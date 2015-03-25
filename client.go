@@ -45,10 +45,30 @@ func (c *Client) Register(ep string, fn goap.MessageHandler) {
     // /rd?ep={Endpoint Client Name}&lt={Lifetime}&sms={MSISDN} &lwm2m={version}&b={binding}
 }
 
-func (c *Client) Deregister(ins string, fn goap.MessageHandler) {
+func (c *Client) Deregister(loc string, fn goap.MessageHandler) {
     msg := goap.NewMessageOfType(goap.TYPE_CONFIRMABLE, goap.GenerateMessageId())
     msg.Code = goap.DELETE
-    msg.AddOptions(goap.NewPathOptions(ins))
+    msg.AddOptions(goap.NewPathOptions(loc))
+    err := c.coapClient.SendAsync(msg, fn)
+    if err != nil {
+        log.Println (err)
+    }
+}
+
+func (c *Client) Update(loc string, fn goap.MessageHandler) {
+    msg := goap.NewMessageOfType(goap.TYPE_CONFIRMABLE, goap.GenerateMessageId())
+    msg.Code = goap.PUT
+    msg.AddOptions(goap.NewPathOptions(loc))
+    err := c.coapClient.SendAsync(msg, fn)
+    if err != nil {
+        log.Println (err)
+    }
+}
+
+func (c *Client) Read(loc string, fn goap.MessageHandler) {
+    msg := goap.NewMessageOfType(goap.TYPE_CONFIRMABLE, goap.GenerateMessageId())
+    msg.Code = goap.GET
+    msg.AddOptions(goap.NewPathOptions(loc))
     err := c.coapClient.SendAsync(msg, fn)
     if err != nil {
         log.Println (err)
@@ -56,9 +76,6 @@ func (c *Client) Deregister(ins string, fn goap.MessageHandler) {
 }
 
 /*
-    Update
-    PUT
-    /{location}?lt={Lifetime}&sms={MSISDN} &b={binding}
 
     ---
     Deregister
