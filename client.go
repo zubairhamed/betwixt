@@ -31,7 +31,7 @@ func (c *Client) Bootstrap(ep string, fn goap.MessageHandler) {
 
 // TODO: Return EndPoint URL
 func (c *Client) Register(ep string, fn goap.MessageHandler) {
-    msg := goap.NewMessageOfType(goap.TYPE_CONFIRMABLE, 12345)
+    msg := goap.NewMessageOfType(goap.TYPE_CONFIRMABLE, goap.GenerateMessageId())
     msg.Code = goap.POST
     msg.AddOptions(goap.NewPathOptions("rd"))
     msg.AddOption(goap.OPTION_URI_QUERY, "ep=" + ep)
@@ -46,7 +46,7 @@ func (c *Client) Register(ep string, fn goap.MessageHandler) {
 }
 
 func (c *Client) Deregister(ins string, fn goap.MessageHandler) {
-    msg := goap.NewMessageOfType(goap.TYPE_CONFIRMABLE, 12345)
+    msg := goap.NewMessageOfType(goap.TYPE_CONFIRMABLE, goap.GenerateMessageId())
     msg.Code = goap.DELETE
     msg.AddOptions(goap.NewPathOptions(ins))
     err := c.coapClient.SendAsync(msg, fn)

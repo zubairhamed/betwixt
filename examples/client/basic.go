@@ -12,16 +12,18 @@ func main() {
 
 	client.Dial("udp", "localhost", 5683)
 
-    client.Register("golwm2ma", func (msg *goap.Message){
+    client.Register("GoLwM2M", func (msg *goap.Message){
         log.Println(goap.CoapCodeToString(msg.Code))
         log.Println(msg.GetOption(goap.OPTION_LOCATION_PATH))
 
-        log.Println(msg.GetPath())
+        loc := msg.GetLocationPath()
+        log.Println("Location path ", loc)
 
         time.Sleep(5 * time.Second)
-
-        log.Println("Deregistering..")
-        // client.Deregister()
+        
+        client.Deregister(loc, func (msg *goap.Message) {
+            log.Println(goap.CoapCodeToString(msg.Code))
+        })
     })
 }
 
