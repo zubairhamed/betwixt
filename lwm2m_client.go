@@ -38,18 +38,28 @@ func (c *LWM2MClient) Start() {
     })
 
     /*
+        ## Observe
+        GET + Observe option
+        /{Object ID}/{Object Instance ID}/{Resource ID}
+        > 2.05 Content with Observe option
+        < 4.04 Not Found, 4.05 Method Not Allowed
+    */
+
+    /*
         ## Discover
         GET + Accept: application/link- forma
         /{Object ID}/{Object Instance ID}/{Resource ID}
         > 2.05 Content
         < 4.04 Not Found, 4.01 Unauthorized, 4.05 Method Not Allowed
     */
+
     svr.NewRoute("{obj}/{inst}/{rsrc}", GET, func(req *CoapRequest) *CoapResponse {
         msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, GenerateMessageId())
         resp := NewResponseWithMessage(msg)
 
         return resp
-    }).BindMediaTypes()
+    }).BindMediaTypes([]MediaType{ MEDIATYPE_APPLICATION_LINK_FORMAT })
+
 
     /*
         ## Read
@@ -78,15 +88,30 @@ func (c *LWM2MClient) Start() {
         /{Object ID}/{Object Instance ID}/{Resource ID}
         > 2.04 Changed
         < 4.00 Bad Request, 4.04 Not Found, 4.01 Unauthorized, 4.05 Method Not Allowed
-    */
 
-    /*
         ## Write Attributes
         PUT
         /{Object ID}/{Object Instance ID}/{Resource ID}?pmin={minimum period}&pmax={maximum period}&gt={greater than}&lt={less than}&st={step}&cancel
         > 2.04 Changed
         < 4.00 Bad Request, 4.04 Not Found, 4.01 Unauthorized, 4.05 Method Not Allowed
+
     */
+    svr.NewRoute("{obj}/{inst}/{rsrc}", PUT, func(req *CoapRequest) *CoapResponse {
+        msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+        msg.Token = req.GetMessage().Token
+
+        resp := NewResponseWithMessage(msg)
+        return resp
+    })
+
+    svr.NewRoute("{obj}/{inst}/{rsrc}", POST, func(req *CoapRequest) *CoapResponse {
+        msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+        msg.Token = req.GetMessage().Token
+
+        resp := NewResponseWithMessage(msg)
+        return resp
+    })
+
 
     /*
         ## Execute
@@ -96,6 +121,7 @@ func (c *LWM2MClient) Start() {
         < 4.00 Bad Request, 4.01 Unauthorized, 4.04 Not Found, 4.05 Method Not Allowed
     */
 
+
     /*
         ## Create
         POST
@@ -103,6 +129,13 @@ func (c *LWM2MClient) Start() {
         > 2.01 Created
         < 4.00 Bad Request, 4.01 Unauthorized, 4.04 Not Found, 4.05 Method Not Allowed
     */
+    svr.NewRoute("{obj}/{inst}/", POST, func(req *CoapRequest) *CoapResponse {
+        msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+        msg.Token = req.GetMessage().Token
+
+        resp := NewResponseWithMessage(msg)
+        return resp
+    })
 
     /*
         ## Delete
@@ -111,14 +144,13 @@ func (c *LWM2MClient) Start() {
         > 2.02 Deleted
         < 4.01 Unauthorized, 4.04 Not Found, 4.05 Method Not Allowed
     */
+    svr.NewRoute("{obj}/{inst}/{DELETE}", POST, func(req *CoapRequest) *CoapResponse {
+        msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+        msg.Token = req.GetMessage().Token
 
-    /*
-        ## Observe
-        GET + Observe option
-        /{Object ID}/{Object Instance ID}/{Resource ID}
-        > 2.05 Content with Observe option
-        < 4.04 Not Found, 4.05 Method Not Allowed
-    */
+        resp := NewResponseWithMessage(msg)
+        return resp
+    })
 
     /*
         ## Cancel Observe
