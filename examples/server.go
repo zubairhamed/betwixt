@@ -1,6 +1,15 @@
 package main
-import "github.com/zubairhamed/lwm2m"
+import (
+    "github.com/zubairhamed/lwm2m"
+    "log"
+)
 
 func main() {
-    lwm2m.NewLWM2MServer()
+    server := lwm2m.NewLWM2MServer()
+
+    log.Println(server.GetModel(0))
+    log.Println(server.GetModel(1))
+    log.Println(server.GetModel(2))
+    log.Println(server.GetModel(3))
+    log.Println(server.GetModel(4))
 }

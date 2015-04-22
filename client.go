@@ -212,3 +212,7 @@ func (c *LWM2MClient) Unregister() {
 func (c *LWM2MClient) Update() {
 
 }
+
+func (c *LWM2MClient) AddResource(resource *LWM2MResource) {
+
+}
