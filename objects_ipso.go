@@ -1,5 +1,26 @@
 package lwm2m
 
+const (
+    OBJECT_IPSO_DIGITAL_INPUT       LWM2MObjectType = 3200
+    OBJECT_IPSO_DIGITAL_OUTPUT      LWM2MObjectType = 3201
+    OBJECT_IPSO_ANALOG_INPUT        LWM2MObjectType = 3202
+    OBJECT_IPSO_ANALOG_OUTPUT       LWM2MObjectType = 3203
+    OBJECT_IPSO_GENERIC_SENSOR      LWM2MObjectType = 3300
+    OBJECT_IPSO_ILLUMINANCE         LWM2MObjectType = 3301
+    OBJECT_IPSO_PRESENCE            LWM2MObjectType = 3302
+    OBJECT_IPSO_TEMPERATURE         LWM2MObjectType = 3303
+    OBJECT_IPSO_HUMIDITY            LWM2MObjectType = 3304
+    OBJECT_IPSO_POWER_MEASUREMENT   LWM2MObjectType = 3305
+    OBJECT_IPSO_ACTUATION           LWM2MObjectType = 3306
+    OBJECT_IPSO_SET_POINT           LWM2MObjectType = 3308
+    OBJECT_IPSO_LOAD_CONTROL        LWM2MObjectType = 3310
+    OBJECT_IPSO_LIGHT_CONTROL       LWM2MObjectType = 3311
+    OBJECT_IPSO_POWER_CONTROL       LWM2MObjectType = 3312
+    OBJECT_IPSO_ACCELEROMETER       LWM2MObjectType = 3313
+    OBJECT_IPSO_MAGNETOMETER        LWM2MObjectType = 3314
+    OBJECT_IPSO_BAROMETER           LWM2MObjectType = 3315
+)
+
 type IPSOSmartObjects struct {
     models  map[int]*ObjectModel
 }
