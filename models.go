@@ -1,5 +1,7 @@
 package lwm2m
 
+type LWM2MObjectType int
+
 type ObjectModel struct {
     Id              int
     Name            string
@@ -17,7 +19,7 @@ type ResourceModel struct {
     Mandatory           bool
     ResourceType        TypeCode
     Units               string
-    RangeOrEnums         string
+    RangeOrEnums        string
     Description         string
 }
 

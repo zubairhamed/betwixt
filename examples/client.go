@@ -7,26 +7,41 @@ import (
 )
 
 func main() {
-
-    repo := NewModelRepository()
-
     client := NewLwm2mClient(":0", "localhost:5683")
 
-    client.AddResource(NewLWM2MResource(repo.GetModel(0), 0, 1, 2))
-    client.AddResource(NewLWM2MResource(repo.GetModel(1), 1))
-    client.AddResource(NewLWM2MResource(repo.GetModel(2), 0, 1, 2, 3, 4))
-    client.AddResource(NewLWM2MResource(repo.GetModel(3), 0))
-    client.AddResource(NewLWM2MResource(repo.GetModel(4), 0))
-    client.AddResource(NewLWM2MResource(repo.GetModel(5), 0))
-    client.AddResource(NewLWM2MResource(repo.GetModel(6)))
-    client.AddResource(NewLWM2MResource(repo.GetModel(7)))
+
+    // LWM2MRequest
+        // Model
+        // Resource
+
+    // LWM2MResponse
+
+    /*
+        ResourceDefs
+
+        ResourceInstances
+
+        LWM2MResource myResource =
+
+        client.OnRead(Resource, ResourceInstance) {
+
+        }
+
+        objSecurity := NewLwm2mObject(0)
+        objSecurity.addResource
+    */
+
+
+
+    setupResources(client)
+
 
     client.OnStartup(func(evt *Event){
         client.Register("GOCLIENT")
     })
 
-    client.OnRead(func(evt *Event){
-
+    client.OnRead(func(evt *Event, m *ObjectInstance, i *ResourceInstance) (*LWM2MResponse) {
+        log.Println(evt.Data["objectModel"].(*ObjectModel))
     })
 
     client.OnRegistered(func(evt *Event){
@@ -47,4 +62,37 @@ func main() {
     })
 
     client.Start()
+}
+
+
+func setupResources (c *Client) {
+
+    instance1 ;=  newObjectInstance(object_lwm2m_security)
+    instance.Set(0, val)
+
+    c.AddObject(OBJECT_LWM2M_SECURITY, instance1, instance2, instance3)
+
+
+/*
+    client
+        ObjectModel
+            ObjectInstances
+                Resources
+
+
+
+    client.AddResource(0, 0, 1, 2)
+    client.AddResource(1, 1)
+    client.AddResource(2, 0, 1, 2, 3, 4)
+    client.AddResource(3, 0)
+    client.AddResource(4, 0)
+    client.AddResource(5, 0)
+    client.AddResource(6)
+    client.AddResource(7)
+
+    client.AddObject(0)
+    client.AddResourceInstance(0, 0)
+    client.AddResourceInstance(0, 1)
+    client.AddResourceInstance(0, 2)
+*/
 }

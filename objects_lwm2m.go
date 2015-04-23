@@ -1,6 +1,18 @@
 package lwm2m
 
 
+
+const (
+    OBJECT_LWM2M_SECURITY                   LWM2MObjectType = 0
+    OBJECT_LWM2M_SERVER LWM2MObjectType                     = 1
+    OBJECT_LWM2M_ACCESS_CONTROL LWM2MObjectType             = 2
+    OBJECT_LWM2M_DEVICE LWM2MObjectType                     = 3
+    OBJECT_LWM2M_CONNECTIVITY_MONITORING LWM2MObjectType    = 4
+    OBJECT_LWM2M_FIRMWARE_UPDATE LWM2MObjectType            = 5
+    OBJECT_LWM2M_LOCATION LWM2MObjectType                   = 6
+    OBJECT_LWM2M_CONNECTIVITY_STATISTICS LWM2MObjectType    = 7
+)
+
 type LWM2MCoreObjects struct {
     models  map[int]*ObjectModel
 }

@@ -11,7 +11,6 @@ func NewLWM2MServer() (*LWM2MServer) {
     s := &LWM2MServer{
         modelRepository: repo,
     }
-
     return s
 }
 
