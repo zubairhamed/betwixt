@@ -22,11 +22,11 @@ const (
 )
 
 type IPSOSmartObjects struct {
-    models  map[int]*ObjectModel
+    models  map[LWM2MObjectType]*ObjectModel
 }
 
 func (o *IPSOSmartObjects) Initialize() {
-    o.models = make(map[int]*ObjectModel)
+    o.models = make(map[LWM2MObjectType]*ObjectModel)
 
     o.Add(
         &ObjectModel{ Name: "IPSO Digital Input", Id: 3200, Multiple: true, Mandatory: false, Description: "Generic digital input for non-specific sensors", },
@@ -223,7 +223,7 @@ func (o *IPSOSmartObjects) Initialize() {
     )
 }
 
-func (o *IPSOSmartObjects) Get(n int) (*ObjectModel) {
+func (o *IPSOSmartObjects) Get(n LWM2MObjectType) (*ObjectModel) {
     return o.models[n]
 }
 

@@ -3,22 +3,22 @@ package lwm2m
 import . "github.com/zubairhamed/goap"
 
 func NewLWM2MServer() (*LWM2MServer) {
-    repo := NewModelRepository()
+    reg := NewObjectRegistry()
 
-    repo.Register(&LWM2MCoreObjects{})
-    repo.Register(&IPSOSmartObjects{})
+    reg.Register(&LWM2MCoreObjects{})
+    reg.Register(&IPSOSmartObjects{})
 
     s := &LWM2MServer{
-        modelRepository: repo,
+        registry :reg,
     }
     return s
 }
 
 type LWM2MServer struct {
-    coapServer       *CoapServer
-    modelRepository  *ModelRepository
+    coapServer      *CoapServer
+    registry        *ObjectRegistry
 }
 
-func (s *LWM2MServer) GetModel(n int) *ObjectModel {
-    return s.modelRepository.GetModel( n)
+func (s *LWM2MServer) GetModel(n LWM2MObjectType) *ObjectModel {
+    return s.registry.GetModel(n)
 }

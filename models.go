@@ -3,7 +3,7 @@ package lwm2m
 type LWM2MObjectType int
 
 type ObjectModel struct {
-    Id              int
+    Id              LWM2MObjectType
     Name            string
     Description     string
     Multiple        bool
@@ -21,6 +21,7 @@ type ResourceModel struct {
     Units               string
     RangeOrEnums        string
     Description         string
+    Value               interface{}
 }
 
 type TypeCode        int
@@ -48,22 +49,41 @@ const (
 
 type ModelSource interface {
     Initialize()
-    Get(int) *ObjectModel
+    Get(LWM2MObjectType) *ObjectModel
     Add(*ObjectModel, ...*ResourceModel)
 }
 
-func NewModelRepository() (*ModelRepository) {
-    repo := &ModelRepository{}
-    repo.sources = make([]ModelSource, 10)
+func NewDefaultObjectRegistry() (*ObjectRegistry) {
+    reg := NewObjectRegistry()
 
-    return repo
+    reg.Register(&LWM2MCoreObjects{})
+    reg.Register(&IPSOSmartObjects{})
+
+    return reg
 }
 
-type ModelRepository struct {
+func NewObjectRegistry() (*ObjectRegistry) {
+    reg := &ObjectRegistry{}
+    reg.sources = []ModelSource{}
+
+    return reg
+}
+
+type ObjectRegistry struct {
     sources     []ModelSource
 }
 
-func (m *ModelRepository) GetModel(n int) *ObjectModel {
+func (m *ObjectRegistry) CreateObjectInstance(t LWM2MObjectType, n int) (*ObjectInstance) {
+    o := m.GetModel(t)
+    if o != nil {
+        obj := NewObjectInstance(t)
+        obj.Id = n
+        obj.TypeId = t
+    }
+    return nil
+}
+
+func (m *ObjectRegistry) GetModel(n LWM2MObjectType) *ObjectModel {
     for _, s := range m.sources {
         if s != nil {
             o := s.Get(n)
@@ -75,31 +95,9 @@ func (m *ModelRepository) GetModel(n int) *ObjectModel {
     return nil
 }
 
-func (m *ModelRepository) GetModels(n int) []*ObjectModel {
-    var models []*ObjectModel
-
-    for _, s := range m.sources {
-        if s != nil {
-            o := s.Get(n)
-            if o != nil {
-                models = append(models, o)
-            }
-        }
-    }
-    return models
-}
-
-func (m *ModelRepository) Register(s ModelSource) {
+func (m *ObjectRegistry) Register(s ModelSource) {
     s.Initialize()
     m.sources = append(m.sources, s)
-}
-
-
-func NewLWM2MResource (m *ObjectModel, instances ... int) (*LWM2MResource) {
-    return &LWM2MResource{
-        instances: instances,
-        model: m,
-    }
 }
 
 type LWM2MResource struct {
@@ -107,3 +105,28 @@ type LWM2MResource struct {
     model       *ObjectModel
 }
 
+func NewObjectInstance(t LWM2MObjectType) (*ObjectInstance) {
+    return &ObjectInstance{
+        TypeId: t,
+        Resources: make(map[int]*ResourceInstance),
+    }
+}
+
+type ObjectInstance struct {
+    Id          int
+    TypeId      LWM2MObjectType
+    Resources   map[int]*ResourceInstance
+}
+
+type ResourceInstance struct {
+    Id          LWM2MObjectType
+    Value       interface{}
+}
+
+type LWM2MRequest struct {
+
+}
+
+type LWM2MResponse struct {
+
+}

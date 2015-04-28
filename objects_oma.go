@@ -12,11 +12,11 @@ const (
 )
 
 type LWM2MCoreObjects struct {
-    models  map[int]*ObjectModel
+    models  map[LWM2MObjectType]*ObjectModel
 }
 
 func (o *LWM2MCoreObjects) Initialize() {
-    o.models = make(map[int]*ObjectModel)
+    o.models = make(map[LWM2MObjectType]*ObjectModel)
 
     o.Add(
         &ObjectModel{ Name: "LWM2M Security",  Id: 0, Multiple: true, Mandatory: true, Description: "" },
@@ -123,7 +123,7 @@ func (o *LWM2MCoreObjects) Initialize() {
     )
 }
 
-func (o *LWM2MCoreObjects) Get(n int) (*ObjectModel) {
+func (o *LWM2MCoreObjects) Get(n LWM2MObjectType) (*ObjectModel) {
     return o.models[n]
 }
 
