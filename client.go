@@ -5,6 +5,9 @@ import (
     "net"
     "log"
     "errors"
+    "bytes"
+    "fmt"
+    "strconv"
 )
 
 func NewLWM2MClient(local string, remote string) (*LWM2MClient) {
@@ -35,7 +38,6 @@ type LWM2MObjectInstances map[LWM2MObjectType][]*ObjectInstance
 type LWM2MClient struct {
     coapServer          *CoapServer
     registry            *ObjectRegistry
-    // instances           []*ObjectInstance
     enabledObjects      LWM2MObjectInstances
 
     // Events
@@ -49,21 +51,10 @@ type LWM2MClient struct {
 }
 
 // Operations
-func (c *LWM2MClient) Start() {
-    s := c.coapServer
-    s.OnStartup(func(evt *Event) {
-        if c.evtOnStartup != nil {
-            c.evtOnStartup()
-        }
-    })
-    c.coapServer.Start()
-}
-
 func (c *LWM2MClient) Register(name string) (string) {
     req := NewRequest(TYPE_CONFIRMABLE, POST, GenerateMessageId())
 
     req.SetStringPayload(BuildModelResourceStringPayload(c.enabledObjects))
-    log.Println(BuildModelResourceStringPayload(c.enabledObjects))
     req.SetRequestURI("rd")
     req.SetUriQuery("ep", name)
     resp, err := c.coapServer.Send(req)
@@ -102,9 +93,13 @@ func (c *LWM2MClient) UseRegistry(reg *ObjectRegistry) {
     c.registry = reg
 }
 
-func (c *LWM2MClient) EnableObject(t LWM2MObjectType) {
-    if c.enabledObjects[t] != nil {
-        c.enabledObjects[t] = append(c.enabledObjects[t], NewObjectInstance(t))
+func (c *LWM2MClient) EnableObject(t LWM2MObjectType) (error) {
+    if c.enabledObjects[t] == nil {
+        c.enabledObjects[t] = []*ObjectInstance{}
+
+        return nil
+    } else {
+        return errors.New("Object already enabled")
     }
 }
 
@@ -112,7 +107,7 @@ func (c *LWM2MClient) AddObjectInstance(instance *ObjectInstance) (error) {
     if instance != nil {
         o := c.GetObjectInstance(instance.TypeId, instance.Id)
         if o == nil {
-            c.enabledObjects[instance.TypeId] = append(c.enabledObjects[instance.TypeId], o)
+            c.enabledObjects[instance.TypeId] = append(c.enabledObjects[instance.TypeId], instance)
 
             return nil
         } else {
@@ -126,20 +121,14 @@ func (c *LWM2MClient) AddObjectInstance(instance *ObjectInstance) (error) {
 
 func (c *LWM2MClient) AddObjectInstances (instances ... *ObjectInstance) {
     for _, o := range instances {
-        log.Println("Add Object Instance")
-        log.Println(o)
         c.AddObjectInstance(o)
     }
 }
 
 func (c *LWM2MClient) GetObjectInstance(n LWM2MObjectType, instance int) (*ObjectInstance) {
     obj := c.enabledObjects[n]
-    log.Println("!!!!")
-    log.Println(c.enabledObjects)
 
     if obj != nil {
-        log.Println(len(obj))
-        log.Println(obj)
         if len(obj) > 0 {
             for _, o := range obj {
                 if o.Id == instance && o.TypeId == n {
@@ -150,6 +139,102 @@ func (c *LWM2MClient) GetObjectInstance(n LWM2MObjectType, instance int) (*Objec
     }
     return nil
 }
+
+func (c *LWM2MClient) Start() {
+    s := c.coapServer
+    s.OnStartup(func(evt *Event) {
+        if c.evtOnStartup != nil {
+            c.evtOnStartup()
+        }
+    })
+
+
+    /*
+        ## Observe
+        GET + Observe option
+        /{Object ID}/{Object Instance ID}/{Resource ID}
+        > 2.05 Content with Observe option
+        < 4.04 Not Found, 4.05 Method Not Allowed
+    */
+
+    /*
+        ## Discover
+        GET + Accept: application/link- forma
+        /{Object ID}/{Object Instance ID}/{Resource ID}
+        > 2.05 Content
+        < 4.04 Not Found, 4.01 Unauthorized, 4.05 Method Not Allowed
+    */
+    /*
+        svr.NewRoute("{obj}/{inst}/{rsrc}", GET, func(req *CoapRequest) *CoapResponse {
+            msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, GenerateMessageId())
+            resp := NewResponseWithMessage(msg)
+
+            return resp
+        }).BindMediaTypes([]MediaType{ MEDIATYPE_APPLICATION_LINK_FORMAT })
+    */
+
+    /*
+        ## Read
+        GET
+        /{Object ID}/{Object Instance ID}/{Resource ID}
+        > 2.05 Content
+        < 4.01 Unauthorized, 4.04 Not Found, 4.05 Method Not Allowed
+    */
+    s.NewRoute("{obj}/{inst}/{rsrc}", GET, handleReadRequest)
+
+    c.coapServer.Start()
+}
+
+// Handlers
+func handleReadRequest(req *CoapRequest) *CoapResponse {
+    log.Println("Got READ Request")
+    log.Println(req.GetAttribute("obj"), req.GetAttribute("inst"), req.GetAttribute("rsrc"))
+
+    msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+    msg.SetStringPayload("")
+    msg.Code = COAPCODE_205_CONTENT
+    msg.Token = req.GetMessage().Token
+
+    resp := NewResponseWithMessage(msg)
+
+    objV, _ := strconv.Atoi(req.GetAttribute("obj"))
+
+    /*
+    CallEvent(c.evtOnRead, map[string] interface{}{
+        "objectModel": c.registry.GetModel(objV),
+    })
+    */
+    log.Println(objV)
+    log.Println(resp)
+
+    return resp
+}
+
+func handleWriteRequest() {
+
+}
+
+func handleExecuteRequest() {
+
+}
+
+func handleCreateRequest() {
+
+}
+
+func handleDiscoverRequest() {
+
+}
+
+func handleWriteAttributesRequest() {
+
+}
+
+func handleDeleteRequest() {
+
+}
+
+
 
 // Events
 func (c *LWM2MClient) OnStartup(fn FnOnStartup) {
@@ -182,40 +267,16 @@ func (c *LWM2MClient) OnError (fn FnOnError) {
 
 // Functions
 func BuildModelResourceStringPayload(instances LWM2MObjectInstances) (string) {
-    // var buf bytes.Buffer
-
-    for k := range instances {
-        log.Println(instances[k])
-    }
-    /*
-    for _, instance := range instances {
-        typeId := instance.TypeId
-        if len(instance.Resources) > 0 {
-            for _, res := range instance.Resources {
-                buf.WriteString(fmt.Sprintf("</%d/%d>,", typeId, i))
-            }
-        }
-    }
-    */
-
-    return ""
-}
-
-
-/*
     var buf bytes.Buffer
 
-    for _, r := range resources {
-        log.Println (r.model)
-        resourceId := r.model.Id
-        if len(r.instances) > 0 {
-            for _, i := range r.instances {
-                buf.WriteString(fmt.Sprintf("</%d/%d>,", resourceId, i))
+    for k, v := range instances {
+        if len(v) > 0 {
+            for _, j := range v {
+                buf.WriteString(fmt.Sprintf("</%d/%d>,", k, j.Id))
             }
         } else {
-            buf.WriteString(fmt.Sprintf("</%d>,", resourceId))
+            buf.WriteString(fmt.Sprintf("</%d>,", k))
         }
     }
-
     return buf.String()
-*/
+}
