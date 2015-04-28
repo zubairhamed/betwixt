@@ -2,6 +2,7 @@ package main
 
 import (
     . "github.com/zubairhamed/lwm2m"
+    "log"
 )
 
 func main() {
@@ -70,6 +71,16 @@ func setupResources (client *LWM2MClient, reg *ObjectRegistry) {
     instanceDevice := reg.CreateObjectInstance(OBJECT_LWM2M_DEVICE, 0)
     instanceConnMonitoring := reg.CreateObjectInstance(OBJECT_LWM2M_CONNECTIVITY_MONITORING, 0)
     instanceFwUpdate :=  reg.CreateObjectInstance(OBJECT_LWM2M_FIRMWARE_UPDATE, 0)
+
+
+    log.Println(
+        instanceSec1, instanceSec2, instanceSec3,
+        instanceServer,
+        instanceAccessCtrl1, instanceAccessCtrl2, instanceAccessCtrl3, instanceAccessCtrl4,
+        instanceDevice,
+        instanceConnMonitoring,
+        instanceFwUpdate,
+    )
 
     client.AddObjectInstances(
         instanceSec1, instanceSec2, instanceSec3,

@@ -110,7 +110,6 @@ func (c *LWM2MClient) AddObjectInstances (instances ... *ObjectInstance) {
         } else {
             // TODO: Throw Error
         }
-
     }
 }
 

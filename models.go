@@ -79,6 +79,8 @@ func (m *ObjectRegistry) CreateObjectInstance(t LWM2MObjectType, n int) (*Object
         obj := NewObjectInstance(t)
         obj.Id = n
         obj.TypeId = t
+
+        return obj
     }
     return nil
 }
