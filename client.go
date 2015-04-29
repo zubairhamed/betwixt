@@ -180,13 +180,21 @@ func (c *LWM2MClient) Start() {
         > 2.05 Content
         < 4.01 Unauthorized, 4.04 Not Found, 4.05 Method Not Allowed
     */
-    s.NewRoute("{obj}/{inst}/{rsrc}", GET, handleReadRequest)
+    s.NewRoute("{obj}/{inst}/{rsrc}", GET, handleReadResource)
+    s.NewRoute("{obj}/{inst}", GET, handleReadInstance)
+
+
 
     c.coapServer.Start()
 }
 
 // Handlers
-func handleReadRequest(req *CoapRequest) *CoapResponse {
+
+/*
+    Read Resource
+    GET     /obj/instance/resource
+*/
+func handleReadResource(req *CoapRequest) *CoapResponse {
     log.Println("Got READ Request")
     log.Println(req.GetAttribute("obj"), req.GetAttribute("inst"), req.GetAttribute("rsrc"))
 
@@ -210,27 +218,72 @@ func handleReadRequest(req *CoapRequest) *CoapResponse {
     return resp
 }
 
-func handleWriteRequest() {
+/*
+    Read Instance
+    GET     /obj/instance
+*/
+func handleReadInstance(req *CoapRequest) *CoapResponse {
+    log.Println("Got READ Request")
+    log.Println(req.GetAttribute("obj"), req.GetAttribute("inst"), req.GetAttribute("rsrc"))
+
+    msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+    msg.SetStringPayload("")
+    msg.Code = COAPCODE_205_CONTENT
+    msg.Token = req.GetMessage().Token
+
+    resp := NewResponseWithMessage(msg)
+
+    objV, _ := strconv.Atoi(req.GetAttribute("obj"))
+
+    /*
+    CallEvent(c.evtOnRead, map[string] interface{}{
+        "objectModel": c.registry.GetModel(objV),
+    })
+    */
+    log.Println(objV)
+    log.Println(resp)
+
+    return resp
+}
+
+/*
+    Write Replace
+    PUT     /obj/instance/resource
+*/
+func handleWriteReplaceResource() {
 
 }
 
-func handleExecuteRequest() {
+func handleWriteReplaceInstance() {
 
 }
 
-func handleCreateRequest() {
+func handleWriteOverwriteResource() {
 
 }
 
-func handleDiscoverRequest() {
+func handleWriteOverwriteInstance() {
 
 }
 
-func handleWriteAttributesRequest() {
+
+func handleExecuteResource() {
 
 }
 
-func handleDeleteRequest() {
+func handleCreateInstance() {
+
+}
+
+func handleDiscoverResources() {
+
+}
+
+func handleWriteResourceAttributes() {
+
+}
+
+func handleDeleteInstance() {
 
 }
 
