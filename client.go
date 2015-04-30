@@ -7,7 +7,6 @@ import (
     "errors"
     "bytes"
     "fmt"
-    "strconv"
 )
 
 func NewLWM2MClient(local string, remote string) (*LWM2MClient) {
@@ -148,253 +147,208 @@ func (c *LWM2MClient) Start() {
         }
     })
 
-
-    /*
-        ## Observe
-        GET + Observe option
-        /{Object ID}/{Object Instance ID}/{Resource ID}
-        > 2.05 Content with Observe option
-        < 4.04 Not Found, 4.05 Method Not Allowed
-    */
-
-    /*
-        ## Discover
-        GET + Accept: application/link- forma
-        /{Object ID}/{Object Instance ID}/{Resource ID}
-        > 2.05 Content
-        < 4.04 Not Found, 4.01 Unauthorized, 4.05 Method Not Allowed
-    */
-    /*
-        svr.NewRoute("{obj}/{inst}/{rsrc}", GET, func(req *CoapRequest) *CoapResponse {
-            msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, GenerateMessageId())
-            resp := NewResponseWithMessage(msg)
-
-            return resp
-        }).BindMediaTypes([]MediaType{ MEDIATYPE_APPLICATION_LINK_FORMAT })
-    */
-
-    /*
-        ## Read
-        GET
-        /{Object ID}/{Object Instance ID}/{Resource ID}
-        > 2.05 Content
-        < 4.01 Unauthorized, 4.04 Not Found, 4.05 Method Not Allowed
-    */
-    s.NewRoute("{obj}/{inst}/{rsrc}", GET, handleReadResource)
-    s.NewRoute("{obj}/{inst}", GET, handleReadInstance)
-    s.NewRoute("{obj}/{inst}/{rsrc}", PUT, handleWriteReplaceResource)
-    s.NewRoute("{obj}/{inst}", PUT, handleWriteReplaceInstance)
-
-    s.NewRoute("{obj}/{inst}/{rsrc}", POST, handleWriteOverwriteResource)
-    s.NewRoute("{obj}/{inst}", POST, handleWriteOverwriteInstance)
-
-    // handleExecuteResource
-    // handleCreateInstance
-    // handleDiscoverResources
-    // handleWriteResourceAttributes
-
-    s.NewRoute("{obj}/{inst}", DELETE, handleDeleteInstance)
-
+    setupRoutes(s)
 
     c.coapServer.Start()
 }
 
+func setupRoutes(s *CoapServer) {
+    s.NewRoute("{obj}/{inst}/{rsrc}", GET, handleGetRequest)
+    s.NewRoute("{obj}/{inst}", GET, handleGetRequest)
+    s.NewRoute("{obj}", GET, handleGetRequest)
+
+    s.NewRoute("{obj}/{inst}/{rsrc}", PUT, handlePutRequest)
+    s.NewRoute("{obj}/{inst}", PUT, handlePutRequest)
+
+    s.NewRoute("{obj}/{inst}", DELETE, handleDeleteRequest)
+
+    s.NewRoute("{obj}/{inst}/{rsrc}", POST, handlePostRequest)
+    s.NewRoute("{obj}/{inst}", POST, handlePostRequest)
+}
+
+func handleGetRequest(req *CoapRequest) *CoapResponse {
+    log.Println(req)
+
+    /*
+READ        GET     /0/0
+READ        GET     /0/0/0
+DISCOVER    GET     /0      +Accept: application/link format
+DISCOVER    GET     /0/0    +Accept: application/link format
+DISCOVER    GET     /0/0/0  +Accept: application/link format
+OBSERVE     GET     /0      +Observe
+OBSERVE     GET     /0/0    +Observe
+OBSERVE     GET     /0/0/0  +Observe
+    */
+
+    msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+    msg.SetStringPayload("")
+    msg.Code = COAPCODE_205_CONTENT
+    msg.Token = req.GetMessage().Token
+
+    resp := NewResponseWithMessage(msg)
+
+    return resp
+}
+
+func handlePutRequest(req *CoapRequest) *CoapResponse {
+    log.Println(req)
+
+    /*
+WRITE       PUT     /0/0
+WRITE       PUT     /0/0/0
+WRITE ATTR  PUT     /0/0/0  +?pmin={minimum period}&pmax={maximum period}&gt={greater than}&lt={less than}&st={step}&cancel
+    */
+
+    msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+    msg.SetStringPayload("")
+    msg.Code = COAPCODE_205_CONTENT
+    msg.Token = req.GetMessage().Token
+
+    resp := NewResponseWithMessage(msg)
+
+    return resp
+}
+
+func handleDeleteRequest(req *CoapRequest) *CoapResponse {
+    log.Println(req)
+
+    // DELETE  /0/0
+
+    msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+    msg.SetStringPayload("")
+    msg.Code = COAPCODE_205_CONTENT
+    msg.Token = req.GetMessage().Token
+
+    resp := NewResponseWithMessage(msg)
+
+    return resp
+}
+
+func handlePostRequest(req *CoapRequest) *CoapResponse {
+    log.Println(req)
+
+    /*
+EXECUTE     POST    /0/0/0
+CREATE      POST    /0/<id>
+    */
+
+    msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+    msg.SetStringPayload("")
+    msg.Code = COAPCODE_205_CONTENT
+    msg.Token = req.GetMessage().Token
+
+    resp := NewResponseWithMessage(msg)
+
+    return resp
+}
+
 /*
+GET     /0/0/0
+GET     /0/0
+GET     /0
+
+PUT     /0/0/0
+PUT     /0/0
+
+DELETE  /0/0
+
+POST    /0/0/0
+POST    /0/0
+
+-----
+READ        GET     /0/0
+READ        GET     /0/0/0
+DISCOVER    GET     /0      +Accept: application/link format
+DISCOVER    GET     /0/0    +Accept: application/link format
+DISCOVER    GET     /0/0/0  +Accept: application/link format
+OBSERVE     GET     /0      +Observe
+OBSERVE     GET     /0/0    +Observe
+OBSERVE     GET     /0/0/0  +Observe
+
+WRITE       PUT     /0/0
+WRITE       PUT     /0/0/0
+WRITE ATTR  PUT     /0/0/0  +?pmin={minimum period}&pmax={maximum period}&gt={greater than}&lt={less than}&st={step}&cancel
+
+DELETE      DELETE  /0/0
+
+EXECUTE     POST    /0/0/0
+CREATE      POST    /0/<id>
+
+
+@@@@@@@@@@ INCOMING @@@@@@@@@@
 ## READ
 GET, CON
 /0/0
 /0/0/0
+- handleReadResource
+- handleReadInstance
+
+## DISCOVER
+GET, CON
+/0
+/0/0
+/0/0/0
+Accept: application/link format
+- handleDiscoverResources
 
 ## WRITE
 PUT, CON
 /0/0
 /0/0/0
 Content-Format: 1542
+- handleWriteResource
+- handleWriteInstance
+
+## WRITE ATTRIBUTES
+PUT, CON
+/0/0/0
+?pmin={minimum period}&pmax={maximum period}&gt={greater than}&lt={less than}&st={step}&cancel
+handleWriteResourceAttributes
 
 ## DELETE
 DELETE, CON
 /0/0
+- handleDeleteInstance
 
 ## EXECUTE
 POST, CON
 /0/0/0
+- handleExecuteResource
 
 ## OBSERVE
 GET, CON
+/0
+/0/0
 /0/0/0
 OPTION OBSERVE = 0
+- handleObserveResources
+// Related parameters for “Observe” operation are described in 5.3.4
+
+## CANCEL OBSERVATION
+(via Write Attribute with Cancel Param)
+(Respond to a Notify with a Cancel Observation)
 
 ## CREATE
 POST, CON
 /0/<NEWID>
 Content-Format: 1542
+- handleCreateInstance
 
-
-
-
-
-
-
-
-
-
-Read Instance
-CON, GET, /0/0
-
-Read Resource
-CON, GET,  /3/0/9
-
-Discover
-Accept: application/link format
-
-Observe Resource
-CON, GET, /6/0/0, Observe: 0
-
-
-
-Write Resource (Replace)
-
-Write Instance (Replace)
-
-Write Resource (Overwrite)
-
-Write Instance (Overwrite)
-
-Execute
-CON, POST, /0/0/0
-
-Create Instance
-
-Write Resource Attributes
-
-
+@@@@@@@@@@ OUTGOING @@@@@@@@@@
 Register
 CON, POST, /rd?ep=DEVKIT&lt=60&b=U
 
 Update
 CON, PUT, /rd/<returnedId>&lt=xxx&b=U
 
-
-
-Write to Resource
-CON, PUT, /2/1/3, Content-Format: Unknown 1542
-
-Write to Instance
-CON, PUT, /0/0, Content-Format: Unknown 1542
+Notify
 
 
 =======
 
 Values:
 Plain Text, Opaque, JSON, TLV
-
-
-
 */
-
-
-
-
-// Handlers
-
-/*
-    Read Resource
-    GET     /obj/instance/resource
-*/
-func handleReadResource(req *CoapRequest) *CoapResponse {
-    log.Println("Got READ Request")
-    log.Println(req.GetAttribute("obj"), req.GetAttribute("inst"), req.GetAttribute("rsrc"))
-
-    msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
-    msg.SetStringPayload("")
-    msg.Code = COAPCODE_205_CONTENT
-    msg.Token = req.GetMessage().Token
-
-    resp := NewResponseWithMessage(msg)
-
-    objV, _ := strconv.Atoi(req.GetAttribute("obj"))
-
-    /*
-    CallEvent(c.evtOnRead, map[string] interface{}{
-        "objectModel": c.registry.GetModel(objV),
-    })
-    */
-    log.Println(objV)
-    log.Println(resp)
-
-    return resp
-}
-
-/*
-    Read Instance
-    GET     /obj/instance
-*/
-func handleReadInstance(req *CoapRequest) *CoapResponse {
-    log.Println("Got READ Request")
-    log.Println(req.GetAttribute("obj"), req.GetAttribute("inst"), req.GetAttribute("rsrc"))
-
-    msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
-    msg.SetStringPayload("")
-    msg.Code = COAPCODE_205_CONTENT
-    msg.Token = req.GetMessage().Token
-
-    resp := NewResponseWithMessage(msg)
-
-    objV, _ := strconv.Atoi(req.GetAttribute("obj"))
-
-    /*
-    CallEvent(c.evtOnRead, map[string] interface{}{
-        "objectModel": c.registry.GetModel(objV),
-    })
-    */
-    log.Println(objV)
-    log.Println(resp)
-
-    return resp
-}
-
-/*
-    Write Replace
-    PUT     /obj/instance/resource
-*/
-func handleWriteReplaceResource() {
-
-}
-
-func handleWriteReplaceInstance() {
-
-}
-
-func handleWriteOverwriteResource() {
-
-}
-
-func handleWriteOverwriteInstance() {
-
-}
-
-
-func handleExecuteResource() {
-
-}
-
-func handleCreateInstance() {
-
-}
-
-func handleDiscoverResources() {
-
-}
-
-func handleWriteResourceAttributes() {
-
-}
-
-func handleDeleteInstance() {
-
-}
-
-
 
 // Events
 func (c *LWM2MClient) OnStartup(fn FnOnStartup) {

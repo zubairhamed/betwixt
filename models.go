@@ -124,11 +124,3 @@ type ResourceInstance struct {
     Id          LWM2MObjectType
     Value       interface{}
 }
-
-type LWM2MRequest struct {
-
-}
-
-type LWM2MResponse struct {
-
-}
