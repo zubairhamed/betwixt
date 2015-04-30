@@ -182,11 +182,118 @@ func (c *LWM2MClient) Start() {
     */
     s.NewRoute("{obj}/{inst}/{rsrc}", GET, handleReadResource)
     s.NewRoute("{obj}/{inst}", GET, handleReadInstance)
+    s.NewRoute("{obj}/{inst}/{rsrc}", PUT, handleWriteReplaceResource)
+    s.NewRoute("{obj}/{inst}", PUT, handleWriteReplaceInstance)
 
+    s.NewRoute("{obj}/{inst}/{rsrc}", POST, handleWriteOverwriteResource)
+    s.NewRoute("{obj}/{inst}", POST, handleWriteOverwriteInstance)
+
+    // handleExecuteResource
+    // handleCreateInstance
+    // handleDiscoverResources
+    // handleWriteResourceAttributes
+
+    s.NewRoute("{obj}/{inst}", DELETE, handleDeleteInstance)
 
 
     c.coapServer.Start()
 }
+
+/*
+## READ
+GET, CON
+/0/0
+/0/0/0
+
+## WRITE
+PUT, CON
+/0/0
+/0/0/0
+Content-Format: 1542
+
+## DELETE
+DELETE, CON
+/0/0
+
+## EXECUTE
+POST, CON
+/0/0/0
+
+## OBSERVE
+GET, CON
+/0/0/0
+OPTION OBSERVE = 0
+
+## CREATE
+POST, CON
+/0/<NEWID>
+Content-Format: 1542
+
+
+
+
+
+
+
+
+
+
+Read Instance
+CON, GET, /0/0
+
+Read Resource
+CON, GET,  /3/0/9
+
+Discover
+Accept: application/link format
+
+Observe Resource
+CON, GET, /6/0/0, Observe: 0
+
+
+
+Write Resource (Replace)
+
+Write Instance (Replace)
+
+Write Resource (Overwrite)
+
+Write Instance (Overwrite)
+
+Execute
+CON, POST, /0/0/0
+
+Create Instance
+
+Write Resource Attributes
+
+
+Register
+CON, POST, /rd?ep=DEVKIT&lt=60&b=U
+
+Update
+CON, PUT, /rd/<returnedId>&lt=xxx&b=U
+
+
+
+Write to Resource
+CON, PUT, /2/1/3, Content-Format: Unknown 1542
+
+Write to Instance
+CON, PUT, /0/0, Content-Format: Unknown 1542
+
+
+=======
+
+Values:
+Plain Text, Opaque, JSON, TLV
+
+
+
+*/
+
+
+
 
 // Handlers
 
