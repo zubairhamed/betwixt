@@ -2,6 +2,8 @@ package main
 
 import (
     . "github.com/zubairhamed/lwm2m"
+    . "github.com/zubairhamed/lwm2m/objects"
+    "github.com/zubairhamed/lwm2m/objects/oma"
 )
 
 func main() {
@@ -49,28 +51,39 @@ func main() {
 
 func setupResources (client *LWM2MClient, reg *ObjectRegistry) {
 
-    client.EnableObject(OBJECT_LWM2M_SECURITY)
-    client.EnableObject(OBJECT_LWM2M_SERVER)
-    client.EnableObject(OBJECT_LWM2M_ACCESS_CONTROL)
-    client.EnableObject(OBJECT_LWM2M_DEVICE)
-    client.EnableObject(OBJECT_LWM2M_CONNECTIVITY_MONITORING)
-    client.EnableObject(OBJECT_LWM2M_FIRMWARE_UPDATE)
-    client.EnableObject(OBJECT_LWM2M_LOCATION)
-    client.EnableObject(OBJECT_LWM2M_CONNECTIVITY_STATISTICS)
 
-    instanceSec1 := reg.CreateObjectInstance(OBJECT_LWM2M_SECURITY, 0)
-    instanceSec2 := reg.CreateObjectInstance(OBJECT_LWM2M_SECURITY, 1)
-    instanceSec3 := reg.CreateObjectInstance(OBJECT_LWM2M_SECURITY, 2)
+    /*
+        accessControlHandler, err  := reg.CreateHandler(OBJECT_LWM2M_ACCESS_CONTROL).(AccessControl)
+        if err == nil {
 
-    instanceServer := reg.CreateObjectInstance(OBJECT_LWM2M_SERVER, 1)
+        }
 
-    instanceAccessCtrl1 := reg.CreateObjectInstance(OBJECT_LWM2M_ACCESS_CONTROL, 0)
-    instanceAccessCtrl2 := reg.CreateObjectInstance(OBJECT_LWM2M_ACCESS_CONTROL, 1)
-    instanceAccessCtrl3 := reg.CreateObjectInstance(OBJECT_LWM2M_ACCESS_CONTROL, 2)
-    instanceAccessCtrl4 := reg.CreateObjectInstance(OBJECT_LWM2M_ACCESS_CONTROL, 3)
-    instanceDevice := reg.CreateObjectInstance(OBJECT_LWM2M_DEVICE, 0)
-    instanceConnMonitoring := reg.CreateObjectInstance(OBJECT_LWM2M_CONNECTIVITY_MONITORING, 0)
-    instanceFwUpdate :=  reg.CreateObjectInstance(OBJECT_LWM2M_FIRMWARE_UPDATE, 0)
+
+        client.EnableObjectWithHandler(OBJECT_LWM2M_ACCESS_CONTROL, accessControlHandler)
+    */
+
+    client.EnableObject(oma.OBJECT_LWM2M_SECURITY)
+    client.EnableObject(oma.OBJECT_LWM2M_SERVER)
+    client.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL)
+    client.EnableObject(oma.OBJECT_LWM2M_DEVICE)
+    client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING)
+    client.EnableObject(oma.OBJECT_LWM2M_FIRMWARE_UPDATE)
+    client.EnableObject(oma.OBJECT_LWM2M_LOCATION)
+    client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS)
+
+    instanceSec1 := reg.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 0)
+    instanceSec2 := reg.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 1)
+    instanceSec3 := reg.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 2)
+
+    instanceServer := reg.CreateObjectInstance(oma.OBJECT_LWM2M_SERVER, 1)
+
+    instanceAccessCtrl1 := reg.CreateObjectInstance(oma.OBJECT_LWM2M_ACCESS_CONTROL, 0)
+    instanceAccessCtrl2 := reg.CreateObjectInstance(oma.OBJECT_LWM2M_ACCESS_CONTROL, 1)
+    instanceAccessCtrl3 := reg.CreateObjectInstance(oma.OBJECT_LWM2M_ACCESS_CONTROL, 2)
+    instanceAccessCtrl4 := reg.CreateObjectInstance(oma.OBJECT_LWM2M_ACCESS_CONTROL, 3)
+    instanceDevice := reg.CreateObjectInstance(oma.OBJECT_LWM2M_DEVICE, 0)
+    instanceConnMonitoring := reg.CreateObjectInstance(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, 0)
+    instanceFwUpdate :=  reg.CreateObjectInstance(oma.OBJECT_LWM2M_FIRMWARE_UPDATE, 0)
 
     client.AddObjectInstances(
         instanceSec1, instanceSec2, instanceSec3,

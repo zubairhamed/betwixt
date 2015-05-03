@@ -1,4 +1,6 @@
-package lwm2m
+package oma
+
+import . "github.com/zubairhamed/lwm2m/core"
 
 const (
     OBJECT_LWM2M_SECURITY                   LWM2MObjectType = 0
@@ -127,7 +129,7 @@ func (o *LWM2MCoreObjects) Get(n LWM2MObjectType) (*ObjectModel) {
     return o.models[n]
 }
 
-func (mr *LWM2MCoreObjects) Add(m *ObjectModel, res ...*ResourceModel) {
+func (o *LWM2MCoreObjects) Add(m *ObjectModel, res ...*ResourceModel) {
     m.Resources = res
-    mr.models[m.Id] = m
+    o.models[m.Id] = m
 }

@@ -1,4 +1,6 @@
-package lwm2m
+package ipso
+
+import . "github.com/zubairhamed/lwm2m/core"
 
 const (
     OBJECT_IPSO_DIGITAL_INPUT       LWM2MObjectType = 3200
@@ -22,7 +24,7 @@ const (
 )
 
 type IPSOSmartObjects struct {
-    models  map[LWM2MObjectType]*ObjectModel
+    models  map[LWM2MObjectType] *ObjectModel
 }
 
 func (o *IPSOSmartObjects) Initialize() {

@@ -7,6 +7,8 @@ import (
     "errors"
     "bytes"
     "fmt"
+    "github.com/zubairhamed/lwm2m/core"
+    "github.com/zubairhamed/lwm2m/objects"
 )
 
 func NewLWM2MClient(local string, remote string) (*LWM2MClient) {
@@ -32,11 +34,11 @@ type FnOnRegistered func(string)
 type FnOnUnregistered func()
 type FnOnError func()
 
-type LWM2MObjectInstances map[LWM2MObjectType][]*ObjectInstance
+type LWM2MObjectInstances map[core.LWM2MObjectType] []*core.ObjectInstance
 
 type LWM2MClient struct {
     coapServer          *CoapServer
-    registry            *ObjectRegistry
+    registry            *objects.ObjectRegistry
     enabledObjects      LWM2MObjectInstances
 
     // Events
@@ -88,13 +90,13 @@ func (c *LWM2MClient) AddObject() {
 
 }
 
-func (c *LWM2MClient) UseRegistry(reg *ObjectRegistry) {
+func (c *LWM2MClient) UseRegistry(reg *objects.ObjectRegistry) {
     c.registry = reg
 }
 
-func (c *LWM2MClient) EnableObject(t LWM2MObjectType) (error) {
+func (c *LWM2MClient) EnableObject(t core.LWM2MObjectType) (error) {
     if c.enabledObjects[t] == nil {
-        c.enabledObjects[t] = []*ObjectInstance{}
+        c.enabledObjects[t] = []*core.ObjectInstance{}
 
         return nil
     } else {
@@ -102,7 +104,7 @@ func (c *LWM2MClient) EnableObject(t LWM2MObjectType) (error) {
     }
 }
 
-func (c *LWM2MClient) AddObjectInstance(instance *ObjectInstance) (error) {
+func (c *LWM2MClient) AddObjectInstance(instance *core.ObjectInstance) (error) {
     if instance != nil {
         o := c.GetObjectInstance(instance.TypeId, instance.Id)
         if o == nil {
@@ -118,13 +120,13 @@ func (c *LWM2MClient) AddObjectInstance(instance *ObjectInstance) (error) {
 
 }
 
-func (c *LWM2MClient) AddObjectInstances (instances ... *ObjectInstance) {
+func (c *LWM2MClient) AddObjectInstances (instances ... *core.ObjectInstance) {
     for _, o := range instances {
         c.AddObjectInstance(o)
     }
 }
 
-func (c *LWM2MClient) GetObjectInstance(n LWM2MObjectType, instance int) (*ObjectInstance) {
+func (c *LWM2MClient) GetObjectInstance(n core.LWM2MObjectType, instance int) (*core.ObjectInstance) {
     obj := c.enabledObjects[n]
 
     if obj != nil {
@@ -147,27 +149,36 @@ func (c *LWM2MClient) Start() {
         }
     })
 
-    setupRoutes(s)
+    s.NewRoute("{obj}/{inst}/{rsrc}", GET, c.handleGetRequest)
+    s.NewRoute("{obj}/{inst}", GET, c.handleGetRequest)
+    s.NewRoute("{obj}", GET, c.handleGetRequest)
+
+    s.NewRoute("{obj}/{inst}/{rsrc}", PUT, c.handlePutRequest)
+    s.NewRoute("{obj}/{inst}", PUT, c.handlePutRequest)
+
+    s.NewRoute("{obj}/{inst}", DELETE, c.handleDeleteRequest)
+
+    s.NewRoute("{obj}/{inst}/{rsrc}", POST, c.handlePostRequest)
+    s.NewRoute("{obj}/{inst}", POST, c.handlePostRequest)
 
     c.coapServer.Start()
 }
 
-func setupRoutes(s *CoapServer) {
-    s.NewRoute("{obj}/{inst}/{rsrc}", GET, handleGetRequest)
-    s.NewRoute("{obj}/{inst}", GET, handleGetRequest)
-    s.NewRoute("{obj}", GET, handleGetRequest)
 
-    s.NewRoute("{obj}/{inst}/{rsrc}", PUT, handlePutRequest)
-    s.NewRoute("{obj}/{inst}", PUT, handlePutRequest)
-
-    s.NewRoute("{obj}/{inst}", DELETE, handleDeleteRequest)
-
-    s.NewRoute("{obj}/{inst}/{rsrc}", POST, handlePostRequest)
-    s.NewRoute("{obj}/{inst}", POST, handlePostRequest)
-}
-
-func handleGetRequest(req *CoapRequest) *CoapResponse {
+func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
     log.Println(req)
+
+    cf := req.GetMessage().GetOption(OPTION_CONTENT_FORMAT)
+    log.Println("Content Format", cf)
+    log.Println("Enabled Objects", c.enabledObjects)
+
+    // if accept application link format
+        // handleDiscoverRequest
+    // else if observe
+        // handleObserveRequest
+    // else
+        // handleReadRequest
+
 
     /*
 READ        GET     /0/0
@@ -190,8 +201,23 @@ OBSERVE     GET     /0/0/0  +Observe
     return resp
 }
 
-func handlePutRequest(req *CoapRequest) *CoapResponse {
+func (c *LWM2MClient)  handleDiscoverRequest() {
+
+}
+
+func (c *LWM2MClient)  handleObserveRequest() {
+
+}
+
+func (c *LWM2MClient)  handleReadRequest() {
+
+}
+
+func (c *LWM2MClient)  handlePutRequest(req *CoapRequest) *CoapResponse {
     log.Println(req)
+
+    // if url has parameters
+    // else
 
     /*
 WRITE       PUT     /0/0
@@ -209,7 +235,7 @@ WRITE ATTR  PUT     /0/0/0  +?pmin={minimum period}&pmax={maximum period}&gt={gr
     return resp
 }
 
-func handleDeleteRequest(req *CoapRequest) *CoapResponse {
+func (c *LWM2MClient)  handleDeleteRequest(req *CoapRequest) *CoapResponse {
     log.Println(req)
 
     // DELETE  /0/0
@@ -224,9 +250,11 @@ func handleDeleteRequest(req *CoapRequest) *CoapResponse {
     return resp
 }
 
-func handlePostRequest(req *CoapRequest) *CoapResponse {
+func (c *LWM2MClient)  handlePostRequest(req *CoapRequest) *CoapResponse {
     log.Println(req)
 
+    // if has resource, execute
+    // else create
     /*
 EXECUTE     POST    /0/0/0
 CREATE      POST    /0/<id>
