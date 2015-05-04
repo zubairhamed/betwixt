@@ -4,6 +4,7 @@ import (
     . "github.com/zubairhamed/lwm2m"
     . "github.com/zubairhamed/lwm2m/objects"
     "github.com/zubairhamed/lwm2m/objects/oma"
+    "github.com/zubairhamed/lwm2m/core"
 )
 
 func main() {
@@ -48,28 +49,32 @@ func main() {
     client.Start()
 }
 
-
 func setupResources (client *LWM2MClient, reg *ObjectRegistry) {
 
 
     /*
+        type ObjectHandler interface {
+
+        }
+
         accessControlHandler, err  := reg.CreateHandler(OBJECT_LWM2M_ACCESS_CONTROL).(AccessControl)
         if err == nil {
 
         }
 
-
         client.EnableObjectWithHandler(OBJECT_LWM2M_ACCESS_CONTROL, accessControlHandler)
     */
 
-    client.EnableObject(oma.OBJECT_LWM2M_SECURITY)
-    client.EnableObject(oma.OBJECT_LWM2M_SERVER)
-    client.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL)
-    client.EnableObject(oma.OBJECT_LWM2M_DEVICE)
-    client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING)
-    client.EnableObject(oma.OBJECT_LWM2M_FIRMWARE_UPDATE)
-    client.EnableObject(oma.OBJECT_LWM2M_LOCATION)
-    client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS)
+    accessControl := &AccessControl{}
+
+    client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil)
+    client.EnableObject(oma.OBJECT_LWM2M_SERVER, nil)
+    client.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, accessControl)
+    client.EnableObject(oma.OBJECT_LWM2M_DEVICE, nil)
+    client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, nil)
+    client.EnableObject(oma.OBJECT_LWM2M_FIRMWARE_UPDATE, nil)
+    client.EnableObject(oma.OBJECT_LWM2M_LOCATION, nil)
+    client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS, nil)
 
     instanceSec1 := reg.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 0)
     instanceSec2 := reg.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 1)
@@ -93,4 +98,12 @@ func setupResources (client *LWM2MClient, reg *ObjectRegistry) {
         instanceConnMonitoring,
         instanceFwUpdate,
     )
+}
+
+type AccessControl struct {
+
+}
+
+func (o *AccessControl) OnRead(t core.LWM2MObjectType) {
+
 }

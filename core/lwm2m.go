@@ -2,6 +2,7 @@ package core
 
 type TypeCode        int
 type OperationCode   int
+type LWM2MObjectInstances map[LWM2MObjectType] *ObjectEnabler
 
 const (
     TYPE_STRING   TypeCode = 0
@@ -22,3 +23,14 @@ const (
     OPERATION_WE    OperationCode = 6
     OPERATION_RWE   OperationCode = 7
 )
+
+// Enablers
+type ObjectHandler interface {
+    OnRead(t LWM2MObjectType)
+}
+
+type ObjectEnabler struct {
+    Handler     ObjectHandler
+    Instances   []*ObjectInstance
+}
+

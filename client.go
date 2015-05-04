@@ -22,7 +22,7 @@ func NewLWM2MClient(local string, remote string) (*LWM2MClient) {
 
     return &LWM2MClient{
         coapServer: coapServer,
-        enabledObjects: make(LWM2MObjectInstances),
+        enabledObjects: make(map[core.LWM2MObjectType]*core.ObjectEnabler),
     }
 }
 
@@ -34,12 +34,10 @@ type FnOnRegistered func(string)
 type FnOnUnregistered func()
 type FnOnError func()
 
-type LWM2MObjectInstances map[core.LWM2MObjectType] []*core.ObjectInstance
-
 type LWM2MClient struct {
     coapServer          *CoapServer
     registry            *objects.ObjectRegistry
-    enabledObjects      LWM2MObjectInstances
+    enabledObjects      map[core.LWM2MObjectType] *core.ObjectEnabler
 
     // Events
     evtOnStartup        FnOnStartup
@@ -94,9 +92,14 @@ func (c *LWM2MClient) UseRegistry(reg *objects.ObjectRegistry) {
     c.registry = reg
 }
 
-func (c *LWM2MClient) EnableObject(t core.LWM2MObjectType) (error) {
+func (c *LWM2MClient) EnableObject(t core.LWM2MObjectType, e core.ObjectHandler) (error) {
     if c.enabledObjects[t] == nil {
-        c.enabledObjects[t] = []*core.ObjectInstance{}
+
+        en := &core.ObjectEnabler{
+            Handler: e,
+            Instances: []*core.ObjectInstance{},
+        }
+        c.enabledObjects[t] = en
 
         return nil
     } else {
@@ -408,7 +411,7 @@ func (c *LWM2MClient) OnError (fn FnOnError) {
 }
 
 // Functions
-func BuildModelResourceStringPayload(instances LWM2MObjectInstances) (string) {
+func BuildModelResourceStringPayload(instances core.LWM2MObjectInstances) (string) {
     var buf bytes.Buffer
 
     for k, v := range instances {

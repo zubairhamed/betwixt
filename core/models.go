@@ -24,7 +24,6 @@ type ResourceModel struct {
     Value               interface{}
 }
 
-
 type LWM2MResource struct {
     instances   []int
     model       *ObjectModel
