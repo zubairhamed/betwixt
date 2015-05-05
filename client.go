@@ -131,6 +131,10 @@ func (c *LWM2MClient) AddObjectInstances (instances ... *core.ObjectInstance) {
     }
 }
 
+func (c *LWM2MClient) GetObjectEnabler(n core.LWM2MObjectType) (*core.ObjectEnabler) {
+    return c.enabledObjects[n]
+}
+
 func (c *LWM2MClient) GetObjectInstance(n core.LWM2MObjectType, instance int) (*core.ObjectInstance) {
     enabler := c.enabledObjects[n]
 
@@ -189,16 +193,20 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
     instInt, _ := strconv.Atoi(inst)
     rsrcInt, _ := strconv.Atoi(rsrc)
 
-    objectInstance := c.GetObjectInstance(core.LWM2MObjectType(objInt), instInt)
-
-    if rsrc != nil {
-        resourceInstance := objectInstance.GetResource(rsrcInt)
-
-        if resourceInstance != nil {
-            
+    t := core.LWM2MObjectType(objInt)
+    enabler := c.GetObjectEnabler(t)
+    if enabler != nil {
+        if enabler.Handler != nil {
+            model := c.registry.GetModel(t)
+            inst := c.GetObjectInstance(t, instInt)
+            rsrc := model.GetResource(rsrcInt)
+            enabler.Handler.OnRead(t, model, inst, rsrc)
         }
+
+    } else {
+        log.Println("Enabler not found.")
     }
-    log.Println("Object Instance", objectInstance, objectInstance.Id, objectInstance.TypeId, objectInstance.Resources)
+    // log.Println("Object Instance", objectInstance, objectInstance.Id, objectInstance.TypeId, objectInstance.Resources)
 
 
     // if accept application link format

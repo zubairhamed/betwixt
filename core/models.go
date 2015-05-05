@@ -11,6 +11,15 @@ type ObjectModel struct {
     Resources       []*ResourceModel
 }
 
+func (o *ObjectModel) GetResource(n int) (*ResourceModel){
+    for _,rsrc := range o.Resources {
+        if rsrc.Id == n {
+            return rsrc
+        }
+    }
+    return nil
+}
+
 type ResourceModel struct {
     Id                  int
     Name                string

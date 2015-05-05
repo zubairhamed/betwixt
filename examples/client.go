@@ -5,6 +5,7 @@ import (
     . "github.com/zubairhamed/lwm2m/objects"
     "github.com/zubairhamed/lwm2m/objects/oma"
     "github.com/zubairhamed/lwm2m/core"
+    "log"
 )
 
 func main() {
@@ -52,25 +53,13 @@ func main() {
 func setupResources (client *LWM2MClient, reg *ObjectRegistry) {
 
 
-    /*
-        type ObjectHandler interface {
-
-        }
-
-        accessControlHandler, err  := reg.CreateHandler(OBJECT_LWM2M_ACCESS_CONTROL).(AccessControl)
-        if err == nil {
-
-        }
-
-        client.EnableObjectWithHandler(OBJECT_LWM2M_ACCESS_CONTROL, accessControlHandler)
-    */
-
     accessControl := &AccessControl{}
+    device := &Device{}
 
     client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil)
     client.EnableObject(oma.OBJECT_LWM2M_SERVER, nil)
     client.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, accessControl)
-    client.EnableObject(oma.OBJECT_LWM2M_DEVICE, nil)
+    client.EnableObject(oma.OBJECT_LWM2M_DEVICE, device)
     client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, nil)
     client.EnableObject(oma.OBJECT_LWM2M_FIRMWARE_UPDATE, nil)
     client.EnableObject(oma.OBJECT_LWM2M_LOCATION, nil)
@@ -104,6 +93,16 @@ type AccessControl struct {
 
 }
 
-func (o *AccessControl) OnRead(t core.LWM2MObjectType) {
+func (o *AccessControl) OnRead(t core.LWM2MObjectType, m *core.ObjectModel, i *core.ObjectInstance, r *core.ResourceModel) {
 
+}
+
+// -----
+
+type Device struct {
+
+}
+
+func (o *Device) OnRead(t core.LWM2MObjectType, m *core.ObjectModel, i *core.ObjectInstance, r *core.ResourceModel) {
+    log.Println("OnRead Invoked", t, m, i, r)
 }

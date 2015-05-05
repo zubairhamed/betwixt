@@ -26,7 +26,7 @@ const (
 
 // Enablers
 type ObjectHandler interface {
-    OnRead(t LWM2MObjectType)
+    OnRead(LWM2MObjectType, *ObjectModel, *ObjectInstance, *ResourceModel)
 }
 
 type ObjectEnabler struct {
