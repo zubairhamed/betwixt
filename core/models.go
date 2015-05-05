@@ -42,6 +42,10 @@ type ObjectInstance struct {
     Resources   map[int]*ResourceInstance
 }
 
+func (o *ObjectInstance) GetResource(id int) (*ResourceInstance) {
+    return o.Resources[id]
+}
+
 type ResourceInstance struct {
     Id          LWM2MObjectType
     Value       interface{}

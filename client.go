@@ -9,6 +9,7 @@ import (
     "fmt"
     "github.com/zubairhamed/lwm2m/core"
     "github.com/zubairhamed/lwm2m/objects"
+    "strconv"
 )
 
 func NewLWM2MClient(local string, remote string) (*LWM2MClient) {
@@ -111,7 +112,8 @@ func (c *LWM2MClient) AddObjectInstance(instance *core.ObjectInstance) (error) {
     if instance != nil {
         o := c.GetObjectInstance(instance.TypeId, instance.Id)
         if o == nil {
-            c.enabledObjects[instance.TypeId] = append(c.enabledObjects[instance.TypeId], instance)
+            c.enabledObjects[instance.TypeId].Instances = append(c.enabledObjects[instance.TypeId].Instances, instance)
+            // c.enabledObjects[instance.TypeId] = append(c.enabledObjects[instance.TypeId], instance)
 
             return nil
         } else {
@@ -130,11 +132,12 @@ func (c *LWM2MClient) AddObjectInstances (instances ... *core.ObjectInstance) {
 }
 
 func (c *LWM2MClient) GetObjectInstance(n core.LWM2MObjectType, instance int) (*core.ObjectInstance) {
-    obj := c.enabledObjects[n]
+    enabler := c.enabledObjects[n]
 
-    if obj != nil {
-        if len(obj) > 0 {
-            for _, o := range obj {
+    if enabler != nil {
+        instances := enabler.Instances
+        if len(instances) > 0 {
+            for _, o := range instances {
                 if o.Id == instance && o.TypeId == n {
                     return o
                 }
@@ -174,6 +177,29 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
     cf := req.GetMessage().GetOption(OPTION_CONTENT_FORMAT)
     log.Println("Content Format", cf)
     log.Println("Enabled Objects", c.enabledObjects)
+
+    obj := req.GetAttribute("obj")
+    inst := req.GetAttribute("inst")
+    rsrc := req.GetAttribute("rsrc")
+
+    log.Println("Instance ", obj, inst, rsrc)
+
+
+    objInt, _ := strconv.Atoi(obj)
+    instInt, _ := strconv.Atoi(inst)
+    rsrcInt, _ := strconv.Atoi(rsrc)
+
+    objectInstance := c.GetObjectInstance(core.LWM2MObjectType(objInt), instInt)
+
+    if rsrc != nil {
+        resourceInstance := objectInstance.GetResource(rsrcInt)
+
+        if resourceInstance != nil {
+            
+        }
+    }
+    log.Println("Object Instance", objectInstance, objectInstance.Id, objectInstance.TypeId, objectInstance.Resources)
+
 
     // if accept application link format
         // handleDiscoverRequest
@@ -415,8 +441,9 @@ func BuildModelResourceStringPayload(instances core.LWM2MObjectInstances) (strin
     var buf bytes.Buffer
 
     for k, v := range instances {
-        if len(v) > 0 {
-            for _, j := range v {
+        inst := v.Instances
+        if len(inst) > 0 {
+            for _, j := range inst {
                 buf.WriteString(fmt.Sprintf("</%d/%d>,", k, j.Id))
             }
         } else {
