@@ -70,6 +70,8 @@ func (c *LWM2MClient) Register(name string) (string) {
 
 //    CallEvent(c.evtOnRegistered, EmptyEventPayload())
 
+    log.Println(path)
+
     return path
 }
 

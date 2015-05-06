@@ -6,6 +6,8 @@ import (
     "github.com/zubairhamed/lwm2m/objects/oma"
     "github.com/zubairhamed/lwm2m/core"
     "log"
+    "github.com/zubairhamed/goap"
+    "time"
 )
 
 func main() {
@@ -14,47 +16,20 @@ func main() {
     registry := NewDefaultObjectRegistry()
     client.UseRegistry(registry)
 
-    setupResources(client, registry)
+    serial := setupResources(client, registry)
 
     client.OnStartup(func(){
-        client.Register("GOCLIENT")
+        client.Register("GO-" + serial)
     })
-
-    // client.OnRead(func(evt *Event, m *ObjectInstance, i *ResourceInstance) (*LWM2MResponse) {
-    client.OnRead(func() {
-        // log.Println(evt.Data["objectModel"].(*ObjectModel))
-    })
-
-    /*
-    client.OnRegistered(func(evt *Event, path string){
-        log.Println("Client is registered")
-    })
-
-    client.OnUnregistered(func(evt *Event){
-        log.Println("Client is Unregistered")
-    })
-
-    client.OnExecute(func(evt *Event, m *ObjectInstance, i *ResourceInstance) (*LWM2MResponse) {
-
-    })
-
-    client.OnWrite(func(evt *Event, m *ObjectInstance, i *ResourceInstance, value interface{}) (*LWM2MResponse) {
-
-    })
-
-    client.OnCreate(func (evt *Event, m *ObjectInstance, i *ResourceInstance) (*LWM2MResponse) {
-
-    })
-    */
 
     client.Start()
 }
 
-func setupResources (client *LWM2MClient, reg *ObjectRegistry) {
-
-
+func setupResources (client *LWM2MClient, reg *ObjectRegistry) (string) {
     accessControl := &AccessControl{}
-    device := &Device{}
+    device := &Device{
+        serial: goap.GenerateToken(5),
+    }
 
     client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil)
     client.EnableObject(oma.OBJECT_LWM2M_SERVER, nil)
@@ -87,6 +62,8 @@ func setupResources (client *LWM2MClient, reg *ObjectRegistry) {
         instanceConnMonitoring,
         instanceFwUpdate,
     )
+
+    return device.GetSerialNumber()
 }
 
 type AccessControl struct {
@@ -100,24 +77,78 @@ func (o *AccessControl) OnRead(t core.LWM2MObjectType, m *core.ObjectModel, i *c
 // -----
 
 type Device struct {
-
+    serial  string
 }
 
+/*
+exec
+case 4:
+case 5:
+case 12:
+
+*/
 func (o *Device) OnRead(t core.LWM2MObjectType, m *core.ObjectModel, i *core.ObjectInstance, r *core.ResourceModel) core.ResponseValue{
-    log.Println("OnRead Invoked", t, m, i, r)
-    log.Println("Resource Model ID ", r.Id)
 
     var val core.ResponseValue
     switch r.Id {
         case 0:
-            val = core.NewStringResponseValue(o.GetManufacturer())
-            break
+        val = core.NewStringResponseValue(o.GetManufacturer())
+        break
 
         case 1:
+        val = core.NewStringResponseValue(o.GetModelNumber())
+        break
 
+        case 2:
+        val = core.NewStringResponseValue(o.GetSerialNumber())
+        break
+
+        case 3:
+        val = core.NewStringResponseValue(o.GetFirmwareVersion())
+        break
+
+        case 6:
+        val = core.NewIntResponseValue(o.GetAvailablePowerSources())
+        break
+
+        case 7:
+        val = core.NewIntResponseValue(o.GetPowerSourceVoltage())
+        break
+
+        case 8:
+        val = core.NewIntResponseValue(o.GetPowerSourceCurrent())
+        break
+
+        case 9:
+        val = core.NewIntResponseValue(o.GetBatteryLevel())
+        break
+
+        case 10:
+        val = core.NewIntResponseValue(o.GetMemoryFree())
+        break
+
+        case 11:
+        val = core.NewIntResponseValue(o.GetErrorCode())
+        break
+
+        case 13:
+        val = core.NewTimeResponseValue(o.GetCurrentTime())
+        break
+
+        case 14:
+        val = core.NewStringResponseValue(o.GetUtcOffset())
+        break
+
+        case 15:
+        val = core.NewStringResponseValue(o.GetTimezone())
+        break
+
+        case 16:
+        val = core.NewStringResponseValue(o.GetSupportedBindingMode())
+        break
 
         default:
-            break
+        break
     }
     return val
 }
@@ -126,54 +157,66 @@ func (o *Device) GetManufacturer() string {
     return "GOLWM2M"
 }
 
+func (o *Device) GetModelNumber() string {
+    return "0.1"
+}
 
-/*
-        GetModelNumber() string
-        &ResourceModel{ Id: 1, Name: "Model Number", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: TYPE_STRING, RangeOrEnums: "", Units: "", Description: "" },
+func (o *Device) GetSerialNumber() string {
+    return o.serial
+}
 
-        GetSerialNumber() string
-        &ResourceModel{ Id: 2, Name: "Serial Number", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: TYPE_STRING, RangeOrEnums: "", Units: "", Description: "" },
+func (o *Device) GetFirmwareVersion() string {
+    return "1.0"
+}
 
-        GetFirmwareVersion() string
-        &ResourceModel{ Id: 3, Name: "Firmware Version", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: TYPE_STRING, RangeOrEnums: "", Units: "", Description: "" },
+func (o *Device) Reboot() *core.NoResponseValue {
+    return core.NoResponse()
+}
 
-        Reboot() string
-        &ResourceModel{ Id: 4, Name: "Reboot", Operations: OPERATION_E, Multiple: false, Mandatory: true, ResourceType: TYPE_STRING, RangeOrEnums: "", Units: "", Description: "" },
+func (o *Device) FactoryReset() *core.NoResponseValue {
+    return core.NoResponse()
+}
 
-        FactoryReset() string
-        &ResourceModel{ Id: 5, Name: "Factory Reset", Operations: OPERATION_E, Multiple: false, Mandatory: false, ResourceType: TYPE_STRING, RangeOrEnums: "", Units: "", Description: "" },
+func (o *Device) GetAvailablePowerSources() int {
+    return 0
+}
 
-        GetAvailablePowerSources() int
-        &ResourceModel{ Id: 6, Name: "Available Power Sources", Operations: OPERATION_R, Multiple: true, Mandatory: false, ResourceType: TYPE_INTEGER, RangeOrEnums: "0-7", Units: "", Description: "" },
+func (o *Device) GetPowerSourceVoltage() int {
+    return 0
+}
 
-        GetPowerSourceVoltage() int
-        &ResourceModel{ Id: 7, Name: "Power Source Voltage", Operations: OPERATION_R, Multiple: true, Mandatory: false, ResourceType: TYPE_INTEGER, RangeOrEnums: "", Units: "mV", Description: "" },
+func (o *Device) GetPowerSourceCurrent() int {
+    return 0
+}
 
-        GetPowerSourceCurrent() int
-        &ResourceModel{ Id: 8, Name: "Power Source Current", Operations: OPERATION_R, Multiple: true, Mandatory: false, ResourceType: TYPE_INTEGER, RangeOrEnums: "", Units: "mA", Description: "" },
+func (o *Device) GetBatteryLevel() int {
+    return 0
+}
 
-        GetBatteryLevel() int
-        &ResourceModel{ Id: 9, Name: "Battery Level", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: TYPE_INTEGER, RangeOrEnums: "0-100", Units: "%", Description: "" },
+func (o *Device) GetMemoryFree() int {
+    return 0
+}
 
-        GetMemoryFree() int
-        &ResourceModel{ Id: 10, Name: "Memory Free", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: TYPE_INTEGER, RangeOrEnums: "", Units: "KB", Description: "" },
+func (o *Device) GetErrorCode() int {
+    return 0
+}
 
-        GetErrorCode() int
-        &ResourceModel{ Id: 11, Name: "Error Code", Operations: OPERATION_R, Multiple: true, Mandatory: true, ResourceType: TYPE_INTEGER, RangeOrEnums: "", Units: "", Description: "" },
+func (o *Device) ResetErrorCode() string {
+    return ""
+}
 
-        ResetErrorCode() string
-        &ResourceModel{ Id: 12, Name: "Reset Error Code", Operations: OPERATION_E, Multiple: false, Mandatory: false, ResourceType: TYPE_STRING, RangeOrEnums: "", Units: "", Description: "" },
+func (o *Device) GetCurrentTime() time.Time {
+    return time.Now()
+}
 
-        GetCurrentTime() time.Time
-        &ResourceModel{ Id: 13, Name: "Current Time", Operations: OPERATION_RW, Multiple: false, Mandatory: false, ResourceType: TYPE_TIME, RangeOrEnums: "", Units: "", Description: "" },
+func (o *Device) GetUtcOffset() string {
+    return "+8:00"
+}
 
-        GetUtcOffset() string
-        &ResourceModel{ Id: 14, Name: "UTC Offset", Operations: OPERATION_RW, Multiple: false, Mandatory: false, ResourceType: TYPE_STRING, RangeOrEnums: "", Units: "", Description: "" },
+func (o *Device) GetTimezone() string {
+    return ""
+}
 
-        GetTimexone() string
-        &ResourceModel{ Id: 15, Name: "Timezone", Operations: OPERATION_RW, Multiple: false, Mandatory: false, ResourceType: TYPE_STRING, RangeOrEnums: "", Units: "", Description: "" },
-
-        GetSupportedBindingMode() string
-        &ResourceModel{ Id: 16, Name: "Supported Binding and Modes", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: TYPE_STRING, RangeOrEnums: "", Units: "", Description: "" },
-
-*.
+func (o *Device) GetSupportedBindingMode() string {
+    return ""
+}
