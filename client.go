@@ -200,7 +200,17 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
             model := c.registry.GetModel(t)
             inst := c.GetObjectInstance(t, instInt)
             rsrc := model.GetResource(rsrcInt)
-            enabler.Handler.OnRead(t, model, inst, rsrc)
+            v := enabler.Handler.OnRead(t, model, inst, rsrc)
+
+            msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+            msg.SetStringPayload("")
+            msg.Code = COAPCODE_205_CONTENT
+            msg.Token = req.GetMessage().Token
+            msg.Payload = v.GetPayloadValue()
+
+            resp := NewResponseWithMessage(msg)
+
+            return resp
         }
 
     } else {
