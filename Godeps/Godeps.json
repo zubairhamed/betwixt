@@ -1,0 +1,12 @@
+{
+  "ImportPath": "https://github.com/zubairhamed/lwm2m",
+  "GoVersion": "go1.3",
+  "Deps": [
+    {
+      "ImportPath": "github.com/zubairhamed/goap"
+    },
+    {
+      "ImportPath": "github.com/zubairhamed/tlv"
+    }
+  ]
+}
