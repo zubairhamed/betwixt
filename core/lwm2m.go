@@ -26,7 +26,7 @@ const (
 
 // Enablers
 type ObjectHandler interface {
-    OnRead(LWM2MObjectType, *ObjectModel, *ObjectInstance, *ResourceModel) ResponseValue
+    OnRead(LWM2MObjectType, *ObjectModel, *ObjectInstance, *ResourceModel) (PayloadValue)
 }
 
 type ObjectEnabler struct {

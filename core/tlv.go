@@ -7,7 +7,6 @@ package core
         Type          Identifier     Length                 Value
 
 
-
     0bxxxxxxxx
     7-6: Type of Identifier
         00: Object Instance
@@ -20,9 +19,10 @@ package core
     4-3: Type of Length
         00: NO length field, value immediately follows the identifier field
         01: Length field is 8 bits and Bits 2-0 must be ignored
-        10: Legnth field is 16 bits and Bits 2-0 must be ignored
+        10: Length field is 16 bits and Bits 2-0 must be ignored
         11: Length field is 24 bits and Bits 2-0 must be ignored
     2-0: 3 bit unsigned integer indiciating Length of the Value
 
-
+    ------------------------------------
 */
+

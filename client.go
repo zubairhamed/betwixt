@@ -208,7 +208,7 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
             msg.SetStringPayload("")
             msg.Code = COAPCODE_205_CONTENT
             msg.Token = req.GetMessage().Token
-            msg.Payload = v.GetPayloadValue()
+            msg.Payload = v.GetValue()
 
             resp := NewResponseWithMessage(msg)
 

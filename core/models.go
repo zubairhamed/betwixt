@@ -30,7 +30,6 @@ type ResourceModel struct {
     Units               string
     RangeOrEnums        string
     Description         string
-    Value               interface{}
 }
 
 type LWM2MResource struct {
