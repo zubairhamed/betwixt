@@ -82,7 +82,6 @@ func (rv *Integer64Value) GetValue() ([]byte) {
     return []byte(string(rv.value))
 }
 
-
 // Unix Time. A signed integer representing the number of seconds since Jan 1st, 1970 in the UTC time zone.
 // Text: Represented as an ASCII integer.
 // TLV: Same representation as Integer.
