@@ -17,7 +17,7 @@ case 12:
 
 */
 
-func (o *Device) OnRead(t core.LWM2MObjectType, m *core.ObjectModel, i *core.ObjectInstance, r *core.ResourceModel) core.ResponseValue{
+func (o *Device) OnRead(t core.LWM2MObjectType, m *core.ObjectModel, i *core.ObjectInstance, r *core.ResourceModel) core.ResponseValue {
 
     var val core.ResponseValue
     switch r.Id {
@@ -38,27 +38,27 @@ func (o *Device) OnRead(t core.LWM2MObjectType, m *core.ObjectModel, i *core.Obj
         break
 
         case 6:
-        val = core.NewIntResponseValue(o.GetAvailablePowerSources())
+        val = core. NewIntegerResponseValue(o.GetAvailablePowerSources())
         break
 
         case 7:
-        val = core.NewIntResponseValue(o.GetPowerSourceVoltage())
+        val = core.NewIntegerResponseValue(o.GetPowerSourceVoltage())
         break
 
         case 8:
-        val = core.NewIntResponseValue(o.GetPowerSourceCurrent())
+        val = core.NewIntegerResponseValue(o.GetPowerSourceCurrent())
         break
 
         case 9:
-        val = core.NewIntResponseValue(o.GetBatteryLevel())
+        val = core.NewIntegerResponseValue(o.GetBatteryLevel())
         break
 
         case 10:
-        val = core.NewIntResponseValue(o.GetMemoryFree())
+        val = core.NewIntegerResponseValue(o.GetMemoryFree())
         break
 
         case 11:
-        val = core.NewIntResponseValue(o.GetErrorCode())
+        val = core.NewIntegerResponseValue(o.GetErrorCode())
         break
 
         case 13:
@@ -99,11 +99,11 @@ func (o *Device) GetFirmwareVersion() string {
     return "1.0"
 }
 
-func (o *Device) Reboot() *core.NoResponseValue {
+func (o *Device) Reboot() core.ResponseValue {
     return core.NoResponse()
 }
 
-func (o *Device) FactoryReset() *core.NoResponseValue {
+func (o *Device) FactoryReset() core.ResponseValue {
     return core.NoResponse()
 }
 

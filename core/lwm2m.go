@@ -24,9 +24,17 @@ const (
     OPERATION_RWE   OperationCode = 7
 )
 
+type IdentifierType byte
+const (
+    OBJECT_INSTANCE     IdentifierType = 0
+    RESOURCE_INSTANCE   IdentifierType = 1
+    RESOURCES           IdentifierType = 2
+    RESOURCE            IdentifierType = 3
+)
+
 // Enablers
 type ObjectHandler interface {
-    OnRead(LWM2MObjectType, *ObjectModel, *ObjectInstance, *ResourceModel) (PayloadValue)
+    OnRead(LWM2MObjectType, *ObjectModel, *ObjectInstance, *ResourceModel) (ResponseValue)
 }
 
 type ObjectEnabler struct {
