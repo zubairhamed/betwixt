@@ -8,6 +8,6 @@ type AccessControl struct {
 
 }
 
-func (o *AccessControl) OnRead(t core.LWM2MObjectType, m *core.ObjectModel, i *core.ObjectInstance, r *core.ResourceModel) core.ResourceValue {
+func (o *AccessControl) OnRead(r *core.ResourceModel, resourceId int) core.ResourceValue {
     return nil
 }

@@ -13,6 +13,7 @@ const (
     TYPE_OPAQUE         ValueTypeCode = 4
     TYPE_TIME           ValueTypeCode = 5
     TYPE_OBJECTLINK     ValueTypeCode = 6
+    TYPE_MULTIPLE       ValueTypeCode = 6
 )
 
 const (
@@ -36,7 +37,7 @@ const (
 
 // Enablers
 type ObjectHandler interface {
-    OnRead(LWM2MObjectType, *ObjectModel, *ObjectInstance, *ResourceModel) (ResourceValue)
+    OnRead(*ResourceModel, int) (ResourceValue)
 }
 
 type ObjectEnabler struct {

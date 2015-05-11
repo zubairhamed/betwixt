@@ -220,13 +220,13 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
     if enabler != nil {
         if enabler.Handler != nil {
             model := c.registry.GetModel(t)
-            inst := c.GetObjectInstance(t, instInt)
+            // inst := c.GetObjectInstance(t, instInt)
             rsrc := model.GetResource(rsrcInt)
 
             // If multiple resources, call each
             // otherwise call single
             // v := enabler.Handler.OnRead(t, model, inst, rsrc)
-            enabler.Handler.OnRead(t, model, inst, rsrc)
+            enabler.Handler.OnRead(rsrc, instInt)
 
             msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
             msg.SetStringPayload("")

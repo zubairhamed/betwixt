@@ -17,7 +17,7 @@ case 12:
 
 */
 
-func (o *Device) OnRead(t core.LWM2MObjectType, m *core.ObjectModel, i *core.ObjectInstance, r *core.ResourceModel) core.ResourceValue {
+func (o *Device) OnRead(r *core.ResourceModel, resourceId int) core.ResourceValue {
 
     var val core.ResourceValue
 
@@ -39,7 +39,7 @@ func (o *Device) OnRead(t core.LWM2MObjectType, m *core.ObjectModel, i *core.Obj
         break
 
         case 6:
-        val = core. NewIntegerValue(o.GetAvailablePowerSources())
+        val = core. NewIntegerValue(o.GetAvailablePowerSources()...)
         break
 
         case 7:
@@ -108,8 +108,8 @@ func (o *Device) FactoryReset() core.ResourceValue {
     return core.NewEmptyValue()
 }
 
-func (o *Device) GetAvailablePowerSources() int {
-    return 0
+func (o *Device) GetAvailablePowerSources() []int {
+    return []int{ 1, 5 }
 }
 
 func (o *Device) GetPowerSourceVoltage() int {

@@ -6,13 +6,31 @@ import (
     "bytes"
 )
 
-
-
 type ResourceValue interface {
     GetBytes() []byte
     GetType() ValueTypeCode
     GetValue()  interface{}
     GetLength() int
+}
+
+type MultipleResourceInstanceValue struct {
+    values      []ResourceValue
+}
+
+func (v *MultipleResourceInstanceValue) GetBytes() ([]byte) {
+    return []byte("")
+}
+
+func (v *MultipleResourceInstanceValue) GetType() (ValueTypeCode) {
+    return TYPE_MULTIPLE
+}
+
+func (v *MultipleResourceInstanceValue) GetValue() (interface{}) {
+    return v.values
+}
+
+func (v *MultipleResourceInstanceValue) GetLength() (int) {
+    return 0
 }
 
 type StringValue struct {
@@ -150,36 +168,87 @@ func (v *EmptyValue) GetLength() (int) {
 
 
 //
-func NewStringValue(v string) ResourceValue {
-    return &StringValue{
-        value: v,
+func NewStringValue(v ...string) ResourceValue {
+    if len(v) > 1 {
+        vs := []ResourceValue{}
+
+        for _, o := range v {
+            vs = append(vs, NewStringValue(o))
+        }
+        return NewMultipleResourceInstanceValue(vs)
+    } else {
+        return &StringValue{
+            value: v[0],
+        }
     }
 }
 
-func NewIntegerValue(v int) ResourceValue {
-    return &IntegerValue{
-        value: v,
+func NewIntegerValue(v ...int) ResourceValue {
+    if len(v) > 1 {
+        vs := []ResourceValue{}
+
+        for _, o := range v {
+            vs = append(vs, NewIntegerValue(o))
+        }
+        return NewMultipleResourceInstanceValue(vs)
+    } else {
+        return &IntegerValue{
+            value: v[0],
+        }
     }
 }
 
-func NewTimeValue(v time.Time) ResourceValue {
-    return &TimeValue{
-        value: v,
+func NewTimeValue(v ...time.Time) ResourceValue {
+    if len(v) > 1 {
+        vs := []ResourceValue{}
+
+        for _, o := range v {
+            vs = append(vs, NewTimeValue(o))
+        }
+        return NewMultipleResourceInstanceValue(vs)
+    } else {
+        return &TimeValue{
+            value: v[0],
+        }
     }
 }
 
-func NewFloatValue(v float32) ResourceValue {
-    return &FloatValue{
-        value: v,
+func NewFloatValue(v ...float32) ResourceValue {
+    if len(v) > 1 {
+        vs := []ResourceValue{}
+
+        for _, o := range v {
+            vs = append(vs, NewFloatValue(o))
+        }
+        return NewMultipleResourceInstanceValue(vs)
+    } else {
+        return &FloatValue{
+            value: v[0],
+        }
     }
 }
 
-func NewBooleanValue(v bool) ResourceValue {
-    return &BooleanValue{
-        value: v,
+func NewBooleanValue(v ...bool) ResourceValue {
+    if len(v) > 1 {
+        vs := []ResourceValue{}
+
+        for _, o := range v {
+            vs = append(vs, NewBooleanValue(o))
+        }
+        return NewMultipleResourceInstanceValue(vs)
+    } else {
+        return &BooleanValue{
+            value: v[0],
+        }
     }
 }
 
 func NewEmptyValue() ResourceValue {
     return &EmptyValue{}
+}
+
+func NewMultipleResourceInstanceValue(v []ResourceValue) ResourceValue {
+    return &MultipleResourceInstanceValue{
+        values: v,
+    }
 }
