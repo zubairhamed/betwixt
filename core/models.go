@@ -26,7 +26,7 @@ type ResourceModel struct {
     Operations          OperationCode
     Multiple            bool
     Mandatory           bool
-    ResourceType        TypeCode
+    ResourceType        ValueTypeCode
     Units               string
     RangeOrEnums        string
     Description         string

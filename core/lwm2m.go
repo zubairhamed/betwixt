@@ -1,16 +1,18 @@
 package core
 
-type TypeCode        int
+
 type OperationCode   int
 type LWM2MObjectInstances map[LWM2MObjectType] *ObjectEnabler
 
+type ValueTypeCode byte
 const (
-    TYPE_STRING   TypeCode = 0
-    TYPE_INTEGER  TypeCode = 1
-    TYPE_FLOAT    TypeCode = 2
-    TYPE_BOOLEAN  TypeCode = 3
-    TYPE_OPAQUE   TypeCode = 4
-    TYPE_TIME     TypeCode = 5
+    TYPE_STRING         ValueTypeCode = 0
+    TYPE_INTEGER        ValueTypeCode = 1
+    TYPE_FLOAT          ValueTypeCode = 2
+    TYPE_BOOLEAN        ValueTypeCode = 3
+    TYPE_OPAQUE         ValueTypeCode = 4
+    TYPE_TIME           ValueTypeCode = 5
+    TYPE_OBJECTLINK     ValueTypeCode = 6
 )
 
 const (
@@ -34,7 +36,7 @@ const (
 
 // Enablers
 type ObjectHandler interface {
-    OnRead(LWM2MObjectType, *ObjectModel, *ObjectInstance, *ResourceModel) (ResponseValue)
+    OnRead(LWM2MObjectType, *ObjectModel, *ObjectInstance, *ResourceModel) (ResourceValue)
 }
 
 type ObjectEnabler struct {

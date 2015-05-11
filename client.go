@@ -180,6 +180,10 @@ func (c *LWM2MClient) Start() {
 func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
     log.Println(req)
 
+    // Object ID
+    // Object Instance ID
+    // Resource ID
+
     cf := req.GetMessage().GetOption(OPTION_CONTENT_FORMAT)
     log.Println("Content Format", cf)
     log.Println("Enabled Objects", c.enabledObjects)
@@ -187,21 +191,40 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
     obj := req.GetAttribute("obj")
     inst := req.GetAttribute("inst")
     rsrc := req.GetAttribute("rsrc")
-
     log.Println("Instance ", obj, inst, rsrc)
 
-
-    objInt, _ := strconv.Atoi(obj)
-    instInt, _ := strconv.Atoi(inst)
-    rsrcInt, _ := strconv.Atoi(rsrc)
-
+    var objInt int
+    var instInt int
+    var rsrcInt int
     t := core.LWM2MObjectType(objInt)
+
+    if obj != nil {
+        objInt, _ = strconv.Atoi(obj)
+
+        if inst != nil {
+            instInt, _ = strconv.Atoi(inst)
+
+            // Resource Instance
+            if rsrc != nil {
+                rsrcInt, _ = strconv.Atoi(rsrc)
+
+            } else {
+                // Object Instance
+            }
+        } else {
+            // Object ID
+        }
+    }
+
     enabler := c.GetObjectEnabler(t)
     if enabler != nil {
         if enabler.Handler != nil {
             model := c.registry.GetModel(t)
             inst := c.GetObjectInstance(t, instInt)
             rsrc := model.GetResource(rsrcInt)
+
+            // If multiple resources, call each
+            // otherwise call single
             v := enabler.Handler.OnRead(t, model, inst, rsrc)
 
             msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)

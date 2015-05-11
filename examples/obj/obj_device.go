@@ -17,9 +17,12 @@ case 12:
 
 */
 
+func (o *Device) OnRead()
+
 func (o *Device) OnRead(t core.LWM2MObjectType, m *core.ObjectModel, i *core.ObjectInstance, r *core.ResourceModel) core.ResponseValue {
 
-    var val core.ResponseValue
+    var val core.ResourceValue
+
     switch r.Id {
         case 0:
         val = core.NewStringResponseValue(o.GetManufacturer())
