@@ -14,7 +14,6 @@ exec
 case 4:
 case 5:
 case 12:
-
 */
 
 func (o *Device) OnRead(r *core.ResourceModel, resourceId int) core.ResourceValue {

@@ -10,7 +10,6 @@ type ResourceValue interface {
     GetBytes() []byte
     GetType() ValueTypeCode
     GetValue()  interface{}
-    GetLength() int
 }
 
 type MultipleResourceInstanceValue struct {
@@ -29,10 +28,6 @@ func (v *MultipleResourceInstanceValue) GetValue() (interface{}) {
     return v.values
 }
 
-func (v *MultipleResourceInstanceValue) GetLength() (int) {
-    return 0
-}
-
 type StringValue struct {
     value       string
 }
@@ -47,10 +42,6 @@ func (v *StringValue) GetType() (ValueTypeCode) {
 
 func (v *StringValue) GetValue() (interface{}) {
     return v.value
-}
-
-func (v *StringValue) GetLength() (int) {
-    return len(v.value)
 }
 
 type IntegerValue struct {
@@ -72,10 +63,6 @@ func (v *IntegerValue) GetValue() (interface{}) {
     return v.value
 }
 
-func (v *IntegerValue) GetLength() (int) {
-    return 0
-}
-
 type TimeValue struct {
     value       time.Time
 }
@@ -93,10 +80,6 @@ func (v *TimeValue) GetType() (ValueTypeCode) {
 
 func (v *TimeValue) GetValue() (interface{}) {
     return v.value
-}
-
-func (v *TimeValue) GetLength() (int) {
-    return 0
 }
 
 type FloatValue struct {
@@ -118,10 +101,6 @@ func (v *FloatValue) GetValue() (interface{}) {
     return v.value
 }
 
-func (v *FloatValue) GetLength() (int) {
-    return 0
-}
-
 type BooleanValue struct {
     value       bool
 }
@@ -141,11 +120,6 @@ func (v *BooleanValue) GetValue() (interface{}) {
     return v.value
 }
 
-func (v *BooleanValue) GetLength() (int) {
-    return 0
-}
-
-
 type EmptyValue struct {
 
 }
@@ -162,12 +136,6 @@ func (v *EmptyValue) GetValue() (interface{}) {
     return ""
 }
 
-func (v *EmptyValue) GetLength() (int) {
-    return 0
-}
-
-
-//
 func NewStringValue(v ...string) ResourceValue {
     if len(v) > 1 {
         vs := []ResourceValue{}
