@@ -17,67 +17,65 @@ case 12:
 
 */
 
-func (o *Device) OnRead()
-
-func (o *Device) OnRead(t core.LWM2MObjectType, m *core.ObjectModel, i *core.ObjectInstance, r *core.ResourceModel) core.ResponseValue {
+func (o *Device) OnRead(t core.LWM2MObjectType, m *core.ObjectModel, i *core.ObjectInstance, r *core.ResourceModel) core.ResourceValue {
 
     var val core.ResourceValue
 
     switch r.Id {
         case 0:
-        val = core.NewStringResponseValue(o.GetManufacturer())
+        val = core.NewStringValue(o.GetManufacturer())
         break
 
         case 1:
-        val = core.NewStringResponseValue(o.GetModelNumber())
+        val = core.NewStringValue(o.GetModelNumber())
         break
 
         case 2:
-        val = core.NewStringResponseValue(o.GetSerialNumber())
+        val = core.NewStringValue(o.GetSerialNumber())
         break
 
         case 3:
-        val = core.NewStringResponseValue(o.GetFirmwareVersion())
+        val = core.NewStringValue(o.GetFirmwareVersion())
         break
 
         case 6:
-        val = core. NewIntegerResponseValue(o.GetAvailablePowerSources())
+        val = core. NewIntegerValue(o.GetAvailablePowerSources())
         break
 
         case 7:
-        val = core.NewIntegerResponseValue(o.GetPowerSourceVoltage())
+        val = core.NewIntegerValue(o.GetPowerSourceVoltage())
         break
 
         case 8:
-        val = core.NewIntegerResponseValue(o.GetPowerSourceCurrent())
+        val = core.NewIntegerValue(o.GetPowerSourceCurrent())
         break
 
         case 9:
-        val = core.NewIntegerResponseValue(o.GetBatteryLevel())
+        val = core.NewIntegerValue(o.GetBatteryLevel())
         break
 
         case 10:
-        val = core.NewIntegerResponseValue(o.GetMemoryFree())
+        val = core.NewIntegerValue(o.GetMemoryFree())
         break
 
         case 11:
-        val = core.NewIntegerResponseValue(o.GetErrorCode())
+        val = core.NewIntegerValue(o.GetErrorCode())
         break
 
         case 13:
-        val = core.NewTimeResponseValue(o.GetCurrentTime())
+        val = core.NewTimeValue(o.GetCurrentTime())
         break
 
         case 14:
-        val = core.NewStringResponseValue(o.GetUtcOffset())
+        val = core.NewStringValue(o.GetUtcOffset())
         break
 
         case 15:
-        val = core.NewStringResponseValue(o.GetTimezone())
+        val = core.NewStringValue(o.GetTimezone())
         break
 
         case 16:
-        val = core.NewStringResponseValue(o.GetSupportedBindingMode())
+        val = core.NewStringValue(o.GetSupportedBindingMode())
         break
 
         default:
@@ -102,12 +100,12 @@ func (o *Device) GetFirmwareVersion() string {
     return "1.0"
 }
 
-func (o *Device) Reboot() core.ResponseValue {
-    return core.NoResponse()
+func (o *Device) Reboot() core.ResourceValue {
+    return core.NewEmptyValue()
 }
 
-func (o *Device) FactoryReset() core.ResponseValue {
-    return core.NoResponse()
+func (o *Device) FactoryReset() core.ResourceValue {
+    return core.NewEmptyValue()
 }
 
 func (o *Device) GetAvailablePowerSources() int {

@@ -198,14 +198,14 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
     var rsrcInt int
     t := core.LWM2MObjectType(objInt)
 
-    if obj != nil {
+    if obj != "" {
         objInt, _ = strconv.Atoi(obj)
 
-        if inst != nil {
+        if inst != "" {
             instInt, _ = strconv.Atoi(inst)
 
             // Resource Instance
-            if rsrc != nil {
+            if rsrc != "" {
                 rsrcInt, _ = strconv.Atoi(rsrc)
 
             } else {
@@ -225,13 +225,15 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
 
             // If multiple resources, call each
             // otherwise call single
-            v := enabler.Handler.OnRead(t, model, inst, rsrc)
+            // v := enabler.Handler.OnRead(t, model, inst, rsrc)
+            enabler.Handler.OnRead(t, model, inst, rsrc)
 
             msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
             msg.SetStringPayload("")
             msg.Code = COAPCODE_205_CONTENT
             msg.Token = req.GetMessage().Token
-            msg.Payload = v.GetValue()
+            // TODO: Send back as TLV
+            // msg.Payload = v.GetValue()
 
             resp := NewResponseWithMessage(msg)
 
