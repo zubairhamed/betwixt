@@ -4,12 +4,15 @@ import (
     "time"
     "encoding/binary"
     "bytes"
+    "strconv"
+    "log"
 )
 
 type ResourceValue interface {
     GetBytes() []byte
     GetType() ValueTypeCode
     GetValue()  interface{}
+    GetStringValue() string
 }
 
 type MultipleResourceInstanceValue struct {
@@ -28,6 +31,10 @@ func (v *MultipleResourceInstanceValue) GetValue() (interface{}) {
     return v.values
 }
 
+func (v *MultipleResourceInstanceValue) GetStringValue() (string) {
+    return ""
+}
+
 type StringValue struct {
     value       string
 }
@@ -41,6 +48,10 @@ func (v *StringValue) GetType() (ValueTypeCode) {
 }
 
 func (v *StringValue) GetValue() (interface{}) {
+    return v.value
+}
+
+func (v *StringValue) GetStringValue() (string) {
     return v.value
 }
 
@@ -63,6 +74,10 @@ func (v *IntegerValue) GetValue() (interface{}) {
     return v.value
 }
 
+func (v *IntegerValue) GetStringValue() (string) {
+    return string(v.value)
+}
+
 type TimeValue struct {
     value       time.Time
 }
@@ -82,8 +97,12 @@ func (v *TimeValue) GetValue() (interface{}) {
     return v.value
 }
 
+func (v *TimeValue) GetStringValue() (string) {
+    return strconv.FormatInt(v.value.Unix(), 10)
+}
+
 type FloatValue struct {
-    value       float32
+    value       float64
 }
 
 func (v *FloatValue) GetBytes() ([]byte) {
@@ -99,6 +118,10 @@ func (v *FloatValue) GetType() (ValueTypeCode) {
 
 func (v *FloatValue) GetValue() (interface{}) {
     return v.value
+}
+
+func (v *FloatValue) GetStringValue() (string) {
+    return strconv.FormatFloat(v.value, 'g', 1, 32)
 }
 
 type BooleanValue struct {
@@ -120,6 +143,14 @@ func (v *BooleanValue) GetValue() (interface{}) {
     return v.value
 }
 
+func (v *BooleanValue) GetStringValue() (string) {
+    if v.value {
+        return "1"
+    } else {
+        return "0"
+    }
+}
+
 type EmptyValue struct {
 
 }
@@ -135,6 +166,11 @@ func (v *EmptyValue) GetType() (ValueTypeCode) {
 func (v *EmptyValue) GetValue() (interface{}) {
     return ""
 }
+
+func (v *EmptyValue) GetStringValue() (string) {
+    return ""
+}
+
 
 func NewStringValue(v ...string) ResourceValue {
     if len(v) > 1 {
@@ -181,7 +217,7 @@ func NewTimeValue(v ...time.Time) ResourceValue {
     }
 }
 
-func NewFloatValue(v ...float32) ResourceValue {
+func NewFloatValue(v ...float64) ResourceValue {
     if len(v) > 1 {
         vs := []ResourceValue{}
 
