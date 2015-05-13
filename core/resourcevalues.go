@@ -5,7 +5,6 @@ import (
     "encoding/binary"
     "bytes"
     "strconv"
-    "log"
 )
 
 type ResourceValue interface {
@@ -24,7 +23,7 @@ func (v *MultipleResourceInstanceValue) GetBytes() ([]byte) {
 }
 
 func (v *MultipleResourceInstanceValue) GetType() (ValueTypeCode) {
-    return TYPE_MULTIPLE
+    return VALUETYPE_MULTIPLE
 }
 
 func (v *MultipleResourceInstanceValue) GetValue() (interface{}) {
@@ -44,7 +43,7 @@ func (v *StringValue) GetBytes() ([]byte) {
 }
 
 func (v *StringValue) GetType() (ValueTypeCode) {
-    return TYPE_STRING
+    return VALUETYPE_STRING
 }
 
 func (v *StringValue) GetValue() (interface{}) {
@@ -67,7 +66,7 @@ func (v *IntegerValue) GetBytes() ([]byte) {
 }
 
 func (v *IntegerValue) GetType() (ValueTypeCode) {
-    return TYPE_INTEGER
+    return VALUETYPE_INTEGER
 }
 
 func (v *IntegerValue) GetValue() (interface{}) {
@@ -90,7 +89,7 @@ func (v *TimeValue) GetBytes() ([]byte) {
 }
 
 func (v *TimeValue) GetType() (ValueTypeCode) {
-    return TYPE_TIME
+    return VALUETYPE_TIME
 }
 
 func (v *TimeValue) GetValue() (interface{}) {
@@ -113,7 +112,7 @@ func (v *FloatValue) GetBytes() ([]byte) {
 }
 
 func (v *FloatValue) GetType() (ValueTypeCode) {
-    return TYPE_FLOAT
+    return VALUETYPE_FLOAT
 }
 
 func (v *FloatValue) GetValue() (interface{}) {
@@ -136,7 +135,7 @@ func (v *BooleanValue) GetBytes() ([]byte) {
 }
 
 func (v *BooleanValue) GetType() (ValueTypeCode) {
-    return TYPE_BOOLEAN
+    return VALUETYPE_BOOLEAN
 }
 
 func (v *BooleanValue) GetValue() (interface{}) {
@@ -160,7 +159,7 @@ func (v *EmptyValue) GetBytes() ([]byte) {
 }
 
 func (v *EmptyValue) GetType() (ValueTypeCode) {
-    return TYPE_STRING
+    return VALUETYPE_STRING
 }
 
 func (v *EmptyValue) GetValue() (interface{}) {

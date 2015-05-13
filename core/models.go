@@ -58,3 +58,6 @@ type ResourceInstance struct {
     Id          LWM2MObjectType
     Value       interface{}
 }
+
+
+

@@ -1,4 +1,4 @@
-package obj
+package basic
 
 import (
     "github.com/zubairhamed/lwm2m/core"

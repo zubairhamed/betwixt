@@ -196,49 +196,50 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
     var objInt int
     var instInt int
     var rsrcInt int
+    var t core.LWM2MObjectType
 
-    if obj != "" {
-        objInt, _ = strconv.Atoi(obj)
+    // Returned payload
+    msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+    msg.SetStringPayload("")
+    msg.Code = COAPCODE_205_CONTENT
+    msg.Token = req.GetMessage().Token
 
-        if inst != "" {
-            instInt, _ = strconv.Atoi(inst)
-
-            // Resource Instance
-            if rsrc != "" {
-                rsrcInt, _ = strconv.Atoi(rsrc)
-
-            } else {
-                // Object Instance
-            }
-        } else {
-            // Object ID
-        }
-    }
-    t := core.LWM2MObjectType(objInt)
+    objInt, _ = strconv.Atoi(obj)
+    t = core.LWM2MObjectType(objInt)
 
     enabler := c.GetObjectEnabler(t)
     if enabler != nil {
+        log.Println("Enabler != nil", enabler, enabler.Handler, t)
         if enabler.Handler != nil {
-            model := c.registry.GetModel(t)
-            // inst := c.GetObjectInstance(t, instInt)
-            rsrc := model.GetResource(rsrcInt)
+            log.Println("Handler != nil")
+            if obj != "" {
+                model := c.registry.GetModel(t)
 
-            ret := enabler.Handler.OnRead(rsrc, instInt)
-            log.Println(ret)
+                if inst != "" {
+                    instInt, _ = strconv.Atoi(inst)
 
-            msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
-            msg.SetStringPayload("")
-            msg.Code = COAPCODE_205_CONTENT
-            msg.Token = req.GetMessage().Token
+                    if rsrc != "" {
+                        rsrcInt, _ = strconv.Atoi(rsrc)
+                        rsrcObj := model.GetResource(rsrcInt)
 
-            if rsrc.Multiple {
-
-            } else {
-                msg.Payload = NewPlainTextPayload(ret.GetStringValue())
+                        // Multiple Resources
+                        if rsrcObj.Multiple {
+                            log.Println("MULTIPLE VALUE RESOURCE")
+                        } else {
+                            // Single value resource
+                            log.Println("SINGLE VALUE RESOURCE")
+                            ret := enabler.Handler.OnRead(rsrcObj, instInt)
+                            msg.Payload = NewPlainTextPayload(ret.GetStringValue())
+                        }
+                    } else {
+                        // Instance of object
+                        log.Println("INSTANCE OF OBJECT")
+                    }
+                } else {
+                    // Object
+                    log.Println("OBJECT")
+                }
             }
-            // TODO: Send back as TLV
-            // msg.Payload = v.GetValue()
-
             resp := NewResponseWithMessage(msg)
 
             return resp
@@ -247,36 +248,8 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
     } else {
         log.Println("Enabler not found.")
     }
-    // log.Println("Object Instance", objectInstance, objectInstance.Id, objectInstance.TypeId, objectInstance.Resources)
 
-
-    // if accept application link format
-        // handleDiscoverRequest
-    // else if observe
-        // handleObserveRequest
-    // else
-        // handleReadRequest
-
-
-    /*
-READ        GET     /0/0
-READ        GET     /0/0/0
-DISCOVER    GET     /0      +Accept: application/link format
-DISCOVER    GET     /0/0    +Accept: application/link format
-DISCOVER    GET     /0/0/0  +Accept: application/link format
-OBSERVE     GET     /0      +Observe
-OBSERVE     GET     /0/0    +Observe
-OBSERVE     GET     /0/0/0  +Observe
-    */
-
-    msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
-    msg.SetStringPayload("")
-    msg.Code = COAPCODE_205_CONTENT
-    msg.Token = req.GetMessage().Token
-
-    resp := NewResponseWithMessage(msg)
-
-    return resp
+    return nil
 }
 
 func (c *LWM2MClient)  handleDiscoverRequest() {

@@ -1,19 +1,18 @@
 package core
 
-
 type OperationCode   int
 type LWM2MObjectInstances map[LWM2MObjectType] *ObjectEnabler
 
 type ValueTypeCode byte
 const (
-    TYPE_STRING         ValueTypeCode = 0
-    TYPE_INTEGER        ValueTypeCode = 1
-    TYPE_FLOAT          ValueTypeCode = 2
-    TYPE_BOOLEAN        ValueTypeCode = 3
-    TYPE_OPAQUE         ValueTypeCode = 4
-    TYPE_TIME           ValueTypeCode = 5
-    TYPE_OBJECTLINK     ValueTypeCode = 6
-    TYPE_MULTIPLE       ValueTypeCode = 6
+    VALUETYPE_STRING         ValueTypeCode = 0
+    VALUETYPE_INTEGER        ValueTypeCode = 1
+    VALUETYPE_FLOAT          ValueTypeCode = 2
+    VALUETYPE_BOOLEAN        ValueTypeCode = 3
+    VALUETYPE_OPAQUE         ValueTypeCode = 4
+    VALUETYPE_TIME           ValueTypeCode = 5
+    VALUETYPE_OBJECTLINK     ValueTypeCode = 6
+    VALUETYPE_MULTIPLE       ValueTypeCode = 6
 )
 
 const (

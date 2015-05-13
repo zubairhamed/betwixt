@@ -5,7 +5,7 @@ import (
     . "github.com/zubairhamed/lwm2m/objects"
     "github.com/zubairhamed/lwm2m/objects/oma"
     "github.com/zubairhamed/goap"
-    . "github.com/zubairhamed/lwm2m/examples/obj"
+    . "github.com/zubairhamed/lwm2m/examples/obj/basic"
 )
 
 func main() {
