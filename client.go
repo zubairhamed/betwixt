@@ -70,8 +70,6 @@ func (c *LWM2MClient) Register(name string) (string) {
 
 //    CallEvent(c.evtOnRegistered, EmptyEventPayload())
 
-    log.Println(path)
-
     return path
 }
 
@@ -178,20 +176,13 @@ func (c *LWM2MClient) Start() {
 
 
 func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
-    log.Println(req)
-
     // Object ID
     // Object Instance ID
     // Resource ID
 
-    cf := req.GetMessage().GetOption(OPTION_CONTENT_FORMAT)
-    log.Println("Content Format", cf)
-    log.Println("Enabled Objects", c.enabledObjects)
-
     obj := req.GetAttribute("obj")
     inst := req.GetAttribute("inst")
     rsrc := req.GetAttribute("rsrc")
-    log.Println("Instance ", obj, inst, rsrc)
 
     var objInt int
     var instInt int
@@ -209,9 +200,7 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
 
     enabler := c.GetObjectEnabler(t)
     if enabler != nil {
-        log.Println("Enabler != nil", enabler, enabler.Handler, t)
         if enabler.Handler != nil {
-            log.Println("Handler != nil")
             if obj != "" {
                 model := c.registry.GetModel(t)
 
@@ -224,7 +213,7 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
 
                         // Multiple Resources
                         if rsrcObj.Multiple {
-
+                            core.TlvPayloadFromResourceInstances(c.enabledObjects[t].GetObjectInstance(instInt).GetResource(rsrcInt))
                         } else {
                             // Single value resource
                             ret := enabler.Handler.OnRead(rsrcObj, instInt)
@@ -232,12 +221,12 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
                         }
                     } else {
                         // Instance of object
-                        core.NewTlvPayload()
-                        log.Println("INSTANCE OF OBJECT")
+                        core.TlvPayloadFromObjectInstance((c.enabledObjects[t].GetObjectInstance(objInt)))
+
                     }
                 } else {
                     // Object
-                    log.Println("OBJECT")
+                    core.TlvPayloadFromObjects(c.enabledObjects[t])
                 }
             }
             resp := NewResponseWithMessage(msg)
@@ -265,8 +254,6 @@ func (c *LWM2MClient)  handleReadRequest() {
 }
 
 func (c *LWM2MClient)  handlePutRequest(req *CoapRequest) *CoapResponse {
-    log.Println(req)
-
     // if url has parameters
     // else
 
@@ -287,8 +274,6 @@ WRITE ATTR  PUT     /0/0/0  +?pmin={minimum period}&pmax={maximum period}&gt={gr
 }
 
 func (c *LWM2MClient)  handleDeleteRequest(req *CoapRequest) *CoapResponse {
-    log.Println(req)
-
     // DELETE  /0/0
 
     msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
@@ -302,8 +287,6 @@ func (c *LWM2MClient)  handleDeleteRequest(req *CoapRequest) *CoapResponse {
 }
 
 func (c *LWM2MClient)  handlePostRequest(req *CoapRequest) *CoapResponse {
-    log.Println(req)
-
     // if has resource, execute
     // else create
     /*
