@@ -44,5 +44,13 @@ type ObjectEnabler struct {
     Instances   []*ObjectInstance
 }
 
+func (en *ObjectEnabler) GetObjectInstance(idx int) (*ObjectInstance) {
+    for _, o := range en.Instances {
+        if o.Id == idx {
+            return o
+        }
+    }
+    return nil
+}
 
 

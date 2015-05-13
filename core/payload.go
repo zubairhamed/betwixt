@@ -25,8 +25,8 @@ package core
     ------------------------------------
 */
 
-func NewTlvPayload() {
-
+func NewTlvPayload() *TlvPayload {
+    return nil
 }
 
 type TlvPayload struct {
