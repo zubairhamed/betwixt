@@ -224,15 +224,15 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
 
                         // Multiple Resources
                         if rsrcObj.Multiple {
-                            log.Println("MULTIPLE VALUE RESOURCE")
+
                         } else {
                             // Single value resource
-                            log.Println("SINGLE VALUE RESOURCE")
                             ret := enabler.Handler.OnRead(rsrcObj, instInt)
                             msg.Payload = NewPlainTextPayload(ret.GetStringValue())
                         }
                     } else {
                         // Instance of object
+                        core.NewTlvPayload()
                         log.Println("INSTANCE OF OBJECT")
                     }
                 } else {
