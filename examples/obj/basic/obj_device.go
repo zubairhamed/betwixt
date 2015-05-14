@@ -3,6 +3,7 @@ package basic
 import (
     "github.com/zubairhamed/lwm2m/core"
     "time"
+    "log"
 )
 
 type Device struct {
@@ -16,6 +17,82 @@ case 5:
 case 12:
 */
 
+func (o *Device) OnRead(instanceId int, resourceId int) (core.ResourceValue) {
+    log.Println("OnRead", instanceId, resourceId)
+
+    if resourceId == -1 {
+        // Read Object Instance
+    } else {
+        // Read Resource Instance
+        var val core.ResourceValue
+
+        switch resourceId {
+            case 0:
+            val = core.NewStringValue(o.GetManufacturer())
+            break
+
+            case 1:
+            val = core.NewStringValue(o.GetModelNumber())
+            break
+
+            case 2:
+            val = core.NewStringValue(o.GetSerialNumber())
+            break
+
+            case 3:
+            val = core.NewStringValue(o.GetFirmwareVersion())
+            break
+
+            case 6:
+            val = core. NewIntegerValue(o.GetAvailablePowerSources()...)
+            break
+
+            case 7:
+            val = core.NewIntegerValue(o.GetPowerSourceVoltage())
+            break
+
+            case 8:
+            val = core.NewIntegerValue(o.GetPowerSourceCurrent())
+            break
+
+            case 9:
+            val = core.NewIntegerValue(o.GetBatteryLevel())
+            break
+
+            case 10:
+            val = core.NewIntegerValue(o.GetMemoryFree())
+            break
+
+            case 11:
+            val = core.NewIntegerValue(o.GetErrorCode())
+            break
+
+            case 13:
+            val = core.NewTimeValue(o.GetCurrentTime())
+            break
+
+            case 14:
+            val = core.NewStringValue(o.GetUtcOffset())
+            break
+
+            case 15:
+            val = core.NewStringValue(o.GetTimezone())
+            break
+
+            case 16:
+            val = core.NewStringValue(o.GetSupportedBindingMode())
+            break
+
+            default:
+            break
+        }
+        return val
+    }
+    return core.NewEmptyValue()
+}
+
+
+/*
 func (o *Device) OnRead(r *core.ResourceModel, resourceId int) core.ResourceValue {
 
     var val core.ResourceValue
@@ -82,6 +159,7 @@ func (o *Device) OnRead(r *core.ResourceModel, resourceId int) core.ResourceValu
     }
     return val
 }
+*/
 
 func (o *Device) GetManufacturer() string {
     return "GOLWM2M"

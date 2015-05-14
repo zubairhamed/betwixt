@@ -8,6 +8,7 @@ type AccessControl struct {
 
 }
 
-func (o *AccessControl) OnRead(r *core.ResourceModel, resourceId int) core.ResourceValue {
+
+func (o *AccessControl) OnRead(instanceId int, resourceId int) (core.ResourceValue) {
     return core.NewEmptyValue()
 }

@@ -37,7 +37,7 @@ const (
 // Enablers
 type ObjectHandler interface {
     // OnRead(*ResourceModel, int) (ResourceValue)
-    OnRead(objectId int, instanceId int)(ResourceValue)
+    OnRead(instanceId int, resourceId int)(ResourceValue)
 }
 
 type ObjectEnabler struct {

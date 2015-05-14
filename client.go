@@ -9,7 +9,6 @@ import (
     "fmt"
     "github.com/zubairhamed/lwm2m/core"
     "github.com/zubairhamed/lwm2m/objects"
-    "strconv"
 )
 
 func NewLWM2MClient(local string, remote string) (*LWM2MClient) {
@@ -121,7 +120,6 @@ func (c *LWM2MClient) AddObjectInstance(instance *core.ObjectInstance) (error) {
         o := c.GetObjectInstance(instance.TypeId, instance.Id)
         if o == nil {
             c.enabledObjects[instance.TypeId].Instances = append(c.enabledObjects[instance.TypeId].Instances, instance)
-            // c.enabledObjects[instance.TypeId] = append(c.enabledObjects[instance.TypeId], instance)
 
             return nil
         } else {
@@ -188,21 +186,20 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
     // Object Instance ID
     // Resource ID
 
-    attrObject := req.GetAttribute("obj")
-    attrInstance := req.GetAttribute("inst")
     attrResource := req.GetAttribute("rsrc")
+    objectId := req.GetAttributeAsInt("obj")
+    instanceId := req.GetAttributeAsInt("inst")
 
-    objectId := req.GetAttributeAsInteger("obj")
-    instanceId := req.GetAttributeAsInteger("inst")
-
+    log.Println("Request == ", attrResource, objectId, instanceId)
     var resourceId = -1
 
     if attrResource != "" {
-        resourceId, _ := strconv.Atoi(attrInstance)
+        resourceId = req.GetAttributeAsInt("rsrc")
     }
 
     t := core.LWM2MObjectType(objectId)
     enabler := c.GetObjectEnabler(t)
+
 
     if enabler != nil {
         if enabler.Handler != nil {
@@ -211,8 +208,10 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
             msg.Code = COAPCODE_205_CONTENT
             msg.Token = req.GetMessage().Token
 
-            val := enabler.Handler.OnRead(objectId, instanceId)
-            msg.Payload = val.GetBytes()
+            val := enabler.Handler.OnRead(instanceId, resourceId)
+            msg.Payload = NewBytesPayload(val.GetBytes())
+
+            return NewResponseWithMessage(msg)
         }
     }
 
@@ -487,5 +486,4 @@ func BuildModelResourceStringPayload(instances core.LWM2MObjectInstances) (strin
     } else {
         log.Println("Enabler not found.")
     }
-    */
 */

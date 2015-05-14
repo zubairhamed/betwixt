@@ -1,19 +1,17 @@
 package core
 
-import "log"
-
 func TlvPayloadFromObjects(enabled *ObjectEnabler) (*TlvPayload, error) {
-    log.Println("TLV < Payload from Objects")
+    // log.Println("TLV < Payload from Objects")
     return NewTlvPayload(), nil
 }
 
 func TlvPayloadFromObjectInstance(o *ObjectInstance) (*TlvPayload, error) {
-    log.Println("TLV < Payload from Object Instance")
+    // log.Println("TLV < Payload from Object Instance")
     return NewTlvPayload(), nil
 }
 
 func TlvPayloadFromResource(v *MultipleResourceInstanceValue , m *ResourceModel, o *Resource) (*TlvPayload, error) {
-    log.Println("TLV < Payload from Resource", v, m, o)
+    // log.Println("TLV < Payload from Resource", v, m, o)
 
 
     /*
