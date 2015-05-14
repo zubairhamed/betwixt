@@ -12,17 +12,18 @@ type ModelSource interface {
 }
 
 func NewDefaultObjectRegistry() (*ObjectRegistry) {
-    reg := NewObjectRegistry()
-
-    reg.Register(&oma.LWM2MCoreObjects{})
-    reg.Register(&ipso.IPSOSmartObjects{})
+    reg := NewObjectRegistry(&oma.LWM2MCoreObjects{}, &ipso.IPSOSmartObjects{})
 
     return reg
 }
 
-func NewObjectRegistry() (*ObjectRegistry) {
+func NewObjectRegistry(s ...ModelSource) (*ObjectRegistry) {
     reg := &ObjectRegistry{}
     reg.sources = []ModelSource{}
+
+    for _, o := range s {
+        reg.Register(o)
+    }
 
     return reg
 }

@@ -73,6 +73,10 @@ func (c *LWM2MClient) Register(name string) (string) {
     return path
 }
 
+func (c *LWM2MClient) GetEnabledObjects() (map[core.LWM2MObjectType] *core.ObjectEnabler) {
+    return c.enabledObjects
+}
+
 func (c *LWM2MClient) Unregister() {
 
 }

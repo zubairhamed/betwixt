@@ -1,13 +1,15 @@
-package lwm2m
+package tests
+
 import (
     "testing"
     "github.com/zubairhamed/lwm2m/objects/oma"
     "github.com/zubairhamed/lwm2m/objects"
     "github.com/zubairhamed/lwm2m/core"
+    "github.com/zubairhamed/lwm2m"
 )
 
 func TestClient(t *testing.T) {
-    client := NewLWM2MClient(":0", "localhost:5683")
+    client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
     if client == nil {
         t.Error("Error instantiating client")
     }
@@ -48,11 +50,43 @@ func TestClient(t *testing.T) {
         t.Error("Error enabling object")
     }
 
+    //////
+    if client.GetObjectEnabler(oma.OBJECT_LWM2M_SECURITY) == nil {
+        t.Error("Error getting object enabler")
+    }
+
+    if client.GetObjectEnabler(oma.OBJECT_LWM2M_SERVER) == nil {
+        t.Error("Error getting object enabler")
+    }
+
+    if client.GetObjectEnabler(oma.OBJECT_LWM2M_ACCESS_CONTROL) == nil {
+        t.Error("Error getting object enabler")
+    }
+
+    if client.GetObjectEnabler(oma.OBJECT_LWM2M_DEVICE) == nil {
+        t.Error("Error getting object enabler")
+    }
+
+    if client.GetObjectEnabler(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING) == nil {
+        t.Error("Error getting object enabler")
+    }
+
+    if client.GetObjectEnabler(oma.OBJECT_LWM2M_FIRMWARE_UPDATE) == nil {
+        t.Error("Error getting object enabler")
+    }
+
+    if client.GetObjectEnabler(oma.OBJECT_LWM2M_LOCATION) == nil {
+        t.Error("Error getting object enabler")
+    }
+
+    if client.GetObjectEnabler(oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS) == nil {
+        t.Error("Error getting object enabler")
+    }
+
     registry := objects.NewDefaultObjectRegistry()
     if registry == nil {
         t.Error("Error instantiating registry")
     }
-
     client.UseRegistry(registry)
 
     inst1 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 0)
@@ -90,34 +124,47 @@ func TestRegistry(t *testing.T) {
     }
 
     if reg.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 0) == nil {
-        t.Error("Error creating lwm2m object")
+        t.Error("Error creating LWM2M object")
     }
 
     if reg.CreateObjectInstance(oma.OBJECT_LWM2M_SERVER, 0) == nil {
-        t.Error("Error creating lwm2m object")
+        t.Error("Error creating LWM2M object")
     }
 
     if reg.CreateObjectInstance(oma.OBJECT_LWM2M_ACCESS_CONTROL, 0) == nil {
-        t.Error("Error creating lwm2m object")
+        t.Error("Error creating LWM2M object")
     }
 
     if reg.CreateObjectInstance(oma.OBJECT_LWM2M_DEVICE, 0) == nil {
-        t.Error("Error creating lwm2m object")
+        t.Error("Error creating LWM2M object")
     }
 
     if reg.CreateObjectInstance(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, 0) == nil {
-        t.Error("Error creating lwm2m object")
+        t.Error("Error creating LWM2M object")
     }
 
     if reg.CreateObjectInstance(oma.OBJECT_LWM2M_FIRMWARE_UPDATE, 0) == nil {
-        t.Error("Error creating lwm2m object")
+        t.Error("Error creating LWM2M object")
     }
 
     if reg.CreateObjectInstance(oma.OBJECT_LWM2M_LOCATION, 0) == nil {
-        t.Error("Error creating lwm2m object")
+        t.Error("Error creating LWM2M object")
     }
 
     if reg.CreateObjectInstance(oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS, 0) == nil {
-        t.Error("Error creating lwm2m object")
+        t.Error("Error creating LWM2M object")
+    }
+}
+
+func TestBuildResourceStringPayload(t *testing.T) {
+    client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
+
+    client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil)
+    client.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, nil)
+    client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, nil)
+
+    str := lwm2m.BuildModelResourceStringPayload(client.GetEnabledObjects())
+    if str != "</0>,</2>,</4>," {
+        t.Error("Unexpected output building Model Resource String")
     }
 }
