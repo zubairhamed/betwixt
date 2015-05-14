@@ -6,7 +6,7 @@
       "ImportPath": "github.com/zubairhamed/goap"
     },
     {
-      "ImportPath": "github.com/zubairhamed/tlv"
+      "ImportPath": "github.com/stretchr/testify/assert"
     }
   ]
 }

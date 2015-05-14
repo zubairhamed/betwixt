@@ -40,24 +40,28 @@ type LWM2MResource struct {
 func NewObjectInstance(t LWM2MObjectType) (*ObjectInstance) {
     return &ObjectInstance{
         TypeId: t,
-        Resources: make(map[int]*ResourceInstance),
+        Resources: make(map[int]*Resource),
     }
 }
 
 type ObjectInstance struct {
     Id          int
     TypeId      LWM2MObjectType
-    Resources   map[int]*ResourceInstance
+    Resources   map[int]*Resource
 }
 
-func (o *ObjectInstance) GetResource(id int) (*ResourceInstance) {
+func (o *ObjectInstance) GetResource(id int) (*Resource) {
     return o.Resources[id]
+}
+
+type Resource struct {
+    Id          int
+    Instances   map[int]*ResourceInstance
 }
 
 type ResourceInstance struct {
     Id          LWM2MObjectType
     Value       interface{}
 }
-
 
 

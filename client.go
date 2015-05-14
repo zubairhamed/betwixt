@@ -77,6 +77,10 @@ func (c *LWM2MClient) GetEnabledObjects() (map[core.LWM2MObjectType] *core.Objec
     return c.enabledObjects
 }
 
+func (c *LWM2MClient) GetRegistry() *objects.ObjectRegistry {
+    return c.registry
+}
+
 func (c *LWM2MClient) Unregister() {
 
 }
@@ -184,62 +188,32 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
     // Object Instance ID
     // Resource ID
 
-    obj := req.GetAttribute("obj")
-    inst := req.GetAttribute("inst")
-    rsrc := req.GetAttribute("rsrc")
+    attrObject := req.GetAttribute("obj")
+    attrInstance := req.GetAttribute("inst")
+    attrResource := req.GetAttribute("rsrc")
 
-    var objInt int
-    var instInt int
-    var rsrcInt int
-    var t core.LWM2MObjectType
+    objectId := req.GetAttributeAsInteger("obj")
+    instanceId := req.GetAttributeAsInteger("inst")
 
-    // Returned payload
-    msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
-    msg.SetStringPayload("")
-    msg.Code = COAPCODE_205_CONTENT
-    msg.Token = req.GetMessage().Token
+    var resourceId = -1
 
-    objInt, _ = strconv.Atoi(obj)
-    t = core.LWM2MObjectType(objInt)
+    if attrResource != "" {
+        resourceId, _ := strconv.Atoi(attrInstance)
+    }
 
+    t := core.LWM2MObjectType(objectId)
     enabler := c.GetObjectEnabler(t)
+
     if enabler != nil {
         if enabler.Handler != nil {
-            if obj != "" {
-                model := c.registry.GetModel(t)
+            msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+            msg.SetStringPayload("")
+            msg.Code = COAPCODE_205_CONTENT
+            msg.Token = req.GetMessage().Token
 
-                if inst != "" {
-                    instInt, _ = strconv.Atoi(inst)
-
-                    if rsrc != "" {
-                        rsrcInt, _ = strconv.Atoi(rsrc)
-                        rsrcObj := model.GetResource(rsrcInt)
-
-                        // Multiple Resources
-                        if rsrcObj.Multiple {
-                            core.TlvPayloadFromResourceInstances(c.enabledObjects[t].GetObjectInstance(instInt).GetResource(rsrcInt))
-                        } else {
-                            // Single value resource
-                            ret := enabler.Handler.OnRead(rsrcObj, instInt)
-                            msg.Payload = NewPlainTextPayload(ret.GetStringValue())
-                        }
-                    } else {
-                        // Instance of object
-                        core.TlvPayloadFromObjectInstance((c.enabledObjects[t].GetObjectInstance(objInt)))
-
-                    }
-                } else {
-                    // Object
-                    core.TlvPayloadFromObjects(c.enabledObjects[t])
-                }
-            }
-            resp := NewResponseWithMessage(msg)
-
-            return resp
+            val := enabler.Handler.OnRead(objectId, instanceId)
+            msg.Payload = val.GetBytes()
         }
-
-    } else {
-        log.Println("Enabler not found.")
     }
 
     return nil
@@ -461,3 +435,57 @@ func BuildModelResourceStringPayload(instances core.LWM2MObjectInstances) (strin
     }
     return buf.String()
 }
+
+/*
+    /*
+    // Returned payload
+
+
+
+    enabler := c.GetObjectEnabler(t)
+    if enabler != nil {
+        if enabler.Handler != nil {
+            val := enabler.Handler.OnRead(objectId, )
+
+            // val := enabler.Handler.OnRead(objectId, resourceId)
+            // msg.Payload = val.GetBytes()
+
+            if obj != "" {
+                model := c.registry.GetModel(t)
+
+                if inst != "" {
+                    instInt, _ = strconv.Atoi(inst)
+
+                    if rsrc != "" {
+                        // Querying resource, so call Handlers
+                        rsrcInt, _ = strconv.Atoi(rsrc)
+                        rsrcObj := model.GetResource(rsrcInt)
+
+                        // Multiple Resources
+                        ret := enabler.Handler.OnRead(rsrcObj, instInt)
+
+                        if rsrcObj.Multiple {
+                            core.TlvPayloadFromResource(ret.GetValue().(*core.MultipleResourceInstanceValue), rsrcObj, c.enabledObjects[t].GetObjectInstance(instInt).GetResource(rsrcInt))
+                        } else {
+                            // Single value resource
+                            msg.Payload = NewPlainTextPayload(ret.GetStringValue())
+                        }
+                    } else {
+                        // Instance of object
+                        core.TlvPayloadFromObjectInstance((c.enabledObjects[t].GetObjectInstance(objInt)))
+                    }
+                } else {
+                    // Object
+                    core.TlvPayloadFromObjects(c.enabledObjects[t])
+                }
+            }
+            resp := NewResponseWithMessage(msg)
+
+            return resp
+        }
+
+    } else {
+        log.Println("Enabler not found.")
+    }
+    */
+*/

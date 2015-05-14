@@ -115,8 +115,6 @@ func TestRegistry(t *testing.T) {
     if reg.CreateObjectInstance(core.LWM2MObjectType(-1), 0) != nil {
         t.Error("Created an unknown LWM2M Object")
     }
-
-
 }
 
 func TestBuildResourceStringPayload(t *testing.T) {

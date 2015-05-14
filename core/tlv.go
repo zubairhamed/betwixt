@@ -12,8 +12,17 @@ func TlvPayloadFromObjectInstance(o *ObjectInstance) (*TlvPayload, error) {
     return NewTlvPayload(), nil
 }
 
-func TlvPayloadFromResourceInstances(o *ResourceInstance) (*TlvPayload, error) {
-    log.Println("TLV < Payload from Resource Instance")
+func TlvPayloadFromResource(v *MultipleResourceInstanceValue , m *ResourceModel, o *Resource) (*TlvPayload, error) {
+    log.Println("TLV < Payload from Resource", v, m, o)
+
+
+    /*
+    if len(o.Instances) > 0 {
+        // Root Resource with Instances for Values
+    } else {
+        // Root Resource with Multiple Values
+    }
+    */
 
     return NewTlvPayload(), nil
 }
