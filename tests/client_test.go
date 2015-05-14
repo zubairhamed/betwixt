@@ -14,6 +14,24 @@ func TestClient(t *testing.T) {
         t.Error("Error instantiating client")
     }
 
+    cases1 := []struct {
+        in core.LWM2MObjectType
+    }{
+        {oma.OBJECT_LWM2M_SERVER},
+        {oma.OBJECT_LWM2M_ACCESS_CONTROL},
+        {oma.OBJECT_LWM2M_DEVICE},
+        {oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING},
+        {oma.OBJECT_LWM2M_FIRMWARE_UPDATE},
+        {oma.OBJECT_LWM2M_LOCATION},
+        {oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS},
+    }
+
+    for _, c := range cases1 {
+        if client.EnableObject(c.in, nil) != nil {
+            t.Error("Error enabling object: ", c)
+        }
+    }
+
     if client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil) != nil {
         t.Error("Error enabling object")
     }
@@ -22,65 +40,22 @@ func TestClient(t *testing.T) {
         t.Error("Object should already be enabled")
     }
 
-    if client.EnableObject(oma.OBJECT_LWM2M_SERVER, nil) != nil {
-        t.Error("Error enabling object")
+    cases2 := []struct {
+        in core.LWM2MObjectType
+    }{
+        {oma.OBJECT_LWM2M_SERVER},
+        {oma.OBJECT_LWM2M_ACCESS_CONTROL},
+        {oma.OBJECT_LWM2M_DEVICE},
+        {oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING},
+        {oma.OBJECT_LWM2M_FIRMWARE_UPDATE},
+        {oma.OBJECT_LWM2M_LOCATION},
+        {oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS},
     }
 
-    if client.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, nil) != nil {
-        t.Error("Error enabling object")
-    }
-
-    if client.EnableObject(oma.OBJECT_LWM2M_DEVICE, nil) != nil {
-        t.Error("Error enabling object")
-    }
-
-    if client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, nil) != nil {
-        t.Error("Error enabling object")
-    }
-
-    if client.EnableObject(oma.OBJECT_LWM2M_FIRMWARE_UPDATE, nil) != nil {
-        t.Error("Error enabling object")
-    }
-
-    if client.EnableObject(oma.OBJECT_LWM2M_LOCATION, nil) != nil {
-        t.Error("Error enabling object")
-    }
-
-    if client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS, nil) != nil {
-        t.Error("Error enabling object")
-    }
-
-    //////
-    if client.GetObjectEnabler(oma.OBJECT_LWM2M_SECURITY) == nil {
-        t.Error("Error getting object enabler")
-    }
-
-    if client.GetObjectEnabler(oma.OBJECT_LWM2M_SERVER) == nil {
-        t.Error("Error getting object enabler")
-    }
-
-    if client.GetObjectEnabler(oma.OBJECT_LWM2M_ACCESS_CONTROL) == nil {
-        t.Error("Error getting object enabler")
-    }
-
-    if client.GetObjectEnabler(oma.OBJECT_LWM2M_DEVICE) == nil {
-        t.Error("Error getting object enabler")
-    }
-
-    if client.GetObjectEnabler(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING) == nil {
-        t.Error("Error getting object enabler")
-    }
-
-    if client.GetObjectEnabler(oma.OBJECT_LWM2M_FIRMWARE_UPDATE) == nil {
-        t.Error("Error getting object enabler")
-    }
-
-    if client.GetObjectEnabler(oma.OBJECT_LWM2M_LOCATION) == nil {
-        t.Error("Error getting object enabler")
-    }
-
-    if client.GetObjectEnabler(oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS) == nil {
-        t.Error("Error getting object enabler")
+    for _, c := range cases2 {
+        if client.GetObjectEnabler(c.in) == nil {
+            t.Error("Error getting object enabler: ", c)
+        }
     }
 
     registry := objects.NewDefaultObjectRegistry()
@@ -99,61 +74,49 @@ func TestClient(t *testing.T) {
 
     client.AddObjectInstances(inst1, inst2, inst3)
 
-    if client.GetObjectInstance(oma.OBJECT_LWM2M_SECURITY, 0) == nil {
-        t.Error("Object instance 1 not found")
+    cases3 := []struct {
+        ot   core.LWM2MObjectType
+        oi   int
+    }{
+        {oma.OBJECT_LWM2M_SECURITY, 0},
+        {oma.OBJECT_LWM2M_SECURITY, 1},
+        {oma.OBJECT_LWM2M_SECURITY, 2},
     }
 
-    if client.GetObjectInstance(oma.OBJECT_LWM2M_SECURITY, 1) == nil {
-        t.Error("Object instance 2 not found")
-    }
-
-    if client.GetObjectInstance(oma.OBJECT_LWM2M_SECURITY, 2) == nil {
-        t.Error("Object instance 3 not found")
-    }
-
-    if client.AddObjectInstance(inst1) == nil {
-        t.Error("Error should be thrown for adding duplicate instance")
+    for _, c := range cases3 {
+        if client.GetObjectInstance(c.ot, c.oi) == nil {
+            t.Error("Object instance", c.oi, "not found")
+        }
     }
 }
 
 func TestRegistry(t *testing.T) {
     reg := objects.NewDefaultObjectRegistry()
 
+    cases := []struct {
+        o   core.LWM2MObjectType
+    }{
+        {oma.OBJECT_LWM2M_SECURITY},
+        {oma.OBJECT_LWM2M_SERVER},
+        {oma.OBJECT_LWM2M_ACCESS_CONTROL},
+        {oma.OBJECT_LWM2M_DEVICE},
+        {oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING},
+        {oma.OBJECT_LWM2M_FIRMWARE_UPDATE},
+        {oma.OBJECT_LWM2M_LOCATION},
+        {oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS},
+    }
+
+    for _, c := range cases {
+        if reg.CreateObjectInstance(c.o, 0) == nil {
+            t.Error("Created an LWM2M Object: ", c.o)
+        }
+    }
+
     if reg.CreateObjectInstance(core.LWM2MObjectType(-1), 0) != nil {
         t.Error("Created an unknown LWM2M Object")
     }
 
-    if reg.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 0) == nil {
-        t.Error("Error creating LWM2M object")
-    }
 
-    if reg.CreateObjectInstance(oma.OBJECT_LWM2M_SERVER, 0) == nil {
-        t.Error("Error creating LWM2M object")
-    }
-
-    if reg.CreateObjectInstance(oma.OBJECT_LWM2M_ACCESS_CONTROL, 0) == nil {
-        t.Error("Error creating LWM2M object")
-    }
-
-    if reg.CreateObjectInstance(oma.OBJECT_LWM2M_DEVICE, 0) == nil {
-        t.Error("Error creating LWM2M object")
-    }
-
-    if reg.CreateObjectInstance(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, 0) == nil {
-        t.Error("Error creating LWM2M object")
-    }
-
-    if reg.CreateObjectInstance(oma.OBJECT_LWM2M_FIRMWARE_UPDATE, 0) == nil {
-        t.Error("Error creating LWM2M object")
-    }
-
-    if reg.CreateObjectInstance(oma.OBJECT_LWM2M_LOCATION, 0) == nil {
-        t.Error("Error creating LWM2M object")
-    }
-
-    if reg.CreateObjectInstance(oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS, 0) == nil {
-        t.Error("Error creating LWM2M object")
-    }
 }
 
 func TestBuildResourceStringPayload(t *testing.T) {
