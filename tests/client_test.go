@@ -164,7 +164,8 @@ func TestBuildResourceStringPayload(t *testing.T) {
     client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, nil)
 
     str := lwm2m.BuildModelResourceStringPayload(client.GetEnabledObjects())
-    if str != "</0>,</2>,</4>," {
-        t.Error("Unexpected output building Model Resource String")
+    compare := "</0>,</2>,</4>,"
+    if str != compare {
+        t.Error("Unexpected output building Model Resource String: Expected = ", compare, "Actual = ", str)
     }
 }
