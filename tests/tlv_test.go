@@ -15,7 +15,8 @@ func TestResourceInstanceToTlv(t *testing.T) {
     // object := client.GetEnabledObjects()[oma.OBJECT_LWM2M_DEVICE]
     model := client.GetRegistry().GetModel(oma.OBJECT_LWM2M_DEVICE)
     // instance := object.GetObjectInstance(0)
-    resourceModel := model.GetResource(1)
+    resourceModel := model.GetResource(6)
+    // 3/0/6
 
     // resource := instance.GetResource(1)
 

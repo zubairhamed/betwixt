@@ -209,7 +209,6 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
             return NewResponseWithMessage(msg)
         }
     }
-
     return nil
 }
 
