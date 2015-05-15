@@ -5,7 +5,7 @@ import (
 )
 
 type AccessControl struct {
-
+    Model       *core.ObjectModel
 }
 
 

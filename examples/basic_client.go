@@ -24,9 +24,13 @@ func main() {
 }
 
 func setupResources (client *LWM2MClient, reg *ObjectRegistry) (string) {
-    accessControl := &AccessControl{}
+    accessControl := &AccessControl{
+        Model: reg.GetModel(oma.OBJECT_LWM2M_ACCESS_CONTROL),
+    }
+
     device := &Device{
         Serial: goap.GenerateToken(5),
+        Model: reg.GetModel(oma.OBJECT_LWM2M_DEVICE),
     }
 
     client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil)

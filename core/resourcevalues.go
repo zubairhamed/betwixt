@@ -170,7 +170,6 @@ func (v *EmptyValue) GetStringValue() (string) {
     return ""
 }
 
-
 func NewStringValue(v ...string) ResourceValue {
     if len(v) > 1 {
         vs := []ResourceValue{}
@@ -254,4 +253,9 @@ func NewMultipleResourceInstanceValue(v []ResourceValue) ResourceValue {
     return &MultipleResourceInstanceValue{
         values: v,
     }
+}
+
+////////////////////////////////////////////////////////////////////
+type TlvValue struct {
+
 }

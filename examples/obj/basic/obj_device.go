@@ -3,11 +3,11 @@ package basic
 import (
     "github.com/zubairhamed/lwm2m/core"
     "time"
-    "log"
 )
 
 type Device struct {
     Serial      string
+    Model       *core.ObjectModel
 }
 
 /*
@@ -18,7 +18,6 @@ case 12:
 */
 
 func (o *Device) OnRead(instanceId int, resourceId int) (core.ResourceValue) {
-    log.Println("OnRead", instanceId, resourceId)
 
     if resourceId == -1 {
         // Read Object Instance
@@ -26,6 +25,7 @@ func (o *Device) OnRead(instanceId int, resourceId int) (core.ResourceValue) {
         // Read Resource Instance
         var val core.ResourceValue
 
+        resource := o.Model.GetResource(resourceId)
         switch resourceId {
             case 0:
             val = core.NewStringValue(o.GetManufacturer())
@@ -44,7 +44,7 @@ func (o *Device) OnRead(instanceId int, resourceId int) (core.ResourceValue) {
             break
 
             case 6:
-            val = core. NewIntegerValue(o.GetAvailablePowerSources()...)
+            core.TlvPayloadFromIntResource(resource, o.GetAvailablePowerSources())
             break
 
             case 7:

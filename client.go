@@ -182,15 +182,10 @@ func (c *LWM2MClient) Start() {
 
 
 func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
-    // Object ID
-    // Object Instance ID
-    // Resource ID
-
     attrResource := req.GetAttribute("rsrc")
     objectId := req.GetAttributeAsInt("obj")
     instanceId := req.GetAttributeAsInt("inst")
 
-    log.Println("Request == ", attrResource, objectId, instanceId)
     var resourceId = -1
 
     if attrResource != "" {
@@ -231,15 +226,6 @@ func (c *LWM2MClient)  handleReadRequest() {
 }
 
 func (c *LWM2MClient)  handlePutRequest(req *CoapRequest) *CoapResponse {
-    // if url has parameters
-    // else
-
-    /*
-WRITE       PUT     /0/0
-WRITE       PUT     /0/0/0
-WRITE ATTR  PUT     /0/0/0  +?pmin={minimum period}&pmax={maximum period}&gt={greater than}&lt={less than}&st={step}&cancel
-    */
-
     msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
     msg.SetStringPayload("")
     msg.Code = COAPCODE_205_CONTENT
@@ -251,8 +237,6 @@ WRITE ATTR  PUT     /0/0/0  +?pmin={minimum period}&pmax={maximum period}&gt={gr
 }
 
 func (c *LWM2MClient)  handleDeleteRequest(req *CoapRequest) *CoapResponse {
-    // DELETE  /0/0
-
     msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
     msg.SetStringPayload("")
     msg.Code = COAPCODE_205_CONTENT
@@ -264,13 +248,6 @@ func (c *LWM2MClient)  handleDeleteRequest(req *CoapRequest) *CoapResponse {
 }
 
 func (c *LWM2MClient)  handlePostRequest(req *CoapRequest) *CoapResponse {
-    // if has resource, execute
-    // else create
-    /*
-EXECUTE     POST    /0/0/0
-CREATE      POST    /0/<id>
-    */
-
     msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
     msg.SetStringPayload("")
     msg.Code = COAPCODE_205_CONTENT
@@ -280,114 +257,6 @@ CREATE      POST    /0/<id>
 
     return resp
 }
-
-/*
-GET     /0/0/0
-GET     /0/0
-GET     /0
-
-PUT     /0/0/0
-PUT     /0/0
-
-DELETE  /0/0
-
-POST    /0/0/0
-POST    /0/0
-
------
-READ        GET     /0/0
-READ        GET     /0/0/0
-DISCOVER    GET     /0      +Accept: application/link format
-DISCOVER    GET     /0/0    +Accept: application/link format
-DISCOVER    GET     /0/0/0  +Accept: application/link format
-OBSERVE     GET     /0      +Observe
-OBSERVE     GET     /0/0    +Observe
-OBSERVE     GET     /0/0/0  +Observe
-
-WRITE       PUT     /0/0
-WRITE       PUT     /0/0/0
-WRITE ATTR  PUT     /0/0/0  +?pmin={minimum period}&pmax={maximum period}&gt={greater than}&lt={less than}&st={step}&cancel
-
-DELETE      DELETE  /0/0
-
-EXECUTE     POST    /0/0/0
-CREATE      POST    /0/<id>
-
-
-@@@@@@@@@@ INCOMING @@@@@@@@@@
-## READ
-GET, CON
-/0/0
-/0/0/0
-- handleReadResource
-- handleReadInstance
-
-## DISCOVER
-GET, CON
-/0
-/0/0
-/0/0/0
-Accept: application/link format
-- handleDiscoverResources
-
-## WRITE
-PUT, CON
-/0/0
-/0/0/0
-Content-Format: 1542
-- handleWriteResource
-- handleWriteInstance
-
-## WRITE ATTRIBUTES
-PUT, CON
-/0/0/0
-?pmin={minimum period}&pmax={maximum period}&gt={greater than}&lt={less than}&st={step}&cancel
-handleWriteResourceAttributes
-
-## DELETE
-DELETE, CON
-/0/0
-- handleDeleteInstance
-
-## EXECUTE
-POST, CON
-/0/0/0
-- handleExecuteResource
-
-## OBSERVE
-GET, CON
-/0
-/0/0
-/0/0/0
-OPTION OBSERVE = 0
-- handleObserveResources
-// Related parameters for “Observe” operation are described in 5.3.4
-
-## CANCEL OBSERVATION
-(via Write Attribute with Cancel Param)
-(Respond to a Notify with a Cancel Observation)
-
-## CREATE
-POST, CON
-/0/<NEWID>
-Content-Format: 1542
-- handleCreateInstance
-
-@@@@@@@@@@ OUTGOING @@@@@@@@@@
-Register
-CON, POST, /rd?ep=DEVKIT&lt=60&b=U
-
-Update
-CON, PUT, /rd/<returnedId>&lt=xxx&b=U
-
-Notify
-
-
-=======
-
-Values:
-Plain Text, Opaque, JSON, TLV
-*/
 
 // Events
 func (c *LWM2MClient) OnStartup(fn FnOnStartup) {

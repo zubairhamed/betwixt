@@ -28,15 +28,14 @@ const (
 
 type IdentifierType byte
 const (
-    OBJECT_INSTANCE     IdentifierType = 0
-    RESOURCE_INSTANCE   IdentifierType = 1
-    RESOURCES           IdentifierType = 2
-    RESOURCE            IdentifierType = 3
+    OBJECT_INSTANCE         IdentifierType = 0xb
+    RESOURCE_INSTANCE       IdentifierType = 1
+    RESOURCES               IdentifierType = 0xb10000110
+    RESOURCE_WITH_VALUE     IdentifierType = 0xb01000001
 )
 
 // Enablers
 type ObjectHandler interface {
-    // OnRead(*ResourceModel, int) (ResourceValue)
     OnRead(instanceId int, resourceId int)(ResourceValue)
 }
 
