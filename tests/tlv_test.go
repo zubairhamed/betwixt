@@ -12,20 +12,8 @@ import (
 
 func TestResourceInstanceToTlv(t *testing.T) {
     client := createTestingClient()
-    // object := client.GetEnabledObjects()[oma.OBJECT_LWM2M_DEVICE]
     model := client.GetRegistry().GetModel(oma.OBJECT_LWM2M_DEVICE)
-    // instance := object.GetObjectInstance(0)
     resourceModel := model.GetResource(6)
-    // 3/0/6
-
-    // resource := instance.GetResource(1)
-
-    /*
-    val := core.NewMultipleResourceInstanceValue([]core.ResourceValue{
-        core.NewIntegerValue(1),
-        core.NewIntegerValue(5),
-    }).(*core.MultipleResourceInstanceValue)
-    */
 
     _, err := core.TlvPayloadFromIntResource(resourceModel, []int{1,5,})
     if err != nil {
@@ -37,13 +25,13 @@ func TestTlvToResourceInstance(t *testing.T) {
 
 }
 
-func TestObjectInstanceToTlv(t *testing.T) {
+func TestObjectInstancesToTlv(t *testing.T) {
     client := createTestingClient()
 
     object := client.GetEnabledObjects()[oma.OBJECT_LWM2M_DEVICE]
-    instance := object.GetObjectInstance(0)
+    // instance := object.GetObjectInstance(0)
 
-    _, err := core.TlvPayloadFromObjectInstance(instance)
+    _, err := core.TlvPayloadFromObjectInstance(object)
     if err != nil {
         t.Error("Error thrown attempting to convert Object Instance to TLV")
     }

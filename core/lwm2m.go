@@ -13,6 +13,7 @@ const (
     VALUETYPE_TIME           ValueTypeCode = 5
     VALUETYPE_OBJECTLINK     ValueTypeCode = 6
     VALUETYPE_MULTIPLE       ValueTypeCode = 6
+    VALUETYPE_TLV            ValueTypeCode = 7
 )
 
 const (

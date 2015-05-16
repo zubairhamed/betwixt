@@ -44,15 +44,15 @@ func (o *Device) OnRead(instanceId int, resourceId int) (core.ResourceValue) {
             break
 
             case 6:
-            core.TlvPayloadFromIntResource(resource, o.GetAvailablePowerSources())
+            val, _ = core.TlvPayloadFromIntResource(resource, o.GetAvailablePowerSources())
             break
 
             case 7:
-            val = core.NewIntegerValue(o.GetPowerSourceVoltage())
+            val, _ = core.TlvPayloadFromIntResource(resource, o.GetPowerSourceVoltage())
             break
 
             case 8:
-            val = core.NewIntegerValue(o.GetPowerSourceCurrent())
+            val, _ = core.TlvPayloadFromIntResource(resource, o.GetPowerSourceCurrent())
             break
 
             case 9:
@@ -64,7 +64,7 @@ func (o *Device) OnRead(instanceId int, resourceId int) (core.ResourceValue) {
             break
 
             case 11:
-            val = core.NewIntegerValue(o.GetErrorCode())
+            val, _ = core.TlvPayloadFromIntResource(resource, o.GetErrorCode())
             break
 
             case 13:
@@ -186,15 +186,15 @@ func (o *Device) FactoryReset() core.ResourceValue {
 }
 
 func (o *Device) GetAvailablePowerSources() []int {
-    return []int{ 1, 5 }
+    return []int{ 1, 2 }
 }
 
-func (o *Device) GetPowerSourceVoltage() int {
-    return 0
+func (o *Device) GetPowerSourceVoltage() []int {
+    return  []int{ 10, 50 }
 }
 
-func (o *Device) GetPowerSourceCurrent() int {
-    return 0
+func (o *Device) GetPowerSourceCurrent() []int {
+    return []int{ 22, 45 }
 }
 
 func (o *Device) GetBatteryLevel() int {
@@ -205,8 +205,8 @@ func (o *Device) GetMemoryFree() int {
     return 0
 }
 
-func (o *Device) GetErrorCode() int {
-    return 0
+func (o *Device) GetErrorCode() []int {
+    return []int{ 100, 210 }
 }
 
 func (o *Device) ResetErrorCode() string {

@@ -205,6 +205,7 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
 
             val := enabler.Handler.OnRead(instanceId, resourceId)
             msg.Payload = NewBytesPayload(val.GetBytes())
+            log.Println("Outgoing data: ", val.GetBytes())
 
             return NewResponseWithMessage(msg)
         }

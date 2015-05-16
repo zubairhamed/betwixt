@@ -1,21 +1,20 @@
 package core
 import (
     "log"
-    "unsafe"
     "encoding/binary"
+    "unsafe"
 )
 
-func TlvPayloadFromObjects(enabled *ObjectEnabler) (*TlvPayload, error) {
-    // log.Println("TLV < Payload from Objects")
-    return NewTlvPayload(), nil
+func TlvPayloadFromObjects(enabled *ObjectEnabler) (ResourceValue, error) {
+    return NewTlvValue(make([]byte, 0)), nil
 }
 
-func TlvPayloadFromObjectInstance(o *ObjectInstance) (*TlvPayload, error) {
-    // log.Println("TLV < Payload from Object Instance")
-    return NewTlvPayload(), nil
+func TlvPayloadFromObjectInstance(o *ObjectEnabler) (ResourceValue, error) {
+
+    return NewTlvValue(make([]byte, 0)), nil
 }
 
-func TlvPayloadFromIntResource(model *ResourceModel, values []int) (*TlvPayload, error) {
+func TlvPayloadFromIntResource(model *ResourceModel, values []int) (ResourceValue, error) {
     log.Println("TLV < Payload from Resource", model, values)
 
     // Resource Instances TLV
@@ -33,8 +32,8 @@ func TlvPayloadFromIntResource(model *ResourceModel, values []int) (*TlvPayload,
             }
 
             // Bit 4-3
-            valSize := unsafe.Sizeof(o)
-            log.Println("valSize ", valSize)
+            valSize := o
+            log.Println("valSize", o)
             if valSize > 7 {
                 if valSize < 256 {
                     typeVal |= 8
@@ -52,7 +51,8 @@ func TlvPayloadFromIntResource(model *ResourceModel, values []int) (*TlvPayload,
                 }
             } else {
                 // Set bit 2-0 instead
-                typeVal |= byte(valSize)
+                // typeVal |= byte(valSize)
+                typeVal |= byte(unsafe.Sizeof(valSize)/8)
             }
             resourceInstanceBytes = append(resourceInstanceBytes, typeVal)
 
@@ -100,6 +100,7 @@ func TlvPayloadFromIntResource(model *ResourceModel, values []int) (*TlvPayload,
 
     // Bit 4-3
     resourceInstanceTlvSize := len(resourceInstanceBytes)
+    log.Println("Resource Instance TLV Size/Length", resourceInstanceTlvSize)
     if resourceInstanceTlvSize > 7 {
         if resourceInstanceTlvSize < 256 {
             typeVal |= 8
@@ -144,7 +145,7 @@ func TlvPayloadFromIntResource(model *ResourceModel, values []int) (*TlvPayload,
         resourceTlv = append(resourceTlv, b)
     }
 
-    log.Println(resourceTlv)
+    return NewTlvValue(resourceTlv), nil
 
    /*                      Type                ID Byte(s)      Length Byte(s)      Value
         Available Power     0b10 0 00 110       0x06            (6 byte)            The next two rows
@@ -200,7 +201,6 @@ func TlvPayloadFromIntResource(model *ResourceModel, values []int) (*TlvPayload,
     }
     */
 
-    return NewTlvPayload(), nil
 }
 
 /*
