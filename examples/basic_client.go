@@ -2,16 +2,17 @@ package main
 
 import (
     . "github.com/zubairhamed/lwm2m"
-    . "github.com/zubairhamed/lwm2m/objects"
     "github.com/zubairhamed/lwm2m/objects/oma"
     "github.com/zubairhamed/goap"
     . "github.com/zubairhamed/lwm2m/examples/obj/basic"
+    "github.com/zubairhamed/lwm2m/registry"
+    "github.com/zubairhamed/lwm2m/core"
 )
 
 func main() {
     client := NewLWM2MClient(":0", "localhost:5683")
 
-    registry := NewDefaultObjectRegistry()
+    registry := registry.NewDefaultObjectRegistry()
     client.UseRegistry(registry)
 
     serial := setupResources(client, registry)
@@ -23,7 +24,7 @@ func main() {
     client.Start()
 }
 
-func setupResources (client *LWM2MClient, reg *ObjectRegistry) (string) {
+func setupResources (client *LWM2MClient, reg core.Registry) (string) {
     accessControl := &AccessControl{
         Model: reg.GetModel(oma.OBJECT_LWM2M_ACCESS_CONTROL),
     }

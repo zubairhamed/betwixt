@@ -30,6 +30,15 @@ func TlvPayloadFromObjects(en *ObjectEnabler, reg Registry) (ResourceValue, erro
                 }
             }
         }
+
+        if len(en.Instances) > 1 {
+            // Create Root TLV Value for Resource
+
+            // Append to Resource Buffer
+            // buf.Write(..)
+        }
+        // Append to Resource TLV to Main Buffer
+        buf.Write(rsrcBuf.Bytes())
     }
 
     return NewTlvValue(buf.Bytes()), nil
