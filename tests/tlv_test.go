@@ -5,6 +5,7 @@ import (
     "github.com/zubairhamed/lwm2m/core"
     "github.com/zubairhamed/lwm2m"
     "github.com/zubairhamed/lwm2m/objects"
+    testobjects "github.com/zubairhamed/lwm2m/tests/objects"
     "github.com/zubairhamed/goap"
     "github.com/zubairhamed/lwm2m/examples/obj/basic"
     "github.com/zubairhamed/lwm2m/objects/oma"
@@ -15,49 +16,35 @@ func TestResourceInstanceToTlv(t *testing.T) {
     model := client.GetRegistry().GetModel(oma.OBJECT_LWM2M_DEVICE)
     resourceModel := model.GetResource(6)
 
+
+    en := client.GetObjectEnabler(oma.OBJECT_LWM2M_DEVICE)
+    en.Handler.OnRead(0, 6)
+    // OnRead(instanceId int, resourceId int)(ResourceValue)
     _, err := core.TlvPayloadFromIntResource(resourceModel, []int{1,5,})
     if err != nil {
         t.Error("Error thrown attempting to convert Resource Instance to TLV")
     }
 }
 
-func TestTlvToResourceInstance(t *testing.T) {
-
-}
 
 func TestObjectInstancesToTlv(t *testing.T) {
-    client := createTestingClient()
+    client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
 
-    object := client.GetEnabledObjects()[oma.OBJECT_LWM2M_DEVICE]
-    // instance := object.GetObjectInstance(0)
+    reg := objects.NewDefaultObjectRegistry()
+    client.UseRegistry(reg)
 
-    _, err := core.TlvPayloadFromObjectInstance(object)
-    if err != nil {
-        t.Error("Error thrown attempting to convert Object Instance to TLV")
-    }
-}
+    device := &testobjects.TestDevice{}
 
-func TestTlvToObjectInstance(t *testing.T) {
+    client.EnableObject(oma.OBJECT_LWM2M_DEVICE, device)
+    instanceDevice := reg.CreateObjectInstance(oma.OBJECT_LWM2M_DEVICE, 0)
+    client.AddObjectInstances(instanceDevice)
 
-}
-
-func TestObjectToTlv(t *testing.T) {
-    client := createTestingClient()
-
-    object := client.GetEnabledObjects()[oma.OBJECT_LWM2M_DEVICE]
-
-    _, err := core.TlvPayloadFromObjects(object)
+    en := client.GetObjectEnabler(oma.OBJECT_LWM2M_DEVICE)
+    _, err := core.TlvPayloadFromObjects(en)
 
     if err != nil {
-        t.Error("Error thrown attempting to convert Object to TLV")
+        t.Error("Error thrown attempting to convert Object instance to TLV")
     }
-
-
-    // core.TlvPayloadFromObjects(c.enabledObjects[t])
-}
-
-func TestTlvToObject(t *testing.T) {
-
 }
 
 func createTestingClient() (*lwm2m.LWM2MClient) {

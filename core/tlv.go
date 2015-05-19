@@ -5,11 +5,17 @@ import (
     "unsafe"
 )
 
-func TlvPayloadFromObjects(enabled *ObjectEnabler) (ResourceValue, error) {
-    return NewTlvValue(make([]byte, 0)), nil
+
+func TlvPayloadFromObjects(en *ObjectEnabler) (ResourceValue, error) {
+
 }
 
-func TlvPayloadFromObjectInstance(o *ObjectEnabler) (ResourceValue, error) {
+func TlvPayloadFromObjectInstance(o *ObjectInstance) (ResourceValue, error) {
+    log.Println("TlvPayloadFromObjectInstance", o.Resources)
+
+    for i, r := range o.Resources {
+        log.Println(i, r)
+    }
 
     return NewTlvValue(make([]byte, 0)), nil
 }
