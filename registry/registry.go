@@ -1,23 +1,18 @@
-package objects
+package registry
+
 import (
-    . "github.com/zubairhamed/lwm2m/core"
     "github.com/zubairhamed/lwm2m/objects/ipso"
     "github.com/zubairhamed/lwm2m/objects/oma"
+    . "github.com/zubairhamed/lwm2m/core"
 )
 
-type ModelSource interface {
-    Initialize()
-    Get(LWM2MObjectType) *ObjectModel
-    Add(*ObjectModel, ...*ResourceModel)
-}
-
-func NewDefaultObjectRegistry() (*ObjectRegistry) {
+func NewDefaultObjectRegistry() (Registry) {
     reg := NewObjectRegistry(&oma.LWM2MCoreObjects{}, &ipso.IPSOSmartObjects{})
 
     return reg
 }
 
-func NewObjectRegistry(s ...ModelSource) (*ObjectRegistry) {
+func NewObjectRegistry(s ...ModelSource) (Registry) {
     reg := &ObjectRegistry{}
     reg.sources = []ModelSource{}
 

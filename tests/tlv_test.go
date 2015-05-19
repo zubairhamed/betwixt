@@ -4,44 +4,45 @@ import (
     "testing"
     "github.com/zubairhamed/lwm2m/core"
     "github.com/zubairhamed/lwm2m"
-    "github.com/zubairhamed/lwm2m/objects"
     testobjects "github.com/zubairhamed/lwm2m/tests/objects"
     "github.com/zubairhamed/goap"
     "github.com/zubairhamed/lwm2m/examples/obj/basic"
     "github.com/zubairhamed/lwm2m/objects/oma"
+    "github.com/zubairhamed/lwm2m/registry"
 )
 
+/*
 func TestResourceInstanceToTlv(t *testing.T) {
     client := createTestingClient()
     model := client.GetRegistry().GetModel(oma.OBJECT_LWM2M_DEVICE)
     resourceModel := model.GetResource(6)
 
+    // client.GetObjectEnabler(oma.OBJECT_LWM2M_DEVICE)
+    // en.Handler.OnRead(0, 6)
 
-    en := client.GetObjectEnabler(oma.OBJECT_LWM2M_DEVICE)
-    en.Handler.OnRead(0, 6)
-    // OnRead(instanceId int, resourceId int)(ResourceValue)
     _, err := core.TlvPayloadFromIntResource(resourceModel, []int{1,5,})
     if err != nil {
         t.Error("Error thrown attempting to convert Resource Instance to TLV")
     }
 }
-
+*/
 
 func TestObjectInstancesToTlv(t *testing.T) {
     client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
 
-    reg := objects.NewDefaultObjectRegistry()
+    reg := registry.NewDefaultObjectRegistry()
     client.UseRegistry(reg)
 
-    device := &testobjects.TestDevice{}
+    device := &testobjects.TestDevice{
+        Model: reg.GetModel(oma.OBJECT_LWM2M_DEVICE),
+    }
 
     client.EnableObject(oma.OBJECT_LWM2M_DEVICE, device)
     instanceDevice := reg.CreateObjectInstance(oma.OBJECT_LWM2M_DEVICE, 0)
     client.AddObjectInstances(instanceDevice)
 
     en := client.GetObjectEnabler(oma.OBJECT_LWM2M_DEVICE)
-    _, err := core.TlvPayloadFromObjects(en)
-
+    _, err := core.TlvPayloadFromObjects(en, client.GetRegistry())
     if err != nil {
         t.Error("Error thrown attempting to convert Object instance to TLV")
     }
@@ -50,7 +51,7 @@ func TestObjectInstancesToTlv(t *testing.T) {
 func createTestingClient() (*lwm2m.LWM2MClient) {
     client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
 
-    reg := objects.NewDefaultObjectRegistry()
+    reg := registry.NewDefaultObjectRegistry()
     client.UseRegistry(reg)
 
     accessControl := &basic.AccessControl{}

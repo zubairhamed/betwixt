@@ -32,6 +32,18 @@ type ResourceModel struct {
     Description         string
 }
 
+func (o *ResourceModel) IsExecutable() (bool) {
+    return (o.Operations == OPERATION_E || o.Operations == OPERATION_RE || o.Operations == OPERATION_RWE || o.Operations == OPERATION_WE)
+}
+
+func (o *ResourceModel) IsReadable() (bool) {
+    return (o.Operations == OPERATION_RE || o.Operations == OPERATION_R || o.Operations == OPERATION_RWE || o.Operations == OPERATION_RW)
+}
+
+func (o *ResourceModel) IsWritable() (bool) {
+    return (o.Operations ==OPERATION_RW || o.Operations == OPERATION_RWE || o.Operations == OPERATION_WE || o.Operations == OPERATION_W)
+}
+
 type LWM2MResource struct {
     instances   []int
     model       *ObjectModel

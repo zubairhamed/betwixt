@@ -3,9 +3,9 @@ package tests
 import (
     "testing"
     "github.com/zubairhamed/lwm2m/objects/oma"
-    "github.com/zubairhamed/lwm2m/objects"
     "github.com/zubairhamed/lwm2m/core"
     "github.com/zubairhamed/lwm2m"
+    "github.com/zubairhamed/lwm2m/registry"
 )
 
 func TestClient(t *testing.T) {
@@ -58,7 +58,7 @@ func TestClient(t *testing.T) {
         }
     }
 
-    registry := objects.NewDefaultObjectRegistry()
+    registry := registry.NewDefaultObjectRegistry()
     if registry == nil {
         t.Error("Error instantiating registry")
     }
@@ -91,7 +91,7 @@ func TestClient(t *testing.T) {
 }
 
 func TestRegistry(t *testing.T) {
-    reg := objects.NewDefaultObjectRegistry()
+    reg := registry.NewDefaultObjectRegistry()
 
     cases := []struct {
         o   core.LWM2MObjectType

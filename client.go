@@ -8,7 +8,6 @@ import (
     "bytes"
     "fmt"
     "github.com/zubairhamed/lwm2m/core"
-    "github.com/zubairhamed/lwm2m/objects"
 )
 
 func NewLWM2MClient(local string, remote string) (*LWM2MClient) {
@@ -36,7 +35,7 @@ type FnOnError func()
 
 type LWM2MClient struct {
     coapServer          *CoapServer
-    registry            *objects.ObjectRegistry
+    registry            core.Registry
     enabledObjects      map[core.LWM2MObjectType] *core.ObjectEnabler
 
     // Events
@@ -76,7 +75,7 @@ func (c *LWM2MClient) GetEnabledObjects() (map[core.LWM2MObjectType] *core.Objec
     return c.enabledObjects
 }
 
-func (c *LWM2MClient) GetRegistry() *objects.ObjectRegistry {
+func (c *LWM2MClient) GetRegistry() core.Registry {
     return c.registry
 }
 
@@ -96,7 +95,7 @@ func (c *LWM2MClient) AddObject() {
 
 }
 
-func (c *LWM2MClient) UseRegistry(reg *objects.ObjectRegistry) {
+func (c *LWM2MClient) UseRegistry(reg core.Registry) {
     c.registry = reg
 }
 
