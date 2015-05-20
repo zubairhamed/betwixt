@@ -1,8 +1,15 @@
 package api
 
-type OperationCode   int
 type LWM2MObjectType int
 type LWM2MObjectInstances map[LWM2MObjectType] ObjectEnabler
+
+type FnOnStartup func()
+type FnOnRead func()
+type FnOnWrite func()
+type FnOnExecute func()
+type FnOnRegistered func(string)
+type FnOnUnregistered func()
+type FnOnError func()
 
 type ValueTypeCode byte
 const (
@@ -17,6 +24,7 @@ const (
     VALUETYPE_TLV            ValueTypeCode = 7
 )
 
+type OperationCode   int
 const (
     OPERATION_NONE  OperationCode = 0
     OPERATION_R     OperationCode = 1
@@ -35,8 +43,5 @@ const (
     IDENTIFIER_RESOURCES               IdentifierType = 2
     IDENTIFIER_RESOURCE_WITH_VALUE     IdentifierType = 3
 )
-
-// Enablers
-
 
 

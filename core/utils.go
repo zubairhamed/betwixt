@@ -1,4 +1,5 @@
 package core
+
 import (
     "errors"
     "time"

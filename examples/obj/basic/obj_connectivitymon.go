@@ -9,6 +9,6 @@ type ConnectivityMonitoring struct {
 
 }
 
-func (o *ConnectivityMonitoring) OnRead(r ResourceModel, resourceId int) ResourceValue {
+func (o *ConnectivityMonitoring) OnRead(instanceId int, resourceId int) (ResourceValue) {
     return core.NewEmptyValue()
 }

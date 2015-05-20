@@ -52,11 +52,9 @@ func (o *DefaultResourceModel) MultipleValuesAllowed() (bool) {
     return o.Multiple
 }
 
-
 func (o *DefaultResourceModel) GetResourceType() (ValueTypeCode) {
     return o.ResourceType
 }
-
 
 func (o *DefaultResourceModel) IsExecutable() (bool) {
     return (o.Operations == OPERATION_E || o.Operations == OPERATION_RE || o.Operations == OPERATION_RWE || o.Operations == OPERATION_WE)
@@ -68,11 +66,6 @@ func (o *DefaultResourceModel) IsReadable() (bool) {
 
 func (o *DefaultResourceModel) IsWritable() (bool) {
     return (o.Operations ==OPERATION_RW || o.Operations == OPERATION_RWE || o.Operations == OPERATION_WE || o.Operations == OPERATION_W)
-}
-
-type LWM2MResource struct {
-    instances   []int
-    model       ObjectModel
 }
 
 func NewObjectInstance(id int, t LWM2MObjectType) (ObjectInstance) {
@@ -101,15 +94,8 @@ func (o *DefaultObjectInstance) GetTypeId() (LWM2MObjectType) {
     return o.TypeId
 }
 
-
 type DefaultResource struct {
     Id          int
-    Instances   map[int]*ResourceInstance
-}
-
-type ResourceInstance struct {
-    Id          LWM2MObjectType
-    Value       interface{}
 }
 
 type DefaultObjectEnabler struct {
@@ -144,4 +130,3 @@ func (en *DefaultObjectEnabler) OnRead(instanceId int, resourceId int)(ResourceV
     }
     return nil
 }
-

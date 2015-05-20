@@ -1,27 +1,27 @@
 package api
 
 type RequestHandler interface {
-    OnRead(instanceId int, resourceId int)(ResourceValue)
+    OnRead(int, int)(ResourceValue)
 }
 
 type ResourceValue interface {
-    GetBytes() []byte
-    GetType() ValueTypeCode
-    GetValue()  interface{}
-    GetStringValue() string
+    GetBytes() ([]byte)
+    GetType() (ValueTypeCode)
+    GetValue() (interface{})
+    GetStringValue() (string)
 }
 
 type ObjectEnabler interface {
-    GetObjectInstance(idx int) (ObjectInstance)
+    GetObjectInstance(int) (ObjectInstance)
     GetObjectInstances() ([]ObjectInstance)
     SetObjectInstances([]ObjectInstance)
     GetHandler() RequestHandler
 
-    OnRead(instanceId int, resourceId int)(ResourceValue)
+    OnRead(int, int)(ResourceValue)
 }
 
 type ObjectInstance interface {
-    GetResource(id int) (Resource)
+    GetResource(int) (Resource)
     GetId() (int)
     GetTypeId() (LWM2MObjectType)
 }
@@ -37,10 +37,10 @@ type ModelSource interface {
 }
 
 type Registry interface {
-    CreateObjectInstance(t LWM2MObjectType, n int) (ObjectInstance)
-    GetModel(n LWM2MObjectType) ObjectModel
+    CreateObjectInstance(LWM2MObjectType, int) (ObjectInstance)
+    GetModel(LWM2MObjectType) ObjectModel
     Register(ModelSource)
-    CreateHandler(t LWM2MObjectType)
+    CreateHandler(LWM2MObjectType)
 }
 
 type ObjectModel interface {
@@ -58,5 +58,30 @@ type ResourceModel interface {
     IsExecutable() (bool)
     IsReadable() (bool)
     IsWritable() (bool)
+}
 
+type LWM2MClient interface {
+    AddObjectInstance(ObjectInstance) (error)
+    AddObjectInstances (... ObjectInstance)
+    AddResource()
+    AddObject()
+    Register(string) (string)
+    Unregister()
+    Update()
+    UseRegistry(Registry)
+    EnableObject(LWM2MObjectType, RequestHandler) (error)
+    GetRegistry() Registry
+    GetEnabledObjects() (map[LWM2MObjectType] ObjectEnabler)
+    GetObjectEnabler(LWM2MObjectType) (ObjectEnabler)
+    GetObjectInstance(LWM2MObjectType, int) (ObjectInstance)
+    Start()
+
+    // Events
+    OnStartup(FnOnStartup)
+    OnRead(FnOnRead)
+    OnWrite(FnOnWrite)
+    OnExecute(FnOnExecute)
+    OnRegistered(FnOnRegistered)
+    OnUnregistered(FnOnUnregistered)
+    OnError (FnOnError)
 }

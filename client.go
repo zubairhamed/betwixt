@@ -9,7 +9,7 @@ import (
     . "github.com/zubairhamed/lwm2m/api"
 )
 
-func NewLWM2MClient(local string, remote string) (*LWM2MClient) {
+func NewLWM2MClient(local string, remote string) (*DefaultClient) {
     localAddr, err := net.ResolveUDPAddr("udp", local)
     IfErrFatal(err)
 
@@ -18,21 +18,13 @@ func NewLWM2MClient(local string, remote string) (*LWM2MClient) {
 
     coapServer := NewCoapServer(localAddr, remoteAddr)
 
-    return &LWM2MClient{
+    return &DefaultClient{
         coapServer: coapServer,
         enabledObjects: make(map[LWM2MObjectType]ObjectEnabler),
     }
 }
 
-type FnOnStartup func()
-type FnOnRead func()
-type FnOnWrite func()
-type FnOnExecute func()
-type FnOnRegistered func(string)
-type FnOnUnregistered func()
-type FnOnError func()
-
-type LWM2MClient struct {
+type DefaultClient struct {
     coapServer          *CoapServer
     registry            Registry
     enabledObjects      map[LWM2MObjectType] ObjectEnabler
@@ -48,7 +40,7 @@ type LWM2MClient struct {
 }
 
 // Operations
-func (c *LWM2MClient) Register(name string) (string) {
+func (c *DefaultClient) Register(name string) (string) {
     req := NewRequest(TYPE_CONFIRMABLE, POST, GenerateMessageId())
 
     req.SetStringPayload(core.BuildModelResourceStringPayload(c.enabledObjects))
@@ -70,35 +62,35 @@ func (c *LWM2MClient) Register(name string) (string) {
     return path
 }
 
-func (c *LWM2MClient) GetEnabledObjects() (map[LWM2MObjectType] ObjectEnabler) {
+func (c *DefaultClient) GetEnabledObjects() (map[LWM2MObjectType] ObjectEnabler) {
     return c.enabledObjects
 }
 
-func (c *LWM2MClient) GetRegistry() Registry {
+func (c *DefaultClient) GetRegistry() Registry {
     return c.registry
 }
 
-func (c *LWM2MClient) Unregister() {
+func (c *DefaultClient) Unregister() {
 
 }
 
-func (c *LWM2MClient) Update() {
+func (c *DefaultClient) Update() {
 
 }
 
-func (c *LWM2MClient) AddResource() {
+func (c *DefaultClient) AddResource() {
 
 }
 
-func (c *LWM2MClient) AddObject() {
+func (c *DefaultClient) AddObject() {
 
 }
 
-func (c *LWM2MClient) UseRegistry(reg Registry) {
+func (c *DefaultClient) UseRegistry(reg Registry) {
     c.registry = reg
 }
 
-func (c *LWM2MClient) EnableObject(t LWM2MObjectType, e RequestHandler) (error) {
+func (c *DefaultClient) EnableObject(t LWM2MObjectType, e RequestHandler) (error) {
     if c.enabledObjects[t] == nil {
 
         en := &core.DefaultObjectEnabler{
@@ -113,7 +105,7 @@ func (c *LWM2MClient) EnableObject(t LWM2MObjectType, e RequestHandler) (error) 
     }
 }
 
-func (c *LWM2MClient) AddObjectInstance(instance ObjectInstance) (error) {
+func (c *DefaultClient) AddObjectInstance(instance ObjectInstance) (error) {
     if instance != nil {
         o := c.GetObjectInstance(instance.GetTypeId(), instance.GetId())
         if o == nil {
@@ -129,17 +121,17 @@ func (c *LWM2MClient) AddObjectInstance(instance ObjectInstance) (error) {
 
 }
 
-func (c *LWM2MClient) AddObjectInstances (instances ... ObjectInstance) {
+func (c *DefaultClient) AddObjectInstances (instances ... ObjectInstance) {
     for _, o := range instances {
         c.AddObjectInstance(o)
     }
 }
 
-func (c *LWM2MClient) GetObjectEnabler(n LWM2MObjectType) (ObjectEnabler) {
+func (c *DefaultClient) GetObjectEnabler(n LWM2MObjectType) (ObjectEnabler) {
     return c.enabledObjects[n]
 }
 
-func (c *LWM2MClient) GetObjectInstance(n LWM2MObjectType, instance int) (ObjectInstance) {
+func (c *DefaultClient) GetObjectInstance(n LWM2MObjectType, instance int) (ObjectInstance) {
     enabler := c.enabledObjects[n]
 
     if enabler != nil {
@@ -155,7 +147,7 @@ func (c *LWM2MClient) GetObjectInstance(n LWM2MObjectType, instance int) (Object
     return nil
 }
 
-func (c *LWM2MClient) Start() {
+func (c *DefaultClient) Start() {
     s := c.coapServer
     s.OnStartup(func(evt *Event) {
         if c.evtOnStartup != nil {
@@ -179,7 +171,7 @@ func (c *LWM2MClient) Start() {
 }
 
 
-func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
+func (c *DefaultClient) handleGetRequest(req *CoapRequest) *CoapResponse {
     attrResource := req.GetAttribute("rsrc")
     objectId := req.GetAttributeAsInt("obj")
     instanceId := req.GetAttributeAsInt("inst")
@@ -210,19 +202,19 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
     return nil
 }
 
-func (c *LWM2MClient)  handleDiscoverRequest() {
+func (c *DefaultClient)  handleDiscoverRequest() {
 
 }
 
-func (c *LWM2MClient)  handleObserveRequest() {
+func (c *DefaultClient)  handleObserveRequest() {
 
 }
 
-func (c *LWM2MClient)  handleReadRequest() {
+func (c *DefaultClient)  handleReadRequest() {
 
 }
 
-func (c *LWM2MClient)  handlePutRequest(req *CoapRequest) *CoapResponse {
+func (c *DefaultClient)  handlePutRequest(req *CoapRequest) *CoapResponse {
     msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
     msg.SetStringPayload("")
     msg.Code = COAPCODE_205_CONTENT
@@ -233,7 +225,7 @@ func (c *LWM2MClient)  handlePutRequest(req *CoapRequest) *CoapResponse {
     return resp
 }
 
-func (c *LWM2MClient)  handleDeleteRequest(req *CoapRequest) *CoapResponse {
+func (c *DefaultClient)  handleDeleteRequest(req *CoapRequest) *CoapResponse {
     msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
     msg.SetStringPayload("")
     msg.Code = COAPCODE_205_CONTENT
@@ -244,7 +236,7 @@ func (c *LWM2MClient)  handleDeleteRequest(req *CoapRequest) *CoapResponse {
     return resp
 }
 
-func (c *LWM2MClient)  handlePostRequest(req *CoapRequest) *CoapResponse {
+func (c *DefaultClient)  handlePostRequest(req *CoapRequest) *CoapResponse {
     msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
     msg.SetStringPayload("")
     msg.Code = COAPCODE_205_CONTENT
@@ -256,31 +248,31 @@ func (c *LWM2MClient)  handlePostRequest(req *CoapRequest) *CoapResponse {
 }
 
 // Events
-func (c *LWM2MClient) OnStartup(fn FnOnStartup) {
+func (c *DefaultClient) OnStartup(fn FnOnStartup) {
     c.evtOnStartup = fn
 }
 
-func (c *LWM2MClient) OnRead(fn FnOnRead) {
+func (c *DefaultClient) OnRead(fn FnOnRead) {
     c.evtOnRead = fn
 }
 
-func (c *LWM2MClient) OnWrite(fn FnOnWrite) {
+func (c *DefaultClient) OnWrite(fn FnOnWrite) {
     c.evtOnWrite = fn
 }
 
-func (c *LWM2MClient) OnExecute(fn FnOnExecute) {
+func (c *DefaultClient) OnExecute(fn FnOnExecute) {
     c.evtOnExecute = fn
 }
 
-func (c *LWM2MClient) OnRegistered(fn FnOnRegistered) {
+func (c *DefaultClient) OnRegistered(fn FnOnRegistered) {
     c.evtOnRegistered = fn
 }
 
-func (c *LWM2MClient) OnUnregistered(fn FnOnUnregistered) {
+func (c *DefaultClient) OnUnregistered(fn FnOnUnregistered) {
     c.evtOnUnregistered = fn
 }
 
-func (c *LWM2MClient) OnError (fn FnOnError) {
+func (c *DefaultClient) OnError (fn FnOnError) {
     c.evtOnError = fn
 }
 

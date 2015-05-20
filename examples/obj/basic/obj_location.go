@@ -9,6 +9,6 @@ type Location struct {
 
 }
 
-func (o *Location) OnRead(r ResourceModel, resourceId int) ResourceValue {
+func (o *Location) OnRead(instanceId int, resourceId int) (ResourceValue) {
     return core.NewEmptyValue()
 }

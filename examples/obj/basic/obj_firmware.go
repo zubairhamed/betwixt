@@ -9,6 +9,6 @@ type Firmware struct {
 
 }
 
-func (o *Firmware) OnRead(r ResourceModel, resourceId int) ResourceValue {
+func (o *Firmware) OnRead(instanceId int, resourceId int) (ResourceValue) {
     return core.NewEmptyValue()
 }

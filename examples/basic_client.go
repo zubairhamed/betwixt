@@ -24,7 +24,7 @@ func main() {
     client.Start()
 }
 
-func setupResources (client *LWM2MClient, reg Registry) {
+func setupResources (client LWM2MClient, reg Registry) {
     accessControl := &AccessControl{
         Model: reg.GetModel(oma.OBJECT_LWM2M_ACCESS_CONTROL),
     }

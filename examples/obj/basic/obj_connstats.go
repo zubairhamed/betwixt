@@ -10,6 +10,6 @@ type ConnectivityStatistics struct {
 
 }
 
-func (o *ConnectivityStatistics) OnRead(r ResourceModel, resourceId int) ResourceValue {
+func (o *ConnectivityStatistics) OnRead(instanceId int, resourceId int) (ResourceValue) {
     return core.NewEmptyValue()
 }

@@ -10,7 +10,6 @@ import (
 type Security struct {
 
 }
-
-func (o *Security) OnRead(r ResourceModel, resourceId int)  ResourceValue {
+func (o *Security) OnRead(instanceId int, resourceId int) (ResourceValue) {
     return core.NewEmptyValue()
 }

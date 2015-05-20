@@ -9,6 +9,6 @@ type Server struct {
 
 }
 
-func (o *Server) OnRead(r *ResourceModel, resourceId int) ResourceValue {
+func (o *Server) OnRead(instanceId int, resourceId int) (ResourceValue) {
     return core.NewEmptyValue()
 }
