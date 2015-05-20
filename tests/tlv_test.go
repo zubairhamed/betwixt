@@ -4,7 +4,6 @@ import (
     "testing"
     "github.com/zubairhamed/lwm2m/core"
     "github.com/zubairhamed/lwm2m"
-    testobjects "github.com/zubairhamed/lwm2m/tests/objects"
     "github.com/zubairhamed/goap"
     "github.com/zubairhamed/lwm2m/examples/obj/basic"
     "github.com/zubairhamed/lwm2m/objects/oma"
@@ -33,7 +32,7 @@ func TestObjectInstancesToTlv(t *testing.T) {
     reg := registry.NewDefaultObjectRegistry()
     client.UseRegistry(reg)
 
-    device := &testobjects.TestDevice{
+    device := &basic.Device{
         Model: reg.GetModel(oma.OBJECT_LWM2M_DEVICE),
     }
 

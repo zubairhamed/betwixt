@@ -3,7 +3,6 @@ package basic
 import (
     "github.com/zubairhamed/lwm2m/core"
     "time"
-    "log"
 )
 
 type Device struct {
@@ -12,7 +11,6 @@ type Device struct {
 }
 
 func (o *Device) OnRead(instanceId int, resourceId int) (core.ResourceValue) {
-    log.Println("OnRead")
     if resourceId == -1 {
         // Read Object Instance
     } else {
