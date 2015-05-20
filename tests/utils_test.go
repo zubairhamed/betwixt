@@ -6,30 +6,36 @@ import (
     "time"
 )
 
-func TestGetValueLength(t *testing.T) {
-    core.GetValueLength(-128)
-    core.GetValueLength(127)
-    core.GetValueLength(-32768)
-    core.GetValueLength(32767)
-    core.GetValueLength(-2147483648)
-    core.GetValueLength(2147483647)
-    core.GetValueLength(-9223372036854775808)
-    core.GetValueLength(9223372036854775807)
+func TestGetValueByteLength(t *testing.T) {
+    core.GetValueByteLength(-128)
+    core.GetValueByteLength(127)
+    core.GetValueByteLength(-32768)
+    core.GetValueByteLength(32767)
+    core.GetValueByteLength(-2147483648)
+    core.GetValueByteLength(2147483647)
+    core.GetValueByteLength(-9223372036854775808)
+    core.GetValueByteLength(9223372036854775807)
 
-    core.GetValueLength(-3.4E+38)
-    core.GetValueLength(+3.4E+38)
+    core.GetValueByteLength(-3.4E+38)
+    core.GetValueByteLength(+3.4E+38)
 
-    core.GetValueLength(-1.7E+308)
-    core.GetValueLength(+1.7E+308)
+    core.GetValueByteLength(-1.7E+308)
+    core.GetValueByteLength(+1.7E+308)
 
-    core.GetValueLength("this is a string")
+    core.GetValueByteLength("this is a string")
 
-    core.GetValueLength(true)
-    core.GetValueLength(false)
+    core.GetValueByteLength(true)
+    core.GetValueByteLength(false)
 
-    core.GetValueLength(time.Now())
+    core.GetValueByteLength(time.Now())
 
-    core.GetValueLength([]byte{})
+    core.GetValueByteLength([]byte{})
+
+    core.GetValueByteLength(uint(1))
+    core.GetValueByteLength(uint16(1))
+    core.GetValueByteLength(uint32(1))
+    core.GetValueByteLength(uint64(1))
+
 }
 
 
