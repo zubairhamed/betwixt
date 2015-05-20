@@ -1,7 +1,6 @@
 package core
 
 import (
-    "log"
     "encoding/binary"
     "bytes"
     "time"
@@ -43,139 +42,120 @@ func TlvPayloadFromObjects(en *ObjectEnabler, reg Registry) (ResourceValue, erro
     return NewTlvValue(buf.Bytes()), nil
 }
 
-func TlvPayloadFromObjectInstance(o *ObjectInstance) (ResourceValue, error) {
-    for i, r := range o.Resources {
-        log.Println(i, r)
-    }
+func CreateTlvTypeField(identType byte, value interface{}, ident int) byte {
+    var typeField byte
+    valueTypeLength, _ := GetValueByteLength(value)
 
-    return NewTlvValue(make([]byte, 0)), nil
-}
-
-// TODO: Heavy refactoring needed
-func TlvPayloadFromIntResource(model *ResourceModel, values []int) (ResourceValue, error) {
-
-    // Resource Instances TLV
-    resourceInstanceBytes := bytes.NewBuffer([]byte{})
-    if model.Multiple {
-        // Type Byte
-        for i, value := range values {
-            var typeVal byte
-
-            valueTypeLength, _ := GetValueByteLength(value)
-            // Bit 7-6: identifier
-            typeVal |= 64
-
-            // Bit 5
-            if i > 255 {
-                typeVal |= 32
-            }
-
-            // Bit 4-3
-            if valueTypeLength > 7 {
-                if valueTypeLength < 256 {
-                    typeVal |= 8
-                } else {
-                    if valueTypeLength < 65535 {
-                        typeVal |= 16
-                    } else {
-                        if valueTypeLength > 16777215 {
-                            // Error, size exceeds allowed (> 16.7MB)
-                        } else {
-                            // Size is 16777215 or less
-                            typeVal |= 24
-                        }
-                    }
-                }
-            } else {
-                // Set bit 2-0 instead
-                b := byte(valueTypeLength)
-                typeVal |= b
-            }
-            resourceInstanceBytes.Write([]byte{typeVal})
-
-            // Identifier Byte
-            if i > 255 {
-                // 16-Bit
-                bs := make([]byte, 2)
-                binary.LittleEndian.PutUint16(bs, uint16(i))
-
-                resourceInstanceBytes.Write(bs)
-            } else {
-                // 8-Bit
-                resourceInstanceBytes.Write([]byte{byte(i)})
-            }
-
-            // Value Length & Value Byte
-            if valueTypeLength > 7 {
-                buf := new(bytes.Buffer)
-                binary.Write(buf, binary.BigEndian, valueTypeLength)
-                resourceInstanceBytes.Write(bytes.Trim(buf.Bytes(), "\x00"))
-            }
-
-            // Value
-            buf := new(bytes.Buffer)
-            binary.Write(buf, binary.BigEndian, uint64(value))
-            if value == 0 {
-                resourceInstanceBytes.Write([]byte{ 0 })
-            } else {
-                resourceInstanceBytes.Write(bytes.Trim(buf.Bytes(), "\x00"))
-            }
-
-        }
-    }
-
-    // Resource Root TLV
-    resourceTlv := bytes.NewBuffer([]byte{})
-    var typeVal byte
-
-    // Byte 7-6: identifier
-    typeVal |= 128
+    // Bit 7-6: identifier
+    typeField |= identType
 
     // Bit 5
-    if model.Id > 255 {
-        typeVal |= 32
+    if ident > 255 {
+        typeField |= 32
     }
 
     // Bit 4-3
-    resourceInstanceTlvSize := len(resourceInstanceBytes.Bytes())
-    if resourceInstanceTlvSize > 7 {
-        if resourceInstanceTlvSize < 256 {
-            typeVal |= 8
+    if valueTypeLength > 7 {
+        if valueTypeLength < 256 {
+            typeField |= 8
         } else {
-            if resourceInstanceTlvSize < 65535 {
-                typeVal |= 16
+            if valueTypeLength < 65535 {
+                typeField |= 16
             } else {
-                if resourceInstanceTlvSize > 16777215 {
+                if valueTypeLength > 16777215 {
                     // Error, size exceeds allowed (> 16.7MB)
                 } else {
-                    typeVal |= 24
+                    // Size is 16777215 or less
+                    typeField |= 24
                 }
             }
         }
     } else {
         // Set bit 2-0 instead
-        typeVal |= byte(resourceInstanceTlvSize)
+        b := byte(valueTypeLength)
+        typeField |= b
     }
-    resourceTlv.Write([]byte{typeVal})
 
-    // Identifier
-    if model.Id > 255 {
+    return typeField
+}
+
+func CreateTlvIdentifierField(ident int) []byte {
+    // Identifier Byte
+    if ident > 255 {
         // 16-Bit
         bs := make([]byte, 2)
-        binary.LittleEndian.PutUint16(bs, uint16(model.Id))
+        binary.LittleEndian.PutUint16(bs, uint16(ident))
 
-        resourceTlv.Write(bs)
+        return bs
     } else {
         // 8-Bit
-        resourceTlv.Write([]byte{byte(model.Id)})
+        return []byte{byte(ident)}
+    }
+}
+
+func CreateTlvLengthField(value interface{}) []byte {
+    valueTypeLength, _ := GetValueByteLength(value)
+
+    if valueTypeLength > 7 {
+        buf := new(bytes.Buffer)
+        binary.Write(buf, binary.BigEndian, valueTypeLength)
+
+        return bytes.Trim(buf.Bytes(), "\x00")
+    }
+    return []byte{}
+}
+
+func CreateTlvValueField(value int) [] byte {
+    buf := new(bytes.Buffer)
+    binary.Write(buf, binary.BigEndian, uint64(value))
+    if value == 0 {
+        return []byte{ 0 }
+    } else {
+        return bytes.Trim(buf.Bytes(), "\x00")
+    }
+}
+
+func TlvPayloadFromIntResource(model *ResourceModel, values []int) (ResourceValue, error) {
+
+    // Resource Instances TLV
+    resourceInstanceBytes := bytes.NewBuffer([]byte{})
+
+    if model.Multiple {
+        for i, value := range values {
+            // Type Field Byte
+            typeField := CreateTlvTypeField(64, value, i)
+            resourceInstanceBytes.Write([]byte{typeField})
+
+            // Identifier Field
+            identifierField := CreateTlvIdentifierField(i)
+            resourceInstanceBytes.Write(identifierField)
+
+            // Length Field
+            lengthField := CreateTlvLengthField(value)
+            resourceInstanceBytes.Write(lengthField)
+
+            // Value Field
+            valueField := CreateTlvValueField(value)
+            resourceInstanceBytes.Write(valueField)
+        }
     }
 
-    // Value Length
-    if resourceInstanceTlvSize > 7 {
-        resourceTlv.Write([]byte{byte(resourceInstanceTlvSize)})
-    }
+    // Resource Root TLV
+    resourceTlv := bytes.NewBuffer([]byte{})
 
-    // Append Resource Instances TLV to Resource TLV
+    // Byte 7-6: identifier
+    typeField := CreateTlvTypeField(128, resourceInstanceBytes.Bytes(), model.Id)
+    resourceTlv.Write([]byte{typeField})
+
+    // Identifier Field
+    identifierField := CreateTlvIdentifierField(model.Id)
+    resourceTlv.Write(identifierField)
+
+    // Length Field
+    lengthField := CreateTlvLengthField(resourceInstanceBytes.Bytes())
+    resourceTlv.Write(lengthField)
+
+    // Value Field, Append Resource Instances TLV to Resource TLV
     resourceTlv.Write(resourceInstanceBytes.Bytes())
 
     return NewTlvValue(resourceTlv.Bytes()), nil
