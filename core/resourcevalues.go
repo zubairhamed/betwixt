@@ -59,10 +59,7 @@ type IntegerValue struct {
 }
 
 func (v *IntegerValue) GetBytes() ([]byte) {
-    buf := new(bytes.Buffer)
-    binary.Write(buf, binary.LittleEndian, v.value)
-
-    return buf.Bytes()
+    return []byte(strconv.Itoa(v.value))
 }
 
 func (v *IntegerValue) GetType() (ValueTypeCode) {
@@ -82,10 +79,7 @@ type TimeValue struct {
 }
 
 func (v *TimeValue) GetBytes() ([]byte) {
-    buf := new(bytes.Buffer)
-    binary.Write(buf, binary.LittleEndian, v.value.Unix())
-
-    return buf.Bytes()
+    return []byte(strconv.FormatInt(v.value.Unix(), 10))
 }
 
 func (v *TimeValue) GetType() (ValueTypeCode) {
