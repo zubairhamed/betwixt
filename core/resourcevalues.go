@@ -5,14 +5,9 @@ import (
     "encoding/binary"
     "bytes"
     "strconv"
+    . "github.com/zubairhamed/lwm2m/api"
 )
 
-type ResourceValue interface {
-    GetBytes() []byte
-    GetType() ValueTypeCode
-    GetValue()  interface{}
-    GetStringValue() string
-}
 
 type MultipleResourceInstanceValue struct {
     values      []ResourceValue

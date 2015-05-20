@@ -6,7 +6,7 @@ import (
     "github.com/zubairhamed/goap"
     . "github.com/zubairhamed/lwm2m/examples/obj/basic"
     "github.com/zubairhamed/lwm2m/registry"
-    "github.com/zubairhamed/lwm2m/core"
+    . "github.com/zubairhamed/lwm2m/api"
 )
 
 func main() {
@@ -24,7 +24,7 @@ func main() {
     client.Start()
 }
 
-func setupResources (client *LWM2MClient, reg core.Registry) {
+func setupResources (client *LWM2MClient, reg Registry) {
     accessControl := &AccessControl{
         Model: reg.GetModel(oma.OBJECT_LWM2M_ACCESS_CONTROL),
     }

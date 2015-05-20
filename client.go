@@ -5,9 +5,8 @@ import (
     "net"
     "log"
     "errors"
-    "bytes"
-    "fmt"
     "github.com/zubairhamed/lwm2m/core"
+    . "github.com/zubairhamed/lwm2m/api"
 )
 
 func NewLWM2MClient(local string, remote string) (*LWM2MClient) {
@@ -21,7 +20,7 @@ func NewLWM2MClient(local string, remote string) (*LWM2MClient) {
 
     return &LWM2MClient{
         coapServer: coapServer,
-        enabledObjects: make(map[core.LWM2MObjectType]*core.ObjectEnabler),
+        enabledObjects: make(map[LWM2MObjectType]ObjectEnabler),
     }
 }
 
@@ -35,8 +34,8 @@ type FnOnError func()
 
 type LWM2MClient struct {
     coapServer          *CoapServer
-    registry            core.Registry
-    enabledObjects      map[core.LWM2MObjectType] *core.ObjectEnabler
+    registry            Registry
+    enabledObjects      map[LWM2MObjectType] ObjectEnabler
 
     // Events
     evtOnStartup        FnOnStartup
@@ -52,7 +51,7 @@ type LWM2MClient struct {
 func (c *LWM2MClient) Register(name string) (string) {
     req := NewRequest(TYPE_CONFIRMABLE, POST, GenerateMessageId())
 
-    req.SetStringPayload(BuildModelResourceStringPayload(c.enabledObjects))
+    req.SetStringPayload(core.BuildModelResourceStringPayload(c.enabledObjects))
     req.SetRequestURI("rd")
     req.SetUriQuery("ep", name)
     resp, err := c.coapServer.Send(req)
@@ -71,11 +70,11 @@ func (c *LWM2MClient) Register(name string) (string) {
     return path
 }
 
-func (c *LWM2MClient) GetEnabledObjects() (map[core.LWM2MObjectType] *core.ObjectEnabler) {
+func (c *LWM2MClient) GetEnabledObjects() (map[LWM2MObjectType] ObjectEnabler) {
     return c.enabledObjects
 }
 
-func (c *LWM2MClient) GetRegistry() core.Registry {
+func (c *LWM2MClient) GetRegistry() Registry {
     return c.registry
 }
 
@@ -95,16 +94,16 @@ func (c *LWM2MClient) AddObject() {
 
 }
 
-func (c *LWM2MClient) UseRegistry(reg core.Registry) {
+func (c *LWM2MClient) UseRegistry(reg Registry) {
     c.registry = reg
 }
 
-func (c *LWM2MClient) EnableObject(t core.LWM2MObjectType, e core.ObjectHandler) (error) {
+func (c *LWM2MClient) EnableObject(t LWM2MObjectType, e RequestHandler) (error) {
     if c.enabledObjects[t] == nil {
 
-        en := &core.ObjectEnabler{
+        en := &core.DefaultObjectEnabler{
             Handler: e,
-            Instances: []*core.ObjectInstance{},
+            Instances: []ObjectInstance{},
         }
         c.enabledObjects[t] = en
 
@@ -114,11 +113,11 @@ func (c *LWM2MClient) EnableObject(t core.LWM2MObjectType, e core.ObjectHandler)
     }
 }
 
-func (c *LWM2MClient) AddObjectInstance(instance *core.ObjectInstance) (error) {
+func (c *LWM2MClient) AddObjectInstance(instance ObjectInstance) (error) {
     if instance != nil {
-        o := c.GetObjectInstance(instance.TypeId, instance.Id)
+        o := c.GetObjectInstance(instance.GetTypeId(), instance.GetId())
         if o == nil {
-            c.enabledObjects[instance.TypeId].Instances = append(c.enabledObjects[instance.TypeId].Instances, instance)
+            c.enabledObjects[instance.GetTypeId()].SetObjectInstances(append(c.enabledObjects[instance.GetTypeId()].GetObjectInstances(), instance))
 
             return nil
         } else {
@@ -130,24 +129,24 @@ func (c *LWM2MClient) AddObjectInstance(instance *core.ObjectInstance) (error) {
 
 }
 
-func (c *LWM2MClient) AddObjectInstances (instances ... *core.ObjectInstance) {
+func (c *LWM2MClient) AddObjectInstances (instances ... ObjectInstance) {
     for _, o := range instances {
         c.AddObjectInstance(o)
     }
 }
 
-func (c *LWM2MClient) GetObjectEnabler(n core.LWM2MObjectType) (*core.ObjectEnabler) {
+func (c *LWM2MClient) GetObjectEnabler(n LWM2MObjectType) (ObjectEnabler) {
     return c.enabledObjects[n]
 }
 
-func (c *LWM2MClient) GetObjectInstance(n core.LWM2MObjectType, instance int) (*core.ObjectInstance) {
+func (c *LWM2MClient) GetObjectInstance(n LWM2MObjectType, instance int) (ObjectInstance) {
     enabler := c.enabledObjects[n]
 
     if enabler != nil {
-        instances := enabler.Instances
+        instances := enabler.GetObjectInstances()
         if len(instances) > 0 {
             for _, o := range instances {
-                if o.Id == instance && o.TypeId == n {
+                if o.GetId() == instance && o.GetTypeId() == n {
                     return o
                 }
             }
@@ -191,20 +190,19 @@ func (c *LWM2MClient) handleGetRequest(req *CoapRequest) *CoapResponse {
         resourceId = req.GetAttributeAsInt("rsrc")
     }
 
-    t := core.LWM2MObjectType(objectId)
+    t := LWM2MObjectType(objectId)
     enabler := c.GetObjectEnabler(t)
 
 
     if enabler != nil {
-        if enabler.Handler != nil {
+        if enabler.GetHandler() != nil {
             msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
             msg.SetStringPayload("")
             msg.Code = COAPCODE_205_CONTENT
             msg.Token = req.GetMessage().Token
 
-            val := enabler.Handler.OnRead(instanceId, resourceId)
+            val := enabler.OnRead(instanceId, resourceId)
             msg.Payload = NewBytesPayload(val.GetBytes())
-            log.Println("Outgoing data: ", val.GetBytes())
 
             return NewResponseWithMessage(msg)
         }
@@ -286,72 +284,3 @@ func (c *LWM2MClient) OnError (fn FnOnError) {
     c.evtOnError = fn
 }
 
-// Functions
-func BuildModelResourceStringPayload(instances core.LWM2MObjectInstances) (string) {
-    var buf bytes.Buffer
-
-    for k, v := range instances {
-        inst := v.Instances
-        if len(inst) > 0 {
-            for _, j := range inst {
-                buf.WriteString(fmt.Sprintf("</%d/%d>,", k, j.Id))
-            }
-        } else {
-            buf.WriteString(fmt.Sprintf("</%d>,", k))
-        }
-    }
-    return buf.String()
-}
-
-/*
-    /*
-    // Returned payload
-
-
-
-    enabler := c.GetObjectEnabler(t)
-    if enabler != nil {
-        if enabler.Handler != nil {
-            val := enabler.Handler.OnRead(objectId, )
-
-            // val := enabler.Handler.OnRead(objectId, resourceId)
-            // msg.Payload = val.GetBytes()
-
-            if obj != "" {
-                model := c.registry.GetModel(t)
-
-                if inst != "" {
-                    instInt, _ = strconv.Atoi(inst)
-
-                    if rsrc != "" {
-                        // Querying resource, so call Handlers
-                        rsrcInt, _ = strconv.Atoi(rsrc)
-                        rsrcObj := model.GetResource(rsrcInt)
-
-                        // Multiple Resources
-                        ret := enabler.Handler.OnRead(rsrcObj, instInt)
-
-                        if rsrcObj.Multiple {
-                            core.TlvPayloadFromResource(ret.GetValue().(*core.MultipleResourceInstanceValue), rsrcObj, c.enabledObjects[t].GetObjectInstance(instInt).GetResource(rsrcInt))
-                        } else {
-                            // Single value resource
-                            msg.Payload = NewPlainTextPayload(ret.GetStringValue())
-                        }
-                    } else {
-                        // Instance of object
-                        core.TlvPayloadFromObjectInstance((c.enabledObjects[t].GetObjectInstance(objInt)))
-                    }
-                } else {
-                    // Object
-                    core.TlvPayloadFromObjects(c.enabledObjects[t])
-                }
-            }
-            resp := NewResponseWithMessage(msg)
-
-            return resp
-        }
-
-    } else {
-        log.Println("Enabler not found.")
-    }
-*/

@@ -2,10 +2,10 @@ package lwm2m
 
 import (
     . "github.com/zubairhamed/goap"
-    . "github.com/zubairhamed/lwm2m/core"
     "github.com/zubairhamed/lwm2m/objects/oma"
     "github.com/zubairhamed/lwm2m/objects/ipso"
     "github.com/zubairhamed/lwm2m/registry"
+    . "github.com/zubairhamed/lwm2m/api"
 )
 
 func NewLWM2MServer() (*LWM2MServer) {
@@ -24,6 +24,6 @@ type LWM2MServer struct {
     registry        Registry
 }
 
-func (s *LWM2MServer) GetModel(n LWM2MObjectType) *ObjectModel {
+func (s *LWM2MServer) GetModel(n LWM2MObjectType) ObjectModel {
     return s.registry.GetModel(n)
 }

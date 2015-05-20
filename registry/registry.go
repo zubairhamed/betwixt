@@ -4,6 +4,7 @@ import (
     "github.com/zubairhamed/lwm2m/objects/ipso"
     "github.com/zubairhamed/lwm2m/objects/oma"
     . "github.com/zubairhamed/lwm2m/core"
+    . "github.com/zubairhamed/lwm2m/api"
 )
 
 func NewDefaultObjectRegistry() (Registry) {
@@ -19,7 +20,6 @@ func NewObjectRegistry(s ...ModelSource) (Registry) {
     for _, o := range s {
         reg.Register(o)
     }
-
     return reg
 }
 
@@ -27,19 +27,17 @@ type ObjectRegistry struct {
     sources     []ModelSource
 }
 
-func (m *ObjectRegistry) CreateObjectInstance(t LWM2MObjectType, n int) (*ObjectInstance) {
+func (m *ObjectRegistry) CreateObjectInstance(t LWM2MObjectType, n int) (ObjectInstance) {
     o := m.GetModel(t)
     if o != nil {
-        obj := NewObjectInstance(t)
-        obj.Id = n
-        obj.TypeId = t
+        obj := NewObjectInstance(n, t)
 
         return obj
     }
     return nil
 }
 
-func (m *ObjectRegistry) GetModel(n LWM2MObjectType) *ObjectModel {
+func (m *ObjectRegistry) GetModel(n LWM2MObjectType) ObjectModel {
     for _, s := range m.sources {
         if s != nil {
             o := s.Get(n)

@@ -1,11 +1,14 @@
 package basic
 
-import "github.com/zubairhamed/lwm2m/core"
+import (
+    "github.com/zubairhamed/lwm2m/core"
+    . "github.com/zubairhamed/lwm2m/api"
+)
 
 type ConnectivityMonitoring struct {
 
 }
 
-func (o *ConnectivityMonitoring) OnRead(r *core.ResourceModel, resourceId int) core.ResourceValue {
+func (o *ConnectivityMonitoring) OnRead(r ResourceModel, resourceId int) ResourceValue {
     return core.NewEmptyValue()
 }

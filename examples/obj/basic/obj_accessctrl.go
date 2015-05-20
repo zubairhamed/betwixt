@@ -2,13 +2,14 @@ package basic
 
 import (
     "github.com/zubairhamed/lwm2m/core"
+    . "github.com/zubairhamed/lwm2m/api"
 )
 
 type AccessControl struct {
-    Model       *core.ObjectModel
+    Model       ObjectModel
 }
 
 
-func (o *AccessControl) OnRead(instanceId int, resourceId int) (core.ResourceValue) {
+func (o *AccessControl) OnRead(instanceId int, resourceId int) (ResourceValue) {
     return core.NewEmptyValue()
 }

@@ -1,7 +1,8 @@
-package core
+package api
 
 type OperationCode   int
-type LWM2MObjectInstances map[LWM2MObjectType] *ObjectEnabler
+type LWM2MObjectType int
+type LWM2MObjectInstances map[LWM2MObjectType] ObjectEnabler
 
 type ValueTypeCode byte
 const (
@@ -36,22 +37,6 @@ const (
 )
 
 // Enablers
-type ObjectHandler interface {
-    OnRead(instanceId int, resourceId int)(ResourceValue)
-}
 
-type ObjectEnabler struct {
-    Handler     ObjectHandler
-    Instances   []*ObjectInstance
-}
-
-func (en *ObjectEnabler) GetObjectInstance(idx int) (*ObjectInstance) {
-    for _, o := range en.Instances {
-        if o.Id == idx {
-            return o
-        }
-    }
-    return nil
-}
 
 

@@ -1,21 +1,22 @@
 package basic
 
 import (
+    . "github.com/zubairhamed/lwm2m/api"
     "github.com/zubairhamed/lwm2m/core"
     "time"
 )
 
 type Device struct {
     Serial      string
-    Model       *core.ObjectModel
+    Model       ObjectModel
 }
 
-func (o *Device) OnRead(instanceId int, resourceId int) (core.ResourceValue) {
+func (o *Device) OnRead(instanceId int, resourceId int) (ResourceValue) {
     if resourceId == -1 {
         // Read Object Instance
     } else {
         // Read Resource Instance
-        var val core.ResourceValue
+        var val ResourceValue
 
         resource := o.Model.GetResource(resourceId)
         switch resourceId {
@@ -99,11 +100,11 @@ func (o *Device) GetFirmwareVersion() string {
     return "1.0"
 }
 
-func (o *Device) Reboot() core.ResourceValue {
+func (o *Device) Reboot() ResourceValue {
     return core.NewEmptyValue()
 }
 
-func (o *Device) FactoryReset() core.ResourceValue {
+func (o *Device) FactoryReset() ResourceValue {
     return core.NewEmptyValue()
 }
 
