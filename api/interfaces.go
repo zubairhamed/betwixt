@@ -54,10 +54,7 @@ type ResourceModel interface {
     GetId() (int)
     MultipleValuesAllowed() (bool)
     GetResourceType()(ValueTypeCode)
-
-    IsExecutable() (bool)
-    IsReadable() (bool)
-    IsWritable() (bool)
+    GetOperations() (OperationCode)
 }
 
 type LWM2MClient interface {

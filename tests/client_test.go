@@ -6,6 +6,7 @@ import (
     "github.com/zubairhamed/lwm2m/core"
     "github.com/zubairhamed/lwm2m"
     "github.com/zubairhamed/lwm2m/registry"
+    . "github.com/zubairhamed/lwm2m/api"
 )
 
 func TestClient(t *testing.T) {
@@ -15,7 +16,7 @@ func TestClient(t *testing.T) {
     }
 
     cases1 := []struct {
-        in core.LWM2MObjectType
+        in LWM2MObjectType
     }{
         {oma.OBJECT_LWM2M_SERVER},
         {oma.OBJECT_LWM2M_ACCESS_CONTROL},
@@ -41,7 +42,7 @@ func TestClient(t *testing.T) {
     }
 
     cases2 := []struct {
-        in core.LWM2MObjectType
+        in LWM2MObjectType
     }{
         {oma.OBJECT_LWM2M_SERVER},
         {oma.OBJECT_LWM2M_ACCESS_CONTROL},
@@ -75,7 +76,7 @@ func TestClient(t *testing.T) {
     client.AddObjectInstances(inst1, inst2, inst3)
 
     cases3 := []struct {
-        ot   core.LWM2MObjectType
+        ot   LWM2MObjectType
         oi   int
     }{
         {oma.OBJECT_LWM2M_SECURITY, 0},
@@ -94,7 +95,7 @@ func TestRegistry(t *testing.T) {
     reg := registry.NewDefaultObjectRegistry()
 
     cases := []struct {
-        o   core.LWM2MObjectType
+        o   LWM2MObjectType
     }{
         {oma.OBJECT_LWM2M_SECURITY},
         {oma.OBJECT_LWM2M_SERVER},
@@ -112,7 +113,7 @@ func TestRegistry(t *testing.T) {
         }
     }
 
-    if reg.CreateObjectInstance(core.LWM2MObjectType(-1), 0) != nil {
+    if reg.CreateObjectInstance(LWM2MObjectType(-1), 0) != nil {
         t.Error("Created an unknown LWM2M Object")
     }
 }
@@ -124,7 +125,7 @@ func TestBuildResourceStringPayload(t *testing.T) {
     client.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, nil)
     client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, nil)
 
-    str := lwm2m.BuildModelResourceStringPayload(client.GetEnabledObjects())
+    str := core.BuildModelResourceStringPayload(client.GetEnabledObjects())
     compare := "</0>,</2>,</4>,"
     if str != compare {
         t.Error("Unexpected output building Model Resource String: Expected = ", compare, "Actual = ", str)

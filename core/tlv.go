@@ -39,7 +39,7 @@ func TlvPayloadFromObjects(en ObjectEnabler, reg Registry) (ResourceValue, error
 
         rsrcBuf := bytes.NewBuffer([]byte{})
         for _, ri := range m.GetResources() {
-            if ri.IsReadable() {
+            if IsReadableResource(ri) {
                 ret := en.OnRead(oi.GetId(), ri.GetId())
 
                 if ri.MultipleValuesAllowed() {

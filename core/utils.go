@@ -68,3 +68,18 @@ func BuildModelResourceStringPayload(instances LWM2MObjectInstances) (string) {
     }
     return buf.String()
 }
+
+func IsExecutableResource(m ResourceModel) (bool) {
+    op := m.GetOperations()
+    return (op == OPERATION_E || op == OPERATION_RE || op == OPERATION_RWE || op == OPERATION_WE)
+}
+
+func IsReadableResource(m ResourceModel) (bool) {
+    op := m.GetOperations()
+    return (op == OPERATION_RE || op == OPERATION_R || op == OPERATION_RWE || op == OPERATION_RW)
+}
+
+func IsWritableResource(m ResourceModel) (bool) {
+    op := m.GetOperations()
+    return (op ==OPERATION_RW || op == OPERATION_RWE || op == OPERATION_WE || op == OPERATION_W)
+}

@@ -48,24 +48,17 @@ func (o *DefaultResourceModel) GetId() (int) {
     return o.Id
 }
 
+func (o *DefaultResourceModel) GetOperations() (OperationCode) {
+    return o.Operations
+}
+
+
 func (o *DefaultResourceModel) MultipleValuesAllowed() (bool) {
     return o.Multiple
 }
 
 func (o *DefaultResourceModel) GetResourceType() (ValueTypeCode) {
     return o.ResourceType
-}
-
-func (o *DefaultResourceModel) IsExecutable() (bool) {
-    return (o.Operations == OPERATION_E || o.Operations == OPERATION_RE || o.Operations == OPERATION_RWE || o.Operations == OPERATION_WE)
-}
-
-func (o *DefaultResourceModel) IsReadable() (bool) {
-    return (o.Operations == OPERATION_RE || o.Operations == OPERATION_R || o.Operations == OPERATION_RWE || o.Operations == OPERATION_RW)
-}
-
-func (o *DefaultResourceModel) IsWritable() (bool) {
-    return (o.Operations ==OPERATION_RW || o.Operations == OPERATION_RWE || o.Operations == OPERATION_WE || o.Operations == OPERATION_W)
 }
 
 func NewObjectInstance(id int, t LWM2MObjectType) (ObjectInstance) {
