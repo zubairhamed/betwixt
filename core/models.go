@@ -123,3 +123,17 @@ func (en *DefaultObjectEnabler) OnRead(instanceId int, resourceId int)(ResourceV
     }
     return nil
 }
+
+func (en *DefaultObjectEnabler) OnDelete(instanceId int)(bool) {
+    if en.Handler != nil {
+        return en.Handler.OnDelete(instanceId)
+    }
+    return false
+}
+
+func (en *DefaultObjectEnabler) OnWrite(instanceId int, resourceId int)(bool) {
+    if en.Handler != nil {
+        return en.Handler.OnWrite(instanceId, resourceId)
+    }
+    return false
+}

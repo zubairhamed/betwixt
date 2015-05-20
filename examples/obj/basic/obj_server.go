@@ -9,9 +9,18 @@ type Server struct {
 
 }
 
+func (o *Server) OnDelete(instanceId int) (bool) {
+    return true
+}
+
 func (o *Server) OnRead(instanceId int, resourceId int) (ResourceValue) {
     return core.NewEmptyValue()
 }
+
+func (o *Server) OnWrite(instanceId int, resourceId int) (bool) {
+    return true
+}
+
 
 /*
 [1]

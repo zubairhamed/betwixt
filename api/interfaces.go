@@ -2,6 +2,8 @@ package api
 
 type RequestHandler interface {
     OnRead(int, int)(ResourceValue)
+    OnDelete(int)(bool)
+    OnWrite(int, int)(bool)
 }
 
 type ResourceValue interface {
@@ -18,6 +20,8 @@ type ObjectEnabler interface {
     GetHandler() RequestHandler
 
     OnRead(int, int)(ResourceValue)
+    OnDelete(int)(bool)
+    OnWrite(int, int)(bool)
 }
 
 type ObjectInstance interface {

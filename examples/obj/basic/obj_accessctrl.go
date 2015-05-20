@@ -9,10 +9,18 @@ type AccessControl struct {
     Model       ObjectModel
 }
 
+func (o *AccessControl) OnDelete(instanceId int) (bool) {
+    return true
+}
 
 func (o *AccessControl) OnRead(instanceId int, resourceId int) (ResourceValue) {
     return core.NewEmptyValue()
 }
+
+func (o *AccessControl) OnWrite(instanceId int, resourceId int) (bool) {
+    return true
+}
+
 
 /*
 [0] - LWM2M Server Object

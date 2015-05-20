@@ -10,8 +10,17 @@ import (
 type Security struct {
 
 }
+
+func (o *Security) OnDelete(instanceId int) (bool) {
+    return true
+}
+
 func (o *Security) OnRead(instanceId int, resourceId int) (ResourceValue) {
     return core.NewEmptyValue()
+}
+
+func (o *Security) OnWrite(instanceId int, resourceId int) (bool) {
+    return true
 }
 
 /*
