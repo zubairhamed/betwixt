@@ -3,6 +3,7 @@ package basic
 import (
     "github.com/zubairhamed/lwm2m/core"
     "time"
+    "log"
 )
 
 type Device struct {
@@ -10,15 +11,8 @@ type Device struct {
     Model       *core.ObjectModel
 }
 
-/*
-exec
-case 4:
-case 5:
-case 12:
-*/
-
 func (o *Device) OnRead(instanceId int, resourceId int) (core.ResourceValue) {
-
+    log.Println("OnRead")
     if resourceId == -1 {
         // Read Object Instance
     } else {
@@ -162,15 +156,15 @@ func (o *Device) OnRead(r *core.ResourceModel, resourceId int) core.ResourceValu
 */
 
 func (o *Device) GetManufacturer() string {
-    return "GOLWM2M"
+    return "Open Mobile Alliance"
 }
 
 func (o *Device) GetModelNumber() string {
-    return "0.1"
+    return "Lightweight M2M Client"
 }
 
 func (o *Device) GetSerialNumber() string {
-    return o.Serial
+    return "345000123"
 }
 
 func (o *Device) GetFirmwareVersion() string {
@@ -186,27 +180,27 @@ func (o *Device) FactoryReset() core.ResourceValue {
 }
 
 func (o *Device) GetAvailablePowerSources() []int {
-    return []int{ 1, 2 }
+    return []int{ 1, 5 }
 }
 
 func (o *Device) GetPowerSourceVoltage() []int {
-    return  []int{ 10, 50 }
+    return  []int{ 3800, 5000 }
 }
 
 func (o *Device) GetPowerSourceCurrent() []int {
-    return []int{ 22, 45 }
+    return []int{ 125, 900 }
 }
 
 func (o *Device) GetBatteryLevel() int {
-    return 0
+    return 100
 }
 
 func (o *Device) GetMemoryFree() int {
-    return 0
+    return 15
 }
 
 func (o *Device) GetErrorCode() []int {
-    return []int{ 100, 210 }
+    return []int{ 0 }
 }
 
 func (o *Device) ResetErrorCode() string {
@@ -222,9 +216,9 @@ func (o *Device) GetUtcOffset() string {
 }
 
 func (o *Device) GetTimezone() string {
-    return ""
+    return "+2:00"
 }
 
 func (o *Device) GetSupportedBindingMode() string {
-    return ""
+    return "U"
 }

@@ -15,16 +15,16 @@ func main() {
     registry := registry.NewDefaultObjectRegistry()
     client.UseRegistry(registry)
 
-    serial := setupResources(client, registry)
+    setupResources(client, registry)
 
     client.OnStartup(func(){
-        client.Register("GO-" + serial)
+        client.Register("GOClient")
     })
 
     client.Start()
 }
 
-func setupResources (client *LWM2MClient, reg core.Registry) (string) {
+func setupResources (client *LWM2MClient, reg core.Registry) {
     accessControl := &AccessControl{
         Model: reg.GetModel(oma.OBJECT_LWM2M_ACCESS_CONTROL),
     }
@@ -65,6 +65,4 @@ func setupResources (client *LWM2MClient, reg core.Registry) (string) {
         instanceConnMonitoring,
         instanceFwUpdate,
     )
-
-    return device.GetSerialNumber()
 }

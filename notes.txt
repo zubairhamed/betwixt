@@ -1,2 +1,4 @@
 Client
-    Object       // Object Instances
+    Object[]
+        Resource[]
+            ResourceInstance[]
