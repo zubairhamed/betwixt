@@ -7,13 +7,12 @@ import (
     "github.com/zubairhamed/lwm2m"
     "github.com/zubairhamed/lwm2m/registry"
     . "github.com/zubairhamed/lwm2m/api"
+    "github.com/stretchr/testify/assert"
 )
 
 func TestClient(t *testing.T) {
     client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
-    if client == nil {
-        t.Error("Error instantiating client")
-    }
+    assert.NotNil(t, client, "Error instantiating client")
 
     cases1 := []struct {
         in LWM2MObjectType
@@ -28,18 +27,11 @@ func TestClient(t *testing.T) {
     }
 
     for _, c := range cases1 {
-        if client.EnableObject(c.in, nil) != nil {
-            t.Error("Error enabling object: ", c)
-        }
+        assert.Nil(t, client.EnableObject(c.in, nil), "Error enabling object: ", c)
     }
 
-    if client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil) != nil {
-        t.Error("Error enabling object")
-    }
-
-    if client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil) == nil {
-        t.Error("Object should already be enabled")
-    }
+    assert.Nil(t, client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil), "Error enabling object")
+    assert.NotNil(t, client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil), "Object should already be enabled")
 
     cases2 := []struct {
         in LWM2MObjectType
@@ -54,24 +46,21 @@ func TestClient(t *testing.T) {
     }
 
     for _, c := range cases2 {
-        if client.GetObjectEnabler(c.in) == nil {
-            t.Error("Error getting object enabler: ", c)
-        }
+        assert.NotNil(t, client.GetObjectEnabler(c.in), "Error getting object enabler: ", c)
     }
 
     registry := registry.NewDefaultObjectRegistry()
-    if registry == nil {
-        t.Error("Error instantiating registry")
-    }
+    assert.NotNil(t, registry, "Error instantiating registry")
+
     client.UseRegistry(registry)
 
     inst1 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 0)
     inst2 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 1)
     inst3 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 2)
 
-    if inst1 == nil || inst2 == nil || inst3 == nil {
-        t.Error("Error instantiating lwm2m object")
-    }
+    assert.NotNil(t, inst1, "Error instantiating lwm2m object")
+    assert.NotNil(t, inst2, "Error instantiating lwm2m object")
+    assert.NotNil(t, inst3, "Error instantiating lwm2m object")
 
     client.AddObjectInstances(inst1, inst2, inst3)
 
@@ -85,9 +74,7 @@ func TestClient(t *testing.T) {
     }
 
     for _, c := range cases3 {
-        if client.GetObjectInstance(c.ot, c.oi) == nil {
-            t.Error("Object instance", c.oi, "not found")
-        }
+        assert.NotNil(t, client.GetObjectInstance(c.ot, c.oi), "Object instance", c.oi, "not found")
     }
 }
 
@@ -108,14 +95,9 @@ func TestRegistry(t *testing.T) {
     }
 
     for _, c := range cases {
-        if reg.CreateObjectInstance(c.o, 0) == nil {
-            t.Error("Created an LWM2M Object: ", c.o)
-        }
+        assert.NotNil(t,reg.CreateObjectInstance(c.o, 0), "Created an LWM2M Object: ", c.o)
     }
-
-    if reg.CreateObjectInstance(LWM2MObjectType(-1), 0) != nil {
-        t.Error("Created an unknown LWM2M Object")
-    }
+    assert.Nil(t, reg.CreateObjectInstance(LWM2MObjectType(-1), 0), "Created an unknown LWM2M Object")
 }
 
 func TestBuildResourceStringPayload(t *testing.T) {
@@ -127,7 +109,5 @@ func TestBuildResourceStringPayload(t *testing.T) {
 
     str := core.BuildModelResourceStringPayload(client.GetEnabledObjects())
     compare := "</0>,</2>,</4>,"
-    if str != compare {
-        t.Error("Unexpected output building Model Resource String: Expected = ", compare, "Actual = ", str)
-    }
+    assert.Equal(t, str, compare, "Unexpected output building Model Resource String: Expected = ", compare, "Actual = ", str)
 }

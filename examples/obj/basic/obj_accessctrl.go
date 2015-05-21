@@ -8,7 +8,7 @@ import (
 
 type AccessControl struct {
     Model       ObjectModel
-    Data        *ObjectsData
+    Data        *core.ObjectsData
 }
 
 func (o *AccessControl) OnDelete(instanceId int) (bool, int) {
@@ -47,26 +47,9 @@ func (o *AccessControl) OnWrite(instanceId int, resourceId int) (bool, int) {
     return true, 0
 }
 
-//////////////////////////////////////////////////////
-type ObjectsData struct {
-    data    map[string] interface{}
-}
-
-func (o *ObjectsData) Put(path string, value interface{}) {
-    o.data[path] = value
-}
-
-func (o *ObjectsData) Get(path ...int) (interface{}) {
-    return o.data[path]
-}
-
-//////////////////////////////////////////////////////
-
-
 func NewExampleAccessControlObject(reg Registry) (*AccessControl) {
-    data := &ObjectsData{}
+    data := &core.ObjectsData{}
 
-    // Object 0
     data.Put("/0/0", 1)
     data.Put("/0/1", 0)
     data.Put("/0/2/101", []byte{0, 15})
