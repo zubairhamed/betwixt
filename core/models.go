@@ -2,6 +2,7 @@ package core
 
 import (
     . "github.com/zubairhamed/lwm2m/api"
+    "github.com/zubairhamed/goap"
 )
 
 type DefaultObjectModel struct {
@@ -119,38 +120,38 @@ func (en *DefaultObjectEnabler) SetObjectInstances(o []ObjectInstance) {
     en.Instances = o
 }
 
-func (en *DefaultObjectEnabler) OnRead(instanceId int, resourceId int)(RequestValue, int) {
+func (en *DefaultObjectEnabler) OnRead(instanceId int, resourceId int)(RequestValue, goap.CoapCode) {
     if en.Handler != nil {
         return en.Handler.OnRead(instanceId, resourceId)
     }
     return nil, 0
 }
 
-func (en *DefaultObjectEnabler) OnDelete(instanceId int)(bool, int) {
+func (en *DefaultObjectEnabler) OnDelete(instanceId int)(goap.CoapCode) {
     if en.Handler != nil {
         return en.Handler.OnDelete(instanceId)
     }
-    return false, 0
+    return goap.COAPCODE_404_NOT_FOUND
 }
 
-func (en *DefaultObjectEnabler) OnWrite(instanceId int, resourceId int)(bool, int) {
+func (en *DefaultObjectEnabler) OnWrite(instanceId int, resourceId int)(goap.CoapCode) {
     if en.Handler != nil {
         return en.Handler.OnWrite(instanceId, resourceId)
     }
-    return false, 0
+    return goap.COAPCODE_404_NOT_FOUND
 }
 
-func (en *DefaultObjectEnabler) OnExecute(instanceId int, resourceId int)(bool, int) {
+func (en *DefaultObjectEnabler) OnExecute(instanceId int, resourceId int)(goap.CoapCode) {
     if en.Handler != nil {
         return en.Handler.OnExecute(instanceId, resourceId)
     }
-    return false, 0
+    return goap.COAPCODE_404_NOT_FOUND
 }
 
 
-func (en *DefaultObjectEnabler) OnCreate(instanceId int, resourceId int)(bool, int) {
+func (en *DefaultObjectEnabler) OnCreate(instanceId int, resourceId int)(goap.CoapCode) {
     if en.Handler != nil {
         return en.Handler.OnCreate(instanceId, resourceId)
     }
-    return false, 0
+    return goap.COAPCODE_404_NOT_FOUND
 }

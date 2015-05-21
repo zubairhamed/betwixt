@@ -4,6 +4,7 @@ import (
     "github.com/zubairhamed/lwm2m/core"
     . "github.com/zubairhamed/lwm2m/api"
     "github.com/zubairhamed/lwm2m/objects/oma"
+    "github.com/zubairhamed/goap"
 )
 
 type AccessControl struct {
@@ -11,48 +12,24 @@ type AccessControl struct {
     Data        *core.ObjectsData
 }
 
-func (o *AccessControl) OnExecute(instanceId int, resourceId int) (bool, int) {
-    return true, 0
+func (o *AccessControl) OnExecute(instanceId int, resourceId int) (goap.CoapCode) {
+    return 0
 }
 
-func (o *AccessControl) OnCreate(instanceId int, resourceId int) (bool, int) {
-    return true, 0
+func (o *AccessControl) OnCreate(instanceId int, resourceId int) (goap.CoapCode) {
+    return 0
 }
 
-func (o *AccessControl) OnDelete(instanceId int) (bool, int) {
-    return true, 0
+func (o *AccessControl) OnDelete(instanceId int) (goap.CoapCode) {
+    return 0
 }
 
-func (o *AccessControl) OnRead(instanceId int, resourceId int) (ResponseValue, int) {
-    /*
-
-    resource := o.Model.GetResource(resourceId)
-
-    val := o.Data.Get(instanceId, resourceId)
-
-
-    switch resourceId {
-        case 0:
-        val = core.NewIntegerValue(instanceId)
-        break
-
-        case 1:
-        val = core.NewIntegerValue(instanceId)
-        break
-
-        case 2:
-        break
-
-        case 3:
-        break
-
-    }
-    */
+func (o *AccessControl) OnRead(instanceId int, resourceId int) (ResponseValue, goap.CoapCode) {
     return core.NewEmptyValue(), 0
 }
 
-func (o *AccessControl) OnWrite(instanceId int, resourceId int) (bool, int) {
-    return true, 0
+func (o *AccessControl) OnWrite(instanceId int, resourceId int) (goap.CoapCode) {
+    return 0
 }
 
 func NewExampleAccessControlObject(reg Registry) (*AccessControl) {

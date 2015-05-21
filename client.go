@@ -187,14 +187,12 @@ func (c *DefaultClient) handleCreateRequest(req *CoapRequest) *CoapResponse {
     if enabler != nil {
         if enabler.GetHandler() != nil {
             msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
-            msg.Code = COAPCODE_204_CHANGED
+
             msg.Token = req.GetMessage().Token
             msg.Payload = NewEmptyPayload()
-            val, _ := enabler.OnCreate(instanceId, resourceId)
+            msg.Code = enabler.OnCreate(instanceId, resourceId)
 
-            if val {
-                return NewResponseWithMessage(msg)
-            }
+            return NewResponseWithMessage(msg)
         }
     }
     return nil
@@ -239,14 +237,11 @@ func (c *DefaultClient) handleDeleteRequest(req *CoapRequest) *CoapResponse {
     if enabler != nil {
         if enabler.GetHandler() != nil {
             msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
-            msg.Code = COAPCODE_202_DELETED
             msg.Token = req.GetMessage().Token
             msg.Payload = NewEmptyPayload()
-            val, _ := enabler.OnDelete(instanceId)
+            msg.Code = enabler.OnDelete(instanceId)
 
-            if val {
-                return NewResponseWithMessage(msg)
-            }
+            return NewResponseWithMessage(msg)
         }
     }
     return nil
@@ -277,14 +272,11 @@ func (c *DefaultClient) handleWriteRequest(req *CoapRequest) *CoapResponse {
     if enabler != nil {
         if enabler.GetHandler() != nil {
             msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
-            msg.Code = COAPCODE_204_CHANGED
             msg.Token = req.GetMessage().Token
             msg.Payload = NewEmptyPayload()
-            val, _ := enabler.OnWrite(instanceId, resourceId)
+            msg.Code = enabler.OnWrite(instanceId, resourceId)
 
-            if val {
-                return NewResponseWithMessage(msg)
-            }
+            return NewResponseWithMessage(msg)
         }
     }
     return nil
@@ -307,14 +299,11 @@ func (c *DefaultClient) handleExecuteRequest(req *CoapRequest) *CoapResponse {
     if enabler != nil {
         if enabler.GetHandler() != nil {
             msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
-            msg.Code = COAPCODE_204_CHANGED
             msg.Token = req.GetMessage().Token
             msg.Payload = NewEmptyPayload()
-            val, _ := enabler.OnExecute(instanceId, resourceId)
+            msg.Code = enabler.OnExecute(instanceId, resourceId)
 
-            if val {
-                return NewResponseWithMessage(msg)
-            }
+            return NewResponseWithMessage(msg)
         }
     }
     return nil

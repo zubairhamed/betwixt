@@ -4,6 +4,7 @@ package basic
 import (
     . "github.com/zubairhamed/lwm2m/api"
     "github.com/zubairhamed/lwm2m/core"
+    "github.com/zubairhamed/goap"
 )
 
 
@@ -11,24 +12,24 @@ type Security struct {
 
 }
 
-func (o *Security) OnExecute(instanceId int, resourceId int) (bool, int) {
-    return true, 0
+func (o *Security) OnExecute(instanceId int, resourceId int) (goap.CoapCode) {
+    return goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
-func (o *Security) OnCreate(instanceId int, resourceId int) (bool, int) {
-    return true, 0
+func (o *Security) OnCreate(instanceId int, resourceId int) (goap.CoapCode) {
+    return goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
-func (o *Security) OnDelete(instanceId int) (bool) {
-    return true
+func (o *Security) OnDelete(instanceId int) (goap.CoapCode) {
+    return goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
-func (o *Security) OnRead(instanceId int, resourceId int) (ResponseValue) {
-    return core.NewEmptyValue()
+func (o *Security) OnRead(instanceId int, resourceId int) (ResponseValue, goap.CoapCode) {
+    return core.NewEmptyValue(),  goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
-func (o *Security) OnWrite(instanceId int, resourceId int) (bool) {
-    return true
+func (o *Security) OnWrite(instanceId int, resourceId int) (goap.CoapCode) {
+    return goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
 /*

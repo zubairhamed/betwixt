@@ -4,6 +4,7 @@ import (
     . "github.com/zubairhamed/lwm2m/api"
     "github.com/zubairhamed/lwm2m/core"
     "time"
+    "github.com/zubairhamed/goap"
 )
 
 type Device struct {
@@ -11,19 +12,19 @@ type Device struct {
     Model       ObjectModel
 }
 
-func (o *Device) OnExecute(instanceId int, resourceId int) (bool, int) {
-    return true, 0
+func (o *Device) OnExecute(instanceId int, resourceId int) (goap.CoapCode) {
+    return goap.COAPCODE_204_CHANGED
 }
 
-func (o *Device) OnCreate(instanceId int, resourceId int) (bool, int) {
-    return true, 0
+func (o *Device) OnCreate(instanceId int, resourceId int) (goap.CoapCode) {
+    return goap.COAPCODE_201_CREATED
 }
 
-func (o *Device) OnDelete(instanceId int) (bool, int) {
-    return true, 0
+func (o *Device) OnDelete(instanceId int) (goap.CoapCode) {
+    return goap.COAPCODE_202_DELETED
 }
 
-func (o *Device) OnRead(instanceId int, resourceId int) (ResponseValue, int) {
+func (o *Device) OnRead(instanceId int, resourceId int) (ResponseValue, goap.CoapCode) {
     if resourceId == -1 {
         // Read Object Instance
     } else {
@@ -91,13 +92,13 @@ func (o *Device) OnRead(instanceId int, resourceId int) (ResponseValue, int) {
             default:
             break
         }
-        return val, 0
+        return val, goap.COAPCODE_205_CONTENT
     }
-    return core.NewEmptyValue(), 0
+    return core.NewEmptyValue(), goap.COAPCODE_404_NOT_FOUND
 }
 
-func (o *Device) OnWrite(instanceId int, resourceId int) (bool, int) {
-    return true, 0
+func (o *Device) OnWrite(instanceId int, resourceId int) (goap.CoapCode) {
+    return goap.COAPCODE_404_NOT_FOUND
 }
 
 func (o *Device) GetManufacturer() string {

@@ -3,30 +3,31 @@ package basic
 import (
     . "github.com/zubairhamed/lwm2m/api"
     "github.com/zubairhamed/lwm2m/core"
+    "github.com/zubairhamed/goap"
 )
 
 type Server struct {
 
 }
 
-func (o *Server) OnExecute(instanceId int, resourceId int) (bool, int) {
-    return true, 0
+func (o *Server) OnExecute(instanceId int, resourceId int) (goap.CoapCode) {
+    return goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
-func (o *Server) OnCreate(instanceId int, resourceId int) (bool, int) {
-    return true, 0
+func (o *Server) OnCreate(instanceId int, resourceId int) (goap.CoapCode) {
+    return goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
-func (o *Server) OnDelete(instanceId int) (bool) {
-    return true
+func (o *Server) OnDelete(instanceId int) (goap.CoapCode) {
+    return goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
-func (o *Server) OnRead(instanceId int, resourceId int) (ResponseValue) {
-    return core.NewEmptyValue()
+func (o *Server) OnRead(instanceId int, resourceId int) (ResponseValue, goap.CoapCode) {
+    return core.NewEmptyValue(), goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
-func (o *Server) OnWrite(instanceId int, resourceId int) (bool) {
-    return true
+func (o *Server) OnWrite(instanceId int, resourceId int) (goap.CoapCode) {
+    return goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
 

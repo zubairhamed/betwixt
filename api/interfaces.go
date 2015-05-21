@@ -1,11 +1,12 @@
 package api
+import "github.com/zubairhamed/goap"
 
 type RequestHandler interface {
-    OnRead(int, int)(ResponseValue, int)
-    OnDelete(int)(bool, int)
-    OnWrite(int, int)(bool, int)
-    OnCreate(int, int)(bool, int)
-    OnExecute(int, int)(bool, int)
+    OnRead(int, int)(ResponseValue, goap.CoapCode)
+    OnDelete(int)(goap.CoapCode)
+    OnWrite(int, int)(goap.CoapCode)
+    OnCreate(int, int)(goap.CoapCode)
+    OnExecute(int, int)(goap.CoapCode)
 }
 
 /*
@@ -38,11 +39,11 @@ type ObjectEnabler interface {
     SetObjectInstances([]ObjectInstance)
     GetHandler() RequestHandler
 
-    OnRead(int, int)(RequestValue, int)
-    OnDelete(int)(bool, int)
-    OnWrite(int, int)(bool, int)
-    OnCreate(int, int)(bool, int)
-    OnExecute(int, int)(bool, int)
+    OnRead(int, int)(RequestValue, goap.CoapCode)
+    OnDelete(int)(goap.CoapCode)
+    OnWrite(int, int)(goap.CoapCode)
+    OnCreate(int, int)(goap.CoapCode)
+    OnExecute(int, int)(goap.CoapCode)
 }
 
 type ObjectInstance interface {
