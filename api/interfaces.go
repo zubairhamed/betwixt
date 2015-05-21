@@ -1,9 +1,9 @@
 package api
 
 type RequestHandler interface {
-    OnRead(int, int)(ResponseValue)
-    OnDelete(int)(bool)
-    OnWrite(int, int)(bool)
+    OnRead(int, int)(ResponseValue, int)
+    OnDelete(int)(bool, int)
+    OnWrite(int, int)(bool, int)
 }
 
 /*
@@ -27,8 +27,6 @@ type ResponseValue interface {
     GetType() (ValueTypeCode)
     GetValue() (interface{})
     GetStringValue() (string)
-
-    // IsError() bool
 }
 
 

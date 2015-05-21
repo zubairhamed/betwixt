@@ -1,6 +1,8 @@
 package core
 
-import . "github.com/zubairhamed/lwm2m/api"
+import (
+    . "github.com/zubairhamed/lwm2m/api"
+)
 
 type DefaultObjectModel struct {
     Id              LWM2MObjectType
@@ -117,23 +119,23 @@ func (en *DefaultObjectEnabler) SetObjectInstances(o []ObjectInstance) {
     en.Instances = o
 }
 
-func (en *DefaultObjectEnabler) OnRead(instanceId int, resourceId int)(RequestValue) {
+func (en *DefaultObjectEnabler) OnRead(instanceId int, resourceId int)(RequestValue, int) {
     if en.Handler != nil {
         return en.Handler.OnRead(instanceId, resourceId)
     }
-    return nil
+    return nil, 0
 }
 
-func (en *DefaultObjectEnabler) OnDelete(instanceId int)(bool) {
+func (en *DefaultObjectEnabler) OnDelete(instanceId int)(bool, int) {
     if en.Handler != nil {
         return en.Handler.OnDelete(instanceId)
     }
-    return false
+    return false, 0
 }
 
-func (en *DefaultObjectEnabler) OnWrite(instanceId int, resourceId int)(bool) {
+func (en *DefaultObjectEnabler) OnWrite(instanceId int, resourceId int)(bool, int) {
     if en.Handler != nil {
         return en.Handler.OnWrite(instanceId, resourceId)
     }
-    return false
+    return false, 0
 }
