@@ -10,6 +10,14 @@ type ConnectivityStatistics struct {
 
 }
 
+func (o *ConnectivityStatistics) OnExecute(instanceId int, resourceId int) (bool, int) {
+    return true, 0
+}
+
+func (o *ConnectivityStatistics) OnCreate(instanceId int, resourceId int) (bool, int) {
+    return true, 0
+}
+
 func (o *ConnectivityStatistics) OnDelete(instanceId int) (bool) {
     return true
 }

@@ -164,10 +164,40 @@ func (c *DefaultClient) Start() {
 
     s.NewRoute("{obj}/{inst}", DELETE, c.handleDeleteRequest)
 
-    s.NewRoute("{obj}/{inst}/{rsrc}", POST, c.handleWriteRequest)
-    s.NewRoute("{obj}/{inst}", POST, c.handleWriteRequest)
+    s.NewRoute("{obj}/{inst}/{rsrc}", POST, c.handleExecuteRequest)
+    s.NewRoute("{obj}/{inst}", POST, c.handleCreateRequest)
 
     c.coapServer.Start()
+}
+
+func (c *DefaultClient) handleCreateRequest(req *CoapRequest) *CoapResponse {
+    attrResource := req.GetAttribute("rsrc")
+    objectId := req.GetAttributeAsInt("obj")
+    instanceId := req.GetAttributeAsInt("inst")
+
+    var resourceId = -1
+
+    if attrResource != "" {
+        resourceId = req.GetAttributeAsInt("rsrc")
+    }
+
+    t := LWM2MObjectType(objectId)
+    enabler := c.GetObjectEnabler(t)
+
+    if enabler != nil {
+        if enabler.GetHandler() != nil {
+            msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+            msg.Code = COAPCODE_204_CHANGED
+            msg.Token = req.GetMessage().Token
+            msg.Payload = NewEmptyPayload()
+            val, _ := enabler.OnCreate(instanceId, resourceId)
+
+            if val {
+                return NewResponseWithMessage(msg)
+            }
+        }
+    }
+    return nil
 }
 
 func (c *DefaultClient) handleReadRequest(req *CoapRequest) *CoapResponse {
@@ -261,14 +291,33 @@ func (c *DefaultClient) handleWriteRequest(req *CoapRequest) *CoapResponse {
 }
 
 func (c *DefaultClient) handleExecuteRequest(req *CoapRequest) *CoapResponse {
-    msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
-    msg.SetStringPayload("")
-    msg.Code = COAPCODE_205_CONTENT
-    msg.Token = req.GetMessage().Token
+    attrResource := req.GetAttribute("rsrc")
+    objectId := req.GetAttributeAsInt("obj")
+    instanceId := req.GetAttributeAsInt("inst")
 
-    resp := NewResponseWithMessage(msg)
+    var resourceId = -1
 
-    return resp
+    if attrResource != "" {
+        resourceId = req.GetAttributeAsInt("rsrc")
+    }
+
+    t := LWM2MObjectType(objectId)
+    enabler := c.GetObjectEnabler(t)
+
+    if enabler != nil {
+        if enabler.GetHandler() != nil {
+            msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+            msg.Code = COAPCODE_204_CHANGED
+            msg.Token = req.GetMessage().Token
+            msg.Payload = NewEmptyPayload()
+            val, _ := enabler.OnExecute(instanceId, resourceId)
+
+            if val {
+                return NewResponseWithMessage(msg)
+            }
+        }
+    }
+    return nil
 }
 
 // Events

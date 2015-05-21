@@ -4,6 +4,8 @@ type RequestHandler interface {
     OnRead(int, int)(ResponseValue, int)
     OnDelete(int)(bool, int)
     OnWrite(int, int)(bool, int)
+    OnCreate(int, int)(bool, int)
+    OnExecute(int, int)(bool, int)
 }
 
 /*
@@ -39,6 +41,8 @@ type ObjectEnabler interface {
     OnRead(int, int)(RequestValue, int)
     OnDelete(int)(bool, int)
     OnWrite(int, int)(bool, int)
+    OnCreate(int, int)(bool, int)
+    OnExecute(int, int)(bool, int)
 }
 
 type ObjectInstance interface {

@@ -11,6 +11,14 @@ type AccessControl struct {
     Data        *core.ObjectsData
 }
 
+func (o *AccessControl) OnExecute(instanceId int, resourceId int) (bool, int) {
+    return true, 0
+}
+
+func (o *AccessControl) OnCreate(instanceId int, resourceId int) (bool, int) {
+    return true, 0
+}
+
 func (o *AccessControl) OnDelete(instanceId int) (bool, int) {
     return true, 0
 }

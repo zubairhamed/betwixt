@@ -9,6 +9,14 @@ type ConnectivityMonitoring struct {
 
 }
 
+func (o *ConnectivityMonitoring) OnExecute(instanceId int, resourceId int) (bool, int) {
+    return true, 0
+}
+
+func (o *ConnectivityMonitoring) OnCreate(instanceId int, resourceId int) (bool, int) {
+    return true, 0
+}
+
 func (o *ConnectivityMonitoring) OnDelete(instanceId int) (bool) {
     return true
 }

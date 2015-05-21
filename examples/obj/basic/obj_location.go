@@ -9,6 +9,14 @@ type Location struct {
 
 }
 
+func (o *Location) OnExecute(instanceId int, resourceId int) (bool, int) {
+    return true, 0
+}
+
+func (o *Location) OnCreate(instanceId int, resourceId int) (bool, int) {
+    return true, 0
+}
+
 func (o *Location) OnDelete(instanceId int) (bool) {
     return true
 }

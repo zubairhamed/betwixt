@@ -9,6 +9,14 @@ type Server struct {
 
 }
 
+func (o *Server) OnExecute(instanceId int, resourceId int) (bool, int) {
+    return true, 0
+}
+
+func (o *Server) OnCreate(instanceId int, resourceId int) (bool, int) {
+    return true, 0
+}
+
 func (o *Server) OnDelete(instanceId int) (bool) {
     return true
 }

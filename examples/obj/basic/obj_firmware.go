@@ -9,6 +9,14 @@ type Firmware struct {
 
 }
 
+func (o *Firmware) OnExecute(instanceId int, resourceId int) (bool, int) {
+    return true, 0
+}
+
+func (o *Firmware) OnCreate(instanceId int, resourceId int) (bool, int) {
+    return true, 0
+}
+
 func (o *Firmware) OnDelete(instanceId int) (bool) {
     return true
 }

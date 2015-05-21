@@ -11,6 +11,14 @@ type Device struct {
     Model       ObjectModel
 }
 
+func (o *Device) OnExecute(instanceId int, resourceId int) (bool, int) {
+    return true, 0
+}
+
+func (o *Device) OnCreate(instanceId int, resourceId int) (bool, int) {
+    return true, 0
+}
+
 func (o *Device) OnDelete(instanceId int) (bool, int) {
     return true, 0
 }

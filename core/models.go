@@ -139,3 +139,18 @@ func (en *DefaultObjectEnabler) OnWrite(instanceId int, resourceId int)(bool, in
     }
     return false, 0
 }
+
+func (en *DefaultObjectEnabler) OnExecute(instanceId int, resourceId int)(bool, int) {
+    if en.Handler != nil {
+        return en.Handler.OnExecute(instanceId, resourceId)
+    }
+    return false, 0
+}
+
+
+func (en *DefaultObjectEnabler) OnCreate(instanceId int, resourceId int)(bool, int) {
+    if en.Handler != nil {
+        return en.Handler.OnCreate(instanceId, resourceId)
+    }
+    return false, 0
+}

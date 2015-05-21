@@ -11,6 +11,14 @@ type Security struct {
 
 }
 
+func (o *Security) OnExecute(instanceId int, resourceId int) (bool, int) {
+    return true, 0
+}
+
+func (o *Security) OnCreate(instanceId int, resourceId int) (bool, int) {
+    return true, 0
+}
+
 func (o *Security) OnDelete(instanceId int) (bool) {
     return true
 }
