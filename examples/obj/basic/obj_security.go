@@ -15,7 +15,7 @@ func (o *Security) OnDelete(instanceId int) (bool) {
     return true
 }
 
-func (o *Security) OnRead(instanceId int, resourceId int) (ResourceValue) {
+func (o *Security) OnRead(instanceId int, resourceId int) (ResponseValue) {
     return core.NewEmptyValue()
 }
 

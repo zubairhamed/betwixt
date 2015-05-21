@@ -15,12 +15,12 @@ func (o *Device) OnDelete(instanceId int) (bool) {
     return true
 }
 
-func (o *Device) OnRead(instanceId int, resourceId int) (ResourceValue) {
+func (o *Device) OnRead(instanceId int, resourceId int) (ResponseValue) {
     if resourceId == -1 {
         // Read Object Instance
     } else {
         // Read Resource Instance
-        var val ResourceValue
+        var val ResponseValue
 
         resource := o.Model.GetResource(resourceId)
         switch resourceId {
@@ -108,11 +108,11 @@ func (o *Device) GetFirmwareVersion() string {
     return "1.0"
 }
 
-func (o *Device) Reboot() ResourceValue {
+func (o *Device) Reboot() ResponseValue {
     return core.NewEmptyValue()
 }
 
-func (o *Device) FactoryReset() ResourceValue {
+func (o *Device) FactoryReset() ResponseValue {
     return core.NewEmptyValue()
 }
 

@@ -117,7 +117,7 @@ func (en *DefaultObjectEnabler) SetObjectInstances(o []ObjectInstance) {
     en.Instances = o
 }
 
-func (en *DefaultObjectEnabler) OnRead(instanceId int, resourceId int)(ResourceValue) {
+func (en *DefaultObjectEnabler) OnRead(instanceId int, resourceId int)(RequestValue) {
     if en.Handler != nil {
         return en.Handler.OnRead(instanceId, resourceId)
     }

@@ -13,7 +13,7 @@ func (o *AccessControl) OnDelete(instanceId int) (bool) {
     return true
 }
 
-func (o *AccessControl) OnRead(instanceId int, resourceId int) (ResourceValue) {
+func (o *AccessControl) OnRead(instanceId int, resourceId int) (ResponseValue) {
     return core.NewEmptyValue()
 }
 

@@ -10,7 +10,7 @@ import (
 
 
 type MultipleResourceInstanceValue struct {
-    values      []ResourceValue
+    values      []ResponseValue
 }
 
 func (v *MultipleResourceInstanceValue) GetBytes() ([]byte) {
@@ -159,9 +159,9 @@ func (v *EmptyValue) GetStringValue() (string) {
     return ""
 }
 
-func NewStringValue(v ...string) ResourceValue {
+func NewStringValue(v ...string) ResponseValue {
     if len(v) > 1 {
-        vs := []ResourceValue{}
+        vs := []ResponseValue{}
 
         for _, o := range v {
             vs = append(vs, NewStringValue(o))
@@ -174,9 +174,9 @@ func NewStringValue(v ...string) ResourceValue {
     }
 }
 
-func NewIntegerValue(v ...int) ResourceValue {
+func NewIntegerValue(v ...int) ResponseValue {
     if len(v) > 1 {
-        vs := []ResourceValue{}
+        vs := []ResponseValue{}
 
         for _, o := range v {
             vs = append(vs, NewIntegerValue(o))
@@ -189,9 +189,9 @@ func NewIntegerValue(v ...int) ResourceValue {
     }
 }
 
-func NewTimeValue(v ...time.Time) ResourceValue {
+func NewTimeValue(v ...time.Time) ResponseValue {
     if len(v) > 1 {
-        vs := []ResourceValue{}
+        vs := []ResponseValue{}
 
         for _, o := range v {
             vs = append(vs, NewTimeValue(o))
@@ -204,9 +204,9 @@ func NewTimeValue(v ...time.Time) ResourceValue {
     }
 }
 
-func NewFloatValue(v ...float64) ResourceValue {
+func NewFloatValue(v ...float64) ResponseValue {
     if len(v) > 1 {
-        vs := []ResourceValue{}
+        vs := []ResponseValue{}
 
         for _, o := range v {
             vs = append(vs, NewFloatValue(o))
@@ -219,9 +219,9 @@ func NewFloatValue(v ...float64) ResourceValue {
     }
 }
 
-func NewBooleanValue(v ...bool) ResourceValue {
+func NewBooleanValue(v ...bool) ResponseValue {
     if len(v) > 1 {
-        vs := []ResourceValue{}
+        vs := []ResponseValue{}
 
         for _, o := range v {
             vs = append(vs, NewBooleanValue(o))
@@ -234,18 +234,18 @@ func NewBooleanValue(v ...bool) ResourceValue {
     }
 }
 
-func NewEmptyValue() ResourceValue {
+func NewEmptyValue() ResponseValue {
     return &EmptyValue{}
 }
 
-func NewMultipleResourceInstanceValue(v []ResourceValue) ResourceValue {
+func NewMultipleResourceInstanceValue(v []ResponseValue) ResponseValue {
     return &MultipleResourceInstanceValue{
         values: v,
     }
 }
 
 ////////////////////////////////////////////////////////////////////
-func NewTlvValue(b []byte) ResourceValue {
+func NewTlvValue(b []byte) ResponseValue {
     return &TlvValue{
         content: b,
     }

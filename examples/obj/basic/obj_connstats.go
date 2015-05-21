@@ -14,7 +14,7 @@ func (o *ConnectivityStatistics) OnDelete(instanceId int) (bool) {
     return true
 }
 
-func (o *ConnectivityStatistics) OnRead(instanceId int, resourceId int) (ResourceValue) {
+func (o *ConnectivityStatistics) OnRead(instanceId int, resourceId int) (ResponseValue) {
     return core.NewEmptyValue()
 }
 

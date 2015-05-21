@@ -13,7 +13,7 @@ func (o *ConnectivityMonitoring) OnDelete(instanceId int) (bool) {
     return true
 }
 
-func (o *ConnectivityMonitoring) OnRead(instanceId int, resourceId int) (ResourceValue) {
+func (o *ConnectivityMonitoring) OnRead(instanceId int, resourceId int) (ResponseValue) {
     return core.NewEmptyValue()
 }
 

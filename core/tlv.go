@@ -31,7 +31,7 @@ import (
     ------------------------------------
 */
 
-func TlvPayloadFromObjects(en ObjectEnabler, reg Registry) (ResourceValue, error) {
+func TlvPayloadFromObjects(en ObjectEnabler, reg Registry) (ResponseValue, error) {
     buf := bytes.NewBuffer([]byte{})
 
     for _, oi := range en.GetObjectInstances() {
@@ -66,7 +66,7 @@ func TlvPayloadFromObjects(en ObjectEnabler, reg Registry) (ResourceValue, error
     return NewTlvValue(buf.Bytes()), nil
 }
 
-func TlvPayloadFromIntResource(model ResourceModel, values []int) (ResourceValue, error) {
+func TlvPayloadFromIntResource(model ResourceModel, values []int) (ResponseValue, error) {
 
     // Resource Instances TLV
     resourceInstanceBytes := bytes.NewBuffer([]byte{})

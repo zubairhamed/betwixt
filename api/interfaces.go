@@ -1,17 +1,36 @@
 package api
 
 type RequestHandler interface {
-    OnRead(int, int)(ResourceValue)
+    OnRead(int, int)(ResponseValue)
     OnDelete(int)(bool)
     OnWrite(int, int)(bool)
 }
 
+/*
 type ResourceValue interface {
     GetBytes() ([]byte)
     GetType() (ValueTypeCode)
     GetValue() (interface{})
     GetStringValue() (string)
 }
+*/
+
+type RequestValue interface {
+    GetBytes() ([]byte)
+    GetType() (ValueTypeCode)
+    GetValue() (interface{})
+    GetStringValue() (string)
+}
+
+type ResponseValue interface {
+    GetBytes() ([]byte)
+    GetType() (ValueTypeCode)
+    GetValue() (interface{})
+    GetStringValue() (string)
+
+    // IsError() bool
+}
+
 
 type ObjectEnabler interface {
     GetObjectInstance(int) (ObjectInstance)
@@ -19,7 +38,7 @@ type ObjectEnabler interface {
     SetObjectInstances([]ObjectInstance)
     GetHandler() RequestHandler
 
-    OnRead(int, int)(ResourceValue)
+    OnRead(int, int)(RequestValue)
     OnDelete(int)(bool)
     OnWrite(int, int)(bool)
 }

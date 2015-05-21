@@ -13,7 +13,7 @@ func (o *Firmware) OnDelete(instanceId int) (bool) {
     return true
 }
 
-func (o *Firmware) OnRead(instanceId int, resourceId int) (ResourceValue) {
+func (o *Firmware) OnRead(instanceId int, resourceId int) (ResponseValue) {
     return core.NewEmptyValue()
 }
 

@@ -13,7 +13,7 @@ func (o *Location) OnDelete(instanceId int) (bool) {
     return true
 }
 
-func (o *Location) OnRead(instanceId int, resourceId int) (ResourceValue) {
+func (o *Location) OnRead(instanceId int, resourceId int) (ResponseValue) {
     return core.NewEmptyValue()
 }
 
