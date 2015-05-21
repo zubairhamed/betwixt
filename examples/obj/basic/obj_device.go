@@ -11,11 +11,11 @@ type Device struct {
     Model       ObjectModel
 }
 
-func (o *Device) OnDelete(instanceId int) (bool) {
-    return true
+func (o *Device) OnDelete(instanceId int) (bool, int) {
+    return true, 0
 }
 
-func (o *Device) OnRead(instanceId int, resourceId int) (ResponseValue) {
+func (o *Device) OnRead(instanceId int, resourceId int) (ResponseValue, int) {
     if resourceId == -1 {
         // Read Object Instance
     } else {
@@ -83,13 +83,13 @@ func (o *Device) OnRead(instanceId int, resourceId int) (ResponseValue) {
             default:
             break
         }
-        return val
+        return val, 0
     }
-    return core.NewEmptyValue()
+    return core.NewEmptyValue(), 0
 }
 
-func (o *Device) OnWrite(instanceId int, resourceId int) (bool) {
-    return true
+func (o *Device) OnWrite(instanceId int, resourceId int) (bool, int) {
+    return true, 0
 }
 
 func (o *Device) GetManufacturer() string {

@@ -8,6 +8,7 @@ import (
     "github.com/zubairhamed/lwm2m/examples/obj/basic"
     "github.com/zubairhamed/lwm2m/objects/oma"
     "github.com/zubairhamed/lwm2m/registry"
+    "github.com/zubairhamed/lwm2m/api"
 )
 
 /*
@@ -47,7 +48,7 @@ func TestObjectInstancesToTlv(t *testing.T) {
     }
 }
 
-func createTestingClient() (*lwm2m.LWM2MClient) {
+func createTestingClient() (api.LWM2MClient) {
     client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
 
     reg := registry.NewDefaultObjectRegistry()

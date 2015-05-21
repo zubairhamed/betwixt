@@ -190,7 +190,7 @@ func (c *DefaultClient) handleReadRequest(req *CoapRequest) *CoapResponse {
             msg.Code = COAPCODE_205_CONTENT
             msg.Token = req.GetMessage().Token
 
-            val := enabler.OnRead(instanceId, resourceId)
+            val, _ := enabler.OnRead(instanceId, resourceId)
             msg.Payload = NewBytesPayload(val.GetBytes())
 
             return NewResponseWithMessage(msg)
@@ -212,7 +212,7 @@ func (c *DefaultClient) handleDeleteRequest(req *CoapRequest) *CoapResponse {
             msg.Code = COAPCODE_202_DELETED
             msg.Token = req.GetMessage().Token
             msg.Payload = NewEmptyPayload()
-            val := enabler.OnDelete(instanceId)
+            val, _ := enabler.OnDelete(instanceId)
 
             if val {
                 return NewResponseWithMessage(msg)
@@ -250,7 +250,7 @@ func (c *DefaultClient) handleWriteRequest(req *CoapRequest) *CoapResponse {
             msg.Code = COAPCODE_204_CHANGED
             msg.Token = req.GetMessage().Token
             msg.Payload = NewEmptyPayload()
-            val := enabler.OnWrite(instanceId, resourceId)
+            val, _ := enabler.OnWrite(instanceId, resourceId)
 
             if val {
                 return NewResponseWithMessage(msg)

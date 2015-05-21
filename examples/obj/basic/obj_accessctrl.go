@@ -10,11 +10,12 @@ type AccessControl struct {
     State       map[int] map[int] interface{}
 }
 
-func (o *AccessControl) OnDelete(instanceId int) (bool) {
-    return true
+func (o *AccessControl) OnDelete(instanceId int) (bool, int) {
+    return true, 0
 }
 
-func (o *AccessControl) OnRead(instanceId int, resourceId int) (ResponseValue) {
+func (o *AccessControl) OnRead(instanceId int, resourceId int) (ResponseValue, int) {
+    /*
     var val ResponseValue
 
     resource := o.Model.GetResource(resourceId)
@@ -34,11 +35,12 @@ func (o *AccessControl) OnRead(instanceId int, resourceId int) (ResponseValue) {
         break
 
     }
-    return core.NewEmptyValue()
+    */
+    return core.NewEmptyValue(), 0
 }
 
-func (o *AccessControl) OnWrite(instanceId int, resourceId int) (bool) {
-    return true
+func (o *AccessControl) OnWrite(instanceId int, resourceId int) (bool, int) {
+    return true, 0
 }
 
 /*

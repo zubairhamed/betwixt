@@ -36,9 +36,9 @@ type ObjectEnabler interface {
     SetObjectInstances([]ObjectInstance)
     GetHandler() RequestHandler
 
-    OnRead(int, int)(RequestValue)
-    OnDelete(int)(bool)
-    OnWrite(int, int)(bool)
+    OnRead(int, int)(RequestValue, int)
+    OnDelete(int)(bool, int)
+    OnWrite(int, int)(bool, int)
 }
 
 type ObjectInstance interface {
