@@ -3,11 +3,12 @@ package basic
 import (
     "github.com/zubairhamed/lwm2m/core"
     . "github.com/zubairhamed/lwm2m/api"
+    "github.com/zubairhamed/lwm2m/objects/oma"
 )
 
 type AccessControl struct {
     Model       ObjectModel
-    State       map[int] map[int] interface{}
+    Data        *ObjectsData
 }
 
 func (o *AccessControl) OnDelete(instanceId int) (bool, int) {
@@ -16,9 +17,12 @@ func (o *AccessControl) OnDelete(instanceId int) (bool, int) {
 
 func (o *AccessControl) OnRead(instanceId int, resourceId int) (ResponseValue, int) {
     /*
-    var val ResponseValue
 
     resource := o.Model.GetResource(resourceId)
+
+    val := o.Data.Get(instanceId, resourceId)
+
+
     switch resourceId {
         case 0:
         val = core.NewIntegerValue(instanceId)
@@ -43,37 +47,58 @@ func (o *AccessControl) OnWrite(instanceId int, resourceId int) (bool, int) {
     return true, 0
 }
 
-/*
+//////////////////////////////////////////////////////
+type ObjectsData struct {
+    data    map[string] interface{}
+}
+
+func (o *ObjectsData) Put(path string, value interface{}) {
+    o.data[path] = value
+}
+
+func (o *ObjectsData) Get(path ...int) (interface{}) {
+    return o.data[path]
+}
+
+//////////////////////////////////////////////////////
+
+
 func NewExampleAccessControlObject(reg Registry) (*AccessControl) {
-    state := map[int] map[int] interface{} {
-        0: {
-            0: {
-                0: 1,
-                1: 0,
-                2: "0b0000000000001111",
-                3: 101,
-            }
-        },
-        1: {
+    data := &ObjectsData{}
 
-        },
-        2: {
+    // Object 0
+    data.Put("/0/0", 1)
+    data.Put("/0/1", 0)
+    data.Put("/0/2/101", []byte{0, 15})
+    data.Put("/0/3", 101)
 
-        },
-        3: {
+    data.Put("1/0", 1)
+    data.Put("1/1", 1)
+    data.Put("1/2/102", []byte{0, 15})
+    data.Put("1/3", 102)
 
-        },
-        4: {
+    data.Put("2/0", 3)
+    data.Put("2/1", 0)
+    data.Put("2/2/101",  []byte{0, 15})
+    data.Put("2/2/102",  []byte{0, 1})
+    data.Put("2/3",  101)
 
-        },
-    }
+    data.Put("3/0", 4)
+    data.Put("3/1", 0)
+    data.Put("3/2/101", []byte{0, 1})
+    data.Put("3/2/0", []byte{0, 1})
+    data.Put("3/3", 101)
+
+    data.Put("4/0", 5)
+    data.Put("4/1", 65535)
+    data.Put("4/2/101", []byte{0, 16})
+    data.Put("4/3", 65535)
 
     return &AccessControl{
         Model: reg.GetModel(oma.OBJECT_LWM2M_SECURITY),
-        State: state,
+        Data: data,
     }
 }
-*/
 
 
 
