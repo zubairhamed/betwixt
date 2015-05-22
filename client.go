@@ -28,6 +28,7 @@ type DefaultClient struct {
     coapServer          *CoapServer
     registry            Registry
     enabledObjects      map[LWM2MObjectType] ObjectEnabler
+    path                string
 
     // Events
     evtOnStartup        FnOnStartup
@@ -35,7 +36,7 @@ type DefaultClient struct {
     evtOnWrite          FnOnWrite
     evtOnExecute        FnOnExecute
     evtOnRegistered     FnOnRegistered
-    evtOnUnregistered   FnOnUnregistered
+    evtOnDeregistered   FnOnDeregistered
     evtOnError          FnOnError
 }
 
@@ -59,6 +60,8 @@ func (c *DefaultClient) Register(name string) (string) {
 
 //    CallEvent(c.evtOnRegistered, EmptyEventPayload())
 
+    c.path = path
+
     return path
 }
 
@@ -70,8 +73,17 @@ func (c *DefaultClient) GetRegistry() Registry {
     return c.registry
 }
 
-func (c *DefaultClient) Unregister() {
+func (c *DefaultClient) Deregister() {
+    req := NewRequest(TYPE_CONFIRMABLE, DELETE, GenerateMessageId())
 
+    req.SetRequestURI(c.path)
+    resp, err := c.coapServer.Send(req)
+
+    if err != nil {
+        log.Println(err)
+    } else {
+        PrintMessage(resp.GetMessage())
+    }
 }
 
 func (c *DefaultClient) Update() {
@@ -328,8 +340,8 @@ func (c *DefaultClient) OnRegistered(fn FnOnRegistered) {
     c.evtOnRegistered = fn
 }
 
-func (c *DefaultClient) OnUnregistered(fn FnOnUnregistered) {
-    c.evtOnUnregistered = fn
+func (c *DefaultClient) OnDeregistered(fn FnOnDeregistered) {
+    c.evtOnDeregistered = fn
 }
 
 func (c *DefaultClient) OnError (fn FnOnError) {

@@ -8,7 +8,7 @@ type FnOnRead func()
 type FnOnWrite func()
 type FnOnExecute func()
 type FnOnRegistered func(string)
-type FnOnUnregistered func()
+type FnOnDeregistered func()
 type FnOnError func()
 
 type ValueTypeCode byte

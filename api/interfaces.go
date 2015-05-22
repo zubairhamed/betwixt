@@ -89,7 +89,7 @@ type LWM2MClient interface {
     AddResource()
     AddObject()
     Register(string) (string)
-    Unregister()
+    Deregister()
     Update()
     UseRegistry(Registry)
     EnableObject(LWM2MObjectType, RequestHandler) (error)
@@ -105,6 +105,6 @@ type LWM2MClient interface {
     OnWrite(FnOnWrite)
     OnExecute(FnOnExecute)
     OnRegistered(FnOnRegistered)
-    OnUnregistered(FnOnUnregistered)
+    OnDeregistered(FnOnDeregistered)
     OnError (FnOnError)
 }
