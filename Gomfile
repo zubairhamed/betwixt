@@ -1,0 +1,2 @@
+gom 'github.com/zubairhamed/goap'
+gom 'github.com/stretchr/testify/assert'
