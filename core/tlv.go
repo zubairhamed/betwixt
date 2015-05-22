@@ -3,7 +3,7 @@ package core
 import (
     "encoding/binary"
     "bytes"
-    . "github.com/zubairhamed/lwm2m/api"
+    . "github.com/zubairhamed/go-lwm2m/api"
 )
 
 /*

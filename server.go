@@ -2,10 +2,10 @@ package lwm2m
 
 import (
     . "github.com/zubairhamed/goap"
-    "github.com/zubairhamed/lwm2m/objects/oma"
-    "github.com/zubairhamed/lwm2m/objects/ipso"
-    "github.com/zubairhamed/lwm2m/registry"
-    . "github.com/zubairhamed/lwm2m/api"
+    "github.com/zubairhamed/go-lwm2m/objects/oma"
+    "github.com/zubairhamed/go-lwm2m/objects/ipso"
+    "github.com/zubairhamed/go-lwm2m/registry"
+    . "github.com/zubairhamed/go-lwm2m/api"
 )
 
 func NewLWM2MServer() (*LWM2MServer) {

@@ -1,13 +1,15 @@
 package basic
 
 import (
-    . "github.com/zubairhamed/lwm2m/api"
-    "github.com/zubairhamed/lwm2m/core"
+    . "github.com/zubairhamed/go-lwm2m/api"
+    "github.com/zubairhamed/go-lwm2m/core"
     "github.com/zubairhamed/goap"
+    "github.com/zubairhamed/go-lwm2m/objects/oma"
 )
 
 type Location struct {
-
+    Model       ObjectModel
+    Data        *core.ObjectsData
 }
 
 func (o *Location) OnExecute(instanceId int, resourceId int) (goap.CoapCode) {
@@ -29,4 +31,11 @@ func (o *Location) OnRead(instanceId int, resourceId int) (ResponseValue, goap.C
 func (o *Location) OnWrite(instanceId int, resourceId int) (goap.CoapCode) {
     return goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
+
+func NewExampleLocationObject(reg Registry) (*Location) {
+    return &Location{
+        Model: reg.GetModel(oma.OBJECT_LWM2M_LOCATION),
+    }
+}
+
 

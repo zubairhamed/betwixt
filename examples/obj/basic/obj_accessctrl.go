@@ -1,9 +1,9 @@
 package basic
 
 import (
-    "github.com/zubairhamed/lwm2m/core"
-    . "github.com/zubairhamed/lwm2m/api"
-    "github.com/zubairhamed/lwm2m/objects/oma"
+    "github.com/zubairhamed/go-lwm2m/core"
+    . "github.com/zubairhamed/go-lwm2m/api"
+    "github.com/zubairhamed/go-lwm2m/objects/oma"
     "github.com/zubairhamed/goap"
 )
 

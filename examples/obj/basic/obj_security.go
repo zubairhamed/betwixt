@@ -2,14 +2,16 @@ package basic
 
 
 import (
-    . "github.com/zubairhamed/lwm2m/api"
-    "github.com/zubairhamed/lwm2m/core"
+    . "github.com/zubairhamed/go-lwm2m/api"
+    "github.com/zubairhamed/go-lwm2m/core"
     "github.com/zubairhamed/goap"
+    "github.com/zubairhamed/go-lwm2m/objects/oma"
 )
 
 
 type Security struct {
-
+    Model       ObjectModel
+    Data        *core.ObjectsData
 }
 
 func (o *Security) OnExecute(instanceId int, resourceId int) (goap.CoapCode) {
@@ -31,6 +33,13 @@ func (o *Security) OnRead(instanceId int, resourceId int) (ResponseValue, goap.C
 func (o *Security) OnWrite(instanceId int, resourceId int) (goap.CoapCode) {
     return goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
+
+func NewExampleSecurityObject(reg Registry) (*Security) {
+    return &Security{
+        Model: reg.GetModel(oma.OBJECT_LWM2M_SECURITY),
+    }
+}
+
 
 /*
 [0]

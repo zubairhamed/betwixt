@@ -5,8 +5,8 @@ import (
     "net"
     "log"
     "errors"
-    "github.com/zubairhamed/lwm2m/core"
-    . "github.com/zubairhamed/lwm2m/api"
+    "github.com/zubairhamed/go-lwm2m/core"
+    . "github.com/zubairhamed/go-lwm2m/api"
 )
 
 func NewLWM2MClient(local string, remote string) (*DefaultClient) {

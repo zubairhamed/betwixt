@@ -1,16 +1,16 @@
 package basic
 
 import (
-    . "github.com/zubairhamed/lwm2m/api"
-    "github.com/zubairhamed/lwm2m/core"
+    . "github.com/zubairhamed/go-lwm2m/api"
+    "github.com/zubairhamed/go-lwm2m/core"
     "time"
     "github.com/zubairhamed/goap"
-    "github.com/zubairhamed/lwm2m/objects/oma"
+    "github.com/zubairhamed/go-lwm2m/objects/oma"
 )
 
 type Device struct {
     Model       ObjectModel
-    Data        core.ObjectsData
+    Data        *core.ObjectsData
 }
 
 func (o *Device) OnExecute(instanceId int, resourceId int) (goap.CoapCode) {

@@ -1,11 +1,11 @@
 package main
 
 import (
-    . "github.com/zubairhamed/lwm2m"
-    "github.com/zubairhamed/lwm2m/objects/oma"
-    . "github.com/zubairhamed/lwm2m/examples/obj/basic"
-    "github.com/zubairhamed/lwm2m/registry"
-    . "github.com/zubairhamed/lwm2m/api"
+    . "github.com/zubairhamed/go-lwm2m"
+    "github.com/zubairhamed/go-lwm2m/objects/oma"
+    . "github.com/zubairhamed/go-lwm2m/examples/obj/basic"
+    "github.com/zubairhamed/go-lwm2m/registry"
+    . "github.com/zubairhamed/go-lwm2m/api"
 )
 
 func main() {
@@ -24,20 +24,23 @@ func main() {
 }
 
 func setupResources (client LWM2MClient, reg Registry) {
-    accessControl := &AccessControl{
-        Model: reg.GetModel(oma.OBJECT_LWM2M_ACCESS_CONTROL),
-    }
-
+    accessControl := NewExampleAccessControlObject(reg)
     device := NewExampleDeviceObject(reg)
+    sec := NewExampleSecurityObject(reg)
+    server := NewExampleServerObject(reg)
+    connMon := NewExampleConnectivityMonitoringObject(reg)
+    fwUpdate := NewExampleFirmwareUpdateObject(reg)
+    location := NewExampleLocationObject(reg)
+    connStats := NewExampleConnectivityStatisticsObject(reg)
 
-    client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil)
-    client.EnableObject(oma.OBJECT_LWM2M_SERVER, nil)
+    client.EnableObject(oma.OBJECT_LWM2M_SECURITY, sec)
+    client.EnableObject(oma.OBJECT_LWM2M_SERVER, server)
     client.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, accessControl)
     client.EnableObject(oma.OBJECT_LWM2M_DEVICE, device)
-    client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, nil)
-    client.EnableObject(oma.OBJECT_LWM2M_FIRMWARE_UPDATE, nil)
-    client.EnableObject(oma.OBJECT_LWM2M_LOCATION, nil)
-    client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS, nil)
+    client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, connMon)
+    client.EnableObject(oma.OBJECT_LWM2M_FIRMWARE_UPDATE, fwUpdate)
+    client.EnableObject(oma.OBJECT_LWM2M_LOCATION, location)
+    client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS, connStats)
 
     instanceSec1 := reg.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 0)
     instanceSec2 := reg.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 1)

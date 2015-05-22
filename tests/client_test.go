@@ -2,11 +2,11 @@ package tests
 
 import (
     "testing"
-    "github.com/zubairhamed/lwm2m/objects/oma"
-    "github.com/zubairhamed/lwm2m/core"
-    "github.com/zubairhamed/lwm2m"
-    "github.com/zubairhamed/lwm2m/registry"
-    . "github.com/zubairhamed/lwm2m/api"
+    "github.com/zubairhamed/go-lwm2m/objects/oma"
+    "github.com/zubairhamed/go-lwm2m/core"
+    "github.com/zubairhamed/go-lwm2m"
+    "github.com/zubairhamed/go-lwm2m/registry"
+    . "github.com/zubairhamed/go-lwm2m/api"
     "github.com/stretchr/testify/assert"
 )
 
@@ -58,9 +58,9 @@ func TestClient(t *testing.T) {
     inst2 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 1)
     inst3 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 2)
 
-    assert.NotNil(t, inst1, "Error instantiating lwm2m object")
-    assert.NotNil(t, inst2, "Error instantiating lwm2m object")
-    assert.NotNil(t, inst3, "Error instantiating lwm2m object")
+    assert.NotNil(t, inst1, "Error instantiating go-lwm2m object")
+    assert.NotNil(t, inst2, "Error instantiating go-lwm2m object")
+    assert.NotNil(t, inst3, "Error instantiating go-lwm2m object")
 
     client.AddObjectInstances(inst1, inst2, inst3)
 

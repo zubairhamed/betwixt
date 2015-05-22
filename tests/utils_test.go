@@ -2,7 +2,7 @@ package tests
 
 import (
     "testing"
-    "github.com/zubairhamed/lwm2m/core"
+    "github.com/zubairhamed/go-lwm2m/core"
     "time"
     "github.com/stretchr/testify/assert"
 )

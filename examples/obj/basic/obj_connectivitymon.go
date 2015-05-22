@@ -1,13 +1,15 @@
 package basic
 
 import (
-    "github.com/zubairhamed/lwm2m/core"
-    . "github.com/zubairhamed/lwm2m/api"
+    "github.com/zubairhamed/go-lwm2m/core"
+    . "github.com/zubairhamed/go-lwm2m/api"
     "github.com/zubairhamed/goap"
+    "github.com/zubairhamed/go-lwm2m/objects/oma"
 )
 
 type ConnectivityMonitoring struct {
-
+    Model       ObjectModel
+    Data        *core.ObjectsData
 }
 
 func (o *ConnectivityMonitoring) OnExecute(instanceId int, resourceId int) (goap.CoapCode) {
@@ -28,6 +30,12 @@ func (o *ConnectivityMonitoring) OnRead(instanceId int, resourceId int) (Respons
 
 func (o *ConnectivityMonitoring) OnWrite(instanceId int, resourceId int) (goap.CoapCode) {
     return goap.COAPCODE_405_METHOD_NOT_ALLOWED
+}
+
+func NewExampleConnectivityMonitoringObject(reg Registry) (*ConnectivityMonitoring) {
+    return &ConnectivityMonitoring{
+        Model: reg.GetModel(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING),
+    }
 }
 
 

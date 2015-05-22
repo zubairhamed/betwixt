@@ -1,13 +1,15 @@
 package basic
 
 import (
-    . "github.com/zubairhamed/lwm2m/api"
-    "github.com/zubairhamed/lwm2m/core"
+    . "github.com/zubairhamed/go-lwm2m/api"
+    "github.com/zubairhamed/go-lwm2m/core"
     "github.com/zubairhamed/goap"
+    "github.com/zubairhamed/go-lwm2m/objects/oma"
 )
 
 type Server struct {
-
+    Model       ObjectModel
+    Data        *core.ObjectsData
 }
 
 func (o *Server) OnExecute(instanceId int, resourceId int) (goap.CoapCode) {
@@ -28,6 +30,12 @@ func (o *Server) OnRead(instanceId int, resourceId int) (ResponseValue, goap.Coa
 
 func (o *Server) OnWrite(instanceId int, resourceId int) (goap.CoapCode) {
     return goap.COAPCODE_405_METHOD_NOT_ALLOWED
+}
+
+func NewExampleServerObject(reg Registry) (*Server) {
+    return &Server{
+        Model: reg.GetModel(oma.OBJECT_LWM2M_SERVER),
+    }
 }
 
 

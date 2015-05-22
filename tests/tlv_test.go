@@ -2,11 +2,11 @@ package tests
 
 import (
     "testing"
-    "github.com/zubairhamed/lwm2m/core"
-    "github.com/zubairhamed/lwm2m"
-    "github.com/zubairhamed/lwm2m/examples/obj/basic"
-    "github.com/zubairhamed/lwm2m/objects/oma"
-    "github.com/zubairhamed/lwm2m/registry"
+    "github.com/zubairhamed/go-lwm2m/core"
+    "github.com/zubairhamed/go-lwm2m"
+    "github.com/zubairhamed/go-lwm2m/examples/obj/basic"
+    "github.com/zubairhamed/go-lwm2m/objects/oma"
+    "github.com/zubairhamed/go-lwm2m/registry"
     "github.com/stretchr/testify/assert"
 )
 

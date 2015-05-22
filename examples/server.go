@@ -1,6 +1,6 @@
 package main
 import (
-    "github.com/zubairhamed/lwm2m"
+    "github.com/zubairhamed/go-lwm2m"
     "log"
 )
 

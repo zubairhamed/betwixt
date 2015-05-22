@@ -1,10 +1,10 @@
 package registry
 
 import (
-    "github.com/zubairhamed/lwm2m/objects/ipso"
-    "github.com/zubairhamed/lwm2m/objects/oma"
-    . "github.com/zubairhamed/lwm2m/core"
-    . "github.com/zubairhamed/lwm2m/api"
+    "github.com/zubairhamed/go-lwm2m/objects/ipso"
+    "github.com/zubairhamed/go-lwm2m/objects/oma"
+    . "github.com/zubairhamed/go-lwm2m/core"
+    . "github.com/zubairhamed/go-lwm2m/api"
 )
 
 func NewDefaultObjectRegistry() (Registry) {
