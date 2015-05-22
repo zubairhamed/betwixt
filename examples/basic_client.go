@@ -3,7 +3,6 @@ package main
 import (
     . "github.com/zubairhamed/lwm2m"
     "github.com/zubairhamed/lwm2m/objects/oma"
-    "github.com/zubairhamed/goap"
     . "github.com/zubairhamed/lwm2m/examples/obj/basic"
     "github.com/zubairhamed/lwm2m/registry"
     . "github.com/zubairhamed/lwm2m/api"
@@ -29,10 +28,7 @@ func setupResources (client LWM2MClient, reg Registry) {
         Model: reg.GetModel(oma.OBJECT_LWM2M_ACCESS_CONTROL),
     }
 
-    device := &Device{
-        Serial: goap.GenerateToken(5),
-        Model: reg.GetModel(oma.OBJECT_LWM2M_DEVICE),
-    }
+    device := NewExampleDeviceObject(reg)
 
     client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil)
     client.EnableObject(oma.OBJECT_LWM2M_SERVER, nil)

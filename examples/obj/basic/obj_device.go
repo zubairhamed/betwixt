@@ -5,11 +5,12 @@ import (
     "github.com/zubairhamed/lwm2m/core"
     "time"
     "github.com/zubairhamed/goap"
+    "github.com/zubairhamed/lwm2m/objects/oma"
 )
 
 type Device struct {
-    Serial      string
     Model       ObjectModel
+    Data        core.ObjectsData
 }
 
 func (o *Device) OnExecute(instanceId int, resourceId int) (goap.CoapCode) {
@@ -168,6 +169,15 @@ func (o *Device) GetTimezone() string {
 func (o *Device) GetSupportedBindingMode() string {
     return "U"
 }
+
+func NewExampleDeviceObject(reg Registry) (*Device) {
+    // data := &core.ObjectsData{}
+
+    return &Device{
+        Model: reg.GetModel(oma.OBJECT_LWM2M_DEVICE),
+    }
+}
+
 
 /*
 Manufacturer                    0           Open Mobile Alliance
