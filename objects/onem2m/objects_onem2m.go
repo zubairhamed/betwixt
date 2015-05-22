@@ -2,10 +2,8 @@ package onem2m
 
 import . "github.com/zubairhamed/lwm2m/core"
 
-const (
-
-)
+const ()
 
 type OneM2MObjects struct {
-    models  map[LWM2MObjectType]*ObjectModel
+	models map[LWM2MObjectType]*ObjectModel
 }

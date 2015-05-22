@@ -1,113 +1,113 @@
 package tests
 
 import (
-    "testing"
-    "github.com/zubairhamed/go-lwm2m/objects/oma"
-    "github.com/zubairhamed/go-lwm2m/core"
-    "github.com/zubairhamed/go-lwm2m"
-    "github.com/zubairhamed/go-lwm2m/registry"
-    . "github.com/zubairhamed/go-lwm2m/api"
-    "github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/assert"
+	"github.com/zubairhamed/go-lwm2m"
+	. "github.com/zubairhamed/go-lwm2m/api"
+	"github.com/zubairhamed/go-lwm2m/core"
+	"github.com/zubairhamed/go-lwm2m/objects/oma"
+	"github.com/zubairhamed/go-lwm2m/registry"
+	"testing"
 )
 
 func TestClient(t *testing.T) {
-    client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
-    assert.NotNil(t, client, "Error instantiating client")
+	client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
+	assert.NotNil(t, client, "Error instantiating client")
 
-    cases1 := []struct {
-        in LWM2MObjectType
-    }{
-        {oma.OBJECT_LWM2M_SERVER},
-        {oma.OBJECT_LWM2M_ACCESS_CONTROL},
-        {oma.OBJECT_LWM2M_DEVICE},
-        {oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING},
-        {oma.OBJECT_LWM2M_FIRMWARE_UPDATE},
-        {oma.OBJECT_LWM2M_LOCATION},
-        {oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS},
-    }
+	cases1 := []struct {
+		in LWM2MObjectType
+	}{
+		{oma.OBJECT_LWM2M_SERVER},
+		{oma.OBJECT_LWM2M_ACCESS_CONTROL},
+		{oma.OBJECT_LWM2M_DEVICE},
+		{oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING},
+		{oma.OBJECT_LWM2M_FIRMWARE_UPDATE},
+		{oma.OBJECT_LWM2M_LOCATION},
+		{oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS},
+	}
 
-    for _, c := range cases1 {
-        assert.Nil(t, client.EnableObject(c.in, nil), "Error enabling object: ", c)
-    }
+	for _, c := range cases1 {
+		assert.Nil(t, client.EnableObject(c.in, nil), "Error enabling object: ", c)
+	}
 
-    assert.Nil(t, client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil), "Error enabling object")
-    assert.NotNil(t, client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil), "Object should already be enabled")
+	assert.Nil(t, client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil), "Error enabling object")
+	assert.NotNil(t, client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil), "Object should already be enabled")
 
-    cases2 := []struct {
-        in LWM2MObjectType
-    }{
-        {oma.OBJECT_LWM2M_SERVER},
-        {oma.OBJECT_LWM2M_ACCESS_CONTROL},
-        {oma.OBJECT_LWM2M_DEVICE},
-        {oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING},
-        {oma.OBJECT_LWM2M_FIRMWARE_UPDATE},
-        {oma.OBJECT_LWM2M_LOCATION},
-        {oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS},
-    }
+	cases2 := []struct {
+		in LWM2MObjectType
+	}{
+		{oma.OBJECT_LWM2M_SERVER},
+		{oma.OBJECT_LWM2M_ACCESS_CONTROL},
+		{oma.OBJECT_LWM2M_DEVICE},
+		{oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING},
+		{oma.OBJECT_LWM2M_FIRMWARE_UPDATE},
+		{oma.OBJECT_LWM2M_LOCATION},
+		{oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS},
+	}
 
-    for _, c := range cases2 {
-        assert.NotNil(t, client.GetObjectEnabler(c.in), "Error getting object enabler: ", c)
-    }
+	for _, c := range cases2 {
+		assert.NotNil(t, client.GetObjectEnabler(c.in), "Error getting object enabler: ", c)
+	}
 
-    registry := registry.NewDefaultObjectRegistry()
-    assert.NotNil(t, registry, "Error instantiating registry")
+	registry := registry.NewDefaultObjectRegistry()
+	assert.NotNil(t, registry, "Error instantiating registry")
 
-    client.UseRegistry(registry)
+	client.UseRegistry(registry)
 
-    inst1 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 0)
-    inst2 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 1)
-    inst3 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 2)
+	inst1 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 0)
+	inst2 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 1)
+	inst3 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 2)
 
-    assert.NotNil(t, inst1, "Error instantiating go-lwm2m object")
-    assert.NotNil(t, inst2, "Error instantiating go-lwm2m object")
-    assert.NotNil(t, inst3, "Error instantiating go-lwm2m object")
+	assert.NotNil(t, inst1, "Error instantiating go-lwm2m object")
+	assert.NotNil(t, inst2, "Error instantiating go-lwm2m object")
+	assert.NotNil(t, inst3, "Error instantiating go-lwm2m object")
 
-    client.AddObjectInstances(inst1, inst2, inst3)
+	client.AddObjectInstances(inst1, inst2, inst3)
 
-    cases3 := []struct {
-        ot   LWM2MObjectType
-        oi   int
-    }{
-        {oma.OBJECT_LWM2M_SECURITY, 0},
-        {oma.OBJECT_LWM2M_SECURITY, 1},
-        {oma.OBJECT_LWM2M_SECURITY, 2},
-    }
+	cases3 := []struct {
+		ot LWM2MObjectType
+		oi int
+	}{
+		{oma.OBJECT_LWM2M_SECURITY, 0},
+		{oma.OBJECT_LWM2M_SECURITY, 1},
+		{oma.OBJECT_LWM2M_SECURITY, 2},
+	}
 
-    for _, c := range cases3 {
-        assert.NotNil(t, client.GetObjectInstance(c.ot, c.oi), "Object instance", c.oi, "not found")
-    }
+	for _, c := range cases3 {
+		assert.NotNil(t, client.GetObjectInstance(c.ot, c.oi), "Object instance", c.oi, "not found")
+	}
 }
 
 func TestRegistry(t *testing.T) {
-    reg := registry.NewDefaultObjectRegistry()
+	reg := registry.NewDefaultObjectRegistry()
 
-    cases := []struct {
-        o   LWM2MObjectType
-    }{
-        {oma.OBJECT_LWM2M_SECURITY},
-        {oma.OBJECT_LWM2M_SERVER},
-        {oma.OBJECT_LWM2M_ACCESS_CONTROL},
-        {oma.OBJECT_LWM2M_DEVICE},
-        {oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING},
-        {oma.OBJECT_LWM2M_FIRMWARE_UPDATE},
-        {oma.OBJECT_LWM2M_LOCATION},
-        {oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS},
-    }
+	cases := []struct {
+		o LWM2MObjectType
+	}{
+		{oma.OBJECT_LWM2M_SECURITY},
+		{oma.OBJECT_LWM2M_SERVER},
+		{oma.OBJECT_LWM2M_ACCESS_CONTROL},
+		{oma.OBJECT_LWM2M_DEVICE},
+		{oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING},
+		{oma.OBJECT_LWM2M_FIRMWARE_UPDATE},
+		{oma.OBJECT_LWM2M_LOCATION},
+		{oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS},
+	}
 
-    for _, c := range cases {
-        assert.NotNil(t,reg.CreateObjectInstance(c.o, 0), "Created an LWM2M Object: ", c.o)
-    }
-    assert.Nil(t, reg.CreateObjectInstance(LWM2MObjectType(-1), 0), "Created an unknown LWM2M Object")
+	for _, c := range cases {
+		assert.NotNil(t, reg.CreateObjectInstance(c.o, 0), "Created an LWM2M Object: ", c.o)
+	}
+	assert.Nil(t, reg.CreateObjectInstance(LWM2MObjectType(-1), 0), "Created an unknown LWM2M Object")
 }
 
 func TestBuildResourceStringPayload(t *testing.T) {
-    client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
+	client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
 
-    client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil)
-    client.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, nil)
-    client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, nil)
+	client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil)
+	client.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, nil)
+	client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, nil)
 
-    str := core.BuildModelResourceStringPayload(client.GetEnabledObjects())
-    compare := "</0>,</2>,</4>,"
-    assert.Equal(t, str, compare, "Unexpected output building Model Resource String: Expected = ", compare, "Actual = ", str)
+	str := core.BuildModelResourceStringPayload(client.GetEnabledObjects())
+	compare := "</0>,</2>,</4>,"
+	assert.Equal(t, str, compare, "Unexpected output building Model Resource String: Expected = ", compare, "Actual = ", str)
 }

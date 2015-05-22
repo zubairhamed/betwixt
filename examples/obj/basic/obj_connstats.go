@@ -1,40 +1,44 @@
 package basic
 
 import (
-    "github.com/zubairhamed/go-lwm2m/core"
-    . "github.com/zubairhamed/go-lwm2m/api"
-    "github.com/zubairhamed/goap"
-    "github.com/zubairhamed/go-lwm2m/objects/oma"
+	. "github.com/zubairhamed/go-lwm2m/api"
+	"github.com/zubairhamed/go-lwm2m/core"
+	"github.com/zubairhamed/go-lwm2m/objects/oma"
+	"github.com/zubairhamed/goap"
 )
 
-
 type ConnectivityStatistics struct {
-    Model       ObjectModel
-    Data        *core.ObjectsData
+	Model ObjectModel
+	Data  *core.ObjectsData
 }
 
-func (o *ConnectivityStatistics) OnExecute(instanceId int, resourceId int) (goap.CoapCode) {
-    return goap.COAPCODE_405_METHOD_NOT_ALLOWED
+func (o *ConnectivityStatistics) OnExecute(instanceId int, resourceId int) goap.CoapCode {
+	return goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
-func (o *ConnectivityStatistics) OnCreate(instanceId int, resourceId int) (goap.CoapCode) {
-    return goap.COAPCODE_405_METHOD_NOT_ALLOWED
+func (o *ConnectivityStatistics) OnCreate(instanceId int, resourceId int) goap.CoapCode {
+	return goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
-func (o *ConnectivityStatistics) OnDelete(instanceId int) (goap.CoapCode) {
-    return goap.COAPCODE_405_METHOD_NOT_ALLOWED
+func (o *ConnectivityStatistics) OnDelete(instanceId int) goap.CoapCode {
+	return goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
 func (o *ConnectivityStatistics) OnRead(instanceId int, resourceId int) (ResponseValue, goap.CoapCode) {
-    return core.NewEmptyValue(),  goap.COAPCODE_405_METHOD_NOT_ALLOWED
+	return core.NewEmptyValue(), goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
-func (o *ConnectivityStatistics) OnWrite(instanceId int, resourceId int) (goap.CoapCode) {
-    return goap.COAPCODE_405_METHOD_NOT_ALLOWED
+func (o *ConnectivityStatistics) OnWrite(instanceId int, resourceId int) goap.CoapCode {
+	return goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
-func NewExampleConnectivityStatisticsObject(reg Registry) (*ConnectivityStatistics) {
-    return &ConnectivityStatistics{
-        Model: reg.GetModel(oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS),
-    }
+func NewExampleConnectivityStatisticsObject(reg Registry) *ConnectivityStatistics {
+	data := &core.ObjectsData{
+		Data: make(map[string]interface{}),
+	}
+
+	return &ConnectivityStatistics{
+		Model: reg.GetModel(oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS),
+		Data:  data,
+	}
 }
