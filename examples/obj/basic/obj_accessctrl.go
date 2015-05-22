@@ -13,23 +13,23 @@ type AccessControl struct {
 }
 
 func (o *AccessControl) OnExecute(instanceId int, resourceId int) (goap.CoapCode) {
-    return 0
+    return goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
 func (o *AccessControl) OnCreate(instanceId int, resourceId int) (goap.CoapCode) {
-    return 0
+    return goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
 func (o *AccessControl) OnDelete(instanceId int) (goap.CoapCode) {
-    return 0
+    return goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
 func (o *AccessControl) OnRead(instanceId int, resourceId int) (ResponseValue, goap.CoapCode) {
-    return core.NewEmptyValue(), 0
+    return core.NewEmptyValue(), goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
 func (o *AccessControl) OnWrite(instanceId int, resourceId int) (goap.CoapCode) {
-    return 0
+    return goap.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
 func NewExampleAccessControlObject(reg Registry) (*AccessControl) {

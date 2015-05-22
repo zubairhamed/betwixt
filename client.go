@@ -184,18 +184,16 @@ func (c *DefaultClient) handleCreateRequest(req *CoapRequest) *CoapResponse {
     t := LWM2MObjectType(objectId)
     enabler := c.GetObjectEnabler(t)
 
-    if enabler != nil {
-        if enabler.GetHandler() != nil {
-            msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+    msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+    msg.Token = req.GetMessage().Token
+    msg.Payload = NewEmptyPayload()
 
-            msg.Token = req.GetMessage().Token
-            msg.Payload = NewEmptyPayload()
-            msg.Code = enabler.OnCreate(instanceId, resourceId)
-
-            return NewResponseWithMessage(msg)
-        }
+    if enabler != nil && enabler.GetHandler() != nil {
+        msg.Code = enabler.OnCreate(instanceId, resourceId)
+    } else {
+        msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
     }
-    return nil
+    return NewResponseWithMessage(msg)
 }
 
 func (c *DefaultClient) handleReadRequest(req *CoapRequest) *CoapResponse {
@@ -212,19 +210,18 @@ func (c *DefaultClient) handleReadRequest(req *CoapRequest) *CoapResponse {
     t := LWM2MObjectType(objectId)
     enabler := c.GetObjectEnabler(t)
 
-    if enabler != nil {
-        if enabler.GetHandler() != nil {
-            msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
-            msg.Code = COAPCODE_205_CONTENT
-            msg.Token = req.GetMessage().Token
+    msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+    msg.Token = req.GetMessage().Token
 
-            val, _ := enabler.OnRead(instanceId, resourceId)
-            msg.Payload = NewBytesPayload(val.GetBytes())
-
-            return NewResponseWithMessage(msg)
-        }
+    if enabler != nil && enabler.GetHandler() != nil {
+        msg.Code = COAPCODE_205_CONTENT
+        val, _ := enabler.OnRead(instanceId, resourceId)
+        msg.Payload = NewBytesPayload(val.GetBytes())
+    } else {
+        msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
     }
-    return nil
+    log.Println("msg", msg)
+    return NewResponseWithMessage(msg)
 }
 
 func (c *DefaultClient) handleDeleteRequest(req *CoapRequest) *CoapResponse {
@@ -234,17 +231,16 @@ func (c *DefaultClient) handleDeleteRequest(req *CoapRequest) *CoapResponse {
     t := LWM2MObjectType(objectId)
     enabler := c.GetObjectEnabler(t)
 
-    if enabler != nil {
-        if enabler.GetHandler() != nil {
-            msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
-            msg.Token = req.GetMessage().Token
-            msg.Payload = NewEmptyPayload()
-            msg.Code = enabler.OnDelete(instanceId)
+    msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+    msg.Token = req.GetMessage().Token
+    msg.Payload = NewEmptyPayload()
 
-            return NewResponseWithMessage(msg)
-        }
+    if enabler != nil && enabler.GetHandler() != nil {
+        msg.Code = enabler.OnDelete(instanceId)
+    } else {
+        msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
     }
-    return nil
+    return NewResponseWithMessage(msg)
 }
 
 func (c *DefaultClient) handleDiscoverRequest() {
@@ -269,17 +265,16 @@ func (c *DefaultClient) handleWriteRequest(req *CoapRequest) *CoapResponse {
     t := LWM2MObjectType(objectId)
     enabler := c.GetObjectEnabler(t)
 
-    if enabler != nil {
-        if enabler.GetHandler() != nil {
-            msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
-            msg.Token = req.GetMessage().Token
-            msg.Payload = NewEmptyPayload()
-            msg.Code = enabler.OnWrite(instanceId, resourceId)
+    msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+    msg.Token = req.GetMessage().Token
+    msg.Payload = NewEmptyPayload()
 
-            return NewResponseWithMessage(msg)
-        }
+    if enabler != nil && enabler.GetHandler() != nil {
+        msg.Code = enabler.OnWrite(instanceId, resourceId)
+    } else {
+        msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
     }
-    return nil
+    return NewResponseWithMessage(msg)
 }
 
 func (c *DefaultClient) handleExecuteRequest(req *CoapRequest) *CoapResponse {
@@ -296,17 +291,20 @@ func (c *DefaultClient) handleExecuteRequest(req *CoapRequest) *CoapResponse {
     t := LWM2MObjectType(objectId)
     enabler := c.GetObjectEnabler(t)
 
+    msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+    msg.Token = req.GetMessage().Token
+    msg.Payload = NewEmptyPayload()
+
     if enabler != nil {
         if enabler.GetHandler() != nil {
-            msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
-            msg.Token = req.GetMessage().Token
-            msg.Payload = NewEmptyPayload()
             msg.Code = enabler.OnExecute(instanceId, resourceId)
-
-            return NewResponseWithMessage(msg)
+        } else {
+            msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
         }
+    } else {
+        msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
     }
-    return nil
+    return NewResponseWithMessage(msg)
 }
 
 // Events
