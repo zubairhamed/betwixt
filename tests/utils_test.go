@@ -88,4 +88,9 @@ func TestObjectData(t *testing.T) {
 		data.Put(c.path, c.value)
 		assert.Equal(t, data.Get(c.path), c.value, "Value get not equal to put: (",  c.path, "vs", c.value)
 	}
+
+	assert.Equal(t, data.Length(), 22, "Number of items in ObjectData. Expected", 22, "actual", data.Length())
+
+	data.Clear()
+	assert.Equal(t, data.Length(), 0, "Number of items in ObjectData. Expected", 0, "actual", data.Length())
 }

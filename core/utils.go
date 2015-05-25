@@ -91,3 +91,12 @@ func (o *ObjectsData) Put(path string, value interface{}) {
 func (o *ObjectsData) Get(path string) interface{} {
 	return o.Data[path]
 }
+
+func (o *ObjectsData) Length() int {
+	return len(o.Data)
+}
+
+
+func (o *ObjectsData) Clear() {
+	o.Data = make(map[string]interface{})
+}
