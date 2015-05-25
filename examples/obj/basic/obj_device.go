@@ -79,11 +79,11 @@ func (o *Device) OnRead(instanceId int, resourceId int) (ResponseValue, goap.Coa
 			break
 
 		case 14:
-			val = core.NewStringValue(o.GetUtcOffset())
+			val = core.NewStringValue(o.GetTimezone())
 			break
 
 		case 15:
-			val = core.NewStringValue(o.GetTimezone())
+			val = core.NewStringValue(o.GetUtcOffset())
 			break
 
 		case 16:
@@ -139,11 +139,11 @@ func (o *Device) GetPowerSourceCurrent() []int {
 }
 
 func (o *Device) GetBatteryLevel() int {
-	return 100
+	return o.Data.Get("/0/9").(int)
 }
 
 func (o *Device) GetMemoryFree() int {
-	return 15
+	return o.Data.Get("/0/10").(int)
 }
 
 func (o *Device) GetErrorCode() []int {
@@ -155,19 +155,19 @@ func (o *Device) ResetErrorCode() string {
 }
 
 func (o *Device) GetCurrentTime() time.Time {
-	return time.Now()
-}
-
-func (o *Device) GetUtcOffset() string {
-	return "+8:00"
+	return o.Data.Get("/0/13").(time.Time)
 }
 
 func (o *Device) GetTimezone() string {
-	return "+2:00"
+	return o.Data.Get("/0/14").(string)
+}
+
+func (o *Device) GetUtcOffset() string {
+	return o.Data.Get("/0/15").(string)
 }
 
 func (o *Device) GetSupportedBindingMode() string {
-	return "U"
+	return o.Data.Get("/0/16").(string)
 }
 
 func NewExampleDeviceObject(reg Registry) *Device {
@@ -188,9 +188,10 @@ func NewExampleDeviceObject(reg Registry) *Device {
 	data.Put("/0/9", 100)
 	data.Put("/0/10", 15)
 	data.Put("/0/11/0", 0)
-	data.Put("/0/13", 1367491215)
+	data.Put("/0/13", time.Unix(1367491215, 0))
 	data.Put("/0/14", "+02:00")
-	data.Put("/0/15", "U")
+	data.Put("/0/15", "")
+	data.Put("/0/16", "U")
 
 	return &Device{
 		Model: reg.GetModel(oma.OBJECT_LWM2M_DEVICE),
