@@ -14,6 +14,7 @@ func TestExampleObjects(t *testing.T) {
     client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
 
     reg := registry.NewDefaultObjectRegistry()
+    client.UseRegistry(reg)
 
     client.EnableObject(oma.OBJECT_LWM2M_DEVICE, basic.NewExampleDeviceObject(reg))
     client.EnableObject(oma.OBJECT_LWM2M_SECURITY, basic.NewExampleSecurityObject(reg))

@@ -14,6 +14,13 @@ func TestClient(t *testing.T) {
 	client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
 	assert.NotNil(t, client, "Error instantiating client")
 
+	assert.NotNil(t, client.EnableObject(oma.OBJECT_LWM2M_SERVER, nil), "Error should be thrown - registry not set")
+
+	registry := registry.NewDefaultObjectRegistry()
+	assert.NotNil(t, registry, "Error instantiating registry")
+
+	client.UseRegistry(registry)
+
 	cases1 := []struct {
 		in LWM2MObjectType
 	}{
@@ -27,7 +34,9 @@ func TestClient(t *testing.T) {
 	}
 
 	for _, c := range cases1 {
-		assert.Nil(t, client.EnableObject(c.in, nil), "Error enabling object: ", c)
+		err := client.EnableObject(c.in, nil)
+
+		assert.Nil(t, err, "Error enabling object: ", c.in)
 	}
 
 	assert.Nil(t, client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil), "Error enabling object")
@@ -48,11 +57,6 @@ func TestClient(t *testing.T) {
 	for _, c := range cases2 {
 		assert.NotNil(t, client.GetObjectEnabler(c.in), "Error getting object enabler: ", c)
 	}
-
-	registry := registry.NewDefaultObjectRegistry()
-	assert.NotNil(t, registry, "Error instantiating registry")
-
-	client.UseRegistry(registry)
 
 	inst1 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 0)
 	inst2 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 1)
@@ -103,11 +107,15 @@ func TestRegistry(t *testing.T) {
 func TestBuildResourceStringPayload(t *testing.T) {
 	client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
 
+	reg := registry.NewDefaultObjectRegistry()
+	client.UseRegistry(reg)
+
 	client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil)
 	client.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, nil)
 	client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, nil)
 
 	str := core.BuildModelResourceStringPayload(client.GetEnabledObjects())
 	compare := "</0>,</2>,</4>,"
-	assert.Equal(t, str, compare, "Unexpected output building Model Resource String: Expected = ", compare, "Actual = ", str)
+
+	assert.Equal(t, str, compare, "Unexpected output building Model Resource String")
 }

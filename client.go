@@ -105,6 +105,10 @@ func (c *DefaultClient) UseRegistry(reg Registry) {
 func (c *DefaultClient) EnableObject(t LWM2MObjectType, e RequestHandler) error {
 	if c.enabledObjects[t] == nil {
 
+		if c.registry == nil {
+			return errors.New("No registry found/set")
+		}
+
 		model := c.registry.GetModel(t)
 		en := &core.DefaultObjectEnabler{
 			Handler:   e,
