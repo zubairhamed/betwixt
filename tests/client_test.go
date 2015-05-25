@@ -4,7 +4,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/zubairhamed/go-lwm2m"
 	. "github.com/zubairhamed/go-lwm2m/api"
-	"github.com/zubairhamed/go-lwm2m/core"
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
 	"github.com/zubairhamed/go-lwm2m/registry"
 	"testing"
@@ -104,18 +103,3 @@ func TestRegistry(t *testing.T) {
 	assert.Nil(t, reg.CreateObjectInstance(LWM2MObjectType(-1), 0), "Created an unknown LWM2M Object")
 }
 
-func TestBuildResourceStringPayload(t *testing.T) {
-	client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
-
-	reg := registry.NewDefaultObjectRegistry()
-	client.UseRegistry(reg)
-
-	client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil)
-	client.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, nil)
-	client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, nil)
-
-	str := core.BuildModelResourceStringPayload(client.GetEnabledObjects())
-	compare := "</0>,</2>,</4>,"
-
-	assert.Equal(t, str, compare, "Unexpected output building Model Resource String")
-}

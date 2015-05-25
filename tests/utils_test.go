@@ -5,6 +5,9 @@ import (
 	"github.com/zubairhamed/go-lwm2m/core"
 	"testing"
 	"time"
+	"github.com/zubairhamed/go-lwm2m"
+	"github.com/zubairhamed/go-lwm2m/registry"
+	"github.com/zubairhamed/go-lwm2m/objects/oma"
 )
 
 func TestGetValueByteLength(t *testing.T) {
@@ -93,4 +96,20 @@ func TestObjectData(t *testing.T) {
 
 	data.Clear()
 	assert.Equal(t, data.Length(), 0, "Number of items in ObjectData. Expected", 0, "actual", data.Length())
+}
+
+func TestBuildResourceStringPayload(t *testing.T) {
+	client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
+
+	reg := registry.NewDefaultObjectRegistry()
+	client.UseRegistry(reg)
+
+	client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil)
+	client.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, nil)
+	client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, nil)
+
+	str := core.BuildModelResourceStringPayload(client.GetEnabledObjects())
+	compare := "</0>,</2>,</4>,"
+
+	assert.Equal(t, str, compare, "Unexpected output building Model Resource String")
 }

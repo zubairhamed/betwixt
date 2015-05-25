@@ -6,6 +6,7 @@ import (
 	"fmt"
 	. "github.com/zubairhamed/go-lwm2m/api"
 	"time"
+	"sort"
 )
 
 func GetValueByteLength(val interface{}) (uint32, error) {
@@ -48,10 +49,37 @@ func GetValueByteLength(val interface{}) (uint32, error) {
 	}
 }
 
+/*
+ // To create a map as input
+    m := make(map[int]string)
+    m[1] = "a"
+    m[2] = "c"
+    m[0] = "b"
+
+    // To store the keys in slice in sorted order
+    var keys []int
+    for k := range m {
+        keys = append(keys, k)
+    }
+    sort.Ints(keys)
+
+    // To perform the opertion you want
+    for _, k := range keys {
+        fmt.Println("Key:", k, "Value:", m[k])
+    }
+*/
+
 func BuildModelResourceStringPayload(instances LWM2MObjectInstances) string {
 	var buf bytes.Buffer
 
-	for k, v := range instances {
+	var keys []int
+	for k := range instances {
+		keys = append(keys, int(k))
+	}
+	sort.Ints(keys)
+
+	for _, k := range keys {
+		v := instances[LWM2MObjectType(k)]
 		inst := v.GetObjectInstances()
 		if len(inst) > 0 {
 			for _, j := range inst {
