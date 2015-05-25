@@ -13,19 +13,19 @@ type Firmware struct {
 }
 
 func (o *Firmware) OnExecute(instanceId int, resourceId int) goap.CoapCode {
-	return goap.COAPCODE_405_METHOD_NOT_ALLOWED
+	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
 func (o *Firmware) OnCreate(instanceId int, resourceId int) goap.CoapCode {
-	return goap.COAPCODE_405_METHOD_NOT_ALLOWED
+	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
 func (o *Firmware) OnDelete(instanceId int) goap.CoapCode {
-	return goap.COAPCODE_405_METHOD_NOT_ALLOWED
+	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
 func (o *Firmware) OnRead(instanceId int, resourceId int) (ResponseValue, goap.CoapCode) {
-	return core.NewEmptyValue(), goap.COAPCODE_405_METHOD_NOT_ALLOWED
+	return core.NewEmptyValue(), goap.COAPCODE_401_UNAUTHORIZED
 }
 
 func (o *Firmware) OnWrite(instanceId int, resourceId int) goap.CoapCode {

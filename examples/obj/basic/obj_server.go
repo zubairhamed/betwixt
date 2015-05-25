@@ -13,23 +13,23 @@ type Server struct {
 }
 
 func (o *Server) OnExecute(instanceId int, resourceId int) goap.CoapCode {
-	return goap.COAPCODE_405_METHOD_NOT_ALLOWED
+	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
 func (o *Server) OnCreate(instanceId int, resourceId int) goap.CoapCode {
-	return goap.COAPCODE_405_METHOD_NOT_ALLOWED
+	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
 func (o *Server) OnDelete(instanceId int) goap.CoapCode {
-	return goap.COAPCODE_405_METHOD_NOT_ALLOWED
+	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
 func (o *Server) OnRead(instanceId int, resourceId int) (ResponseValue, goap.CoapCode) {
-	return core.NewEmptyValue(), goap.COAPCODE_405_METHOD_NOT_ALLOWED
+	return core.NewEmptyValue(), goap.COAPCODE_401_UNAUTHORIZED
 }
 
 func (o *Server) OnWrite(instanceId int, resourceId int) goap.CoapCode {
-	return goap.COAPCODE_405_METHOD_NOT_ALLOWED
+	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
 func NewExampleServerObject(reg Registry) *Server {

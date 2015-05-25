@@ -105,9 +105,11 @@ func (c *DefaultClient) UseRegistry(reg Registry) {
 func (c *DefaultClient) EnableObject(t LWM2MObjectType, e RequestHandler) error {
 	if c.enabledObjects[t] == nil {
 
+		model := c.registry.GetModel(t)
 		en := &core.DefaultObjectEnabler{
 			Handler:   e,
 			Instances: []ObjectInstance{},
+			Model: model,
 		}
 		c.enabledObjects[t] = en
 
@@ -226,13 +228,22 @@ func (c *DefaultClient) handleReadRequest(req *CoapRequest) *CoapResponse {
 	msg.Token = req.GetMessage().Token
 
 	if enabler != nil && enabler.GetHandler() != nil {
-		msg.Code = COAPCODE_205_CONTENT
-		val, _ := enabler.OnRead(instanceId, resourceId)
-		msg.Payload = NewBytesPayload(val.GetBytes())
+		model := enabler.GetModel()
+		resource := model.GetResource(resourceId)
+
+		if resource == nil {
+			msg.Code = COAPCODE_404_NOT_FOUND
+		}
+		if !core.IsReadableResource(resource) {
+			msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
+		} else {
+			val, _ := enabler.OnRead(instanceId, resourceId)
+			msg.Code = COAPCODE_205_CONTENT
+			msg.Payload = NewBytesPayload(val.GetBytes())
+		}
 	} else {
 		msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 	}
-	log.Println("msg", msg)
 	return NewResponseWithMessage(msg)
 }
 
@@ -268,8 +279,6 @@ func (c *DefaultClient) handleWriteRequest(req *CoapRequest) *CoapResponse {
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
 
-	log.Println(req.GetMessage().Payload)
-
 	var resourceId = -1
 
 	if attrResource != "" {
@@ -284,9 +293,19 @@ func (c *DefaultClient) handleWriteRequest(req *CoapRequest) *CoapResponse {
 	msg.Payload = NewEmptyPayload()
 
 	if enabler != nil && enabler.GetHandler() != nil {
-		msg.Code = enabler.OnWrite(instanceId, resourceId)
+		model := enabler.GetModel()
+		resource := model.GetResource(resourceId)
+		if resource == nil {
+			msg.Code = COAPCODE_404_NOT_FOUND
+		}
+
+		if !core.IsWritableResource(resource) {
+			msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
+		} else {
+			msg.Code = enabler.OnWrite(instanceId, resourceId)
+		}
 	} else {
-		msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
+		msg.Code = COAPCODE_404_NOT_FOUND
 	}
 	return NewResponseWithMessage(msg)
 }
@@ -309,15 +328,23 @@ func (c *DefaultClient) handleExecuteRequest(req *CoapRequest) *CoapResponse {
 	msg.Token = req.GetMessage().Token
 	msg.Payload = NewEmptyPayload()
 
-	if enabler != nil {
-		if enabler.GetHandler() != nil {
-			msg.Code = enabler.OnExecute(instanceId, resourceId)
-		} else {
+
+	if enabler != nil && enabler.GetHandler() != nil {
+		model := enabler.GetModel()
+		resource := model.GetResource(resourceId)
+		if resource == nil {
+			msg.Code = COAPCODE_404_NOT_FOUND
+		}
+
+		if !core.IsExecutableResource(resource) {
 			msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
+		} else {
+			msg.Code = enabler.OnExecute(instanceId, resourceId)
 		}
 	} else {
-		msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
+		msg.Code = COAPCODE_404_NOT_FOUND
 	}
+
 	return NewResponseWithMessage(msg)
 }
 

@@ -13,23 +13,23 @@ type ConnectivityStatistics struct {
 }
 
 func (o *ConnectivityStatistics) OnExecute(instanceId int, resourceId int) goap.CoapCode {
-	return goap.COAPCODE_405_METHOD_NOT_ALLOWED
+	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
 func (o *ConnectivityStatistics) OnCreate(instanceId int, resourceId int) goap.CoapCode {
-	return goap.COAPCODE_405_METHOD_NOT_ALLOWED
+	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
 func (o *ConnectivityStatistics) OnDelete(instanceId int) goap.CoapCode {
-	return goap.COAPCODE_405_METHOD_NOT_ALLOWED
+	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
 func (o *ConnectivityStatistics) OnRead(instanceId int, resourceId int) (ResponseValue, goap.CoapCode) {
-	return core.NewEmptyValue(), goap.COAPCODE_405_METHOD_NOT_ALLOWED
+	return core.NewEmptyValue(), goap.COAPCODE_401_UNAUTHORIZED
 }
 
 func (o *ConnectivityStatistics) OnWrite(instanceId int, resourceId int) goap.CoapCode {
-	return goap.COAPCODE_405_METHOD_NOT_ALLOWED
+	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
 func NewExampleConnectivityStatisticsObject(reg Registry) *ConnectivityStatistics {

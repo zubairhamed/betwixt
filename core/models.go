@@ -96,11 +96,17 @@ type DefaultResource struct {
 type DefaultObjectEnabler struct {
 	Handler   RequestHandler
 	Instances []ObjectInstance
+	Model 	  ObjectModel
 }
 
 func (en *DefaultObjectEnabler) GetHandler() RequestHandler {
 	return en.Handler
 }
+
+func (en *DefaultObjectEnabler) GetModel() ObjectModel {
+	return en.Model
+}
+
 
 func (en *DefaultObjectEnabler) GetObjectInstance(idx int) ObjectInstance {
 	for _, o := range en.Instances {

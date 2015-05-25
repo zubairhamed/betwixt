@@ -38,6 +38,7 @@ type ObjectEnabler interface {
 	GetObjectInstances() []ObjectInstance
 	SetObjectInstances([]ObjectInstance)
 	GetHandler() RequestHandler
+	GetModel() ObjectModel
 
 	OnRead(int, int) (RequestValue, goap.CoapCode)
 	OnDelete(int) goap.CoapCode
