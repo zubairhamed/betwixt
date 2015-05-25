@@ -8,141 +8,84 @@ import (
 )
 
 func TestGetValueByteLength(t *testing.T) {
-	var v uint32
-	var err error
+	test1 := [] struct {
+		input 		interface{}
+		expected	uint32
+	}{
+		{-128, 1},
+		{127, 1},
+		{-32768, 2},
+		{-2147483648, 4},
+		{2147483647, 4},
+		{-9223372036854775808, 8},
+		{9223372036854775807, 8},
+		{-3.4E+38, 4},
+		{3.4E+38, 4},
+		{-1.7E+308, 8},
+		{1.7E+308, 8},
+		{"this is a string", 16},
+		{true, 1},
+		{false, 1},
+		{time.Now(), 8},
+		{[]byte{}, 0},
+	}
 
-	v, _ = core.GetValueByteLength(-128)
-	assert.Equal(t, v, uint32(1), "Wrong type size returned")
+	for _, c := range test1 {
+		v, _ := core.GetValueByteLength(c.input)
+		assert.Equal(t, v, uint32(c.expected), "Wrong expected length returned")
+	}
 
-	v, _ = core.GetValueByteLength(127)
-	assert.Equal(t, v, uint32(1), "Wrong type size returned")
+	test2 := [] struct {
+		input 		interface{}
+	}{
+		{uint(1)},
+		{uint16(1)},
+		{uint32(1)},
+		{uint64(1)},
+	}
 
-	v, _ = core.GetValueByteLength(-32768)
-	assert.Equal(t, v, uint32(2), "Wrong type size returned")
-
-	v, _ = core.GetValueByteLength(32767)
-	assert.Equal(t, v, uint32(2), "Wrong type size returned")
-
-	v, _ = core.GetValueByteLength(-2147483648)
-	assert.Equal(t, v, uint32(4), "Wrong type size returned")
-
-	v, _ = core.GetValueByteLength(2147483647)
-	assert.Equal(t, v, uint32(4), "Wrong type size returned")
-
-	v, _ = core.GetValueByteLength(-9223372036854775808)
-	assert.Equal(t, v, uint32(8), "Wrong type size returned")
-
-	v, _ = core.GetValueByteLength(9223372036854775807)
-	assert.Equal(t, v, uint32(8), "Wrong type size returned")
-
-	v, _ = core.GetValueByteLength(-3.4E+38)
-	assert.Equal(t, v, uint32(4), "Wrong type size returned")
-
-	v, _ = core.GetValueByteLength(+3.4E+38)
-	assert.Equal(t, v, uint32(4), "Wrong type size returned")
-
-	v, _ = core.GetValueByteLength(-1.7E+308)
-	assert.Equal(t, v, uint32(8), "Wrong type size returned")
-
-	v, _ = core.GetValueByteLength(+1.7E+308)
-	assert.Equal(t, v, uint32(8), "Wrong type size returned")
-
-	v, _ = core.GetValueByteLength("this is a string")
-	assert.Equal(t, v, uint32(16), "Wrong type size returned")
-
-	v, _ = core.GetValueByteLength(true)
-	assert.Equal(t, v, uint32(1), "Wrong type size returned")
-
-	v, _ = core.GetValueByteLength(false)
-	assert.Equal(t, v, uint32(1), "Wrong type size returned")
-
-	v, _ = core.GetValueByteLength(time.Now())
-	assert.Equal(t, v, uint32(8), "Wrong type size returned")
-
-	v, _ = core.GetValueByteLength([]byte{})
-	assert.Equal(t, v, uint32(0), "Wrong type size returned")
-
-	_, err = core.GetValueByteLength(uint(1))
-	assert.NotNil(t, err, "An error should be returned")
-
-	_, err = core.GetValueByteLength(uint16(1))
-	assert.NotNil(t, err, "An error should be returned")
-
-	_, err = core.GetValueByteLength(uint32(1))
-	assert.NotNil(t, err, "An error should be returned")
-
-	_, err = core.GetValueByteLength(uint64(1))
-	assert.NotNil(t, err, "An error should be returned")
+	for _, c := range test2 {
+		_, err := core.GetValueByteLength(c.input)
+		assert.NotNil(t, err, "An error should be returned")
+	}
 }
 
 func TestObjectData(t *testing.T) {
+
+	tests := [] struct {
+		path 	string
+		value 	interface{}
+	}{
+		{"/0/0", 1},
+		{"/0/1", 0},
+		{"/0/2/101", []byte{0, 15}},
+		{"/0/3", 101},
+		{"/1/0", 1},
+		{"/1/1", 1},
+		{"/1/2/102", []byte{0, 15}},
+		{"/1/3", 102},
+		{"/2/0", 3},
+		{"/2/1", 0},
+		{"/2/2/101", []byte{0, 15}},
+		{"/2/2/102", []byte{0, 1}},
+		{"/2/3", 101},
+		{"/3/0", 4},
+		{"/3/1", 0},
+		{"/3/2/101", []byte{0, 1}},
+		{"/3/2/0", []byte{0, 1}},
+		{"/3/3", 101},
+		{"/4/0", 5},
+		{"/4/1", 65535},
+		{"/4/2/101", []byte{0, 16}},
+		{"/4/3", 65535},
+	}
+
 	data := &core.ObjectsData{
 		Data: make(map[string]interface{}),
 	}
 
-	data.Put("/0/0", 1)
-	assert.Equal(t, data.Get("/0/0"), 1, "Value get not equal to put")
-
-	data.Put("/0/1", 0)
-	assert.Equal(t, data.Get("/0/1"), 0, "Value get not equal to put")
-
-	data.Put("/0/2/101", []byte{0, 15})
-	assert.Equal(t, data.Get("/0/2/101"), []byte{0, 15}, "Value get not equal to put")
-
-	data.Put("/0/3", 101)
-	assert.Equal(t, data.Get("/0/3"), 101, "Value get not equal to put")
-
-	data.Put("/1/0", 1)
-	assert.Equal(t, data.Get("/1/0"), 1, "Value get not equal to put")
-
-	data.Put("/1/1", 1)
-	assert.Equal(t, data.Get("/1/1"), 1, "Value get not equal to put")
-
-	data.Put("/1/2/102", []byte{0, 15})
-	assert.Equal(t, data.Get("/1/2/102"), []byte{0, 15}, "Value get not equal to put")
-
-	data.Put("/1/3", 102)
-	assert.Equal(t, data.Get("/1/3"), 102, "Value get not equal to put")
-
-	data.Put("/2/0", 3)
-	assert.Equal(t, data.Get("/2/0"), 3, "Value get not equal to put")
-
-	data.Put("/2/1", 0)
-	assert.Equal(t, data.Get("/2/1"), 0, "Value get not equal to put")
-
-	data.Put("/2/2/101", []byte{0, 15})
-	assert.Equal(t, data.Get("/2/2/101"), []byte{0, 15}, "Value get not equal to put")
-
-	data.Put("/2/2/102", []byte{0, 1})
-	assert.Equal(t, data.Get("/2/2/102"), []byte{0, 1}, "Value get not equal to put")
-
-	data.Put("/2/3", 101)
-	assert.Equal(t, data.Get("/2/3"), 101, "Value get not equal to put")
-
-	data.Put("/3/0", 4)
-	assert.Equal(t, data.Get("/3/0"), 4, "Value get not equal to put")
-
-	data.Put("/3/1", 0)
-	assert.Equal(t, data.Get("/3/1"), 0, "Value get not equal to put")
-
-	data.Put("/3/2/101", []byte{0, 1})
-	assert.Equal(t, data.Get("/3/2/101"), []byte{0, 1}, "Value get not equal to put")
-
-	data.Put("/3/2/0", []byte{0, 1})
-	assert.Equal(t, data.Get("/3/2/0"), []byte{0, 1}, "Value get not equal to put")
-
-	data.Put("/3/3", 101)
-	assert.Equal(t, data.Get("/3/3"), 101, "Value get not equal to put")
-
-	data.Put("/4/0", 5)
-	assert.Equal(t, data.Get("/4/0"), 5, "Value get not equal to put")
-
-	data.Put("/4/1", 65535)
-	assert.Equal(t, data.Get("/4/1"), 65535, "Value get not equal to put")
-
-	data.Put("/4/2/101", []byte{0, 16})
-	assert.Equal(t, data.Get("/4/2/101"), []byte{0, 16}, "Value get not equal to put")
-
-	data.Put("/4/3", 65535)
-	assert.Equal(t, data.Get("/4/3"), 65535, "Value get not equal to put")
+	for _, c := range tests {
+		data.Put(c.path, c.value)
+		assert.Equal(t, data.Get(c.path), c.value, "Value get not equal to put: (",  c.path, "vs", c.value)
+	}
 }
