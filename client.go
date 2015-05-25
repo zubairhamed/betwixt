@@ -268,6 +268,8 @@ func (c *DefaultClient) handleWriteRequest(req *CoapRequest) *CoapResponse {
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
 
+	log.Println(req.GetMessage().Payload)
+
 	var resourceId = -1
 
 	if attrResource != "" {

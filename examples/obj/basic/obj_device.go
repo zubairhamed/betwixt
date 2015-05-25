@@ -103,19 +103,19 @@ func (o *Device) OnWrite(instanceId int, resourceId int) goap.CoapCode {
 }
 
 func (o *Device) GetManufacturer() string {
-	return "Open Mobile Alliance"
+	return o.Data.Get("/0/0").(string)
 }
 
 func (o *Device) GetModelNumber() string {
-	return "Lightweight M2M Client"
+	return o.Data.Get("/0/1").(string)
 }
 
 func (o *Device) GetSerialNumber() string {
-	return "345000123"
+	return o.Data.Get("/0/2").(string)
 }
 
 func (o *Device) GetFirmwareVersion() string {
-	return "1.0"
+	return o.Data.Get("/0/3").(string)
 }
 
 func (o *Device) Reboot() ResponseValue {
@@ -177,7 +177,7 @@ func NewExampleDeviceObject(reg Registry) *Device {
 
 	data.Put("/0/0", "Open Mobile Alliance")
 	data.Put("/0/1", "Lightweight M2M Client")
-	data.Put("/0/2", 345000123)
+	data.Put("/0/2", "345000123")
 	data.Put("/0/3", "1.0")
 	data.Put("/0/6/0", 1)
 	data.Put("/0/6/1", 5)
