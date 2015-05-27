@@ -343,6 +343,7 @@ func (c *DefaultClient) handleExecuteRequest(req *CoapRequest) *CoapResponse {
 		if !core.IsExecutableResource(resource) {
 			msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 		} else {
+			log.Println("Executing OnExecute")
 			msg.Code = enabler.OnExecute(instanceId, resourceId)
 		}
 	} else {

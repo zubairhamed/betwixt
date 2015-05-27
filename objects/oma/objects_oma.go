@@ -126,6 +126,22 @@ func (o *LWM2MCoreObjects) Initialize() {
 		&DefaultResourceModel{Id: 5, Name: "Average Message Size", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "", Units: "Byte", Description: ""},
 		&DefaultResourceModel{Id: 6, Name: "StartOrReset", Operations: OPERATION_E, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_STRING, RangeOrEnums: "", Units: "", Description: ""},
 	)
+
+	/*
+		Lock and Wipe
+
+		Software Update
+
+		Cellular connectivity
+
+		APN connection profile
+
+		WLAN connectivity
+
+		Bearer selection
+
+		DevCapMgmt
+	*/
 }
 
 func (o *LWM2MCoreObjects) Get(n LWM2MObjectType) ObjectModel {

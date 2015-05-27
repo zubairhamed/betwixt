@@ -12,7 +12,6 @@ type FnOnDeregistered func()
 type FnOnError func()
 
 type ValueTypeCode byte
-
 const (
 	VALUETYPE_STRING     ValueTypeCode = 0
 	VALUETYPE_INTEGER    ValueTypeCode = 1
@@ -26,7 +25,6 @@ const (
 )
 
 type OperationCode int
-
 const (
 	OPERATION_NONE OperationCode = 0
 	OPERATION_R    OperationCode = 1
@@ -39,10 +37,19 @@ const (
 )
 
 type IdentifierType byte
-
 const (
 	IDENTIFIER_OBJECT_INSTANCE     IdentifierType = 0
 	IDENTIFIER_RESOURCE_INSTANCE   IdentifierType = 1
 	IDENTIFIER_RESOURCES           IdentifierType = 2
 	IDENTIFIER_RESOURCE_WITH_VALUE IdentifierType = 3
+)
+
+type BindingMode string
+const (
+	BINDINGMODE_UDP 						BindingMode = "U"
+	BINDINGMODE_UDP_WITH_QUEUE_MODE 		BindingMode = "UQ"
+	BINDINGMODE_SMS 						BindingMode = "S"
+	BINDINGMODE_SMS_WITH_QUEUE_MODE 		BindingMode = "SQ"
+	BINDINGMODE_UDP_AND_SMS 				BindingMode = "US"
+	BINDINGMODE_UDP_WITH_QUEUE_MODE_AND_SMS BindingMode = "UQS"
 )
