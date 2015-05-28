@@ -205,7 +205,7 @@ func (c *DefaultClient) handleCreateRequest(req *CoapRequest) *CoapResponse {
 	msg.Payload = NewEmptyPayload()
 
 	if enabler != nil && enabler.GetHandler() != nil {
-		lwReq := request.NewDefaultRequest(req, OPERATIONTYPE_CREATE)
+		lwReq := request.Default(req, OPERATIONTYPE_CREATE)
 		response := enabler.OnCreate(instanceId, resourceId, lwReq)
 		msg.Code = response.GetResponseCode()
 	} else {
@@ -242,7 +242,7 @@ func (c *DefaultClient) handleReadRequest(req *CoapRequest) *CoapResponse {
 			if !core.IsReadableResource(resource) {
 				msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 			} else {
-				lwReq := request.NewDefaultRequest(req, OPERATIONTYPE_READ)
+				lwReq := request.Default(req, OPERATIONTYPE_READ)
 				response := enabler.OnRead(instanceId, resourceId, lwReq)
 
 				val := response.GetResponseValue()
@@ -268,7 +268,7 @@ func (c *DefaultClient) handleDeleteRequest(req *CoapRequest) *CoapResponse {
 	msg.Payload = NewEmptyPayload()
 
 	if enabler != nil && enabler.GetHandler() != nil {
-		lwReq := request.NewDefaultRequest(req, OPERATIONTYPE_DELETE)
+		lwReq := request.Default(req, OPERATIONTYPE_DELETE)
 
 		response := enabler.OnDelete(instanceId, lwReq)
 		msg.Code = response.GetResponseCode()
@@ -316,7 +316,7 @@ func (c *DefaultClient) handleWriteRequest(req *CoapRequest) *CoapResponse {
 			if !core.IsWritableResource(resource) {
 				msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 			} else {
-				lwReq := request.NewDefaultRequest(req, OPERATIONTYPE_WRITE)
+				lwReq := request.Default(req, OPERATIONTYPE_WRITE)
 				response := enabler.OnWrite(instanceId, resourceId, lwReq)
 				msg.Code = response.GetResponseCode()
 			}
@@ -356,7 +356,7 @@ func (c *DefaultClient) handleExecuteRequest(req *CoapRequest) *CoapResponse {
 			log.Println("ExecutableResource?", resource.GetOperations())
 			msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 		} else {
-			lwReq := request.NewDefaultRequest(req, OPERATIONTYPE_EXECUTE)
+			lwReq := request.Default(req, OPERATIONTYPE_EXECUTE)
 			response := enabler.OnExecute(instanceId, resourceId, lwReq)
 			msg.Code = response.GetResponseCode()
 		}

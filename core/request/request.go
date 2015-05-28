@@ -5,7 +5,7 @@ import (
 	"github.com/zubairhamed/goap"
 )
 
-func NewDefaultRequest(coap *goap.CoapRequest, op OperationType) Request {
+func Default(coap *goap.CoapRequest, op OperationType) Request {
 	return &DefaultRequest{
 		coap: coap,
 		op:   op,

@@ -10,10 +10,10 @@ import (
 )
 
 type Device struct {
-	Model 			ObjectModel
-	currentTime		time.Time
-	utcOffset		string
-	timeZone		string
+	Model       ObjectModel
+	currentTime time.Time
+	utcOffset   string
+	timeZone    string
 }
 
 func (o *Device) OnExecute(instanceId int, resourceId int, req Request) Response {
@@ -54,7 +54,8 @@ func (o *Device) OnRead(instanceId int, resourceId int, req Request) Response {
 			break
 
 		case 6:
-			val, _ = core.TlvPayloadFromIntResource(resource, []int{1, 5})
+
+			val, _ = core.TlvPayloadFromIntResource(resource, []int{oma.POWERSOURCE_INTERNAL, oma.POWERSOURCE_USB})
 			break
 
 		case 7:
@@ -90,7 +91,7 @@ func (o *Device) OnRead(instanceId int, resourceId int, req Request) Response {
 			break
 
 		case 16:
-			val = values.String("U")
+			val = values.String(string(BINDINGMODE_UDP))
 			break
 
 		default:
@@ -136,9 +137,9 @@ func (o *Device) ResetErrorCode() string {
 
 func NewExampleDeviceObject(reg Registry) *Device {
 	return &Device{
-		Model: reg.GetModel(oma.OBJECT_LWM2M_DEVICE),
+		Model:       reg.GetModel(oma.OBJECT_LWM2M_DEVICE),
 		currentTime: time.Unix(1367491215, 0),
-		utcOffset: "+02:00",
-		timeZone: "+02:00",
+		utcOffset:   "+02:00",
+		timeZone:    "+02:00",
 	}
 }
