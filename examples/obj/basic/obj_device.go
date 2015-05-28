@@ -3,29 +3,32 @@ package basic
 import (
 	. "github.com/zubairhamed/go-lwm2m/api"
 	"github.com/zubairhamed/go-lwm2m/core"
+	"github.com/zubairhamed/go-lwm2m/core/response"
+	"github.com/zubairhamed/go-lwm2m/core/values"
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
-	"github.com/zubairhamed/goap"
 	"time"
 )
 
 type Device struct {
-	Model ObjectModel
-	Data  *core.ObjectsData
+	Model       ObjectModel
+	currentTime time.Time
+	utcOffset   string
+	timeZone    string
 }
 
-func (o *Device) OnExecute(instanceId int, resourceId int) goap.CoapCode {
-	return goap.COAPCODE_204_CHANGED
+func (o *Device) OnExecute(instanceId int, resourceId int, req Request) Response {
+	return response.Changed()
 }
 
-func (o *Device) OnCreate(instanceId int, resourceId int) goap.CoapCode {
-	return goap.COAPCODE_201_CREATED
+func (o *Device) OnCreate(instanceId int, resourceId int, req Request) Response {
+	return response.Created()
 }
 
-func (o *Device) OnDelete(instanceId int) goap.CoapCode {
-	return goap.COAPCODE_202_DELETED
+func (o *Device) OnDelete(instanceId int, req Request) Response {
+	return response.Deleted()
 }
 
-func (o *Device) OnRead(instanceId int, resourceId int) (ResponseValue, goap.CoapCode) {
+func (o *Device) OnRead(instanceId int, resourceId int, req Request) Response {
 	if resourceId == -1 {
 		// Read Object Instance
 	} else {
@@ -35,170 +38,108 @@ func (o *Device) OnRead(instanceId int, resourceId int) (ResponseValue, goap.Coa
 		resource := o.Model.GetResource(resourceId)
 		switch resourceId {
 		case 0:
-			val = core.NewStringValue(o.GetManufacturer())
+			val = values.String("Open Mobile Alliance")
 			break
 
 		case 1:
-			val = core.NewStringValue(o.GetModelNumber())
+			val = values.String("Lightweight M2M Client")
 			break
 
 		case 2:
-			val = core.NewStringValue(o.GetSerialNumber())
+			val = values.String("345000123")
 			break
 
 		case 3:
-			val = core.NewStringValue(o.GetFirmwareVersion())
+			val = values.String("1.0")
 			break
 
 		case 6:
-			val, _ = core.TlvPayloadFromIntResource(resource, o.GetAvailablePowerSources())
+
+			val, _ = core.TlvPayloadFromIntResource(resource, []int{oma.POWERSOURCE_INTERNAL, oma.POWERSOURCE_USB})
 			break
 
 		case 7:
-			val, _ = core.TlvPayloadFromIntResource(resource, o.GetPowerSourceVoltage())
+			val, _ = core.TlvPayloadFromIntResource(resource, []int{3800, 5000})
 			break
 
 		case 8:
-			val, _ = core.TlvPayloadFromIntResource(resource, o.GetPowerSourceCurrent())
+			val, _ = core.TlvPayloadFromIntResource(resource, []int{125, 900})
 			break
 
 		case 9:
-			val = core.NewIntegerValue(o.GetBatteryLevel())
+			val = values.Integer(100)
 			break
 
 		case 10:
-			val = core.NewIntegerValue(o.GetMemoryFree())
+			val = values.Integer(15)
 			break
 
 		case 11:
-			val, _ = core.TlvPayloadFromIntResource(resource, o.GetErrorCode())
+			val, _ = core.TlvPayloadFromIntResource(resource, []int{0})
 			break
 
 		case 13:
-			val = core.NewTimeValue(o.GetCurrentTime())
+			val = values.Time(o.currentTime)
 			break
 
 		case 14:
-			val = core.NewStringValue(o.GetTimezone())
+			val = values.String(o.utcOffset)
 			break
 
 		case 15:
-			val = core.NewStringValue(o.GetUtcOffset())
+			val = values.String(o.timeZone)
 			break
 
 		case 16:
-			val = core.NewStringValue(o.GetSupportedBindingMode())
+			val = values.String(string(BINDINGMODE_UDP))
 			break
 
 		default:
 			break
 		}
-		return val, goap.COAPCODE_205_CONTENT
+		return response.Content(val)
 	}
-	return core.NewEmptyValue(), goap.COAPCODE_404_NOT_FOUND
+	return response.NotFound()
 }
 
-func (o *Device) OnWrite(instanceId int, resourceId int) goap.CoapCode {
-	return goap.COAPCODE_404_NOT_FOUND
-}
+func (o *Device) OnWrite(instanceId int, resourceId int, req Request) Response {
+	val := req.GetMessage().Payload
 
-func (o *Device) GetManufacturer() string {
-	return o.Data.Get("/0/0").(string)
-}
+	switch resourceId {
+	case 13:
+		break
 
-func (o *Device) GetModelNumber() string {
-	return o.Data.Get("/0/1").(string)
-}
+	case 14:
+		o.utcOffset = val.String()
+		break
 
-func (o *Device) GetSerialNumber() string {
-	return o.Data.Get("/0/2").(string)
-}
+	case 15:
+		o.timeZone = val.String()
+		break
 
-func (o *Device) GetFirmwareVersion() string {
-	return o.Data.Get("/0/3").(string)
+	default:
+		return response.NotFound()
+	}
+	return response.Changed()
 }
 
 func (o *Device) Reboot() ResponseValue {
-	return core.NewEmptyValue()
+	return values.Empty()
 }
 
 func (o *Device) FactoryReset() ResponseValue {
-	return core.NewEmptyValue()
-}
-
-func (o *Device) GetAvailablePowerSources() []int {
-	return []int{1, 5}
-}
-
-func (o *Device) GetPowerSourceVoltage() []int {
-	return []int{3800, 5000}
-}
-
-func (o *Device) GetPowerSourceCurrent() []int {
-	return []int{125, 900}
-}
-
-func (o *Device) GetBatteryLevel() int {
-	return o.Data.Get("/0/9").(int)
-}
-
-func (o *Device) GetMemoryFree() int {
-	return o.Data.Get("/0/10").(int)
-}
-
-func (o *Device) GetErrorCode() []int {
-	return []int{0}
+	return values.Empty()
 }
 
 func (o *Device) ResetErrorCode() string {
 	return ""
 }
 
-func (o *Device) GetCurrentTime() time.Time {
-	return o.Data.Get("/0/13").(time.Time)
-}
-
-func (o *Device) GetTimezone() string {
-	return o.Data.Get("/0/14").(string)
-}
-
-func (o *Device) GetUtcOffset() string {
-	return o.Data.Get("/0/15").(string)
-}
-
-func (o *Device) GetSupportedBindingMode() string {
-	return o.Data.Get("/0/16").(string)
-}
-
 func NewExampleDeviceObject(reg Registry) *Device {
-	data := &core.ObjectsData{
-		Data: make(map[string]interface{}),
-	}
-
-	data.Put("/0/0", "Open Mobile Alliance")
-	data.Put("/0/1", "Lightweight M2M Client")
-	data.Put("/0/2", "345000123")
-	data.Put("/0/3", "1.0")
-	data.Put("/0/6/0", 1)
-	data.Put("/0/6/1", 5)
-	data.Put("/0/7/0", 3800)
-	data.Put("/0/7/1", 5000)
-	data.Put("/0/8/0", 125)
-	data.Put("/0/8/1", 900)
-	data.Put("/0/9", 100)
-	data.Put("/0/10", 15)
-	data.Put("/0/11/0", 0)
-	data.Put("/0/13", time.Unix(1367491215, 0))
-	data.Put("/0/14", "+02:00")
-	data.Put("/0/15", "")
-	data.Put("/0/16", "U")
-
 	return &Device{
-		Model: reg.GetModel(oma.OBJECT_LWM2M_DEVICE),
-		Data:  data,
+		Model:       reg.GetModel(oma.OBJECT_LWM2M_DEVICE),
+		currentTime: time.Unix(1367491215, 0),
+		utcOffset:   "+02:00",
+		timeZone:    "+02:00",
 	}
 }
-
-/*
-
-*/

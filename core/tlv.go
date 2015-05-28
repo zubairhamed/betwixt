@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	. "github.com/zubairhamed/go-lwm2m/api"
+	"github.com/zubairhamed/go-lwm2m/core/values"
 )
 
 /*
@@ -40,13 +41,14 @@ func TlvPayloadFromObjects(en ObjectEnabler, reg Registry) (ResponseValue, error
 		rsrcBuf := bytes.NewBuffer([]byte{})
 		for _, ri := range m.GetResources() {
 			if IsReadableResource(ri) {
-				ret, _ := en.OnRead(oi.GetId(), ri.GetId())
+				response := en.OnRead(oi.GetId(), ri.GetId(), nil)
 
+				val := response.GetResponseValue()
 				if ri.MultipleValuesAllowed() {
-					rsrcBuf.Write(ret.GetBytes())
+					rsrcBuf.Write(val.GetBytes())
 				} else {
 					if ri.GetResourceType() == VALUETYPE_INTEGER {
-						v, _ := TlvPayloadFromIntResource(ri, []int{ret.GetValue().(int)})
+						v, _ := TlvPayloadFromIntResource(ri, []int{val.GetValue().(int)})
 						rsrcBuf.Write(v.GetBytes())
 					}
 				}
@@ -63,16 +65,16 @@ func TlvPayloadFromObjects(en ObjectEnabler, reg Registry) (ResponseValue, error
 		buf.Write(rsrcBuf.Bytes())
 	}
 
-	return NewTlvValue(buf.Bytes()), nil
+	return values.Tlv(buf.Bytes()), nil
 }
 
-func TlvPayloadFromIntResource(model ResourceModel, values []int) (ResponseValue, error) {
+func TlvPayloadFromIntResource(model ResourceModel, vals []int) (ResponseValue, error) {
 
 	// Resource Instances TLV
 	resourceInstanceBytes := bytes.NewBuffer([]byte{})
 
 	if model.MultipleValuesAllowed() {
-		for i, value := range values {
+		for i, value := range vals {
 			// Type Field Byte
 			typeField := CreateTlvTypeField(64, value, i)
 			resourceInstanceBytes.Write([]byte{typeField})
@@ -109,7 +111,7 @@ func TlvPayloadFromIntResource(model ResourceModel, values []int) (ResponseValue
 	// Value Field, Append Resource Instances TLV to Resource TLV
 	resourceTlv.Write(resourceInstanceBytes.Bytes())
 
-	return NewTlvValue(resourceTlv.Bytes()), nil
+	return values.Tlv(resourceTlv.Bytes()), nil
 }
 
 func CreateTlvTypeField(identType byte, value interface{}, ident int) byte {

@@ -3,8 +3,8 @@ package basic
 import (
 	. "github.com/zubairhamed/go-lwm2m/api"
 	"github.com/zubairhamed/go-lwm2m/core"
+	"github.com/zubairhamed/go-lwm2m/core/response"
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
-	"github.com/zubairhamed/goap"
 )
 
 type Server struct {
@@ -12,24 +12,24 @@ type Server struct {
 	Data  *core.ObjectsData
 }
 
-func (o *Server) OnExecute(instanceId int, resourceId int) goap.CoapCode {
-	return goap.COAPCODE_401_UNAUTHORIZED
+func (o *Server) OnExecute(instanceId int, resourceId int, req Request) Response {
+	return response.Unauthorized()
 }
 
-func (o *Server) OnCreate(instanceId int, resourceId int) goap.CoapCode {
-	return goap.COAPCODE_401_UNAUTHORIZED
+func (o *Server) OnCreate(instanceId int, resourceId int, req Request) Response {
+	return response.Unauthorized()
 }
 
-func (o *Server) OnDelete(instanceId int) goap.CoapCode {
-	return goap.COAPCODE_401_UNAUTHORIZED
+func (o *Server) OnDelete(instanceId int, req Request) Response {
+	return response.Unauthorized()
 }
 
-func (o *Server) OnRead(instanceId int, resourceId int) (ResponseValue, goap.CoapCode) {
-	return core.NewEmptyValue(), goap.COAPCODE_401_UNAUTHORIZED
+func (o *Server) OnRead(instanceId int, resourceId int, req Request) Response {
+	return response.Unauthorized()
 }
 
-func (o *Server) OnWrite(instanceId int, resourceId int) goap.CoapCode {
-	return goap.COAPCODE_401_UNAUTHORIZED
+func (o *Server) OnWrite(instanceId int, resourceId int, req Request) Response {
+	return response.Unauthorized()
 }
 
 func NewExampleServerObject(reg Registry) *Server {

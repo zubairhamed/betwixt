@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 	. "github.com/zubairhamed/go-lwm2m/api"
-	"time"
 	"sort"
+	"time"
 )
 
 func GetValueByteLength(val interface{}) (uint32, error) {
@@ -123,7 +123,6 @@ func (o *ObjectsData) Get(path string) interface{} {
 func (o *ObjectsData) Length() int {
 	return len(o.Data)
 }
-
 
 func (o *ObjectsData) Clear() {
 	o.Data = make(map[string]interface{})

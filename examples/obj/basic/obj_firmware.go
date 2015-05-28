@@ -3,8 +3,8 @@ package basic
 import (
 	. "github.com/zubairhamed/go-lwm2m/api"
 	"github.com/zubairhamed/go-lwm2m/core"
+	"github.com/zubairhamed/go-lwm2m/core/response"
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
-	"github.com/zubairhamed/goap"
 )
 
 type Firmware struct {
@@ -12,24 +12,24 @@ type Firmware struct {
 	Data  *core.ObjectsData
 }
 
-func (o *Firmware) OnExecute(instanceId int, resourceId int) goap.CoapCode {
-	return goap.COAPCODE_401_UNAUTHORIZED
+func (o *Firmware) OnExecute(instanceId int, resourceId int, req Request) Response {
+	return response.Unauthorized()
 }
 
-func (o *Firmware) OnCreate(instanceId int, resourceId int) goap.CoapCode {
-	return goap.COAPCODE_401_UNAUTHORIZED
+func (o *Firmware) OnCreate(instanceId int, resourceId int, req Request) Response {
+	return response.Unauthorized()
 }
 
-func (o *Firmware) OnDelete(instanceId int) goap.CoapCode {
-	return goap.COAPCODE_401_UNAUTHORIZED
+func (o *Firmware) OnDelete(instanceId int, req Request) Response {
+	return response.Unauthorized()
 }
 
-func (o *Firmware) OnRead(instanceId int, resourceId int) (ResponseValue, goap.CoapCode) {
-	return core.NewEmptyValue(), goap.COAPCODE_401_UNAUTHORIZED
+func (o *Firmware) OnRead(instanceId int, resourceId int, req Request) Response {
+	return response.Unauthorized()
 }
 
-func (o *Firmware) OnWrite(instanceId int, resourceId int) goap.CoapCode {
-	return 0
+func (o *Firmware) OnWrite(instanceId int, resourceId int, req Request) Response {
+	return response.Unauthorized()
 }
 
 func NewExampleFirmwareUpdateObject(reg Registry) *Firmware {

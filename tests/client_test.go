@@ -102,4 +102,3 @@ func TestRegistry(t *testing.T) {
 	}
 	assert.Nil(t, reg.CreateObjectInstance(LWM2MObjectType(-1), 0), "Created an unknown LWM2M Object")
 }
-

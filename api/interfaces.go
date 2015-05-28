@@ -1,30 +1,25 @@
 package api
 
-import "github.com/zubairhamed/goap"
+import (
+	. "github.com/zubairhamed/goap"
+)
 
 type RequestHandler interface {
-	OnRead(int, int) (ResponseValue, goap.CoapCode)
-	OnDelete(int) goap.CoapCode
-	OnWrite(int, int) goap.CoapCode
-	OnCreate(int, int) goap.CoapCode
-	OnExecute(int, int) goap.CoapCode
+	OnRead(int, int, Request) Response
+	OnDelete(int, Request) Response
+	OnWrite(int, int, Request) Response
+	OnCreate(int, int, Request) Response
+	OnExecute(int, int, Request) Response
 }
 
 /*
-type ResourceValue interface {
-    GetBytes() ([]byte)
-    GetType() (ValueTypeCode)
-    GetValue() (interface{})
-    GetStringValue() (string)
-}
-*/
-
 type RequestValue interface {
 	GetBytes() []byte
 	GetType() ValueTypeCode
 	GetValue() interface{}
 	GetStringValue() string
 }
+*/
 
 type ResponseValue interface {
 	GetBytes() []byte
@@ -40,20 +35,16 @@ type ObjectEnabler interface {
 	GetHandler() RequestHandler
 	GetModel() ObjectModel
 
-	OnRead(int, int) (RequestValue, goap.CoapCode)
-	OnDelete(int) goap.CoapCode
-	OnWrite(int, int) goap.CoapCode
-	OnCreate(int, int) goap.CoapCode
-	OnExecute(int, int) goap.CoapCode
+	OnRead(int, int, Request) Response
+	OnDelete(int, Request) Response
+	OnWrite(int, int, Request) Response
+	OnCreate(int, int, Request) Response
+	OnExecute(int, int, Request) Response
 }
 
 type ObjectInstance interface {
-	GetResource(int) Resource
 	GetId() int
 	GetTypeId() LWM2MObjectType
-}
-
-type Resource interface {
 }
 
 type ModelSource interface {
@@ -107,4 +98,16 @@ type LWM2MClient interface {
 	OnRegistered(FnOnRegistered)
 	OnDeregistered(FnOnDeregistered)
 	OnError(FnOnError)
+}
+
+type Request interface {
+	GetPath() string
+	GetMessage() *Message
+	GetOperationType() OperationType
+	GetCoapRequest() *CoapRequest
+}
+
+type Response interface {
+	GetResponseCode() CoapCode
+	GetResponseValue() ResponseValue
 }

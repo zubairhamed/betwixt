@@ -16,7 +16,6 @@ func TestObjectInstancesToTlv(t *testing.T) {
 	reg := registry.NewDefaultObjectRegistry()
 	client.UseRegistry(reg)
 
-
 	device := basic.NewExampleDeviceObject(reg)
 
 	client.EnableObject(oma.OBJECT_LWM2M_DEVICE, device)

@@ -2,7 +2,7 @@ package core
 
 import (
 	. "github.com/zubairhamed/go-lwm2m/api"
-	"github.com/zubairhamed/goap"
+	"github.com/zubairhamed/go-lwm2m/core/response"
 )
 
 type DefaultObjectModel struct {
@@ -65,20 +65,14 @@ func (o *DefaultResourceModel) GetResourceType() ValueTypeCode {
 
 func NewObjectInstance(id int, t LWM2MObjectType) ObjectInstance {
 	return &DefaultObjectInstance{
-		Id:        id,
-		TypeId:    t,
-		Resources: make(map[int]Resource),
+		Id:     id,
+		TypeId: t,
 	}
 }
 
 type DefaultObjectInstance struct {
-	Id        int
-	TypeId    LWM2MObjectType
-	Resources map[int]Resource
-}
-
-func (o *DefaultObjectInstance) GetResource(id int) Resource {
-	return o.Resources[id]
+	Id     int
+	TypeId LWM2MObjectType
 }
 
 func (o *DefaultObjectInstance) GetId() int {
@@ -96,7 +90,7 @@ type DefaultResource struct {
 type DefaultObjectEnabler struct {
 	Handler   RequestHandler
 	Instances []ObjectInstance
-	Model 	  ObjectModel
+	Model     ObjectModel
 }
 
 func (en *DefaultObjectEnabler) GetHandler() RequestHandler {
@@ -106,7 +100,6 @@ func (en *DefaultObjectEnabler) GetHandler() RequestHandler {
 func (en *DefaultObjectEnabler) GetModel() ObjectModel {
 	return en.Model
 }
-
 
 func (en *DefaultObjectEnabler) GetObjectInstance(idx int) ObjectInstance {
 	for _, o := range en.Instances {
@@ -125,37 +118,37 @@ func (en *DefaultObjectEnabler) SetObjectInstances(o []ObjectInstance) {
 	en.Instances = o
 }
 
-func (en *DefaultObjectEnabler) OnRead(instanceId int, resourceId int) (RequestValue, goap.CoapCode) {
+func (en *DefaultObjectEnabler) OnRead(instanceId int, resourceId int, req Request) Response {
 	if en.Handler != nil {
-		return en.Handler.OnRead(instanceId, resourceId)
+		return en.Handler.OnRead(instanceId, resourceId, req)
 	}
-	return nil, 0
+	return nil
 }
 
-func (en *DefaultObjectEnabler) OnDelete(instanceId int) goap.CoapCode {
+func (en *DefaultObjectEnabler) OnDelete(instanceId int, req Request) Response {
 	if en.Handler != nil {
-		return en.Handler.OnDelete(instanceId)
+		return en.Handler.OnDelete(instanceId, req)
 	}
-	return goap.COAPCODE_404_NOT_FOUND
+	return response.NotFound()
 }
 
-func (en *DefaultObjectEnabler) OnWrite(instanceId int, resourceId int) goap.CoapCode {
+func (en *DefaultObjectEnabler) OnWrite(instanceId int, resourceId int, req Request) Response {
 	if en.Handler != nil {
-		return en.Handler.OnWrite(instanceId, resourceId)
+		return en.Handler.OnWrite(instanceId, resourceId, req)
 	}
-	return goap.COAPCODE_404_NOT_FOUND
+	return response.NotFound()
 }
 
-func (en *DefaultObjectEnabler) OnExecute(instanceId int, resourceId int) goap.CoapCode {
+func (en *DefaultObjectEnabler) OnExecute(instanceId int, resourceId int, req Request) Response {
 	if en.Handler != nil {
-		return en.Handler.OnExecute(instanceId, resourceId)
+		return en.Handler.OnExecute(instanceId, resourceId, req)
 	}
-	return goap.COAPCODE_404_NOT_FOUND
+	return response.NotFound()
 }
 
-func (en *DefaultObjectEnabler) OnCreate(instanceId int, resourceId int) goap.CoapCode {
+func (en *DefaultObjectEnabler) OnCreate(instanceId int, resourceId int, req Request) Response {
 	if en.Handler != nil {
-		return en.Handler.OnCreate(instanceId, resourceId)
+		return en.Handler.OnCreate(instanceId, resourceId, req)
 	}
-	return goap.COAPCODE_404_NOT_FOUND
+	return response.NotFound()
 }

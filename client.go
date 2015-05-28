@@ -4,6 +4,7 @@ import (
 	"errors"
 	. "github.com/zubairhamed/go-lwm2m/api"
 	"github.com/zubairhamed/go-lwm2m/core"
+	"github.com/zubairhamed/go-lwm2m/core/request"
 	. "github.com/zubairhamed/goap"
 	"log"
 	"net"
@@ -57,9 +58,6 @@ func (c *DefaultClient) Register(name string) string {
 
 		path = resp.GetMessage().GetLocationPath()
 	}
-
-	//    CallEvent(c.evtOnRegistered, EmptyEventPayload())
-
 	c.path = path
 
 	return path
@@ -113,7 +111,7 @@ func (c *DefaultClient) EnableObject(t LWM2MObjectType, e RequestHandler) error 
 		en := &core.DefaultObjectEnabler{
 			Handler:   e,
 			Instances: []ObjectInstance{},
-			Model: model,
+			Model:     model,
 		}
 		c.enabledObjects[t] = en
 
@@ -207,7 +205,9 @@ func (c *DefaultClient) handleCreateRequest(req *CoapRequest) *CoapResponse {
 	msg.Payload = NewEmptyPayload()
 
 	if enabler != nil && enabler.GetHandler() != nil {
-		msg.Code = enabler.OnCreate(instanceId, resourceId)
+		lwReq := request.Default(req, OPERATIONTYPE_CREATE)
+		response := enabler.OnCreate(instanceId, resourceId, lwReq)
+		msg.Code = response.GetResponseCode()
 	} else {
 		msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 	}
@@ -236,14 +236,19 @@ func (c *DefaultClient) handleReadRequest(req *CoapRequest) *CoapResponse {
 		resource := model.GetResource(resourceId)
 
 		if resource == nil {
+			// TODO: Return TLV of Object Instance
 			msg.Code = COAPCODE_404_NOT_FOUND
-		}
-		if !core.IsReadableResource(resource) {
-			msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 		} else {
-			val, _ := enabler.OnRead(instanceId, resourceId)
-			msg.Code = COAPCODE_205_CONTENT
-			msg.Payload = NewBytesPayload(val.GetBytes())
+			if !core.IsReadableResource(resource) {
+				msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
+			} else {
+				lwReq := request.Default(req, OPERATIONTYPE_READ)
+				response := enabler.OnRead(instanceId, resourceId, lwReq)
+
+				val := response.GetResponseValue()
+				msg.Code = COAPCODE_205_CONTENT
+				msg.Payload = NewBytesPayload(val.GetBytes())
+			}
 		}
 	} else {
 		msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
@@ -263,7 +268,10 @@ func (c *DefaultClient) handleDeleteRequest(req *CoapRequest) *CoapResponse {
 	msg.Payload = NewEmptyPayload()
 
 	if enabler != nil && enabler.GetHandler() != nil {
-		msg.Code = enabler.OnDelete(instanceId)
+		lwReq := request.Default(req, OPERATIONTYPE_DELETE)
+
+		response := enabler.OnDelete(instanceId, lwReq)
+		msg.Code = response.GetResponseCode()
 	} else {
 		msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 	}
@@ -283,6 +291,8 @@ func (c *DefaultClient) handleWriteRequest(req *CoapRequest) *CoapResponse {
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
 
+	log.Println(req.GetMessage().Payload)
+
 	var resourceId = -1
 
 	if attrResource != "" {
@@ -300,13 +310,16 @@ func (c *DefaultClient) handleWriteRequest(req *CoapRequest) *CoapResponse {
 		model := enabler.GetModel()
 		resource := model.GetResource(resourceId)
 		if resource == nil {
+			// TODO Write to Object Instance
 			msg.Code = COAPCODE_404_NOT_FOUND
-		}
-
-		if !core.IsWritableResource(resource) {
-			msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 		} else {
-			msg.Code = enabler.OnWrite(instanceId, resourceId)
+			if !core.IsWritableResource(resource) {
+				msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
+			} else {
+				lwReq := request.Default(req, OPERATIONTYPE_WRITE)
+				response := enabler.OnWrite(instanceId, resourceId, lwReq)
+				msg.Code = response.GetResponseCode()
+			}
 		}
 	} else {
 		msg.Code = COAPCODE_404_NOT_FOUND
@@ -332,7 +345,6 @@ func (c *DefaultClient) handleExecuteRequest(req *CoapRequest) *CoapResponse {
 	msg.Token = req.GetMessage().Token
 	msg.Payload = NewEmptyPayload()
 
-
 	if enabler != nil && enabler.GetHandler() != nil {
 		model := enabler.GetModel()
 		resource := model.GetResource(resourceId)
@@ -341,10 +353,12 @@ func (c *DefaultClient) handleExecuteRequest(req *CoapRequest) *CoapResponse {
 		}
 
 		if !core.IsExecutableResource(resource) {
+			log.Println("ExecutableResource?", resource.GetOperations())
 			msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 		} else {
-			log.Println("Executing OnExecute")
-			msg.Code = enabler.OnExecute(instanceId, resourceId)
+			lwReq := request.Default(req, OPERATIONTYPE_EXECUTE)
+			response := enabler.OnExecute(instanceId, resourceId, lwReq)
+			msg.Code = response.GetResponseCode()
 		}
 	} else {
 		msg.Code = COAPCODE_404_NOT_FOUND

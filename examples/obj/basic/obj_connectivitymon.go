@@ -3,8 +3,8 @@ package basic
 import (
 	. "github.com/zubairhamed/go-lwm2m/api"
 	"github.com/zubairhamed/go-lwm2m/core"
+	"github.com/zubairhamed/go-lwm2m/core/response"
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
-	"github.com/zubairhamed/goap"
 )
 
 type ConnectivityMonitoring struct {
@@ -12,24 +12,24 @@ type ConnectivityMonitoring struct {
 	Data  *core.ObjectsData
 }
 
-func (o *ConnectivityMonitoring) OnExecute(instanceId int, resourceId int) goap.CoapCode {
-	return goap.COAPCODE_401_UNAUTHORIZED
+func (o *ConnectivityMonitoring) OnExecute(instanceId int, resourceId int, req Request) Response {
+	return response.Unauthorized()
 }
 
-func (o *ConnectivityMonitoring) OnCreate(instanceId int, resourceId int) goap.CoapCode {
-	return goap.COAPCODE_401_UNAUTHORIZED
+func (o *ConnectivityMonitoring) OnCreate(instanceId int, resourceId int, req Request) Response {
+	return response.Unauthorized()
 }
 
-func (o *ConnectivityMonitoring) OnDelete(instanceId int) goap.CoapCode {
-	return goap.COAPCODE_401_UNAUTHORIZED
+func (o *ConnectivityMonitoring) OnDelete(instanceId int, req Request) Response {
+	return response.Unauthorized()
 }
 
-func (o *ConnectivityMonitoring) OnRead(instanceId int, resourceId int) (ResponseValue, goap.CoapCode) {
-	return core.NewEmptyValue(), goap.COAPCODE_401_UNAUTHORIZED
+func (o *ConnectivityMonitoring) OnRead(instanceId int, resourceId int, req Request) Response {
+	return response.Unauthorized()
 }
 
-func (o *ConnectivityMonitoring) OnWrite(instanceId int, resourceId int) goap.CoapCode {
-	return goap.COAPCODE_401_UNAUTHORIZED
+func (o *ConnectivityMonitoring) OnWrite(instanceId int, resourceId int, req Request) Response {
+	return response.Unauthorized()
 }
 
 func NewExampleConnectivityMonitoringObject(reg Registry) *ConnectivityMonitoring {

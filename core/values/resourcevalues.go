@@ -1,4 +1,4 @@
-package core
+package values
 
 import (
 	"bytes"
@@ -157,14 +157,14 @@ func (v *EmptyValue) GetStringValue() string {
 	return ""
 }
 
-func NewStringValue(v ...string) ResponseValue {
+func String(v ...string) ResponseValue {
 	if len(v) > 1 {
 		vs := []ResponseValue{}
 
 		for _, o := range v {
-			vs = append(vs, NewStringValue(o))
+			vs = append(vs, String(o))
 		}
-		return NewMultipleResourceInstanceValue(vs)
+		return MultipleResourceInstance(vs)
 	} else {
 		return &StringValue{
 			value: v[0],
@@ -172,14 +172,14 @@ func NewStringValue(v ...string) ResponseValue {
 	}
 }
 
-func NewIntegerValue(v ...int) ResponseValue {
+func Integer(v ...int) ResponseValue {
 	if len(v) > 1 {
 		vs := []ResponseValue{}
 
 		for _, o := range v {
-			vs = append(vs, NewIntegerValue(o))
+			vs = append(vs, Integer(o))
 		}
-		return NewMultipleResourceInstanceValue(vs)
+		return MultipleResourceInstance(vs)
 	} else {
 		return &IntegerValue{
 			value: v[0],
@@ -187,14 +187,14 @@ func NewIntegerValue(v ...int) ResponseValue {
 	}
 }
 
-func NewTimeValue(v ...time.Time) ResponseValue {
+func Time(v ...time.Time) ResponseValue {
 	if len(v) > 1 {
 		vs := []ResponseValue{}
 
 		for _, o := range v {
-			vs = append(vs, NewTimeValue(o))
+			vs = append(vs, Time(o))
 		}
-		return NewMultipleResourceInstanceValue(vs)
+		return MultipleResourceInstance(vs)
 	} else {
 		return &TimeValue{
 			value: v[0],
@@ -202,14 +202,14 @@ func NewTimeValue(v ...time.Time) ResponseValue {
 	}
 }
 
-func NewFloatValue(v ...float64) ResponseValue {
+func Float(v ...float64) ResponseValue {
 	if len(v) > 1 {
 		vs := []ResponseValue{}
 
 		for _, o := range v {
-			vs = append(vs, NewFloatValue(o))
+			vs = append(vs, Float(o))
 		}
-		return NewMultipleResourceInstanceValue(vs)
+		return MultipleResourceInstance(vs)
 	} else {
 		return &FloatValue{
 			value: v[0],
@@ -217,14 +217,14 @@ func NewFloatValue(v ...float64) ResponseValue {
 	}
 }
 
-func NewBooleanValue(v ...bool) ResponseValue {
+func Boolean(v ...bool) ResponseValue {
 	if len(v) > 1 {
 		vs := []ResponseValue{}
 
 		for _, o := range v {
-			vs = append(vs, NewBooleanValue(o))
+			vs = append(vs, Boolean(o))
 		}
-		return NewMultipleResourceInstanceValue(vs)
+		return MultipleResourceInstance(vs)
 	} else {
 		return &BooleanValue{
 			value: v[0],
@@ -232,18 +232,18 @@ func NewBooleanValue(v ...bool) ResponseValue {
 	}
 }
 
-func NewEmptyValue() ResponseValue {
+func Empty() ResponseValue {
 	return &EmptyValue{}
 }
 
-func NewMultipleResourceInstanceValue(v []ResponseValue) ResponseValue {
+func MultipleResourceInstance(v []ResponseValue) ResponseValue {
 	return &MultipleResourceInstanceValue{
 		values: v,
 	}
 }
 
 ////////////////////////////////////////////////////////////////////
-func NewTlvValue(b []byte) ResponseValue {
+func Tlv(b []byte) ResponseValue {
 	return &TlvValue{
 		content: b,
 	}
@@ -276,24 +276,3 @@ func (v *TlvValue) GetType() ValueTypeCode {
 func (v *TlvValue) GetValue() interface{} {
 	return v.content
 }
-
-////////////////////////////////////////////////////////////////////
-/// ERROR CODE REPLIES
-////////////////////////////////////////////////////////////////////
-
-/*
-   2.01 Created
-   2.02 Deleted
-   2.04 Changed
-   2.05 Content
-
-   4.00 Bad Request
-   4.01 Unauthorized
-   4.04 Not Found
-   4.05 Method Not Allowed
-   4.09 Conflict
-
-
-
-
-*/
