@@ -4,10 +4,10 @@ import (
 	"errors"
 	. "github.com/zubairhamed/go-lwm2m/api"
 	"github.com/zubairhamed/go-lwm2m/core"
+	"github.com/zubairhamed/go-lwm2m/core/request"
 	. "github.com/zubairhamed/goap"
 	"log"
 	"net"
-	"github.com/zubairhamed/go-lwm2m/core/request"
 )
 
 func NewLWM2MClient(local string, remote string) *DefaultClient {

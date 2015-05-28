@@ -2,8 +2,8 @@ package response
 
 import (
 	. "github.com/zubairhamed/go-lwm2m/api"
-	. "github.com/zubairhamed/goap"
 	"github.com/zubairhamed/go-lwm2m/core/values"
+	. "github.com/zubairhamed/goap"
 )
 
 // 201 Created

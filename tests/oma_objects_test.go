@@ -4,12 +4,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/zubairhamed/go-lwm2m"
 	"github.com/zubairhamed/go-lwm2m/api"
+	"github.com/zubairhamed/go-lwm2m/core/request"
 	"github.com/zubairhamed/go-lwm2m/examples/obj/basic"
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
 	"github.com/zubairhamed/go-lwm2m/registry"
 	"testing"
 	"time"
-	"github.com/zubairhamed/go-lwm2m/core/request"
 )
 
 func TestExampleObjects(t *testing.T) {

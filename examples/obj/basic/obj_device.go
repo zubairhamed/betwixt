@@ -3,10 +3,10 @@ package basic
 import (
 	. "github.com/zubairhamed/go-lwm2m/api"
 	"github.com/zubairhamed/go-lwm2m/core"
-	"github.com/zubairhamed/go-lwm2m/objects/oma"
-	"time"
 	"github.com/zubairhamed/go-lwm2m/core/response"
 	"github.com/zubairhamed/go-lwm2m/core/values"
+	"github.com/zubairhamed/go-lwm2m/objects/oma"
+	"time"
 )
 
 type Device struct {
