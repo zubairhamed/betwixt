@@ -33,7 +33,7 @@ type IPSOSmartObjects struct {
 func (o *IPSOSmartObjects) Initialize() {
 	o.models = make(map[LWM2MObjectType]ObjectModel)
 
-	// This IPSO object is a generzubairhamed@gmail.comic object that can be used with any kind of digital input interface.
+	// This IPSO object is a generic object that can be used with any kind of digital input interface.
 	o.Add(
 		&DefaultObjectModel{Name: "IPSO Digital Input", Id: 3200, Multiple: true, Mandatory: false, Description: "Generic digital input for non-specific sensors"},
 		&DefaultResourceModel{Id: 5500, Name: "Digital Input State", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_BOOLEAN, RangeOrEnums: "", Units: "", Description: "The current state of a digital input."},

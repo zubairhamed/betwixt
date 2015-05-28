@@ -159,3 +159,42 @@ func (en *DefaultObjectEnabler) OnCreate(instanceId int, resourceId int) goap.Co
 	}
 	return goap.COAPCODE_404_NOT_FOUND
 }
+
+func NewLWM2MRequest(coap goap.CoapRequest, op OperationType) Request {
+	return &LWM2MRequest {
+		coap: coap,
+		op: op,
+	}
+}
+
+func NewNilLWM2MRequest(op OperationType) Request {
+	return &LWM2MRequest {
+		op: op,
+	}
+}
+
+type NilLWM2MRequest struct {
+	op 		OperationType
+}
+
+type LWM2MRequest struct {
+	coap	goap.CoapRequest
+	op 		OperationType
+}
+
+func (r *LWM2MRequest) GetPath()  string {
+	return r.coap.GetMessage().GetUriPath()
+}
+
+func (r *LWM2MRequest) GetMessage() *goap.Message {
+	return r.coap.GetMessage()
+}
+
+func (r *LWM2MRequest) GetOperationType() OperationType {
+	return r.op
+}
+
+func (r *LWM2MRequest) GetCoapRequest() goap.CoapRequest {
+	return r.coap
+}
+

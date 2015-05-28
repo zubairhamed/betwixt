@@ -306,7 +306,8 @@ func (c *DefaultClient) handleWriteRequest(req *CoapRequest) *CoapResponse {
 		if !core.IsWritableResource(resource) {
 			msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 		} else {
-			msg.Code = enabler.OnWrite(instanceId, resourceId)
+			lwReq := core.NewLWM2MRequest(req, OPERATIONTYPE_WRITE)
+			msg.Code = enabler.OnWrite(instanceId, resourceId, lwReq)
 		}
 	} else {
 		msg.Code = COAPCODE_404_NOT_FOUND

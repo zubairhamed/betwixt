@@ -53,3 +53,20 @@ const (
 	BINDINGMODE_UDP_AND_SMS 				BindingMode = "US"
 	BINDINGMODE_UDP_WITH_QUEUE_MODE_AND_SMS BindingMode = "UQS"
 )
+
+type OperationType byte
+const (
+	OPERATIONTYPE_REGISTER			OperationType = 0
+	OPERATIONTYPE_UPDATE			OperationType = 1
+	OPERATIONTYPE_DEREGISTER		OperationType = 2
+	OPERATIONTYPE_READ				OperationType = 3
+	OPERATIONTYPE_DISCOVER			OperationType = 4
+	OPERATIONTYPE_WRITE				OperationType = 5
+	OPERATIONTYPE_WRITE_ATTRIBUTES	OperationType = 6
+	OPERATIONTYPE_EXECUTE			OperationType = 7
+	OPERATIONTYPE_CREATE			OperationType = 8
+	OPERATIONTYPE_DELETE			OperationType = 9
+	OPERATIONTYPE_OBSERVE 			OperationType = 10
+	OPERATIONTYPE_NOTIFY 			OperationType = 11
+	OPERATIONTYPE_CANCEL_OBSERVE 	OperationType = 12
+)
