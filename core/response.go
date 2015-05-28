@@ -4,6 +4,54 @@ import (
 	. "github.com/zubairhamed/go-lwm2m/api"
 )
 
+func NewMethodNotAllowedResponse() (Response) {
+	return &MethodNotAllowedResponse{}
+}
+
+type MethodNotAllowedResponse struct {
+
+}
+
+func (r *MethodNotAllowedResponse) GetResponseCode() CoapCode {
+	return COAPCODE_405_METHOD_NOT_ALLOWED
+}
+
+func (r *MethodNotAllowedResponse) GetResponseValue() ResponseValue {
+	return NewEmptyValue()
+}
+
+func NewConflictResponse() (Response) {
+	return &ConflictResponse{}
+}
+
+type ConflictResponse struct {
+
+}
+
+func (r *ConflictResponse) GetResponseCode() CoapCode {
+	return COAPCODE_409_CONFLICT
+}
+
+func (r *ConflictResponse) GetResponseValue() ResponseValue {
+	return NewEmptyValue()
+}
+
+func NewBadRequestResponse() Response {
+	return &BadRequestResponse{}
+}
+
+type BadRequestResponse struct {
+
+}
+
+func (r *BadRequestResponse) GetResponseCode() CoapCode {
+	return COAPCODE_400_BAD_REQUEST
+}
+
+func (r *BadRequestResponse) GetResponseValue() ResponseValue {
+	return NewEmptyValue()
+}
+
 func NewNotFoundResponse() Response {
 	return &NotFoundResponse{}
 }
