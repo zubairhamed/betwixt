@@ -31,20 +31,16 @@ type ObjectEnabler interface {
 	GetHandler() RequestHandler
 	GetModel() ObjectModel
 
-	OnRead(int, int,  Request) (RequestValue, goap.CoapCode)
-	OnDelete(int,  Request) goap.CoapCode
+	OnRead(int, int, Request) (RequestValue, goap.CoapCode)
+	OnDelete(int, Request) goap.CoapCode
 	OnWrite(int, int, Request) goap.CoapCode
-	OnCreate(int, int,  Request) goap.CoapCode
-	OnExecute(int, int,  Request) goap.CoapCode
+	OnCreate(int, int, Request) goap.CoapCode
+	OnExecute(int, int, Request) goap.CoapCode
 }
 
 type ObjectInstance interface {
-	GetResource(int) Resource
 	GetId() int
 	GetTypeId() LWM2MObjectType
-}
-
-type Resource interface {
 }
 
 type ModelSource interface {

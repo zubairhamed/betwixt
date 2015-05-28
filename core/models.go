@@ -67,18 +67,12 @@ func NewObjectInstance(id int, t LWM2MObjectType) ObjectInstance {
 	return &DefaultObjectInstance{
 		Id:        id,
 		TypeId:    t,
-		Resources: make(map[int]Resource),
 	}
 }
 
 type DefaultObjectInstance struct {
 	Id        int
 	TypeId    LWM2MObjectType
-	Resources map[int]Resource
-}
-
-func (o *DefaultObjectInstance) GetResource(id int) Resource {
-	return o.Resources[id]
 }
 
 func (o *DefaultObjectInstance) GetId() int {
@@ -96,7 +90,7 @@ type DefaultResource struct {
 type DefaultObjectEnabler struct {
 	Handler   RequestHandler
 	Instances []ObjectInstance
-	Model 	  ObjectModel
+	Model     ObjectModel
 }
 
 func (en *DefaultObjectEnabler) GetHandler() RequestHandler {
@@ -106,7 +100,6 @@ func (en *DefaultObjectEnabler) GetHandler() RequestHandler {
 func (en *DefaultObjectEnabler) GetModel() ObjectModel {
 	return en.Model
 }
-
 
 func (en *DefaultObjectEnabler) GetObjectInstance(idx int) ObjectInstance {
 	for _, o := range en.Instances {
@@ -161,18 +154,18 @@ func (en *DefaultObjectEnabler) OnCreate(instanceId int, resourceId int, req Req
 }
 
 func NewDefaultRequest(coap *goap.CoapRequest, op OperationType) Request {
-	return &DefaultRequest {
+	return &DefaultRequest{
 		coap: coap,
-		op: op,
+		op:   op,
 	}
 }
 
 type DefaultRequest struct {
-	coap	*goap.CoapRequest
-	op 		OperationType
+	coap *goap.CoapRequest
+	op   OperationType
 }
 
-func (r *DefaultRequest) GetPath()  string {
+func (r *DefaultRequest) GetPath() string {
 	return r.coap.GetMessage().GetUriPath()
 }
 
@@ -189,16 +182,16 @@ func (r *DefaultRequest) GetCoapRequest() *goap.CoapRequest {
 }
 
 func NewNilRequest(op OperationType) Request {
-	return &NilRequest {
+	return &NilRequest{
 		op: op,
 	}
 }
 
 type NilRequest struct {
-	op 		OperationType
+	op OperationType
 }
 
-func (r *NilRequest) GetPath()  string {
+func (r *NilRequest) GetPath() string {
 	return ""
 }
 

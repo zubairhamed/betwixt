@@ -2,18 +2,18 @@ package tests
 
 import (
 	"github.com/stretchr/testify/assert"
+	"github.com/zubairhamed/go-lwm2m"
 	"github.com/zubairhamed/go-lwm2m/core"
+	"github.com/zubairhamed/go-lwm2m/objects/oma"
+	"github.com/zubairhamed/go-lwm2m/registry"
 	"testing"
 	"time"
-	"github.com/zubairhamed/go-lwm2m"
-	"github.com/zubairhamed/go-lwm2m/registry"
-	"github.com/zubairhamed/go-lwm2m/objects/oma"
 )
 
 func TestGetValueByteLength(t *testing.T) {
-	test1 := [] struct {
-		input 		interface{}
-		expected	uint32
+	test1 := []struct {
+		input    interface{}
+		expected uint32
 	}{
 		{-128, 1},
 		{127, 1},
@@ -38,8 +38,8 @@ func TestGetValueByteLength(t *testing.T) {
 		assert.Equal(t, v, uint32(c.expected), "Wrong expected length returned")
 	}
 
-	test2 := [] struct {
-		input 		interface{}
+	test2 := []struct {
+		input interface{}
 	}{
 		{uint(1)},
 		{uint16(1)},
@@ -55,9 +55,9 @@ func TestGetValueByteLength(t *testing.T) {
 
 func TestObjectData(t *testing.T) {
 
-	tests := [] struct {
-		path 	string
-		value 	interface{}
+	tests := []struct {
+		path  string
+		value interface{}
 	}{
 		{"/0/0", 1},
 		{"/0/1", 0},
@@ -89,7 +89,7 @@ func TestObjectData(t *testing.T) {
 
 	for _, c := range tests {
 		data.Put(c.path, c.value)
-		assert.Equal(t, data.Get(c.path), c.value, "Value get not equal to put: (",  c.path, "vs", c.value)
+		assert.Equal(t, data.Get(c.path), c.value, "Value get not equal to put: (", c.path, "vs", c.value)
 	}
 
 	assert.Equal(t, data.Length(), 22, "Number of items in ObjectData. Expected", 22, "actual", data.Length())

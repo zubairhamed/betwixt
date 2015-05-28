@@ -25,7 +25,7 @@ func (o *Security) OnDelete(instanceId int, req Request) goap.CoapCode {
 }
 
 func (o *Security) OnRead(instanceId int, resourceId int, req Request) (ResponseValue, goap.CoapCode) {
-	return core.NewEmptyValue(),  goap.COAPCODE_401_UNAUTHORIZED
+	return core.NewEmptyValue(), goap.COAPCODE_401_UNAUTHORIZED
 }
 
 func (o *Security) OnWrite(instanceId int, resourceId int, req Request) goap.CoapCode {
