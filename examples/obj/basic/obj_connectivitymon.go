@@ -12,23 +12,23 @@ type ConnectivityMonitoring struct {
 	Data  *core.ObjectsData
 }
 
-func (o *ConnectivityMonitoring) OnExecute(instanceId int, resourceId int) goap.CoapCode {
+func (o *ConnectivityMonitoring) OnExecute(instanceId int, resourceId int, req Request) goap.CoapCode {
 	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
-func (o *ConnectivityMonitoring) OnCreate(instanceId int, resourceId int) goap.CoapCode {
+func (o *ConnectivityMonitoring) OnCreate(instanceId int, resourceId int, req Request) goap.CoapCode {
 	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
-func (o *ConnectivityMonitoring) OnDelete(instanceId int) goap.CoapCode {
+func (o *ConnectivityMonitoring) OnDelete(instanceId int, req Request) goap.CoapCode {
 	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
-func (o *ConnectivityMonitoring) OnRead(instanceId int, resourceId int) (ResponseValue, goap.CoapCode) {
+func (o *ConnectivityMonitoring) OnRead(instanceId int, resourceId int, req Request) (ResponseValue, goap.CoapCode) {
 	return core.NewEmptyValue(), goap.COAPCODE_401_UNAUTHORIZED
 }
 
-func (o *ConnectivityMonitoring) OnWrite(instanceId int, resourceId int) goap.CoapCode {
+func (o *ConnectivityMonitoring) OnWrite(instanceId int, resourceId int, req Request) goap.CoapCode {
 	return goap.COAPCODE_401_UNAUTHORIZED
 }
 

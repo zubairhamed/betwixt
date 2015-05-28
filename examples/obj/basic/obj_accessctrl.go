@@ -12,23 +12,23 @@ type AccessControl struct {
 	Data  *core.ObjectsData
 }
 
-func (o *AccessControl) OnExecute(instanceId int, resourceId int) goap.CoapCode {
+func (o *AccessControl) OnExecute(instanceId int, resourceId int, req Request) goap.CoapCode {
 	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
-func (o *AccessControl) OnCreate(instanceId int, resourceId int) goap.CoapCode {
+func (o *AccessControl) OnCreate(instanceId int, resourceId int, req Request) goap.CoapCode {
 	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
-func (o *AccessControl) OnDelete(instanceId int) goap.CoapCode {
+func (o *AccessControl) OnDelete(instanceId int, req Request) goap.CoapCode {
 	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
-func (o *AccessControl) OnRead(instanceId int, resourceId int) (ResponseValue, goap.CoapCode) {
+func (o *AccessControl) OnRead(instanceId int, resourceId int, req Request) (ResponseValue, goap.CoapCode) {
 	return core.NewEmptyValue(), goap.COAPCODE_401_UNAUTHORIZED
 }
 
-func (o *AccessControl) OnWrite(instanceId int, resourceId int) goap.CoapCode {
+func (o *AccessControl) OnWrite(instanceId int, resourceId int, req Request) goap.CoapCode {
 	return goap.COAPCODE_401_UNAUTHORIZED
 }
 

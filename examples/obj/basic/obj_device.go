@@ -13,19 +13,19 @@ type Device struct {
 	Data  *core.ObjectsData
 }
 
-func (o *Device) OnExecute(instanceId int, resourceId int) goap.CoapCode {
+func (o *Device) OnExecute(instanceId int, resourceId int, req Request) goap.CoapCode {
 	return goap.COAPCODE_204_CHANGED
 }
 
-func (o *Device) OnCreate(instanceId int, resourceId int) goap.CoapCode {
+func (o *Device) OnCreate(instanceId int, resourceId int, req Request) goap.CoapCode {
 	return goap.COAPCODE_201_CREATED
 }
 
-func (o *Device) OnDelete(instanceId int) goap.CoapCode {
+func (o *Device) OnDelete(instanceId int, req Request) goap.CoapCode {
 	return goap.COAPCODE_202_DELETED
 }
 
-func (o *Device) OnRead(instanceId int, resourceId int) (ResponseValue, goap.CoapCode) {
+func (o *Device) OnRead(instanceId int, resourceId int, req Request) (ResponseValue, goap.CoapCode) {
 	if resourceId == -1 {
 		// Read Object Instance
 	} else {
@@ -98,7 +98,7 @@ func (o *Device) OnRead(instanceId int, resourceId int) (ResponseValue, goap.Coa
 	return core.NewEmptyValue(), goap.COAPCODE_404_NOT_FOUND
 }
 
-func (o *Device) OnWrite(instanceId int, resourceId int) goap.CoapCode {
+func (o *Device) OnWrite(instanceId int, resourceId int, req Request) goap.CoapCode {
 	return goap.COAPCODE_404_NOT_FOUND
 }
 

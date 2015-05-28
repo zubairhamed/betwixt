@@ -207,7 +207,8 @@ func (c *DefaultClient) handleCreateRequest(req *CoapRequest) *CoapResponse {
 	msg.Payload = NewEmptyPayload()
 
 	if enabler != nil && enabler.GetHandler() != nil {
-		msg.Code = enabler.OnCreate(instanceId, resourceId)
+        lwReq := core.NewDefaultRequest(req, OPERATIONTYPE_CREATE)
+		msg.Code = enabler.OnCreate(instanceId, resourceId, lwReq)
 	} else {
 		msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 	}
@@ -241,7 +242,8 @@ func (c *DefaultClient) handleReadRequest(req *CoapRequest) *CoapResponse {
 		if !core.IsReadableResource(resource) {
 			msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 		} else {
-			val, _ := enabler.OnRead(instanceId, resourceId)
+            lwReq := core.NewDefaultRequest(req, OPERATIONTYPE_READ)
+			val, _ := enabler.OnRead(instanceId, resourceId, lwReq)
 			msg.Code = COAPCODE_205_CONTENT
 			msg.Payload = NewBytesPayload(val.GetBytes())
 		}
@@ -263,7 +265,8 @@ func (c *DefaultClient) handleDeleteRequest(req *CoapRequest) *CoapResponse {
 	msg.Payload = NewEmptyPayload()
 
 	if enabler != nil && enabler.GetHandler() != nil {
-		msg.Code = enabler.OnDelete(instanceId)
+        lwReq := core.NewDefaultRequest(req, OPERATIONTYPE_DELETE)
+		msg.Code = enabler.OnDelete(instanceId, lwReq)
 	} else {
 		msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 	}
@@ -306,7 +309,7 @@ func (c *DefaultClient) handleWriteRequest(req *CoapRequest) *CoapResponse {
 		if !core.IsWritableResource(resource) {
 			msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 		} else {
-			lwReq := core.NewLWM2MRequest(req, OPERATIONTYPE_WRITE)
+			lwReq := core.NewDefaultRequest(req, OPERATIONTYPE_WRITE)
 			msg.Code = enabler.OnWrite(instanceId, resourceId, lwReq)
 		}
 	} else {
@@ -344,8 +347,8 @@ func (c *DefaultClient) handleExecuteRequest(req *CoapRequest) *CoapResponse {
 		if !core.IsExecutableResource(resource) {
 			msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 		} else {
-			log.Println("Executing OnExecute")
-			msg.Code = enabler.OnExecute(instanceId, resourceId)
+            lwReq := core.NewDefaultRequest(req, OPERATIONTYPE_EXECUTE)
+			msg.Code = enabler.OnExecute(instanceId, resourceId, lwReq)
 		}
 	} else {
 		msg.Code = COAPCODE_404_NOT_FOUND

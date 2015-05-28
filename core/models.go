@@ -125,76 +125,91 @@ func (en *DefaultObjectEnabler) SetObjectInstances(o []ObjectInstance) {
 	en.Instances = o
 }
 
-func (en *DefaultObjectEnabler) OnRead(instanceId int, resourceId int) (RequestValue, goap.CoapCode) {
+func (en *DefaultObjectEnabler) OnRead(instanceId int, resourceId int, req Request) (RequestValue, goap.CoapCode) {
 	if en.Handler != nil {
-		return en.Handler.OnRead(instanceId, resourceId)
+		return en.Handler.OnRead(instanceId, resourceId, req)
 	}
 	return nil, 0
 }
 
-func (en *DefaultObjectEnabler) OnDelete(instanceId int) goap.CoapCode {
+func (en *DefaultObjectEnabler) OnDelete(instanceId int, req Request) goap.CoapCode {
 	if en.Handler != nil {
-		return en.Handler.OnDelete(instanceId)
+		return en.Handler.OnDelete(instanceId, req)
 	}
 	return goap.COAPCODE_404_NOT_FOUND
 }
 
-func (en *DefaultObjectEnabler) OnWrite(instanceId int, resourceId int) goap.CoapCode {
+func (en *DefaultObjectEnabler) OnWrite(instanceId int, resourceId int, req Request) goap.CoapCode {
 	if en.Handler != nil {
-		return en.Handler.OnWrite(instanceId, resourceId)
+		return en.Handler.OnWrite(instanceId, resourceId, req)
 	}
 	return goap.COAPCODE_404_NOT_FOUND
 }
 
-func (en *DefaultObjectEnabler) OnExecute(instanceId int, resourceId int) goap.CoapCode {
+func (en *DefaultObjectEnabler) OnExecute(instanceId int, resourceId int, req Request) goap.CoapCode {
 	if en.Handler != nil {
-		return en.Handler.OnExecute(instanceId, resourceId)
+		return en.Handler.OnExecute(instanceId, resourceId, req)
 	}
 	return goap.COAPCODE_404_NOT_FOUND
 }
 
-func (en *DefaultObjectEnabler) OnCreate(instanceId int, resourceId int) goap.CoapCode {
+func (en *DefaultObjectEnabler) OnCreate(instanceId int, resourceId int, req Request) goap.CoapCode {
 	if en.Handler != nil {
-		return en.Handler.OnCreate(instanceId, resourceId)
+		return en.Handler.OnCreate(instanceId, resourceId, req)
 	}
 	return goap.COAPCODE_404_NOT_FOUND
 }
 
-func NewLWM2MRequest(coap goap.CoapRequest, op OperationType) Request {
-	return &LWM2MRequest {
+func NewDefaultRequest(coap *goap.CoapRequest, op OperationType) Request {
+	return &DefaultRequest {
 		coap: coap,
 		op: op,
 	}
 }
 
-func NewNilLWM2MRequest(op OperationType) Request {
-	return &LWM2MRequest {
+type DefaultRequest struct {
+	coap	*goap.CoapRequest
+	op 		OperationType
+}
+
+func (r *DefaultRequest) GetPath()  string {
+	return r.coap.GetMessage().GetUriPath()
+}
+
+func (r *DefaultRequest) GetMessage() *goap.Message {
+	return r.coap.GetMessage()
+}
+
+func (r *DefaultRequest) GetOperationType() OperationType {
+	return r.op
+}
+
+func (r *DefaultRequest) GetCoapRequest() *goap.CoapRequest {
+	return r.coap
+}
+
+func NewNilRequest(op OperationType) Request {
+	return &NilRequest {
 		op: op,
 	}
 }
 
-type NilLWM2MRequest struct {
+type NilRequest struct {
 	op 		OperationType
 }
 
-type LWM2MRequest struct {
-	coap	goap.CoapRequest
-	op 		OperationType
+func (r *NilRequest) GetPath()  string {
+	return ""
 }
 
-func (r *LWM2MRequest) GetPath()  string {
-	return r.coap.GetMessage().GetUriPath()
+func (r *NilRequest) GetMessage() *goap.Message {
+	return nil
 }
 
-func (r *LWM2MRequest) GetMessage() *goap.Message {
-	return r.coap.GetMessage()
-}
-
-func (r *LWM2MRequest) GetOperationType() OperationType {
+func (r *NilRequest) GetOperationType() OperationType {
 	return r.op
 }
 
-func (r *LWM2MRequest) GetCoapRequest() goap.CoapRequest {
-	return r.coap
+func (r *NilRequest) GetCoapRequest() *goap.CoapRequest {
+	return nil
 }
-

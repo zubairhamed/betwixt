@@ -12,23 +12,23 @@ type Firmware struct {
 	Data  *core.ObjectsData
 }
 
-func (o *Firmware) OnExecute(instanceId int, resourceId int) goap.CoapCode {
+func (o *Firmware) OnExecute(instanceId int, resourceId int, req Request) goap.CoapCode {
 	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
-func (o *Firmware) OnCreate(instanceId int, resourceId int) goap.CoapCode {
+func (o *Firmware) OnCreate(instanceId int, resourceId int, req Request) goap.CoapCode {
 	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
-func (o *Firmware) OnDelete(instanceId int) goap.CoapCode {
+func (o *Firmware) OnDelete(instanceId int, req Request) goap.CoapCode {
 	return goap.COAPCODE_401_UNAUTHORIZED
 }
 
-func (o *Firmware) OnRead(instanceId int, resourceId int) (ResponseValue, goap.CoapCode) {
+func (o *Firmware) OnRead(instanceId int, resourceId int, req Request) (ResponseValue, goap.CoapCode) {
 	return core.NewEmptyValue(), goap.COAPCODE_401_UNAUTHORIZED
 }
 
-func (o *Firmware) OnWrite(instanceId int, resourceId int) goap.CoapCode {
+func (o *Firmware) OnWrite(instanceId int, resourceId int, req Request) goap.CoapCode {
 	return 0
 }
 

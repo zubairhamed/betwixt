@@ -8,6 +8,7 @@ import (
     "github.com/stretchr/testify/assert"
     "time"
     "github.com/zubairhamed/go-lwm2m/api"
+    "github.com/zubairhamed/go-lwm2m/core"
 )
 
 func TestExampleObjects(t *testing.T) {
@@ -86,7 +87,8 @@ func TestExampleObjects(t *testing.T) {
 
     for _, c := range test_obj_1 {
         en := client.GetObjectEnabler(c.typeId)
-        ret, _ := en.OnRead(c.instanceId, c.resourceId)
+        lwReq := core.NewNilRequest(api.OPERATIONTYPE_READ)
+        ret, _ := en.OnRead(c.instanceId, c.resourceId, lwReq)
         val := ret.GetValue()
 
         assert.Equal(t, val, c.expected, "Unexpected value returned for enabler OnRead: ", val, "vs", c.expected)
