@@ -1,21 +1,23 @@
 package api
 
-import "github.com/zubairhamed/goap"
+import . "github.com/zubairhamed/goap"
 
 type RequestHandler interface {
-	OnRead(int, int, Request) (ResponseValue, goap.CoapCode)
-	OnDelete(int, Request) goap.CoapCode
-	OnWrite(int, int, Request) goap.CoapCode
-	OnCreate(int, int, Request) goap.CoapCode
-	OnExecute(int, int, Request) goap.CoapCode
+	OnRead(int, int, Request) (ResponseValue, CoapCode)
+	OnDelete(int, Request) CoapCode
+	OnWrite(int, int, Request) CoapCode
+	OnCreate(int, int, Request) CoapCode
+	OnExecute(int, int, Request) CoapCode
 }
 
+/*
 type RequestValue interface {
 	GetBytes() []byte
 	GetType() ValueTypeCode
 	GetValue() interface{}
 	GetStringValue() string
 }
+*/
 
 type ResponseValue interface {
 	GetBytes() []byte
@@ -31,11 +33,11 @@ type ObjectEnabler interface {
 	GetHandler() RequestHandler
 	GetModel() ObjectModel
 
-	OnRead(int, int, Request) (RequestValue, goap.CoapCode)
-	OnDelete(int, Request) goap.CoapCode
-	OnWrite(int, int, Request) goap.CoapCode
-	OnCreate(int, int, Request) goap.CoapCode
-	OnExecute(int, int, Request) goap.CoapCode
+	OnRead(int, int, Request) (ResponseValue, CoapCode)
+	OnDelete(int, Request) CoapCode
+	OnWrite(int, int, Request) CoapCode
+	OnCreate(int, int, Request) CoapCode
+	OnExecute(int, int, Request) CoapCode
 }
 
 type ObjectInstance interface {
@@ -98,11 +100,11 @@ type LWM2MClient interface {
 
 type Request interface {
 	GetPath() string
-	GetMessage() *goap.Message
+	GetMessage() *Message
 	GetOperationType() OperationType
-	GetCoapRequest() *goap.CoapRequest
+	GetCoapRequest() *CoapRequest
 }
 
 type Response interface {
-
+	GetResponseCode() CoapCode
 }

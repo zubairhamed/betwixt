@@ -65,14 +65,14 @@ func (o *DefaultResourceModel) GetResourceType() ValueTypeCode {
 
 func NewObjectInstance(id int, t LWM2MObjectType) ObjectInstance {
 	return &DefaultObjectInstance{
-		Id:        id,
-		TypeId:    t,
+		Id:     id,
+		TypeId: t,
 	}
 }
 
 type DefaultObjectInstance struct {
-	Id        int
-	TypeId    LWM2MObjectType
+	Id     int
+	TypeId LWM2MObjectType
 }
 
 func (o *DefaultObjectInstance) GetId() int {
@@ -118,7 +118,7 @@ func (en *DefaultObjectEnabler) SetObjectInstances(o []ObjectInstance) {
 	en.Instances = o
 }
 
-func (en *DefaultObjectEnabler) OnRead(instanceId int, resourceId int, req Request) (RequestValue, goap.CoapCode) {
+func (en *DefaultObjectEnabler) OnRead(instanceId int, resourceId int, req Request) (ResponseValue, goap.CoapCode) {
 	if en.Handler != nil {
 		return en.Handler.OnRead(instanceId, resourceId, req)
 	}

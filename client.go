@@ -57,9 +57,6 @@ func (c *DefaultClient) Register(name string) string {
 
 		path = resp.GetMessage().GetLocationPath()
 	}
-
-	//    CallEvent(c.evtOnRegistered, EmptyEventPayload())
-
 	c.path = path
 
 	return path
