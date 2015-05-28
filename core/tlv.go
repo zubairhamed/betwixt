@@ -40,13 +40,14 @@ func TlvPayloadFromObjects(en ObjectEnabler, reg Registry) (ResponseValue, error
 		rsrcBuf := bytes.NewBuffer([]byte{})
 		for _, ri := range m.GetResources() {
 			if IsReadableResource(ri) {
-				ret, _ := en.OnRead(oi.GetId(), ri.GetId(), nil)
+				response := en.OnRead(oi.GetId(), ri.GetId(), nil)
 
+				val := response.GetResponseValue()
 				if ri.MultipleValuesAllowed() {
-					rsrcBuf.Write(ret.GetBytes())
+					rsrcBuf.Write(val.GetBytes())
 				} else {
 					if ri.GetResourceType() == VALUETYPE_INTEGER {
-						v, _ := TlvPayloadFromIntResource(ri, []int{ret.GetValue().(int)})
+						v, _ := TlvPayloadFromIntResource(ri, []int{val.GetValue().(int)})
 						rsrcBuf.Write(v.GetBytes())
 					}
 				}

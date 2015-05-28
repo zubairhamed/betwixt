@@ -118,39 +118,39 @@ func (en *DefaultObjectEnabler) SetObjectInstances(o []ObjectInstance) {
 	en.Instances = o
 }
 
-func (en *DefaultObjectEnabler) OnRead(instanceId int, resourceId int, req Request) (ResponseValue, goap.CoapCode) {
+func (en *DefaultObjectEnabler) OnRead(instanceId int, resourceId int, req Request) (Response) {
 	if en.Handler != nil {
 		return en.Handler.OnRead(instanceId, resourceId, req)
 	}
-	return nil, 0
+	return nil
 }
 
-func (en *DefaultObjectEnabler) OnDelete(instanceId int, req Request) goap.CoapCode {
+func (en *DefaultObjectEnabler) OnDelete(instanceId int, req Request) (Response) {
 	if en.Handler != nil {
 		return en.Handler.OnDelete(instanceId, req)
 	}
-	return goap.COAPCODE_404_NOT_FOUND
+	return NewNotFoundResponse()
 }
 
-func (en *DefaultObjectEnabler) OnWrite(instanceId int, resourceId int, req Request) goap.CoapCode {
+func (en *DefaultObjectEnabler) OnWrite(instanceId int, resourceId int, req Request) (Response) {
 	if en.Handler != nil {
 		return en.Handler.OnWrite(instanceId, resourceId, req)
 	}
-	return goap.COAPCODE_404_NOT_FOUND
+	return NewNotFoundResponse()
 }
 
-func (en *DefaultObjectEnabler) OnExecute(instanceId int, resourceId int, req Request) goap.CoapCode {
+func (en *DefaultObjectEnabler) OnExecute(instanceId int, resourceId int, req Request) (Response) {
 	if en.Handler != nil {
 		return en.Handler.OnExecute(instanceId, resourceId, req)
 	}
-	return goap.COAPCODE_404_NOT_FOUND
+	return NewNotFoundResponse()
 }
 
-func (en *DefaultObjectEnabler) OnCreate(instanceId int, resourceId int, req Request) goap.CoapCode {
+func (en *DefaultObjectEnabler) OnCreate(instanceId int, resourceId int, req Request) (Response) {
 	if en.Handler != nil {
 		return en.Handler.OnCreate(instanceId, resourceId, req)
 	}
-	return goap.COAPCODE_404_NOT_FOUND
+	return NewNotFoundResponse()
 }
 
 func NewDefaultRequest(coap *goap.CoapRequest, op OperationType) Request {

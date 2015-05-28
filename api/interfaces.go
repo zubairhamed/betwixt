@@ -1,13 +1,15 @@
 package api
 
-import . "github.com/zubairhamed/goap"
+import (
+	. "github.com/zubairhamed/goap"
+)
 
 type RequestHandler interface {
-	OnRead(int, int, Request) (ResponseValue, CoapCode)
-	OnDelete(int, Request) CoapCode
-	OnWrite(int, int, Request) CoapCode
-	OnCreate(int, int, Request) CoapCode
-	OnExecute(int, int, Request) CoapCode
+	OnRead(int, int, Request) (Response)
+	OnDelete(int, Request) (Response)
+	OnWrite(int, int, Request) (Response)
+	OnCreate(int, int, Request) (Response)
+	OnExecute(int, int, Request) (Response)
 }
 
 /*
@@ -33,11 +35,11 @@ type ObjectEnabler interface {
 	GetHandler() RequestHandler
 	GetModel() ObjectModel
 
-	OnRead(int, int, Request) (ResponseValue, CoapCode)
-	OnDelete(int, Request) CoapCode
-	OnWrite(int, int, Request) CoapCode
-	OnCreate(int, int, Request) CoapCode
-	OnExecute(int, int, Request) CoapCode
+	OnRead(int, int, Request) (Response)
+	OnDelete(int, Request) (Response)
+	OnWrite(int, int, Request) (Response)
+	OnCreate(int, int, Request) (Response)
+	OnExecute(int, int, Request) (Response)
 }
 
 type ObjectInstance interface {
@@ -107,4 +109,6 @@ type Request interface {
 
 type Response interface {
 	GetResponseCode() CoapCode
+	GetResponseValue() ResponseValue
 }
+

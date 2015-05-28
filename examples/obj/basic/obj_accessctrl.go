@@ -4,7 +4,6 @@ import (
 	. "github.com/zubairhamed/go-lwm2m/api"
 	"github.com/zubairhamed/go-lwm2m/core"
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
-	"github.com/zubairhamed/goap"
 )
 
 type AccessControl struct {
@@ -12,24 +11,24 @@ type AccessControl struct {
 	Data  *core.ObjectsData
 }
 
-func (o *AccessControl) OnExecute(instanceId int, resourceId int, req Request) goap.CoapCode {
-	return goap.COAPCODE_401_UNAUTHORIZED
+func (o *AccessControl) OnExecute(instanceId int, resourceId int, req Request) (Response) {
+	return core.NewUnauthorizedResponse()
 }
 
-func (o *AccessControl) OnCreate(instanceId int, resourceId int, req Request) goap.CoapCode {
-	return goap.COAPCODE_401_UNAUTHORIZED
+func (o *AccessControl) OnCreate(instanceId int, resourceId int, req Request) (Response) {
+	return core.NewUnauthorizedResponse()
 }
 
-func (o *AccessControl) OnDelete(instanceId int, req Request) goap.CoapCode {
-	return goap.COAPCODE_401_UNAUTHORIZED
+func (o *AccessControl) OnDelete(instanceId int, req Request) (Response) {
+	return core.NewUnauthorizedResponse()
 }
 
-func (o *AccessControl) OnRead(instanceId int, resourceId int, req Request) (ResponseValue, goap.CoapCode) {
-	return core.NewEmptyValue(), goap.COAPCODE_401_UNAUTHORIZED
+func (o *AccessControl) OnRead(instanceId int, resourceId int, req Request) (Response) {
+	return core.NewUnauthorizedResponse()
 }
 
-func (o *AccessControl) OnWrite(instanceId int, resourceId int, req Request) goap.CoapCode {
-	return goap.COAPCODE_401_UNAUTHORIZED
+func (o *AccessControl) OnWrite(instanceId int, resourceId int, req Request) (Response) {
+	return core.NewUnauthorizedResponse()
 }
 
 func NewExampleAccessControlObject(reg Registry) *AccessControl {
