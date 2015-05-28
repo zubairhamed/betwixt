@@ -82,6 +82,7 @@ func TestExampleObjects(t *testing.T) {
 		{0, 10, 15, oma.OBJECT_LWM2M_DEVICE},
 		// {0, 11, []int{0}, oma.OBJECT_LWM2M_DEVICE},
 		{0, 13, time.Unix(1367491215, 0), oma.OBJECT_LWM2M_DEVICE},
+		{0, 14, "+02:00", oma.OBJECT_LWM2M_DEVICE},
 		{0, 15, "+02:00", oma.OBJECT_LWM2M_DEVICE},
 		{0, 16, "U", oma.OBJECT_LWM2M_DEVICE},
 	}

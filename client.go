@@ -236,17 +236,19 @@ func (c *DefaultClient) handleReadRequest(req *CoapRequest) *CoapResponse {
 		resource := model.GetResource(resourceId)
 
 		if resource == nil {
+			// TODO: Return TLV of Object Instance
 			msg.Code = COAPCODE_404_NOT_FOUND
-		}
-		if !core.IsReadableResource(resource) {
-			msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 		} else {
-			lwReq := request.NewDefaultRequest(req, OPERATIONTYPE_READ)
-			response := enabler.OnRead(instanceId, resourceId, lwReq)
+			if !core.IsReadableResource(resource) {
+				msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
+			} else {
+				lwReq := request.NewDefaultRequest(req, OPERATIONTYPE_READ)
+				response := enabler.OnRead(instanceId, resourceId, lwReq)
 
-			val := response.GetResponseValue()
-			msg.Code = COAPCODE_205_CONTENT
-			msg.Payload = NewBytesPayload(val.GetBytes())
+				val := response.GetResponseValue()
+				msg.Code = COAPCODE_205_CONTENT
+				msg.Payload = NewBytesPayload(val.GetBytes())
+			}
 		}
 	} else {
 		msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
@@ -289,6 +291,8 @@ func (c *DefaultClient) handleWriteRequest(req *CoapRequest) *CoapResponse {
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
 
+	log.Println(req.GetMessage().Payload)
+
 	var resourceId = -1
 
 	if attrResource != "" {
@@ -306,15 +310,16 @@ func (c *DefaultClient) handleWriteRequest(req *CoapRequest) *CoapResponse {
 		model := enabler.GetModel()
 		resource := model.GetResource(resourceId)
 		if resource == nil {
+			// TODO Write to Object Instance
 			msg.Code = COAPCODE_404_NOT_FOUND
-		}
-
-		if !core.IsWritableResource(resource) {
-			msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 		} else {
-			lwReq := request.NewDefaultRequest(req, OPERATIONTYPE_WRITE)
-			response := enabler.OnWrite(instanceId, resourceId, lwReq)
-			msg.Code = response.GetResponseCode()
+			if !core.IsWritableResource(resource) {
+				msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
+			} else {
+				lwReq := request.NewDefaultRequest(req, OPERATIONTYPE_WRITE)
+				response := enabler.OnWrite(instanceId, resourceId, lwReq)
+				msg.Code = response.GetResponseCode()
+			}
 		}
 	} else {
 		msg.Code = COAPCODE_404_NOT_FOUND
@@ -348,6 +353,7 @@ func (c *DefaultClient) handleExecuteRequest(req *CoapRequest) *CoapResponse {
 		}
 
 		if !core.IsExecutableResource(resource) {
+			log.Println("ExecutableResource?", resource.GetOperations())
 			msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 		} else {
 			lwReq := request.NewDefaultRequest(req, OPERATIONTYPE_EXECUTE)
