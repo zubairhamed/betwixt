@@ -5,6 +5,8 @@ import (
 	"github.com/zubairhamed/go-lwm2m/core"
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
 	"time"
+	"github.com/zubairhamed/go-lwm2m/core/response"
+	"github.com/zubairhamed/go-lwm2m/core/values"
 )
 
 type Device struct {
@@ -13,15 +15,15 @@ type Device struct {
 }
 
 func (o *Device) OnExecute(instanceId int, resourceId int, req Request) Response {
-	return core.NewChangedResponse()
+	return response.Changed()
 }
 
 func (o *Device) OnCreate(instanceId int, resourceId int, req Request) Response {
-	return core.NewCreatedResponse()
+	return response.Created()
 }
 
 func (o *Device) OnDelete(instanceId int, req Request) Response {
-	return core.NewDeletedResponse()
+	return response.Deleted()
 }
 
 func (o *Device) OnRead(instanceId int, resourceId int, req Request) Response {
@@ -34,19 +36,19 @@ func (o *Device) OnRead(instanceId int, resourceId int, req Request) Response {
 		resource := o.Model.GetResource(resourceId)
 		switch resourceId {
 		case 0:
-			val = core.NewStringValue(o.GetManufacturer())
+			val = values.String(o.GetManufacturer())
 			break
 
 		case 1:
-			val = core.NewStringValue(o.GetModelNumber())
+			val = values.String(o.GetModelNumber())
 			break
 
 		case 2:
-			val = core.NewStringValue(o.GetSerialNumber())
+			val = values.String(o.GetSerialNumber())
 			break
 
 		case 3:
-			val = core.NewStringValue(o.GetFirmwareVersion())
+			val = values.String(o.GetFirmwareVersion())
 			break
 
 		case 6:
@@ -62,11 +64,11 @@ func (o *Device) OnRead(instanceId int, resourceId int, req Request) Response {
 			break
 
 		case 9:
-			val = core.NewIntegerValue(o.GetBatteryLevel())
+			val = values.Integer(o.GetBatteryLevel())
 			break
 
 		case 10:
-			val = core.NewIntegerValue(o.GetMemoryFree())
+			val = values.Integer(o.GetMemoryFree())
 			break
 
 		case 11:
@@ -74,31 +76,48 @@ func (o *Device) OnRead(instanceId int, resourceId int, req Request) Response {
 			break
 
 		case 13:
-			val = core.NewTimeValue(o.GetCurrentTime())
+			val = values.Time(o.GetCurrentTime())
 			break
 
 		case 14:
-			val = core.NewStringValue(o.GetTimezone())
+			val = values.String(o.GetUtcOffset())
 			break
 
 		case 15:
-			val = core.NewStringValue(o.GetUtcOffset())
+			val = values.String(o.GetTimezone())
 			break
 
 		case 16:
-			val = core.NewStringValue(o.GetSupportedBindingMode())
+			val = values.String(o.GetSupportedBindingMode())
 			break
 
 		default:
 			break
 		}
-		return core.NewContentResponse(val)
+		return response.Content(val)
 	}
-	return core.NewNotFoundResponse()
+	return response.NotFound()
 }
 
 func (o *Device) OnWrite(instanceId int, resourceId int, req Request) Response {
-	return core.NewNotFoundResponse()
+	val := req.GetMessage().Payload
+
+	switch resourceId {
+	case 13:
+		break
+
+	case 14:
+		o.Data.Put("/0/14", val.String())
+		break
+
+	case 15:
+		o.Data.Put("/0/15", val.String())
+		break
+
+	default:
+		return response.NotFound()
+	}
+	return response.Changed()
 }
 
 func (o *Device) GetManufacturer() string {
@@ -118,11 +137,11 @@ func (o *Device) GetFirmwareVersion() string {
 }
 
 func (o *Device) Reboot() ResponseValue {
-	return core.NewEmptyValue()
+	return values.Empty()
 }
 
 func (o *Device) FactoryReset() ResponseValue {
-	return core.NewEmptyValue()
+	return values.Empty()
 }
 
 func (o *Device) GetAvailablePowerSources() []int {
@@ -157,11 +176,11 @@ func (o *Device) GetCurrentTime() time.Time {
 	return o.Data.Get("/0/13").(time.Time)
 }
 
-func (o *Device) GetTimezone() string {
+func (o *Device) GetUtcOffset() string {
 	return o.Data.Get("/0/14").(string)
 }
 
-func (o *Device) GetUtcOffset() string {
+func (o *Device) GetTimezone() string {
 	return o.Data.Get("/0/15").(string)
 }
 

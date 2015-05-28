@@ -2,6 +2,7 @@ package core
 
 import (
 	. "github.com/zubairhamed/go-lwm2m/api"
+	"github.com/zubairhamed/go-lwm2m/core/response"
 )
 
 type DefaultObjectModel struct {
@@ -128,26 +129,26 @@ func (en *DefaultObjectEnabler) OnDelete(instanceId int, req Request) Response {
 	if en.Handler != nil {
 		return en.Handler.OnDelete(instanceId, req)
 	}
-	return NewNotFoundResponse()
+	return response.NotFound()
 }
 
 func (en *DefaultObjectEnabler) OnWrite(instanceId int, resourceId int, req Request) Response {
 	if en.Handler != nil {
 		return en.Handler.OnWrite(instanceId, resourceId, req)
 	}
-	return NewNotFoundResponse()
+	return response.NotFound()
 }
 
 func (en *DefaultObjectEnabler) OnExecute(instanceId int, resourceId int, req Request) Response {
 	if en.Handler != nil {
 		return en.Handler.OnExecute(instanceId, resourceId, req)
 	}
-	return NewNotFoundResponse()
+	return response.NotFound()
 }
 
 func (en *DefaultObjectEnabler) OnCreate(instanceId int, resourceId int, req Request) Response {
 	if en.Handler != nil {
 		return en.Handler.OnCreate(instanceId, resourceId, req)
 	}
-	return NewNotFoundResponse()
+	return response.NotFound()
 }

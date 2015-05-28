@@ -4,6 +4,7 @@ import (
 	. "github.com/zubairhamed/go-lwm2m/api"
 	"github.com/zubairhamed/go-lwm2m/core"
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
+	"github.com/zubairhamed/go-lwm2m/core/response"
 )
 
 type Location struct {
@@ -12,23 +13,23 @@ type Location struct {
 }
 
 func (o *Location) OnExecute(instanceId int, resourceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func (o *Location) OnCreate(instanceId int, resourceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func (o *Location) OnDelete(instanceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func (o *Location) OnRead(instanceId int, resourceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func (o *Location) OnWrite(instanceId int, resourceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func NewExampleLocationObject(reg Registry) *Location {

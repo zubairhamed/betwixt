@@ -4,6 +4,7 @@ import (
 	. "github.com/zubairhamed/go-lwm2m/api"
 	"github.com/zubairhamed/go-lwm2m/core"
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
+	"github.com/zubairhamed/go-lwm2m/core/response"
 )
 
 type Server struct {
@@ -12,23 +13,23 @@ type Server struct {
 }
 
 func (o *Server) OnExecute(instanceId int, resourceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func (o *Server) OnCreate(instanceId int, resourceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func (o *Server) OnDelete(instanceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func (o *Server) OnRead(instanceId int, resourceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func (o *Server) OnWrite(instanceId int, resourceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func NewExampleServerObject(reg Registry) *Server {

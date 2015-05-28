@@ -4,6 +4,7 @@ import (
 	. "github.com/zubairhamed/go-lwm2m/api"
 	"github.com/zubairhamed/go-lwm2m/core"
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
+	"github.com/zubairhamed/go-lwm2m/core/response"
 )
 
 type ConnectivityStatistics struct {
@@ -12,23 +13,23 @@ type ConnectivityStatistics struct {
 }
 
 func (o *ConnectivityStatistics) OnExecute(instanceId int, resourceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func (o *ConnectivityStatistics) OnCreate(instanceId int, resourceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func (o *ConnectivityStatistics) OnDelete(instanceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func (o *ConnectivityStatistics) OnRead(instanceId int, resourceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func (o *ConnectivityStatistics) OnWrite(instanceId int, resourceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func NewExampleConnectivityStatisticsObject(reg Registry) *ConnectivityStatistics {

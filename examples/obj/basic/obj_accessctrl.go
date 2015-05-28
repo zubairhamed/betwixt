@@ -4,6 +4,7 @@ import (
 	. "github.com/zubairhamed/go-lwm2m/api"
 	"github.com/zubairhamed/go-lwm2m/core"
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
+	"github.com/zubairhamed/go-lwm2m/core/response"
 )
 
 type AccessControl struct {
@@ -12,23 +13,23 @@ type AccessControl struct {
 }
 
 func (o *AccessControl) OnExecute(instanceId int, resourceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func (o *AccessControl) OnCreate(instanceId int, resourceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func (o *AccessControl) OnDelete(instanceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func (o *AccessControl) OnRead(instanceId int, resourceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func (o *AccessControl) OnWrite(instanceId int, resourceId int, req Request) Response {
-	return core.NewUnauthorizedResponse()
+	return response.Unauthorized()
 }
 
 func NewExampleAccessControlObject(reg Registry) *AccessControl {

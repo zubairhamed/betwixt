@@ -4,12 +4,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/zubairhamed/go-lwm2m"
 	"github.com/zubairhamed/go-lwm2m/api"
-	"github.com/zubairhamed/go-lwm2m/core"
 	"github.com/zubairhamed/go-lwm2m/examples/obj/basic"
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
 	"github.com/zubairhamed/go-lwm2m/registry"
 	"testing"
 	"time"
+	"github.com/zubairhamed/go-lwm2m/core/request"
 )
 
 func TestExampleObjects(t *testing.T) {
@@ -82,13 +82,13 @@ func TestExampleObjects(t *testing.T) {
 		{0, 10, 15, oma.OBJECT_LWM2M_DEVICE},
 		// {0, 11, []int{0}, oma.OBJECT_LWM2M_DEVICE},
 		{0, 13, time.Unix(1367491215, 0), oma.OBJECT_LWM2M_DEVICE},
-		{0, 14, "+02:00", oma.OBJECT_LWM2M_DEVICE},
+		{0, 15, "+02:00", oma.OBJECT_LWM2M_DEVICE},
 		{0, 16, "U", oma.OBJECT_LWM2M_DEVICE},
 	}
 
 	for _, c := range test_obj_1 {
 		en := client.GetObjectEnabler(c.typeId)
-		lwReq := core.NewNilRequest(api.OPERATIONTYPE_READ)
+		lwReq := request.Nil(api.OPERATIONTYPE_READ)
 		response := en.OnRead(c.instanceId, c.resourceId, lwReq)
 		val := response.GetResponseValue().GetValue()
 

@@ -1,4 +1,4 @@
-package core
+package request
 
 import (
 	. "github.com/zubairhamed/go-lwm2m/api"
@@ -33,7 +33,7 @@ func (r *DefaultRequest) GetCoapRequest() *goap.CoapRequest {
 	return r.coap
 }
 
-func NewNilRequest(op OperationType) Request {
+func Nil(op OperationType) Request {
 	return &NilRequest{
 		op: op,
 	}
