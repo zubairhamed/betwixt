@@ -5,11 +5,11 @@ import (
 )
 
 type RequestHandler interface {
-	OnRead(int, int, Request) (Response)
-	OnDelete(int, Request) (Response)
-	OnWrite(int, int, Request) (Response)
-	OnCreate(int, int, Request) (Response)
-	OnExecute(int, int, Request) (Response)
+	OnRead(int, int, Request) Response
+	OnDelete(int, Request) Response
+	OnWrite(int, int, Request) Response
+	OnCreate(int, int, Request) Response
+	OnExecute(int, int, Request) Response
 }
 
 /*
@@ -35,11 +35,11 @@ type ObjectEnabler interface {
 	GetHandler() RequestHandler
 	GetModel() ObjectModel
 
-	OnRead(int, int, Request) (Response)
-	OnDelete(int, Request) (Response)
-	OnWrite(int, int, Request) (Response)
-	OnCreate(int, int, Request) (Response)
-	OnExecute(int, int, Request) (Response)
+	OnRead(int, int, Request) Response
+	OnDelete(int, Request) Response
+	OnWrite(int, int, Request) Response
+	OnCreate(int, int, Request) Response
+	OnExecute(int, int, Request) Response
 }
 
 type ObjectInstance interface {
@@ -111,4 +111,3 @@ type Response interface {
 	GetResponseCode() CoapCode
 	GetResponseValue() ResponseValue
 }
-

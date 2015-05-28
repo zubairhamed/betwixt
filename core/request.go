@@ -1,6 +1,5 @@
 package core
 
-
 import (
 	. "github.com/zubairhamed/go-lwm2m/api"
 	"github.com/zubairhamed/goap"

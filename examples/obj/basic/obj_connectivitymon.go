@@ -11,23 +11,23 @@ type ConnectivityMonitoring struct {
 	Data  *core.ObjectsData
 }
 
-func (o *ConnectivityMonitoring) OnExecute(instanceId int, resourceId int, req Request) (Response) {
+func (o *ConnectivityMonitoring) OnExecute(instanceId int, resourceId int, req Request) Response {
 	return core.NewUnauthorizedResponse()
 }
 
-func (o *ConnectivityMonitoring) OnCreate(instanceId int, resourceId int, req Request) (Response) {
+func (o *ConnectivityMonitoring) OnCreate(instanceId int, resourceId int, req Request) Response {
 	return core.NewUnauthorizedResponse()
 }
 
-func (o *ConnectivityMonitoring) OnDelete(instanceId int, req Request) (Response) {
+func (o *ConnectivityMonitoring) OnDelete(instanceId int, req Request) Response {
 	return core.NewUnauthorizedResponse()
 }
 
-func (o *ConnectivityMonitoring) OnRead(instanceId int, resourceId int, req Request) (Response) {
+func (o *ConnectivityMonitoring) OnRead(instanceId int, resourceId int, req Request) Response {
 	return core.NewUnauthorizedResponse()
 }
 
-func (o *ConnectivityMonitoring) OnWrite(instanceId int, resourceId int, req Request) (Response) {
+func (o *ConnectivityMonitoring) OnWrite(instanceId int, resourceId int, req Request) Response {
 	return core.NewUnauthorizedResponse()
 }
 

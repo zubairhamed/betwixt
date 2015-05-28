@@ -11,23 +11,23 @@ type Security struct {
 	Data  *core.ObjectsData
 }
 
-func (o *Security) OnExecute(instanceId int, resourceId int, req Request) (Response) {
+func (o *Security) OnExecute(instanceId int, resourceId int, req Request) Response {
 	return core.NewUnauthorizedResponse()
 }
 
-func (o *Security) OnCreate(instanceId int, resourceId int, req Request) (Response) {
+func (o *Security) OnCreate(instanceId int, resourceId int, req Request) Response {
 	return core.NewUnauthorizedResponse()
 }
 
-func (o *Security) OnDelete(instanceId int, req Request) (Response) {
+func (o *Security) OnDelete(instanceId int, req Request) Response {
 	return core.NewUnauthorizedResponse()
 }
 
-func (o *Security) OnRead(instanceId int, resourceId int, req Request) (Response) {
+func (o *Security) OnRead(instanceId int, resourceId int, req Request) Response {
 	return core.NewUnauthorizedResponse()
 }
 
-func (o *Security) OnWrite(instanceId int, resourceId int, req Request) (Response) {
+func (o *Security) OnWrite(instanceId int, resourceId int, req Request) Response {
 	return core.NewUnauthorizedResponse()
 }
 

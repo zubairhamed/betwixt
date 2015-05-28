@@ -11,23 +11,23 @@ type Server struct {
 	Data  *core.ObjectsData
 }
 
-func (o *Server) OnExecute(instanceId int, resourceId int, req Request) (Response) {
+func (o *Server) OnExecute(instanceId int, resourceId int, req Request) Response {
 	return core.NewUnauthorizedResponse()
 }
 
-func (o *Server) OnCreate(instanceId int, resourceId int, req Request) (Response) {
+func (o *Server) OnCreate(instanceId int, resourceId int, req Request) Response {
 	return core.NewUnauthorizedResponse()
 }
 
-func (o *Server) OnDelete(instanceId int, req Request) (Response) {
+func (o *Server) OnDelete(instanceId int, req Request) Response {
 	return core.NewUnauthorizedResponse()
 }
 
-func (o *Server) OnRead(instanceId int, resourceId int, req Request) (Response) {
+func (o *Server) OnRead(instanceId int, resourceId int, req Request) Response {
 	return core.NewUnauthorizedResponse()
 }
 
-func (o *Server) OnWrite(instanceId int, resourceId int, req Request) (Response) {
+func (o *Server) OnWrite(instanceId int, resourceId int, req Request) Response {
 	return core.NewUnauthorizedResponse()
 }
 

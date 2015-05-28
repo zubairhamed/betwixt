@@ -276,24 +276,3 @@ func (v *TlvValue) GetType() ValueTypeCode {
 func (v *TlvValue) GetValue() interface{} {
 	return v.content
 }
-
-////////////////////////////////////////////////////////////////////
-/// ERROR CODE REPLIES
-////////////////////////////////////////////////////////////////////
-
-/*
-   2.01 Created
-   2.02 Deleted
-   2.04 Changed
-   2.05 Content
-
-   4.00 Bad Request
-   4.01 Unauthorized
-   4.04 Not Found
-   4.05 Method Not Allowed
-   4.09 Conflict
-
-
-
-
-*/

@@ -1,15 +1,15 @@
 package core
+
 import (
-	. "github.com/zubairhamed/goap"
 	. "github.com/zubairhamed/go-lwm2m/api"
+	. "github.com/zubairhamed/goap"
 )
 
-func NewMethodNotAllowedResponse() (Response) {
+func NewMethodNotAllowedResponse() Response {
 	return &MethodNotAllowedResponse{}
 }
 
 type MethodNotAllowedResponse struct {
-
 }
 
 func (r *MethodNotAllowedResponse) GetResponseCode() CoapCode {
@@ -20,12 +20,11 @@ func (r *MethodNotAllowedResponse) GetResponseValue() ResponseValue {
 	return NewEmptyValue()
 }
 
-func NewConflictResponse() (Response) {
+func NewConflictResponse() Response {
 	return &ConflictResponse{}
 }
 
 type ConflictResponse struct {
-
 }
 
 func (r *ConflictResponse) GetResponseCode() CoapCode {
@@ -41,7 +40,6 @@ func NewBadRequestResponse() Response {
 }
 
 type BadRequestResponse struct {
-
 }
 
 func (r *BadRequestResponse) GetResponseCode() CoapCode {
@@ -57,7 +55,6 @@ func NewNotFoundResponse() Response {
 }
 
 type NotFoundResponse struct {
-
 }
 
 func (r *NotFoundResponse) GetResponseCode() CoapCode {
@@ -73,7 +70,6 @@ func NewUnauthorizedResponse() Response {
 }
 
 type UnauthorizedResponse struct {
-
 }
 
 func (r *UnauthorizedResponse) GetResponseCode() CoapCode {
@@ -84,12 +80,11 @@ func (r *UnauthorizedResponse) GetResponseValue() ResponseValue {
 	return NewEmptyValue()
 }
 
-func NewChangedResponse() (Response) {
+func NewChangedResponse() Response {
 	return &ChangedResponse{}
 }
 
 type ChangedResponse struct {
-
 }
 
 func (r *ChangedResponse) GetResponseCode() CoapCode {
@@ -100,12 +95,11 @@ func (r *ChangedResponse) GetResponseValue() ResponseValue {
 	return NewEmptyValue()
 }
 
-func NewCreatedResponse() (Response) {
+func NewCreatedResponse() Response {
 	return &CreatedResponse{}
 }
 
 type CreatedResponse struct {
-
 }
 
 func (r *CreatedResponse) GetResponseCode() CoapCode {
@@ -116,12 +110,11 @@ func (r *CreatedResponse) GetResponseValue() ResponseValue {
 	return NewEmptyValue()
 }
 
-func NewDeletedResponse() (Response) {
+func NewDeletedResponse() Response {
 	return &DeletedResponse{}
 }
 
 type DeletedResponse struct {
-
 }
 
 func (r *DeletedResponse) GetResponseCode() CoapCode {
@@ -132,14 +125,14 @@ func (r *DeletedResponse) GetResponseValue() ResponseValue {
 	return NewEmptyValue()
 }
 
-func NewContentResponse(val ResponseValue) (Response) {
+func NewContentResponse(val ResponseValue) Response {
 	return &ContentResponse{
 		val: val,
 	}
 }
 
 type ContentResponse struct {
-	val 	ResponseValue
+	val ResponseValue
 }
 
 func (r *ContentResponse) GetResponseCode() CoapCode {
