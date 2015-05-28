@@ -4,14 +4,6 @@ import (
 	. "github.com/zubairhamed/go-lwm2m/api"
 )
 
-func NewDefaultResponse() {
-
-}
-
-type DefaultResponse struct {
-
-}
-
 func NewNotFoundResponse() Response {
 	return &NotFoundResponse{}
 }
