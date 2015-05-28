@@ -97,7 +97,6 @@ func (o *Device) OnRead(instanceId int, resourceId int, req Request) Response {
 		default:
 			break
 		}
-		return response.Content(val)
 	}
 	return response.NotFound()
 }
