@@ -89,8 +89,8 @@ func TestExampleObjects(t *testing.T) {
 	for _, c := range test_obj_1 {
 		en := client.GetObjectEnabler(c.typeId)
 		lwReq := core.NewNilRequest(api.OPERATIONTYPE_READ)
-		ret, _ := en.OnRead(c.instanceId, c.resourceId, lwReq)
-		val := ret.GetValue()
+		response := en.OnRead(c.instanceId, c.resourceId, lwReq)
+		val := response.GetResponseValue().GetValue()
 
 		assert.Equal(t, val, c.expected, "Unexpected value returned for enabler OnRead: ", val, "vs", c.expected)
 	}
