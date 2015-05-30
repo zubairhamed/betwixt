@@ -1,26 +1,26 @@
 package main
 
 import (
-	. "github.com/zubairhamed/go-lwm2m"
 	. "github.com/zubairhamed/go-lwm2m/api"
 	. "github.com/zubairhamed/go-lwm2m/examples/obj/basic"
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
 	"github.com/zubairhamed/go-lwm2m/registry"
+	"github.com/zubairhamed/go-lwm2m/client"
 )
 
 func main() {
-	client := NewLWM2MClient(":0", "localhost:5683")
+	c := client.NewDefaultClient(":0", "localhost:5683")
 
 	registry := registry.NewDefaultObjectRegistry()
-	client.UseRegistry(registry)
+	c.UseRegistry(registry)
 
-	setupResources(client, registry)
+	setupResources(c, registry)
 
-	client.OnStartup(func() {
-		client.Register("GOClient")
+	c.OnStartup(func() {
+		c.Register("GOClient")
 	})
 
-	client.Start()
+	c.Start()
 }
 
 func setupResources(client LWM2MClient, reg Registry) {

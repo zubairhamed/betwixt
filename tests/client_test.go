@@ -2,23 +2,24 @@ package tests
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/zubairhamed/go-lwm2m"
 	. "github.com/zubairhamed/go-lwm2m/api"
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
 	"github.com/zubairhamed/go-lwm2m/registry"
 	"testing"
+	"github.com/zubairhamed/go-lwm2m/client"
 )
 
 func TestClient(t *testing.T) {
-	client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
-	assert.NotNil(t, client, "Error instantiating client")
 
-	assert.NotNil(t, client.EnableObject(oma.OBJECT_LWM2M_SERVER, nil), "Error should be thrown - registry not set")
+	cli := client.NewDefaultClient(":0", "localhost:5683")
+	assert.NotNil(t, cli, "Error instantiating client")
+
+	assert.NotNil(t, cli.EnableObject(oma.OBJECT_LWM2M_SERVER, nil), "Error should be thrown - registry not set")
 
 	registry := registry.NewDefaultObjectRegistry()
 	assert.NotNil(t, registry, "Error instantiating registry")
 
-	client.UseRegistry(registry)
+	cli.UseRegistry(registry)
 
 	cases1 := []struct {
 		in LWM2MObjectType
@@ -33,13 +34,13 @@ func TestClient(t *testing.T) {
 	}
 
 	for _, c := range cases1 {
-		err := client.EnableObject(c.in, nil)
+		err := cli.EnableObject(c.in, nil)
 
 		assert.Nil(t, err, "Error enabling object: ", c.in)
 	}
 
-	assert.Nil(t, client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil), "Error enabling object")
-	assert.NotNil(t, client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil), "Object should already be enabled")
+	assert.Nil(t, cli.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil), "Error enabling object")
+	assert.NotNil(t, cli.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil), "Object should already be enabled")
 
 	cases2 := []struct {
 		in LWM2MObjectType
@@ -54,7 +55,7 @@ func TestClient(t *testing.T) {
 	}
 
 	for _, c := range cases2 {
-		assert.NotNil(t, client.GetObjectEnabler(c.in), "Error getting object enabler: ", c)
+		assert.NotNil(t, cli.GetObjectEnabler(c.in), "Error getting object enabler: ", c)
 	}
 
 	inst1 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 0)
@@ -65,7 +66,7 @@ func TestClient(t *testing.T) {
 	assert.NotNil(t, inst2, "Error instantiating go-lwm2m object")
 	assert.NotNil(t, inst3, "Error instantiating go-lwm2m object")
 
-	client.AddObjectInstances(inst1, inst2, inst3)
+	cli.AddObjectInstances(inst1, inst2, inst3)
 
 	cases3 := []struct {
 		ot LWM2MObjectType
@@ -77,7 +78,7 @@ func TestClient(t *testing.T) {
 	}
 
 	for _, c := range cases3 {
-		assert.NotNil(t, client.GetObjectInstance(c.ot, c.oi), "Object instance", c.oi, "not found")
+		assert.NotNil(t, cli.GetObjectInstance(c.ot, c.oi), "Object instance", c.oi, "not found")
 	}
 }
 

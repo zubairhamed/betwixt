@@ -2,28 +2,28 @@ package tests
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/zubairhamed/go-lwm2m"
 	"github.com/zubairhamed/go-lwm2m/core"
 	"github.com/zubairhamed/go-lwm2m/examples/obj/basic"
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
 	"github.com/zubairhamed/go-lwm2m/registry"
 	"testing"
+	"github.com/zubairhamed/go-lwm2m/client"
 )
 
 func TestObjectInstancesToTlv(t *testing.T) {
-	client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
+	cli := client.NewDefaultClient(":0", "localhost:5683")
 
 	reg := registry.NewDefaultObjectRegistry()
-	client.UseRegistry(reg)
+	cli.UseRegistry(reg)
 
 	device := basic.NewExampleDeviceObject(reg)
 
-	client.EnableObject(oma.OBJECT_LWM2M_DEVICE, device)
+	cli.EnableObject(oma.OBJECT_LWM2M_DEVICE, device)
 	instanceDevice := reg.CreateObjectInstance(oma.OBJECT_LWM2M_DEVICE, 0)
-	client.AddObjectInstances(instanceDevice)
+	cli.AddObjectInstances(instanceDevice)
 
-	en := client.GetObjectEnabler(oma.OBJECT_LWM2M_DEVICE)
-	_, err := core.TlvPayloadFromObjects(en, client.GetRegistry())
+	en := cli.GetObjectEnabler(oma.OBJECT_LWM2M_DEVICE)
+	_, err := core.TlvPayloadFromObjects(en, cli.GetRegistry())
 
 	assert.Nil(t, err, "Error thrown attempting to convert Object instance to TLV")
 }

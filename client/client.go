@@ -1,4 +1,4 @@
-package lwm2m
+package client
 
 import (
 	"errors"
@@ -10,14 +10,14 @@ import (
 	"net"
 )
 
-func NewLWM2MClient(local string, remote string) *DefaultClient {
+func NewDefaultClient(local string, remote string) *DefaultClient {
 	localAddr, err := net.ResolveUDPAddr("udp", local)
 	IfErrFatal(err)
 
 	remoteAddr, err := net.ResolveUDPAddr("udp", remote)
 	IfErrFatal(err)
 
-	coapServer := NewCoapServer(localAddr, remoteAddr)
+	coapServer := NewServer(localAddr, remoteAddr)
 
 	return &DefaultClient{
 		coapServer:     coapServer,

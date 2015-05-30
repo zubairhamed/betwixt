@@ -2,12 +2,12 @@ package tests
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/zubairhamed/go-lwm2m"
 	"github.com/zubairhamed/go-lwm2m/core"
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
 	"github.com/zubairhamed/go-lwm2m/registry"
 	"testing"
 	"time"
+	"github.com/zubairhamed/go-lwm2m/client"
 )
 
 func TestGetValueByteLength(t *testing.T) {
@@ -99,16 +99,16 @@ func TestObjectData(t *testing.T) {
 }
 
 func TestBuildResourceStringPayload(t *testing.T) {
-	client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
+	cli := client.NewDefaultClient(":0", "localhost:5683")
 
 	reg := registry.NewDefaultObjectRegistry()
-	client.UseRegistry(reg)
+	cli.UseRegistry(reg)
 
-	client.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil)
-	client.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, nil)
-	client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, nil)
+	cli.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil)
+	cli.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, nil)
+	cli.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, nil)
 
-	str := core.BuildModelResourceStringPayload(client.GetEnabledObjects())
+	str := core.BuildModelResourceStringPayload(cli.GetEnabledObjects())
 	compare := "</0>,</2>,</4>,"
 
 	assert.Equal(t, str, compare, "Unexpected output building Model Resource String")

@@ -2,7 +2,6 @@ package tests
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/zubairhamed/go-lwm2m"
 	"github.com/zubairhamed/go-lwm2m/api"
 	"github.com/zubairhamed/go-lwm2m/core/request"
 	"github.com/zubairhamed/go-lwm2m/examples/obj/basic"
@@ -10,22 +9,23 @@ import (
 	"github.com/zubairhamed/go-lwm2m/registry"
 	"testing"
 	"time"
+	"github.com/zubairhamed/go-lwm2m/client"
 )
 
 func TestExampleObjects(t *testing.T) {
-	client := lwm2m.NewLWM2MClient(":0", "localhost:5683")
+	cli := client.NewDefaultClient(":0", "localhost:5683")
 
 	reg := registry.NewDefaultObjectRegistry()
-	client.UseRegistry(reg)
+	cli.UseRegistry(reg)
 
-	client.EnableObject(oma.OBJECT_LWM2M_DEVICE, basic.NewExampleDeviceObject(reg))
-	client.EnableObject(oma.OBJECT_LWM2M_SECURITY, basic.NewExampleSecurityObject(reg))
-	client.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, basic.NewExampleAccessControlObject(reg))
-	client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, basic.NewExampleConnectivityMonitoringObject(reg))
-	client.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS, basic.NewExampleConnectivityStatisticsObject(reg))
-	client.EnableObject(oma.OBJECT_LWM2M_FIRMWARE_UPDATE, basic.NewExampleFirmwareUpdateObject(reg))
-	client.EnableObject(oma.OBJECT_LWM2M_LOCATION, basic.NewExampleLocationObject(reg))
-	client.EnableObject(oma.OBJECT_LWM2M_SERVER, basic.NewExampleConnectivityMonitoringObject(reg))
+	cli.EnableObject(oma.OBJECT_LWM2M_DEVICE, basic.NewExampleDeviceObject(reg))
+	cli.EnableObject(oma.OBJECT_LWM2M_SECURITY, basic.NewExampleSecurityObject(reg))
+	cli.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, basic.NewExampleAccessControlObject(reg))
+	cli.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, basic.NewExampleConnectivityMonitoringObject(reg))
+	cli.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS, basic.NewExampleConnectivityStatisticsObject(reg))
+	cli.EnableObject(oma.OBJECT_LWM2M_FIRMWARE_UPDATE, basic.NewExampleFirmwareUpdateObject(reg))
+	cli.EnableObject(oma.OBJECT_LWM2M_LOCATION, basic.NewExampleLocationObject(reg))
+	cli.EnableObject(oma.OBJECT_LWM2M_SERVER, basic.NewExampleConnectivityMonitoringObject(reg))
 
 	instDevice := reg.CreateObjectInstance(oma.OBJECT_LWM2M_DEVICE, 0)
 	instSec := reg.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 0)
@@ -36,7 +36,7 @@ func TestExampleObjects(t *testing.T) {
 	instLocation := reg.CreateObjectInstance(oma.OBJECT_LWM2M_LOCATION, 0)
 	instServer := reg.CreateObjectInstance(oma.OBJECT_LWM2M_SERVER, 0)
 
-	client.AddObjectInstances(
+	cli.AddObjectInstances(
 		instDevice,
 		instSec,
 		instAccCtrl,
@@ -62,7 +62,7 @@ func TestExampleObjects(t *testing.T) {
 	}
 
 	for _, c := range test_enablers {
-		assert.NotNil(t, client.GetObjectEnabler(c.input), "Enabler returned nil", c.input)
+		assert.NotNil(t, cli.GetObjectEnabler(c.input), "Enabler returned nil", c.input)
 	}
 
 	// Device Object
@@ -88,7 +88,7 @@ func TestExampleObjects(t *testing.T) {
 	}
 
 	for _, c := range test_obj_1 {
-		en := client.GetObjectEnabler(c.typeId)
+		en := cli.GetObjectEnabler(c.typeId)
 		lwReq := request.Nil(api.OPERATIONTYPE_READ)
 		response := en.OnRead(c.instanceId, c.resourceId, lwReq)
 		val := response.GetResponseValue().GetValue()
