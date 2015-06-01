@@ -12,23 +12,23 @@ type Location struct {
 	Data  *core.ObjectsData
 }
 
-func (o *Location) OnExecute(instanceId int, resourceId int, req Request) Response {
+func (o *Location) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Location) OnCreate(instanceId int, resourceId int, req Request) Response {
+func (o *Location) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Location) OnDelete(instanceId int, req Request) Response {
+func (o *Location) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Location) OnRead(instanceId int, resourceId int, req Request) Response {
+func (o *Location) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Location) OnWrite(instanceId int, resourceId int, req Request) Response {
+func (o *Location) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 

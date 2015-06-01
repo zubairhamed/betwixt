@@ -1,15 +1,14 @@
 package api
-
 import (
 	. "github.com/zubairhamed/goap"
 )
 
 type RequestHandler interface {
-	OnRead(int, int, Request) Response
-	OnDelete(int, Request) Response
-	OnWrite(int, int, Request) Response
-	OnCreate(int, int, Request) Response
-	OnExecute(int, int, Request) Response
+	OnRead(int, int, Lwm2mRequest) Lwm2mResponse
+	OnDelete(int, Lwm2mRequest) Lwm2mResponse
+	OnWrite(int, int, Lwm2mRequest) Lwm2mResponse
+	OnCreate(int, int, Lwm2mRequest) Lwm2mResponse
+	OnExecute(int, int, Lwm2mRequest) Lwm2mResponse
 }
 
 /*
@@ -28,6 +27,7 @@ type ResponseValue interface {
 	GetStringValue() string
 }
 
+
 type ObjectEnabler interface {
 	GetObjectInstance(int) ObjectInstance
 	GetObjectInstances() []ObjectInstance
@@ -35,11 +35,11 @@ type ObjectEnabler interface {
 	GetHandler() RequestHandler
 	GetModel() ObjectModel
 
-	OnRead(int, int, Request) Response
-	OnDelete(int, Request) Response
-	OnWrite(int, int, Request) Response
-	OnCreate(int, int, Request) Response
-	OnExecute(int, int, Request) Response
+	OnRead(int, int, Lwm2mRequest) Lwm2mResponse
+	OnDelete(int, Lwm2mRequest) Lwm2mResponse
+	OnWrite(int, int, Lwm2mRequest) Lwm2mResponse
+	OnCreate(int, int, Lwm2mRequest) Lwm2mResponse
+	OnExecute(int, int, Lwm2mRequest) Lwm2mResponse
 }
 
 type ObjectInstance interface {
@@ -100,14 +100,14 @@ type LWM2MClient interface {
 	OnError(FnOnError)
 }
 
-type Request interface {
+type Lwm2mRequest interface {
 	GetPath() string
 	GetMessage() *Message
 	GetOperationType() OperationType
 	GetCoapRequest() *CoapRequest
 }
 
-type Response interface {
+type Lwm2mResponse interface {
 	GetResponseCode() CoapCode
 	GetResponseValue() ResponseValue
 }

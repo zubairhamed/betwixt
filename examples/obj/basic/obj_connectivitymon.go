@@ -11,19 +11,19 @@ type ConnectivityMonitoring struct {
 	Model ObjectModel
 }
 
-func (o *ConnectivityMonitoring) OnExecute(instanceId int, resourceId int, req Request) Response {
+func (o *ConnectivityMonitoring) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *ConnectivityMonitoring) OnCreate(instanceId int, resourceId int, req Request) Response {
+func (o *ConnectivityMonitoring) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *ConnectivityMonitoring) OnDelete(instanceId int, req Request) Response {
+func (o *ConnectivityMonitoring) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *ConnectivityMonitoring) OnRead(instanceId int, resourceId int, req Request) Response {
+func (o *ConnectivityMonitoring) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	if resourceId == -1 {
 		// Read Object Instance
 	} else {
@@ -84,7 +84,7 @@ func (o *ConnectivityMonitoring) OnRead(instanceId int, resourceId int, req Requ
 	return response.NotFound()
 }
 
-func (o *ConnectivityMonitoring) OnWrite(instanceId int, resourceId int, req Request) Response {
+func (o *ConnectivityMonitoring) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 

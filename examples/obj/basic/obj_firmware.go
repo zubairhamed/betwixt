@@ -12,23 +12,23 @@ type Firmware struct {
 	Data  *core.ObjectsData
 }
 
-func (o *Firmware) OnExecute(instanceId int, resourceId int, req Request) Response {
+func (o *Firmware) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Firmware) OnCreate(instanceId int, resourceId int, req Request) Response {
+func (o *Firmware) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Firmware) OnDelete(instanceId int, req Request) Response {
+func (o *Firmware) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Firmware) OnRead(instanceId int, resourceId int, req Request) Response {
+func (o *Firmware) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Firmware) OnWrite(instanceId int, resourceId int, req Request) Response {
+func (o *Firmware) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 

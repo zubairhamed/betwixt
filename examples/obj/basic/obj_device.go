@@ -16,19 +16,19 @@ type Device struct {
 	timeZone    string
 }
 
-func (o *Device) OnExecute(instanceId int, resourceId int, req Request) Response {
+func (o *Device) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Changed()
 }
 
-func (o *Device) OnCreate(instanceId int, resourceId int, req Request) Response {
+func (o *Device) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Created()
 }
 
-func (o *Device) OnDelete(instanceId int, req Request) Response {
+func (o *Device) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Deleted()
 }
 
-func (o *Device) OnRead(instanceId int, resourceId int, req Request) Response {
+func (o *Device) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	if resourceId == -1 {
 		// Read Object Instance
 	} else {
@@ -102,7 +102,7 @@ func (o *Device) OnRead(instanceId int, resourceId int, req Request) Response {
 	return response.NotFound()
 }
 
-func (o *Device) OnWrite(instanceId int, resourceId int, req Request) Response {
+func (o *Device) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	val := req.GetMessage().Payload
 
 	switch resourceId {

@@ -12,23 +12,23 @@ type ConnectivityStatistics struct {
 	Data  *core.ObjectsData
 }
 
-func (o *ConnectivityStatistics) OnExecute(instanceId int, resourceId int, req Request) Response {
+func (o *ConnectivityStatistics) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *ConnectivityStatistics) OnCreate(instanceId int, resourceId int, req Request) Response {
+func (o *ConnectivityStatistics) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *ConnectivityStatistics) OnDelete(instanceId int, req Request) Response {
+func (o *ConnectivityStatistics) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *ConnectivityStatistics) OnRead(instanceId int, resourceId int, req Request) Response {
+func (o *ConnectivityStatistics) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *ConnectivityStatistics) OnWrite(instanceId int, resourceId int, req Request) Response {
+func (o *ConnectivityStatistics) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 

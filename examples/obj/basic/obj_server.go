@@ -12,23 +12,23 @@ type Server struct {
 	Data  *core.ObjectsData
 }
 
-func (o *Server) OnExecute(instanceId int, resourceId int, req Request) Response {
+func (o *Server) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Server) OnCreate(instanceId int, resourceId int, req Request) Response {
+func (o *Server) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Server) OnDelete(instanceId int, req Request) Response {
+func (o *Server) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Server) OnRead(instanceId int, resourceId int, req Request) Response {
+func (o *Server) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Server) OnWrite(instanceId int, resourceId int, req Request) Response {
+func (o *Server) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 

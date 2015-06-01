@@ -4,6 +4,7 @@ import (
     "github.com/zubairhamed/go-lwm2m/api"
     "log"
     "net"
+    . "github.com/zubairhamed/go-commons/network"
 )
 
 func NewDefaultServer() (Server) {
@@ -12,19 +13,23 @@ func NewDefaultServer() (Server) {
         log.Println("Error starting CoAP Server: ", err)
     }
     coapServer := goap.NewServer(localAddr, nil)
+    httpServer := NewDefaultHttpServer()
 
     return &DefaultServer{
         coapServer:  coapServer,
+        httpServer:  httpServer,
         clients:     make(map[string]RegisteredClient),
     }
 }
 
 type Server interface {
+    UseRegistry(api.Registry)
     Start()
 }
 
 type DefaultServer struct {
     coapServer     *goap.CoapServer
+    httpServer     *HttpServer
     registry       api.Registry
     clients        map[string]RegisteredClient
 }
@@ -32,13 +37,25 @@ type DefaultServer struct {
 func (server *DefaultServer) Start() {
     s := server.coapServer
 
+    // Setup Routes
     s.NewRoute("rd", goap.POST, server.handleRegister)
     s.NewRoute("rd/{id}", goap.PUT, server.handleUpdate)
 
-    s.Start()
+    // Start CoAP Server
+    go func() {
+        s.Start()
+    }()
+
+    // Start HTTP Server
+    server.httpServer.Start()
 }
 
-func (server *DefaultServer) handleRegister(req *goap.CoapRequest) *(goap.CoapResponse) {
+func (server *DefaultServer) UseRegistry(reg api.Registry) {
+    server.registry = reg
+}
+
+func (server *DefaultServer) handleRegister(r Request) (Response) {
+    req := r.(*goap.CoapRequest)
     ep := req.GetUriQuery("ep")
 
     clientId, err := server.register(ep)
@@ -54,22 +71,25 @@ func (server *DefaultServer) handleRegister(req *goap.CoapRequest) *(goap.CoapRe
     return goap.NewResponseWithMessage(msg)
 }
 
-func (server *DefaultServer) handleUpdate(req *goap.CoapRequest) *(goap.CoapResponse) {
+func (server *DefaultServer) handleUpdate(r Request) (Response) {
+    req := r.(*goap.CoapRequest)
     id := req.GetAttribute("id")
 
-    log.Println("Updating id", id)
-    // 204 changed
+    server.update(id)
 
     msg := goap.NewMessageOfType(goap.TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
     msg.Token = req.GetMessage().Token
     msg.Code = goap.COAPCODE_204_CHANGED
 
     return goap.NewResponseWithMessage(msg)
-
 }
 
 func (server *DefaultServer) GetRegisteredClient(id string) (RegisteredClient){
     return server.clients[id]
+}
+
+func (server *DefaultServer) update(id string) {
+
 }
 
 func (server *DefaultServer) register(ep string) (string, error) {
@@ -88,7 +108,12 @@ func NewRegisteredClient (ep string, id string) (RegisteredClient) {
 }
 
 type RegisteredClient interface {
-
+    GetId() string
+    GetName() string
+    GetLifetime() int
+    GetVersion() string
+    GetBindingMode() api.BindingMode
+    GetSmsNumber() string
 }
 
 type DefaultRegisteredClient struct {
@@ -98,4 +123,28 @@ type DefaultRegisteredClient struct {
     version     string
     bindingMode api.BindingMode
     smsNumber   string
+}
+
+func (c *DefaultRegisteredClient) GetId() string {
+    return c.id
+}
+
+func (c *DefaultRegisteredClient) GetName() string {
+    return c.name
+}
+
+func (c *DefaultRegisteredClient) GetLifetime() int {
+    return c.lifetime
+}
+
+func (c *DefaultRegisteredClient) GetVersion() string {
+    return c.version
+}
+
+func (c *DefaultRegisteredClient) GetBindingMode() api.BindingMode {
+    return c.bindingMode
+}
+
+func (c *DefaultRegisteredClient) GetSmsNumber() string {
+    return c.smsNumber
 }

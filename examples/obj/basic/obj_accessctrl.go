@@ -12,23 +12,23 @@ type AccessControl struct {
 	Data  *core.ObjectsData
 }
 
-func (o *AccessControl) OnExecute(instanceId int, resourceId int, req Request) Response {
+func (o *AccessControl) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *AccessControl) OnCreate(instanceId int, resourceId int, req Request) Response {
+func (o *AccessControl) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *AccessControl) OnDelete(instanceId int, req Request) Response {
+func (o *AccessControl) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *AccessControl) OnRead(instanceId int, resourceId int, req Request) Response {
+func (o *AccessControl) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *AccessControl) OnWrite(instanceId int, resourceId int, req Request) Response {
+func (o *AccessControl) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
