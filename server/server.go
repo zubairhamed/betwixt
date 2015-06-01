@@ -30,53 +30,26 @@ type DefaultServer struct {
 }
 
 func (server *DefaultServer) Start() {
-    s := server.coapServer
+    coap := server.coapServer
 
-    // Setup Routes
-    s.NewRoute("rd", goap.POST, server.handleRegister)
-    s.NewRoute("rd/{id}", goap.PUT, server.handleUpdate)
+    // Setup CoAP Routes
+    SetupCoapRoutes(server)
 
     // Start CoAP Server
     go func() {
-        s.Start()
+        coap.Start()
     }()
 
+    // Setup HTTP Routes
+    http := server.httpServer
+    SetupHttpRoutes(server)
+
     // Start HTTP Server
-    server.httpServer.Start()
+    http.Start()
 }
 
 func (server *DefaultServer) UseRegistry(reg api.Registry) {
     server.registry = reg
-}
-
-func (server *DefaultServer) handleRegister(r Request) (Response) {
-    req := r.(*goap.CoapRequest)
-    ep := req.GetUriQuery("ep")
-
-    clientId, err := server.register(ep)
-    if err != nil {
-        log.Println("Error registering client ", ep)
-    }
-
-    msg := goap.NewMessageOfType(goap.TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
-    msg.Token = req.GetMessage().Token
-    msg.AddOption(goap.OPTION_LOCATION_PATH, "rd/" + clientId)
-    msg.Code = goap.COAPCODE_201_CREATED
-
-    return goap.NewResponseWithMessage(msg)
-}
-
-func (server *DefaultServer) handleUpdate(r Request) (Response) {
-    req := r.(*goap.CoapRequest)
-    id := req.GetAttribute("id")
-
-    server.update(id)
-
-    msg := goap.NewMessageOfType(goap.TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
-    msg.Token = req.GetMessage().Token
-    msg.Code = goap.COAPCODE_204_CHANGED
-
-    return goap.NewResponseWithMessage(msg)
 }
 
 func (server *DefaultServer) GetRegisteredClient(id string) (api.RegisteredClient){
