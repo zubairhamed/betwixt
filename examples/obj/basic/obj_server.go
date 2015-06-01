@@ -7,32 +7,32 @@ import (
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
 )
 
-type Server struct {
+type ServerObject struct {
 	Model ObjectModel
 	Data  *core.ObjectsData
 }
 
-func (o *Server) OnExecute(instanceId int, resourceId int, req Request) Response {
+func (o *ServerObject) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Server) OnCreate(instanceId int, resourceId int, req Request) Response {
+func (o *ServerObject) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Server) OnDelete(instanceId int, req Request) Response {
+func (o *ServerObject) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Server) OnRead(instanceId int, resourceId int, req Request) Response {
+func (o *ServerObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Server) OnWrite(instanceId int, resourceId int, req Request) Response {
+func (o *ServerObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func NewExampleServerObject(reg Registry) *Server {
+func NewExampleServerObject(reg Registry) *ServerObject {
 	data := &core.ObjectsData{
 		Data: make(map[string]interface{}),
 	}
@@ -53,7 +53,7 @@ func NewExampleServerObject(reg Registry) *Server {
 	data.Put("/2/6", false)
 	data.Put("/2/7", "UQ")
 
-	return &Server{
+	return &ServerObject{
 		Model: reg.GetModel(oma.OBJECT_LWM2M_SERVER),
 		Data:  data,
 	}

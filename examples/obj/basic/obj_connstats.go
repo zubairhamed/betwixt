@@ -7,37 +7,37 @@ import (
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
 )
 
-type ConnectivityStatistics struct {
+type ConnectivityStatisticsObject struct {
 	Model ObjectModel
 	Data  *core.ObjectsData
 }
 
-func (o *ConnectivityStatistics) OnExecute(instanceId int, resourceId int, req Request) Response {
+func (o *ConnectivityStatisticsObject) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *ConnectivityStatistics) OnCreate(instanceId int, resourceId int, req Request) Response {
+func (o *ConnectivityStatisticsObject) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *ConnectivityStatistics) OnDelete(instanceId int, req Request) Response {
+func (o *ConnectivityStatisticsObject) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *ConnectivityStatistics) OnRead(instanceId int, resourceId int, req Request) Response {
+func (o *ConnectivityStatisticsObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *ConnectivityStatistics) OnWrite(instanceId int, resourceId int, req Request) Response {
+func (o *ConnectivityStatisticsObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func NewExampleConnectivityStatisticsObject(reg Registry) *ConnectivityStatistics {
+func NewExampleConnectivityStatisticsObject(reg Registry) *ConnectivityStatisticsObject {
 	data := &core.ObjectsData{
 		Data: make(map[string]interface{}),
 	}
 
-	return &ConnectivityStatistics{
+	return &ConnectivityStatisticsObject{
 		Model: reg.GetModel(oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS),
 		Data:  data,
 	}

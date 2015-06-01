@@ -8,6 +8,7 @@ import (
 	. "github.com/zubairhamed/goap"
 	"log"
 	"net"
+	. "github.com/zubairhamed/go-commons/network"
 )
 
 func NewDefaultClient(local string, remote string) *DefaultClient {
@@ -186,7 +187,8 @@ func (c *DefaultClient) Start() {
 	c.coapServer.Start()
 }
 
-func (c *DefaultClient) handleCreateRequest(req *CoapRequest) *CoapResponse {
+func (c *DefaultClient) handleCreateRequest(r Request) Response {
+	req := r.(*CoapRequest)
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
@@ -214,7 +216,8 @@ func (c *DefaultClient) handleCreateRequest(req *CoapRequest) *CoapResponse {
 	return NewResponseWithMessage(msg)
 }
 
-func (c *DefaultClient) handleReadRequest(req *CoapRequest) *CoapResponse {
+func (c *DefaultClient) handleReadRequest(r Request) Response {
+	req := r.(*CoapRequest)
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
@@ -256,7 +259,8 @@ func (c *DefaultClient) handleReadRequest(req *CoapRequest) *CoapResponse {
 	return NewResponseWithMessage(msg)
 }
 
-func (c *DefaultClient) handleDeleteRequest(req *CoapRequest) *CoapResponse {
+func (c *DefaultClient) handleDeleteRequest(r Request) (Response) {
+	req := r.(*CoapRequest)
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
 
@@ -286,7 +290,8 @@ func (c *DefaultClient) handleObserveRequest() {
 
 }
 
-func (c *DefaultClient) handleWriteRequest(req *CoapRequest) *CoapResponse {
+func (c *DefaultClient) handleWriteRequest(r Request) Response {
+	req := r.(*CoapRequest)
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
@@ -327,7 +332,8 @@ func (c *DefaultClient) handleWriteRequest(req *CoapRequest) *CoapResponse {
 	return NewResponseWithMessage(msg)
 }
 
-func (c *DefaultClient) handleExecuteRequest(req *CoapRequest) *CoapResponse {
+func (c *DefaultClient) handleExecuteRequest(r Request) (Response) {
+	req := r.(*CoapRequest)
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")

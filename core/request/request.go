@@ -5,7 +5,7 @@ import (
 	"github.com/zubairhamed/goap"
 )
 
-func Default(coap *goap.CoapRequest, op OperationType) Request {
+func Default(coap *goap.CoapRequest, op OperationType) Lwm2mRequest {
 	return &DefaultRequest{
 		coap: coap,
 		op:   op,
@@ -33,7 +33,7 @@ func (r *DefaultRequest) GetCoapRequest() *goap.CoapRequest {
 	return r.coap
 }
 
-func Nil(op OperationType) Request {
+func Nil(op OperationType) Lwm2mRequest {
 	return &NilRequest{
 		op: op,
 	}

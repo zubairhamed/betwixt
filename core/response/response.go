@@ -1,13 +1,13 @@
 package response
 
 import (
-	. "github.com/zubairhamed/go-lwm2m/api"
 	"github.com/zubairhamed/go-lwm2m/core/values"
 	. "github.com/zubairhamed/goap"
+	. "github.com/zubairhamed/go-lwm2m/api"
 )
 
 // 201 Created
-func Created() Response {
+func Created() Lwm2mResponse {
 	return &CreatedResponse{}
 }
 
@@ -23,7 +23,7 @@ func (r *CreatedResponse) GetResponseValue() ResponseValue {
 }
 
 // 202 Deleted
-func Deleted() Response {
+func Deleted() Lwm2mResponse {
 	return &DeletedResponse{}
 }
 
@@ -39,7 +39,7 @@ func (r *DeletedResponse) GetResponseValue() ResponseValue {
 }
 
 // 204 Changed
-func Changed() Response {
+func Changed() Lwm2mResponse {
 	return &ChangedResponse{}
 }
 
@@ -55,7 +55,7 @@ func (r *ChangedResponse) GetResponseValue() ResponseValue {
 }
 
 // 205 Content
-func Content(val ResponseValue) Response {
+func Content(val ResponseValue) Lwm2mResponse {
 	return &ContentResponse{
 		val: val,
 	}
@@ -74,7 +74,7 @@ func (r *ContentResponse) GetResponseValue() ResponseValue {
 }
 
 // 400 Bad Request
-func BadRequest() Response {
+func BadRequest() Lwm2mResponse {
 	return &BadRequestResponse{}
 }
 
@@ -90,7 +90,7 @@ func (r *BadRequestResponse) GetResponseValue() ResponseValue {
 }
 
 // 401 Unauthorized
-func Unauthorized() Response {
+func Unauthorized() Lwm2mResponse {
 	return &UnauthorizedResponse{}
 }
 
@@ -106,7 +106,7 @@ func (r *UnauthorizedResponse) GetResponseValue() ResponseValue {
 }
 
 // 404 Not Found
-func NotFound() Response {
+func NotFound() Lwm2mResponse {
 	return &NotFoundResponse{}
 }
 
@@ -122,7 +122,7 @@ func (r *NotFoundResponse) GetResponseValue() ResponseValue {
 }
 
 // 405 Method Not Allowed
-func MethodNotAllowed() Response {
+func MethodNotAllowed() Lwm2mResponse {
 	return &MethodNotAllowedResponse{}
 }
 
@@ -138,7 +138,7 @@ func (r *MethodNotAllowedResponse) GetResponseValue() ResponseValue {
 }
 
 // 409 Conflict
-func Conflict() Response {
+func Conflict() Lwm2mResponse {
 	return &ConflictResponse{}
 }
 

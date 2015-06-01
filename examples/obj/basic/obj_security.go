@@ -7,32 +7,32 @@ import (
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
 )
 
-type Security struct {
+type SecurityObject struct {
 	Model ObjectModel
 	Data  *core.ObjectsData
 }
 
-func (o *Security) OnExecute(instanceId int, resourceId int, req Request) Response {
+func (o *SecurityObject) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Security) OnCreate(instanceId int, resourceId int, req Request) Response {
+func (o *SecurityObject) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Security) OnDelete(instanceId int, req Request) Response {
+func (o *SecurityObject) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Security) OnRead(instanceId int, resourceId int, req Request) Response {
+func (o *SecurityObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Security) OnWrite(instanceId int, resourceId int, req Request) Response {
+func (o *SecurityObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func NewExampleSecurityObject(reg Registry) *Security {
+func NewExampleSecurityObject(reg Registry) *SecurityObject {
 	data := &core.ObjectsData{
 		Data: make(map[string]interface{}),
 	}
@@ -61,7 +61,7 @@ func NewExampleSecurityObject(reg Registry) *Security {
 	data.Put("/2/10", 102)
 	data.Put("/2/11", 0)
 
-	return &Security{
+	return &SecurityObject{
 		Model: reg.GetModel(oma.OBJECT_LWM2M_SECURITY),
 		Data:  data,
 	}

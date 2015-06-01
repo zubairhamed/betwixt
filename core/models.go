@@ -118,35 +118,35 @@ func (en *DefaultObjectEnabler) SetObjectInstances(o []ObjectInstance) {
 	en.Instances = o
 }
 
-func (en *DefaultObjectEnabler) OnRead(instanceId int, resourceId int, req Request) Response {
+func (en *DefaultObjectEnabler) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	if en.Handler != nil {
 		return en.Handler.OnRead(instanceId, resourceId, req)
 	}
 	return nil
 }
 
-func (en *DefaultObjectEnabler) OnDelete(instanceId int, req Request) Response {
+func (en *DefaultObjectEnabler) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
 	if en.Handler != nil {
 		return en.Handler.OnDelete(instanceId, req)
 	}
 	return response.NotFound()
 }
 
-func (en *DefaultObjectEnabler) OnWrite(instanceId int, resourceId int, req Request) Response {
+func (en *DefaultObjectEnabler) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	if en.Handler != nil {
 		return en.Handler.OnWrite(instanceId, resourceId, req)
 	}
 	return response.NotFound()
 }
 
-func (en *DefaultObjectEnabler) OnExecute(instanceId int, resourceId int, req Request) Response {
+func (en *DefaultObjectEnabler) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	if en.Handler != nil {
 		return en.Handler.OnExecute(instanceId, resourceId, req)
 	}
 	return response.NotFound()
 }
 
-func (en *DefaultObjectEnabler) OnCreate(instanceId int, resourceId int, req Request) Response {
+func (en *DefaultObjectEnabler) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	if en.Handler != nil {
 		return en.Handler.OnCreate(instanceId, resourceId, req)
 	}

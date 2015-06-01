@@ -9,26 +9,26 @@ import (
 	"time"
 )
 
-type Device struct {
+type DeviceObject struct {
 	Model       ObjectModel
 	currentTime time.Time
 	utcOffset   string
 	timeZone    string
 }
 
-func (o *Device) OnExecute(instanceId int, resourceId int, req Request) Response {
+func (o *DeviceObject) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Changed()
 }
 
-func (o *Device) OnCreate(instanceId int, resourceId int, req Request) Response {
+func (o *DeviceObject) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Created()
 }
 
-func (o *Device) OnDelete(instanceId int, req Request) Response {
+func (o *DeviceObject) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Deleted()
 }
 
-func (o *Device) OnRead(instanceId int, resourceId int, req Request) Response {
+func (o *DeviceObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	if resourceId == -1 {
 		// Read Object Instance
 	} else {
@@ -102,7 +102,7 @@ func (o *Device) OnRead(instanceId int, resourceId int, req Request) Response {
 	return response.NotFound()
 }
 
-func (o *Device) OnWrite(instanceId int, resourceId int, req Request) Response {
+func (o *DeviceObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	val := req.GetMessage().Payload
 
 	switch resourceId {
@@ -123,20 +123,20 @@ func (o *Device) OnWrite(instanceId int, resourceId int, req Request) Response {
 	return response.Changed()
 }
 
-func (o *Device) Reboot() ResponseValue {
+func (o *DeviceObject) Reboot() ResponseValue {
 	return values.Empty()
 }
 
-func (o *Device) FactoryReset() ResponseValue {
+func (o *DeviceObject) FactoryReset() ResponseValue {
 	return values.Empty()
 }
 
-func (o *Device) ResetErrorCode() string {
+func (o *DeviceObject) ResetErrorCode() string {
 	return ""
 }
 
-func NewExampleDeviceObject(reg Registry) *Device {
-	return &Device{
+func NewExampleDeviceObject(reg Registry) *DeviceObject {
+	return &DeviceObject{
 		Model:       reg.GetModel(oma.OBJECT_LWM2M_DEVICE),
 		currentTime: time.Unix(1367491215, 0),
 		utcOffset:   "+02:00",
