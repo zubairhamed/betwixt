@@ -1,7 +1,7 @@
 package server
 import (
     . "github.com/zubairhamed/go-commons/network"
-    "log"
+    "github.com/zubairhamed/go-lwm2m/server/pages"
 )
 
 func SetupHttpRoutes(server *DefaultServer) {
@@ -12,8 +12,20 @@ func SetupHttpRoutes(server *DefaultServer) {
 
 func handleHttpHome(server *DefaultServer) RouteHandler {
     return func (r Request) (Response) {
-        log.Println("Handle Home")
 
-        return nil
+        page := &pages.HomePage{}
+
+        model := struct {
+            Title   string
+            Content string
+        }{
+            "Page Title",
+            "Page Content",
+        }
+
+        return &HttpResponse{
+            TemplateModel: model,
+            Payload: NewBytesPayload(page.GetContent()),
+        }
     }
 }

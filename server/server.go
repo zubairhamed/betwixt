@@ -7,17 +7,18 @@ import (
     . "github.com/zubairhamed/go-commons/network"
 )
 
-func NewDefaultServer() (api.Server) {
+func NewDefaultCoapServer() (*goap.CoapServer) {
     localAddr, err := net.ResolveUDPAddr("udp", ":5683")
     if err != nil {
         log.Println("Error starting CoAP Server: ", err)
     }
-    coapServer := goap.NewServer(localAddr, nil)
-    httpServer := NewDefaultHttpServer()
+    return goap.NewServer(localAddr, nil)
+}
 
+func NewDefaultServer() (api.Server) {
     return &DefaultServer{
-        coapServer:  coapServer,
-        httpServer:  httpServer,
+        coapServer:  NewDefaultCoapServer(),
+        httpServer:  NewDefaultHttpServer(),
         clients:     make(map[string]api.RegisteredClient),
     }
 }
@@ -68,42 +69,3 @@ func (server *DefaultServer) register(ep string) (string, error) {
     return clientId, nil
 }
 
-func NewRegisteredClient (ep string, id string) (api.RegisteredClient) {
-    return &DefaultRegisteredClient{
-        name: ep,
-        id: id,
-    }
-}
-
-type DefaultRegisteredClient struct {
-    id          string
-    name        string
-    lifetime    int
-    version     string
-    bindingMode api.BindingMode
-    smsNumber   string
-}
-
-func (c *DefaultRegisteredClient) GetId() string {
-    return c.id
-}
-
-func (c *DefaultRegisteredClient) GetName() string {
-    return c.name
-}
-
-func (c *DefaultRegisteredClient) GetLifetime() int {
-    return c.lifetime
-}
-
-func (c *DefaultRegisteredClient) GetVersion() string {
-    return c.version
-}
-
-func (c *DefaultRegisteredClient) GetBindingMode() api.BindingMode {
-    return c.bindingMode
-}
-
-func (c *DefaultRegisteredClient) GetSmsNumber() string {
-    return c.smsNumber
-}
