@@ -7,32 +7,32 @@ import (
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
 )
 
-type AccessControl struct {
+type AccessControlObject struct {
 	Model ObjectModel
 	Data  *core.ObjectsData
 }
 
-func (o *AccessControl) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *AccessControlObject) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *AccessControl) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *AccessControlObject) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *AccessControl) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *AccessControlObject) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *AccessControl) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *AccessControlObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *AccessControl) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *AccessControlObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func NewExampleAccessControlObject(reg Registry) *AccessControl {
+func NewExampleAccessControlObject(reg Registry) *AccessControlObject {
 	data := &core.ObjectsData{
 		Data: make(map[string]interface{}),
 	}
@@ -64,7 +64,7 @@ func NewExampleAccessControlObject(reg Registry) *AccessControl {
 	data.Put("4/2/101", []byte{0, 16})
 	data.Put("4/3", 65535)
 
-	return &AccessControl{
+	return &AccessControlObject{
 		Model: reg.GetModel(oma.OBJECT_LWM2M_SECURITY),
 		Data:  data,
 	}

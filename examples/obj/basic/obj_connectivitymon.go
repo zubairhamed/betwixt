@@ -7,23 +7,23 @@ import (
 	"github.com/zubairhamed/go-lwm2m/core/values"
 )
 
-type ConnectivityMonitoring struct {
+type ConnectivityMonitoringObject struct {
 	Model ObjectModel
 }
 
-func (o *ConnectivityMonitoring) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *ConnectivityMonitoringObject) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *ConnectivityMonitoring) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *ConnectivityMonitoringObject) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *ConnectivityMonitoring) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *ConnectivityMonitoringObject) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *ConnectivityMonitoring) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *ConnectivityMonitoringObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	if resourceId == -1 {
 		// Read Object Instance
 	} else {
@@ -84,12 +84,12 @@ func (o *ConnectivityMonitoring) OnRead(instanceId int, resourceId int, req Lwm2
 	return response.NotFound()
 }
 
-func (o *ConnectivityMonitoring) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *ConnectivityMonitoringObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func NewExampleConnectivityMonitoringObject(reg Registry) *ConnectivityMonitoring {
-	return &ConnectivityMonitoring{
+func NewExampleConnectivityMonitoringObject(reg Registry) *ConnectivityMonitoringObject {
+	return &ConnectivityMonitoringObject{
 		Model: reg.GetModel(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING),
 	}
 }

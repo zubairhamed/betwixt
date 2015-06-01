@@ -111,3 +111,17 @@ type Lwm2mResponse interface {
 	GetResponseCode() CoapCode
 	GetResponseValue() ResponseValue
 }
+
+type Server interface {
+	UseRegistry(Registry)
+	Start()
+}
+
+type RegisteredClient interface {
+	GetId() string
+	GetName() string
+	GetLifetime() int
+	GetVersion() string
+	GetBindingMode() BindingMode
+	GetSmsNumber() string
+}

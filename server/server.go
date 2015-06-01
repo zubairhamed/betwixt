@@ -7,7 +7,7 @@ import (
     . "github.com/zubairhamed/go-commons/network"
 )
 
-func NewDefaultServer() (Server) {
+func NewDefaultServer() (api.Server) {
     localAddr, err := net.ResolveUDPAddr("udp", ":5683")
     if err != nil {
         log.Println("Error starting CoAP Server: ", err)
@@ -18,20 +18,15 @@ func NewDefaultServer() (Server) {
     return &DefaultServer{
         coapServer:  coapServer,
         httpServer:  httpServer,
-        clients:     make(map[string]RegisteredClient),
+        clients:     make(map[string]api.RegisteredClient),
     }
-}
-
-type Server interface {
-    UseRegistry(api.Registry)
-    Start()
 }
 
 type DefaultServer struct {
     coapServer     *goap.CoapServer
     httpServer     *HttpServer
     registry       api.Registry
-    clients        map[string]RegisteredClient
+    clients        map[string]api.RegisteredClient
 }
 
 func (server *DefaultServer) Start() {
@@ -84,7 +79,7 @@ func (server *DefaultServer) handleUpdate(r Request) (Response) {
     return goap.NewResponseWithMessage(msg)
 }
 
-func (server *DefaultServer) GetRegisteredClient(id string) (RegisteredClient){
+func (server *DefaultServer) GetRegisteredClient(id string) (api.RegisteredClient){
     return server.clients[id]
 }
 
@@ -100,20 +95,11 @@ func (server *DefaultServer) register(ep string) (string, error) {
     return clientId, nil
 }
 
-func NewRegisteredClient (ep string, id string) (RegisteredClient) {
+func NewRegisteredClient (ep string, id string) (api.RegisteredClient) {
     return &DefaultRegisteredClient{
         name: ep,
         id: id,
     }
-}
-
-type RegisteredClient interface {
-    GetId() string
-    GetName() string
-    GetLifetime() int
-    GetVersion() string
-    GetBindingMode() api.BindingMode
-    GetSmsNumber() string
 }
 
 type DefaultRegisteredClient struct {

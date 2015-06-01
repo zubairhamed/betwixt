@@ -7,37 +7,37 @@ import (
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
 )
 
-type Location struct {
+type LocationObject struct {
 	Model ObjectModel
 	Data  *core.ObjectsData
 }
 
-func (o *Location) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *LocationObject) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Location) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *LocationObject) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Location) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *LocationObject) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Location) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *LocationObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func (o *Location) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *LocationObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func NewExampleLocationObject(reg Registry) *Location {
+func NewExampleLocationObject(reg Registry) *LocationObject {
 	data := &core.ObjectsData{
 		Data: make(map[string]interface{}),
 	}
 
-	return &Location{
+	return &LocationObject{
 		Model: reg.GetModel(oma.OBJECT_LWM2M_LOCATION),
 		Data:  data,
 	}

@@ -17,16 +17,6 @@ func (h *HttpServer) Start() {
     h.serveServer()
 }
 
-type WrappedHandler struct {
-    routes     []*Route
-}
-
-func (wh *WrappedHandler) ServeHTTP (w http.ResponseWriter, r *http.Request) {
-    route, attrs, err := MatchingRoute(r.URL.Path, r.Method, nil, wh.routes)
-
-    log.Println(route, attrs, err)
-}
-
 func (h *HttpServer) serveServer() {
     log.Println("Started HTTP Server @ Port 8080")
 
@@ -43,4 +33,13 @@ func (h *HttpServer) NewRoute(path string, method string, fn RouteHandler) *Rout
     return route
 }
 
+type WrappedHandler struct {
+    routes     []*Route
+}
+
+func (wh *WrappedHandler) ServeHTTP (w http.ResponseWriter, r *http.Request) {
+    route, attrs, err := MatchingRoute(r.URL.Path, r.Method, nil, wh.routes)
+
+    log.Println(route, attrs, err)
+}
 
