@@ -2,13 +2,13 @@ package client
 
 import (
 	"errors"
+	. "github.com/zubairhamed/go-commons/network"
 	. "github.com/zubairhamed/go-lwm2m/api"
 	"github.com/zubairhamed/go-lwm2m/core"
 	"github.com/zubairhamed/go-lwm2m/core/request"
 	. "github.com/zubairhamed/goap"
 	"log"
 	"net"
-	. "github.com/zubairhamed/go-commons/network"
 )
 
 func NewDefaultClient(local string, remote string) *DefaultClient {
@@ -259,7 +259,7 @@ func (c *DefaultClient) handleReadRequest(r Request) Response {
 	return NewResponseWithMessage(msg)
 }
 
-func (c *DefaultClient) handleDeleteRequest(r Request) (Response) {
+func (c *DefaultClient) handleDeleteRequest(r Request) Response {
 	req := r.(*CoapRequest)
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
@@ -332,7 +332,7 @@ func (c *DefaultClient) handleWriteRequest(r Request) Response {
 	return NewResponseWithMessage(msg)
 }
 
-func (c *DefaultClient) handleExecuteRequest(r Request) (Response) {
+func (c *DefaultClient) handleExecuteRequest(r Request) Response {
 	req := r.(*CoapRequest)
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")

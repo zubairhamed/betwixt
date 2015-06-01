@@ -3,10 +3,10 @@ package tests
 import (
 	"github.com/stretchr/testify/assert"
 	. "github.com/zubairhamed/go-lwm2m/api"
+	"github.com/zubairhamed/go-lwm2m/client"
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
 	"github.com/zubairhamed/go-lwm2m/registry"
 	"testing"
-	"github.com/zubairhamed/go-lwm2m/client"
 )
 
 func TestClient(t *testing.T) {

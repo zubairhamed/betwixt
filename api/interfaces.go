@@ -1,4 +1,5 @@
 package api
+
 import (
 	. "github.com/zubairhamed/goap"
 )
@@ -26,7 +27,6 @@ type ResponseValue interface {
 	GetValue() interface{}
 	GetStringValue() string
 }
-
 
 type ObjectEnabler interface {
 	GetObjectInstance(int) ObjectInstance

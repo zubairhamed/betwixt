@@ -2,10 +2,10 @@ package main
 
 import (
 	. "github.com/zubairhamed/go-lwm2m/api"
+	"github.com/zubairhamed/go-lwm2m/client"
 	. "github.com/zubairhamed/go-lwm2m/examples/obj/basic"
 	"github.com/zubairhamed/go-lwm2m/objects/oma"
 	"github.com/zubairhamed/go-lwm2m/registry"
-	"github.com/zubairhamed/go-lwm2m/client"
 )
 
 func main() {
