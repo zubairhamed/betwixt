@@ -47,7 +47,7 @@ func handleHttpHome(server *DefaultServer) RouteHandler {
 				Endpoint:         v.GetName(),
 				RegistrationID:   v.GetId(),
 				RegistrationDate: v.GetRegistrationDate().String(),
-				LastUpdate: 	  v.LastUpdate().String(),
+				LastUpdate:       v.LastUpdate().String(),
 			}
 			model = append(model, c)
 		}

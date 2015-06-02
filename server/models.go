@@ -7,10 +7,10 @@ import (
 
 func NewRegisteredClient(ep string, id string, addr string) api.RegisteredClient {
 	return &DefaultRegisteredClient{
-		name:    	ep,
-		id:      	id,
-		addr:    	addr,
-		regDate: 	time.Now(),
+		name:       ep,
+		id:         id,
+		addr:       addr,
+		regDate:    time.Now(),
 		updateDate: time.Now(),
 	}
 }
@@ -24,7 +24,7 @@ type DefaultRegisteredClient struct {
 	smsNumber   string
 	addr        string
 	regDate     time.Time
-	updateDate	time.Time
+	updateDate  time.Time
 }
 
 func (c *DefaultRegisteredClient) GetId() string {
