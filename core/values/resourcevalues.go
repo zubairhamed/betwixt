@@ -3,7 +3,7 @@ package values
 import (
 	"bytes"
 	"encoding/binary"
-	. "github.com/zubairhamed/go-lwm2m/api"
+	. "github.com/zubairhamed/betwixt/api"
 	"strconv"
 	"time"
 )

@@ -1,8 +1,8 @@
 package response
 
 import (
-	. "github.com/zubairhamed/go-lwm2m/api"
-	"github.com/zubairhamed/go-lwm2m/core/values"
+	. "github.com/zubairhamed/betwixt/api"
+	"github.com/zubairhamed/betwixt/core/values"
 	. "github.com/zubairhamed/goap"
 )
 

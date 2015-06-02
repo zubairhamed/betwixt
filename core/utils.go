@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	. "github.com/zubairhamed/go-lwm2m/api"
+	. "github.com/zubairhamed/betwixt/api"
 	"sort"
 	"time"
 )

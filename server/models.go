@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/zubairhamed/go-lwm2m/api"
+	"github.com/zubairhamed/betwixt/api"
 	"time"
 )
 

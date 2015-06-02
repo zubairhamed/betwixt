@@ -3,8 +3,8 @@ package core
 import (
 	"bytes"
 	"encoding/binary"
-	. "github.com/zubairhamed/go-lwm2m/api"
-	"github.com/zubairhamed/go-lwm2m/core/values"
+	. "github.com/zubairhamed/betwixt/api"
+	"github.com/zubairhamed/betwixt/core/values"
 )
 
 /*

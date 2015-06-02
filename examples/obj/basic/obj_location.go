@@ -1,10 +1,10 @@
 package basic
 
 import (
-	. "github.com/zubairhamed/go-lwm2m/api"
-	"github.com/zubairhamed/go-lwm2m/core"
-	"github.com/zubairhamed/go-lwm2m/core/response"
-	"github.com/zubairhamed/go-lwm2m/objects/oma"
+	. "github.com/zubairhamed/betwixt/api"
+	"github.com/zubairhamed/betwixt/core"
+	"github.com/zubairhamed/betwixt/core/response"
+	"github.com/zubairhamed/betwixt/objects/oma"
 )
 
 type LocationObject struct {

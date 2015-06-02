@@ -1,8 +1,8 @@
 package oma
 
 import (
-	. "github.com/zubairhamed/go-lwm2m/api"
-	. "github.com/zubairhamed/go-lwm2m/core"
+	. "github.com/zubairhamed/betwixt/api"
+	. "github.com/zubairhamed/betwixt/core"
 )
 
 const (

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/zubairhamed/go-lwm2m/registry"
-	"github.com/zubairhamed/go-lwm2m/server"
+	"github.com/zubairhamed/betwixt/registry"
+	"github.com/zubairhamed/betwixt/server"
 )
 
 func main() {

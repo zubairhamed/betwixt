@@ -2,7 +2,7 @@ package server
 
 import (
 	. "github.com/zubairhamed/go-commons/network"
-	"github.com/zubairhamed/go-lwm2m/server/pages"
+	"github.com/zubairhamed/betwixt/server/pages"
 )
 
 func SetupHttpRoutes(server *DefaultServer) {

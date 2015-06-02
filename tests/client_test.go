@@ -2,10 +2,10 @@ package tests
 
 import (
 	"github.com/stretchr/testify/assert"
-	. "github.com/zubairhamed/go-lwm2m/api"
-	"github.com/zubairhamed/go-lwm2m/client"
-	"github.com/zubairhamed/go-lwm2m/objects/oma"
-	"github.com/zubairhamed/go-lwm2m/registry"
+	. "github.com/zubairhamed/betwixt/api"
+	"github.com/zubairhamed/betwixt/client"
+	"github.com/zubairhamed/betwixt/objects/oma"
+	"github.com/zubairhamed/betwixt/registry"
 	"testing"
 )
 
@@ -62,9 +62,9 @@ func TestClient(t *testing.T) {
 	inst2 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 1)
 	inst3 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 2)
 
-	assert.NotNil(t, inst1, "Error instantiating go-lwm2m object")
-	assert.NotNil(t, inst2, "Error instantiating go-lwm2m object")
-	assert.NotNil(t, inst3, "Error instantiating go-lwm2m object")
+	assert.NotNil(t, inst1, "Error instantiating betwixt object")
+	assert.NotNil(t, inst2, "Error instantiating betwixt object")
+	assert.NotNil(t, inst3, "Error instantiating betwixt object")
 
 	cli.AddObjectInstances(inst1, inst2, inst3)
 

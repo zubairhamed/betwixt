@@ -2,12 +2,12 @@ package tests
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/zubairhamed/go-lwm2m/api"
-	"github.com/zubairhamed/go-lwm2m/client"
-	"github.com/zubairhamed/go-lwm2m/core/request"
-	"github.com/zubairhamed/go-lwm2m/examples/obj/basic"
-	"github.com/zubairhamed/go-lwm2m/objects/oma"
-	"github.com/zubairhamed/go-lwm2m/registry"
+	"github.com/zubairhamed/betwixt/api"
+	"github.com/zubairhamed/betwixt/client"
+	"github.com/zubairhamed/betwixt/core/request"
+	"github.com/zubairhamed/betwixt/examples/obj/basic"
+	"github.com/zubairhamed/betwixt/objects/oma"
+	"github.com/zubairhamed/betwixt/registry"
 	"testing"
 	"time"
 )
