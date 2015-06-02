@@ -3,7 +3,7 @@ package response
 import (
 	. "github.com/zubairhamed/betwixt/api"
 	"github.com/zubairhamed/betwixt/core/values"
-	. "github.com/zubairhamed/goap"
+	. "github.com/zubairhamed/canopus"
 )
 
 // 201 Created

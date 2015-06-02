@@ -2,8 +2,8 @@ package server
 
 import (
 	"github.com/zubairhamed/betwixt/api"
+	"github.com/zubairhamed/canopus"
 	. "github.com/zubairhamed/go-commons/network"
-	"github.com/zubairhamed/goap"
 	"log"
 	"net"
 )

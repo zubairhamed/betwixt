@@ -2,7 +2,7 @@ package request
 
 import (
 	. "github.com/zubairhamed/betwixt/api"
-	"github.com/zubairhamed/goap"
+	"github.com/zubairhamed/canopus"
 )
 
 func Default(coap *goap.CoapRequest, op OperationType) Lwm2mRequest {

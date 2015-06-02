@@ -1,7 +1,7 @@
 package api
 
 import (
-	. "github.com/zubairhamed/goap"
+	. "github.com/zubairhamed/canopus"
 	"time"
 )
 
