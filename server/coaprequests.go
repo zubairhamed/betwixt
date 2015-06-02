@@ -9,14 +9,14 @@ import (
 func SetupCoapRoutes(server *DefaultServer) {
 	coap := server.coapServer
 
-	coap.NewRoute("rd", goap.POST, handleRegister(server))
-	coap.NewRoute("rd/{id}", goap.PUT, handleUpdate(server))
-	coap.NewRoute("rd/{id}", goap.DELETE, handleDelete(server))
+	coap.NewRoute("rd", canopus.POST, handleRegister(server))
+	coap.NewRoute("rd/{id}", canopus.PUT, handleUpdate(server))
+	coap.NewRoute("rd/{id}", canopus.DELETE, handleDelete(server))
 }
 
 func handleRegister(server *DefaultServer) RouteHandler {
 	return func(r Request) Response {
-		req := r.(*goap.CoapRequest)
+		req := r.(*canopus.CoapRequest)
 		ep := req.GetUriQuery("ep")
 
 		clientId, err := server.register(ep, req.GetAddress().String())
@@ -24,41 +24,41 @@ func handleRegister(server *DefaultServer) RouteHandler {
 			log.Println("Error registering client ", ep)
 		}
 
-		msg := goap.NewMessageOfType(goap.TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+		msg := canopus.NewMessageOfType(canopus.TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
 		msg.Token = req.GetMessage().Token
-		msg.AddOption(goap.OPTION_LOCATION_PATH, "rd/"+clientId)
-		msg.Code = goap.COAPCODE_201_CREATED
+		msg.AddOption(canopus.OPTION_LOCATION_PATH, "rd/"+clientId)
+		msg.Code = canopus.COAPCODE_201_CREATED
 
-		return goap.NewResponseWithMessage(msg)
+		return canopus.NewResponseWithMessage(msg)
 	}
 }
 
 func handleUpdate(server *DefaultServer) RouteHandler {
 	return func(r Request) Response {
-		req := r.(*goap.CoapRequest)
+		req := r.(*canopus.CoapRequest)
 		id := req.GetAttribute("id")
 
 		server.update(id)
 
-		msg := goap.NewMessageOfType(goap.TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+		msg := canopus.NewMessageOfType(canopus.TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
 		msg.Token = req.GetMessage().Token
-		msg.Code = goap.COAPCODE_204_CHANGED
+		msg.Code = canopus.COAPCODE_204_CHANGED
 
-		return goap.NewResponseWithMessage(msg)
+		return canopus.NewResponseWithMessage(msg)
 	}
 }
 
 func handleDelete(server *DefaultServer) RouteHandler {
 	return func(r Request) Response {
-		req := r.(*goap.CoapRequest)
+		req := r.(*canopus.CoapRequest)
 		id := req.GetAttribute("id")
 
 		server.delete(id)
 
-		msg := goap.NewMessageOfType(goap.TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+		msg := canopus.NewMessageOfType(canopus.TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
 		msg.Token = req.GetMessage().Token
-		msg.Code = goap.COAPCODE_202_DELETED
+		msg.Code = canopus.COAPCODE_202_DELETED
 
-		return goap.NewResponseWithMessage(msg)
+		return canopus.NewResponseWithMessage(msg)
 	}
 }

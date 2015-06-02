@@ -8,12 +8,12 @@ import (
 	"net"
 )
 
-func NewDefaultCoapServer() *goap.CoapServer {
+func NewDefaultCoapServer() *canopus.CoapServer {
 	localAddr, err := net.ResolveUDPAddr("udp", ":5683")
 	if err != nil {
 		log.Println("Error starting CoAP Server: ", err)
 	}
-	return goap.NewServer(localAddr, nil)
+	return canopus.NewServer(localAddr, nil)
 }
 
 func NewDefaultServer() api.Server {
@@ -25,7 +25,7 @@ func NewDefaultServer() api.Server {
 }
 
 type DefaultServer struct {
-	coapServer *goap.CoapServer
+	coapServer *canopus.CoapServer
 	httpServer *HttpServer
 	registry   api.Registry
 	clients    map[string]api.RegisteredClient
@@ -68,7 +68,7 @@ func (server *DefaultServer) update(id string) {
 }
 
 func (server *DefaultServer) register(ep string, addr string) (string, error) {
-	clientId := goap.GenerateToken(8)
+	clientId := canopus.GenerateToken(8)
 	newClient := NewRegisteredClient(ep, clientId, addr)
 
 	server.clients[ep] = newClient
