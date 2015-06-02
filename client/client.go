@@ -2,10 +2,10 @@ package client
 
 import (
 	"errors"
-	. "github.com/zubairhamed/go-commons/network"
 	. "github.com/zubairhamed/betwixt/api"
 	"github.com/zubairhamed/betwixt/core"
 	"github.com/zubairhamed/betwixt/core/request"
+	. "github.com/zubairhamed/go-commons/network"
 	. "github.com/zubairhamed/goap"
 	"log"
 	"net"
