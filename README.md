@@ -7,13 +7,13 @@ Go v1.4 (but should work on 1.3 as well)
 ## Running
 There are a couple of examples in the /examples package.
 
-## basic_client.go
+### basic_client.go
 This runs a client with objects and values based on the LWM2M spec examples.
 Code for the objects are found in /examples/obj/*
 
 You can either run the Leshan Standalone server and have the client register to it or run basic_server.go and have it register to it.
 
-## basic_server.go
+### basic_server.go
 This runs a simple server which accepts registrations and updates.
 
 By default, it runs a CoAP server on port 5683 and a HTTP server on port 8081
