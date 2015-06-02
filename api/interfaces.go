@@ -2,6 +2,7 @@ package api
 
 import (
 	. "github.com/zubairhamed/goap"
+	"time"
 )
 
 type RequestHandler interface {
@@ -124,4 +125,7 @@ type RegisteredClient interface {
 	GetVersion() string
 	GetBindingMode() BindingMode
 	GetSmsNumber() string
+	GetRegistrationDate() time.Time
+	Update()
+	LastUpdate() time.Time
 }

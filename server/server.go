@@ -59,13 +59,29 @@ func (server *DefaultServer) GetRegisteredClient(id string) api.RegisteredClient
 }
 
 func (server *DefaultServer) update(id string) {
-
+	for k, v := range server.clients {
+		if v.GetId() == id {
+			v.Update()
+			server.clients[k] = v
+		}
+	}
 }
 
-func (server *DefaultServer) register(ep string) (string, error) {
+func (server *DefaultServer) register(ep string, addr string) (string, error) {
 	clientId := goap.GenerateToken(8)
-	newClient := NewRegisteredClient(ep, clientId)
-	server.clients[clientId] = newClient
+	newClient := NewRegisteredClient(ep, clientId, addr)
+
+	server.clients[ep] = newClient
 
 	return clientId, nil
+}
+
+func (server *DefaultServer) delete(id string) {
+	for k, v := range server.clients {
+		if v.GetId() == id {
+
+			delete(server.clients, k)
+			return
+		}
+	}
 }
