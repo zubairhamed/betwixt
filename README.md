@@ -18,13 +18,23 @@ This runs a simple server which accepts registrations and updates.
 
 By default, it runs a CoAP server on port 5683 and a HTTP server on port 8081
 
+### Using
+
+#### Defining a client
+
+#### Defining an object
+
 ## Limitations
 - No dTLS support.
+
+## LWM2M - Short of it
+- Device Management Standard out of OMA
+- Lightweight and compact binary protocol based on CoAP
+- Targets as light as 8-bit MCUs
 
 ## Links
 [A primer on LWM2M](http://www.slideshare.net/zdshelby/oma-lightweightm2-mtutorial)
 [Specifications and Technical Information](http://technical.openmobilealliance.org/Technical/technical-information/release-program/current-releases/oma-lightweightm2m-v1-0)
-
-
+[Leshan - A fairly complete Java-based LWM2M implementation](https://github.com/eclipse/leshan)
 
 
