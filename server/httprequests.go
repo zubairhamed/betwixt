@@ -9,7 +9,7 @@ func SetupHttpRoutes(server *DefaultServer) {
 	http := server.httpServer
 
 	http.NewRoute("/", METHOD_GET, handleHttpHome(server))
-	http.NewRoute("/reg/{client}", METHOD_GET, handleHttpViewClient(server))
+	http.NewRoute("/client/{client}", METHOD_GET, handleHttpViewClient(server))
 }
 
 func handleHttpViewClient(server *DefaultServer) RouteHandler {
