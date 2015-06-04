@@ -15,6 +15,22 @@ func NewRegisteredClient(ep string, id string, addr string) api.RegisteredClient
 	}
 }
 
+type ServerStatistics struct {
+	requestsCount 	int
+}
+
+func (s *ServerStatistics) IncrementCoapRequestsCount() {
+	s.requestsCount++
+}
+
+func (s *ServerStatistics) GetRequestsCount() int {
+	return s.requestsCount
+}
+
+type RegisteredObject struct {
+
+}
+
 type DefaultRegisteredClient struct {
 	id          string
 	name        string
@@ -25,6 +41,7 @@ type DefaultRegisteredClient struct {
 	addr        string
 	regDate     time.Time
 	updateDate  time.Time
+	objects 	[]*RegisteredObject
 }
 
 func (c *DefaultRegisteredClient) GetId() string {

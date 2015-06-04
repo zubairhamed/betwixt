@@ -40,10 +40,10 @@ func (p *HomePage) content() string {
                     <div class="col-sm-2">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Memory (MB)</h3>
+                                <h3 class="panel-title">Memory</h3>
                             </div>
                             <div class="panel-body">
-                              <h1>10.2</h1>
+                              <h1>{{.MemUsage}} KB</h1>
                             </div>
                         </div>
                     </div>
@@ -65,7 +65,7 @@ func (p *HomePage) content() string {
                                 <h3 class="panel-title">Requests</h3>
                             </div>
                             <div class="panel-body">
-                              <h1>200212</h1>
+                              <h1>{{.RequestCount}}</h1>
                             </div>
                         </div>
                     </div>
@@ -76,7 +76,7 @@ func (p *HomePage) content() string {
                                 <h3 class="panel-title">Errors</h3>
                             </div>
                             <div class="panel-body">
-                              <h1>3</h1>
+                              <h1>{{.ErrorsCount}}</h1>
                             </div>
                         </div>
                     </div>

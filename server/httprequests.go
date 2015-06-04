@@ -4,6 +4,8 @@ import (
 	"github.com/zubairhamed/betwixt/server/pages"
 	. "github.com/zubairhamed/go-commons/network"
 	"log"
+	"runtime"
+	"strconv"
 )
 
 func SetupHttpRoutes(server *DefaultServer) {
@@ -57,6 +59,9 @@ func handleHttpHome(server *DefaultServer) RouteHandler {
 		type model struct {
 			Clients 		 []*client
 			ClientsCount 	 int
+			MemUsage 		 string
+			RequestCount 	 int
+			ErrorsCount	 	 int
 		}
 
 		cl := []*client{}
@@ -70,10 +75,19 @@ func handleHttpHome(server *DefaultServer) RouteHandler {
 			cl = append(cl, c)
 		}
 
+		// Memory Usage
+		var mem runtime.MemStats
+		runtime.ReadMemStats(&mem)
+
 		m := &model{
 			ClientsCount: len(cl),
 			Clients: cl,
+			MemUsage: strconv.Itoa(int(mem.Alloc/1000)),
+			RequestCount: server.stats.GetRequestsCount(),
+			ErrorsCount: 0,
+
 		}
+
 
 		return &HttpResponse{
 			TemplateModel: m,

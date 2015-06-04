@@ -21,6 +21,7 @@ func NewDefaultServer() api.Server {
 		coapServer: NewDefaultCoapServer(),
 		httpServer: NewDefaultHttpServer(),
 		clients:    make(map[string]api.RegisteredClient),
+		stats: 		&ServerStatistics{},
 	}
 }
 
@@ -28,6 +29,7 @@ type DefaultServer struct {
 	coapServer *canopus.CoapServer
 	httpServer *HttpServer
 	registry   api.Registry
+	stats 	   *ServerStatistics
 	clients    map[string]api.RegisteredClient
 }
 
