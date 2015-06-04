@@ -39,7 +39,7 @@ func handleHttpDeleteClient(server *DefaultServer) RouteHandler {
 		log.Println("Handle Deleting of Client")
 
 		return &HttpResponse{
-			Payload:       NewBytesPayload(page.GetContent()),
+			Payload: NewBytesPayload(page.GetContent()),
 		}
 	}
 }
@@ -57,11 +57,11 @@ func handleHttpHome(server *DefaultServer) RouteHandler {
 		}
 
 		type model struct {
-			Clients 		 []*client
-			ClientsCount 	 int
-			MemUsage 		 string
-			RequestCount 	 int
-			ErrorsCount	 	 int
+			Clients      []*client
+			ClientsCount int
+			MemUsage     string
+			RequestCount int
+			ErrorsCount  int
 		}
 
 		cl := []*client{}
@@ -81,13 +81,11 @@ func handleHttpHome(server *DefaultServer) RouteHandler {
 
 		m := &model{
 			ClientsCount: len(cl),
-			Clients: cl,
-			MemUsage: strconv.Itoa(int(mem.Alloc/1000)),
+			Clients:      cl,
+			MemUsage:     strconv.Itoa(int(mem.Alloc / 1000)),
 			RequestCount: server.stats.GetRequestsCount(),
-			ErrorsCount: 0,
-
+			ErrorsCount:  0,
 		}
-
 
 		return &HttpResponse{
 			TemplateModel: m,

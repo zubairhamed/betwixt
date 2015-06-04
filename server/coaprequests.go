@@ -9,7 +9,7 @@ import (
 func SetupCoapRoutes(server *DefaultServer) {
 	coap := server.coapServer
 
-	coap.OnMessage(func (evt *canopus.Event){
+	coap.OnMessage(func(evt *canopus.Event) {
 		server.stats.IncrementCoapRequestsCount()
 	})
 
@@ -23,7 +23,7 @@ func handleRegister(server *DefaultServer) RouteHandler {
 		req := r.(*canopus.CoapRequest)
 		ep := req.GetUriQuery("ep")
 
-		log.Println(req.GetMessage().Payload)
+		// resources := canopus.CoreResourcesFromString(req.GetMessage().Payload.String())
 		clientId, err := server.register(ep, req.GetAddress().String())
 		if err != nil {
 			log.Println("Error registering client ", ep)
