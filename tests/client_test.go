@@ -12,15 +12,10 @@ import (
 
 func TestClient(t *testing.T) {
 
-	cli := client.NewDefaultClient(":0", "localhost:5683")
-	assert.NotNil(t, cli, "Error instantiating client")
-
-	assert.NotNil(t, cli.EnableObject(oma.OBJECT_LWM2M_SERVER, nil), "Error should be thrown - registry not set")
-
 	registry := registry.NewDefaultObjectRegistry()
+	cli := client.NewDefaultClient(":0", "localhost:5683", registry)
+	assert.NotNil(t, cli, "Error instantiating client")
 	assert.NotNil(t, registry, "Error instantiating registry")
-
-	cli.UseRegistry(registry)
 
 	cases1 := []struct {
 		in LWM2MObjectType

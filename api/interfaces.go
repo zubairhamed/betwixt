@@ -28,11 +28,6 @@ type ObjectEnabler interface {
 	OnExecute(int, int, Lwm2mRequest) Lwm2mResponse
 }
 
-//type ObjectInstance interface {
-//	GetId() int
-//	GetTypeId() LWM2MObjectType
-//}
-
 type ModelSource interface {
 	Initialize()
 	Get(LWM2MObjectType) ObjectModel
@@ -40,7 +35,6 @@ type ModelSource interface {
 }
 
 type Registry interface {
-	// CreateObjectInstance(LWM2MObjectType, int) ObjectInstance
 	GetModel(LWM2MObjectType) ObjectModel
 	Register(ModelSource)
 	CreateHandler(LWM2MObjectType)

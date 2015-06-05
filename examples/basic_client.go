@@ -9,10 +9,8 @@ import (
 )
 
 func main() {
-	c := client.NewDefaultClient(":0", "localhost:5683")
-
 	registry := registry.NewDefaultObjectRegistry()
-	c.UseRegistry(registry)
+	c := client.NewDefaultClient(":0", "localhost:5683", registry)
 
 	setupResources(c, registry)
 

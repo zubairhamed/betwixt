@@ -13,10 +13,8 @@ import (
 )
 
 func TestExampleObjects(t *testing.T) {
-	cli := client.NewDefaultClient(":0", "localhost:5683")
-
 	reg := registry.NewDefaultObjectRegistry()
-	cli.UseRegistry(reg)
+	cli := client.NewDefaultClient(":0", "localhost:5683", reg)
 
 	cli.EnableObject(oma.OBJECT_LWM2M_DEVICE, basic.NewExampleDeviceObject(reg))
 	cli.EnableObject(oma.OBJECT_LWM2M_SECURITY, basic.NewExampleSecurityObject(reg))

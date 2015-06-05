@@ -11,12 +11,10 @@ import (
 )
 
 func TestObjectInstancesToTlv(t *testing.T) {
-	cli := client.NewDefaultClient(":0", "localhost:5683")
+	registry := registry.NewDefaultObjectRegistry()
+	cli := client.NewDefaultClient(":0", "localhost:5683", registry)
 
-	reg := registry.NewDefaultObjectRegistry()
-	cli.UseRegistry(reg)
-
-	device := basic.NewExampleDeviceObject(reg)
+	device := basic.NewExampleDeviceObject(registry)
 
 	cli.EnableObject(oma.OBJECT_LWM2M_DEVICE, device)
 	cli.AddObjectInstance(oma.OBJECT_LWM2M_DEVICE, 0)

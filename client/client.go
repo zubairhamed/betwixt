@@ -11,7 +11,7 @@ import (
 	"net"
 )
 
-func NewDefaultClient(local string, remote string) *DefaultClient {
+func NewDefaultClient(local string, remote string, registry Registry) *DefaultClient {
 	localAddr, err := net.ResolveUDPAddr("udp", local)
 	IfErrFatal(err)
 
@@ -20,10 +20,13 @@ func NewDefaultClient(local string, remote string) *DefaultClient {
 
 	coapServer := NewServer(localAddr, remoteAddr)
 
-	return &DefaultClient{
+	// TODO Create Mandatory
+	c := &DefaultClient{
 		coapServer:     coapServer,
 		enabledObjects: make(map[LWM2MObjectType]Object),
+		registry: registry,
 	}
+	return c
 }
 
 type DefaultClient struct {
