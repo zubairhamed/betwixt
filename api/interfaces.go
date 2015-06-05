@@ -13,15 +13,6 @@ type RequestHandler interface {
 	OnExecute(int, int, Lwm2mRequest) Lwm2mResponse
 }
 
-/*
-type RequestValue interface {
-	GetBytes() []byte
-	GetType() ValueTypeCode
-	GetValue() interface{}
-	GetStringValue() string
-}
-*/
-
 type ResponseValue interface {
 	GetBytes() []byte
 	GetType() ValueTypeCode
@@ -30,12 +21,6 @@ type ResponseValue interface {
 }
 
 type ObjectEnabler interface {
-	GetObjectInstance(int) ObjectInstance
-	GetObjectInstances() []ObjectInstance
-	SetObjectInstances([]ObjectInstance)
-	GetHandler() RequestHandler
-	GetModel() ObjectModel
-
 	OnRead(int, int, Lwm2mRequest) Lwm2mResponse
 	OnDelete(int, Lwm2mRequest) Lwm2mResponse
 	OnWrite(int, int, Lwm2mRequest) Lwm2mResponse
@@ -43,10 +28,10 @@ type ObjectEnabler interface {
 	OnExecute(int, int, Lwm2mRequest) Lwm2mResponse
 }
 
-type ObjectInstance interface {
-	GetId() int
-	GetTypeId() LWM2MObjectType
-}
+//type ObjectInstance interface {
+//	GetId() int
+//	GetTypeId() LWM2MObjectType
+//}
 
 type ModelSource interface {
 	Initialize()
@@ -55,7 +40,7 @@ type ModelSource interface {
 }
 
 type Registry interface {
-	CreateObjectInstance(LWM2MObjectType, int) ObjectInstance
+	// CreateObjectInstance(LWM2MObjectType, int) ObjectInstance
 	GetModel(LWM2MObjectType) ObjectModel
 	Register(ModelSource)
 	CreateHandler(LWM2MObjectType)
@@ -76,19 +61,17 @@ type ResourceModel interface {
 }
 
 type LWM2MClient interface {
-	AddObjectInstance(ObjectInstance) error
-	AddObjectInstances(...ObjectInstance)
+	AddObjectInstance(LWM2MObjectType, int) error
+	AddObjectInstances(LWM2MObjectType, ...int)
 	AddResource()
 	AddObject()
 	Register(string) string
 	Deregister()
 	Update()
 	UseRegistry(Registry)
-	EnableObject(LWM2MObjectType, RequestHandler) error
+	EnableObject(LWM2MObjectType, ObjectEnabler) error
 	GetRegistry() Registry
-	GetEnabledObjects() map[LWM2MObjectType]ObjectEnabler
-	GetObjectEnabler(LWM2MObjectType) ObjectEnabler
-	GetObjectInstance(LWM2MObjectType, int) ObjectInstance
+	GetEnabledObjects() map[LWM2MObjectType]Object
 	Start()
 
 	// Events
@@ -128,4 +111,15 @@ type RegisteredClient interface {
 	GetRegistrationDate() time.Time
 	Update()
 	LastUpdate() time.Time
+	SetObjects(map[string][]string)
 }
+
+type Object interface {
+	AddInstance(int)
+	RemoveInstance(int)
+	GetInstances()[]int
+	GetEnabler() ObjectEnabler
+	GetType() LWM2MObjectType
+	GetModel() ObjectModel
+}
+

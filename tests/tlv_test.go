@@ -19,11 +19,10 @@ func TestObjectInstancesToTlv(t *testing.T) {
 	device := basic.NewExampleDeviceObject(reg)
 
 	cli.EnableObject(oma.OBJECT_LWM2M_DEVICE, device)
-	instanceDevice := reg.CreateObjectInstance(oma.OBJECT_LWM2M_DEVICE, 0)
-	cli.AddObjectInstances(instanceDevice)
+	cli.AddObjectInstance(oma.OBJECT_LWM2M_DEVICE, 0)
 
-	en := cli.GetObjectEnabler(oma.OBJECT_LWM2M_DEVICE)
-	_, err := core.TlvPayloadFromObjects(en, cli.GetRegistry())
+	obj := cli.GetObject(oma.OBJECT_LWM2M_DEVICE)
+	_, err := core.TlvPayloadFromObjects(obj, cli.GetRegistry())
 
 	assert.Nil(t, err, "Error thrown attempting to convert Object instance to TLV")
 }

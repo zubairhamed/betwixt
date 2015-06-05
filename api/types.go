@@ -1,7 +1,7 @@
 package api
 
 type LWM2MObjectType int
-type LWM2MObjectInstances map[LWM2MObjectType]ObjectEnabler
+type LWM2MObjectInstances map[LWM2MObjectType]Object
 
 type FnOnStartup func()
 type FnOnRead func()

@@ -7,6 +7,7 @@ import (
 	"github.com/zubairhamed/betwixt/objects/oma"
 	"github.com/zubairhamed/betwixt/registry"
 	"testing"
+	"github.com/zubairhamed/betwixt/examples/obj/basic"
 )
 
 func TestClient(t *testing.T) {
@@ -23,18 +24,19 @@ func TestClient(t *testing.T) {
 
 	cases1 := []struct {
 		in LWM2MObjectType
+		en ObjectEnabler
 	}{
-		{oma.OBJECT_LWM2M_SERVER},
-		{oma.OBJECT_LWM2M_ACCESS_CONTROL},
-		{oma.OBJECT_LWM2M_DEVICE},
-		{oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING},
-		{oma.OBJECT_LWM2M_FIRMWARE_UPDATE},
-		{oma.OBJECT_LWM2M_LOCATION},
-		{oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS},
+		{oma.OBJECT_LWM2M_SERVER, basic.NewExampleServerObject(registry)},
+		{oma.OBJECT_LWM2M_ACCESS_CONTROL, basic.NewExampleAccessControlObject(registry)},
+		{oma.OBJECT_LWM2M_DEVICE, basic.NewExampleDeviceObject(registry)},
+		{oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, basic.NewExampleConnectivityMonitoringObject(registry)},
+		{oma.OBJECT_LWM2M_FIRMWARE_UPDATE, basic.NewExampleFirmwareUpdateObject(registry)},
+		{oma.OBJECT_LWM2M_LOCATION, basic.NewExampleLocationObject(registry)},
+		{oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS, basic.NewExampleConnectivityStatisticsObject(registry)},
 	}
 
 	for _, c := range cases1 {
-		err := cli.EnableObject(c.in, nil)
+		err := cli.EnableObject(c.in, c.en)
 
 		assert.Nil(t, err, "Error enabling object: ", c.in)
 	}
@@ -55,51 +57,34 @@ func TestClient(t *testing.T) {
 	}
 
 	for _, c := range cases2 {
-		assert.NotNil(t, cli.GetObjectEnabler(c.in), "Error getting object enabler: ", c)
+		o := cli.GetObject(c.in)
+		assert.NotNil(t, o, "Error getting object: ", c)
+		assert.NotNil(t, o.GetEnabler(), "Error getting object enabler: ", c)
 	}
 
-	inst1 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 0)
-	inst2 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 1)
-	inst3 := registry.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 2)
+	cli.AddObjectInstances(oma.OBJECT_LWM2M_SECURITY, 0, 1, 2)
 
-	assert.NotNil(t, inst1, "Error instantiating betwixt object")
-	assert.NotNil(t, inst2, "Error instantiating betwixt object")
-	assert.NotNil(t, inst3, "Error instantiating betwixt object")
-
-	cli.AddObjectInstances(inst1, inst2, inst3)
-
-	cases3 := []struct {
-		ot LWM2MObjectType
-		oi int
-	}{
-		{oma.OBJECT_LWM2M_SECURITY, 0},
-		{oma.OBJECT_LWM2M_SECURITY, 1},
-		{oma.OBJECT_LWM2M_SECURITY, 2},
-	}
-
-	for _, c := range cases3 {
-		assert.NotNil(t, cli.GetObjectInstance(c.ot, c.oi), "Object instance", c.oi, "not found")
-	}
+	assert.Equal(t, len(cli.GetObject(oma.OBJECT_LWM2M_SECURITY).GetInstances()), 3)
 }
 
-func TestRegistry(t *testing.T) {
-	reg := registry.NewDefaultObjectRegistry()
-
-	cases := []struct {
-		o LWM2MObjectType
-	}{
-		{oma.OBJECT_LWM2M_SECURITY},
-		{oma.OBJECT_LWM2M_SERVER},
-		{oma.OBJECT_LWM2M_ACCESS_CONTROL},
-		{oma.OBJECT_LWM2M_DEVICE},
-		{oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING},
-		{oma.OBJECT_LWM2M_FIRMWARE_UPDATE},
-		{oma.OBJECT_LWM2M_LOCATION},
-		{oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS},
-	}
-
-	for _, c := range cases {
-		assert.NotNil(t, reg.CreateObjectInstance(c.o, 0), "Created an LWM2M Object: ", c.o)
-	}
-	assert.Nil(t, reg.CreateObjectInstance(LWM2MObjectType(-1), 0), "Created an unknown LWM2M Object")
-}
+//func TestRegistry(t *testing.T) {
+//	reg := registry.NewDefaultObjectRegistry()
+//
+//	cases := []struct {
+//		o LWM2MObjectType
+//	}{
+//		{oma.OBJECT_LWM2M_SECURITY},
+//		{oma.OBJECT_LWM2M_SERVER},
+//		{oma.OBJECT_LWM2M_ACCESS_CONTROL},
+//		{oma.OBJECT_LWM2M_DEVICE},
+//		{oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING},
+//		{oma.OBJECT_LWM2M_FIRMWARE_UPDATE},
+//		{oma.OBJECT_LWM2M_LOCATION},
+//		{oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS},
+//	}
+//
+//	for _, c := range cases {
+//		assert.NotNil(t, reg.CreateObjectInstance(c.o, 0), "Created an LWM2M Object: ", c.o)
+//	}
+//	assert.Nil(t, reg.CreateObjectInstance(LWM2MObjectType(-1), 0), "Created an unknown LWM2M Object")
+//}

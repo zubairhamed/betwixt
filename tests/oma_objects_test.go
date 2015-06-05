@@ -27,26 +27,6 @@ func TestExampleObjects(t *testing.T) {
 	cli.EnableObject(oma.OBJECT_LWM2M_LOCATION, basic.NewExampleLocationObject(reg))
 	cli.EnableObject(oma.OBJECT_LWM2M_SERVER, basic.NewExampleConnectivityMonitoringObject(reg))
 
-	instDevice := reg.CreateObjectInstance(oma.OBJECT_LWM2M_DEVICE, 0)
-	instSec := reg.CreateObjectInstance(oma.OBJECT_LWM2M_SECURITY, 0)
-	instAccCtrl := reg.CreateObjectInstance(oma.OBJECT_LWM2M_ACCESS_CONTROL, 0)
-	instConnMon := reg.CreateObjectInstance(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, 0)
-	instConnStats := reg.CreateObjectInstance(oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS, 0)
-	instFwUpdate := reg.CreateObjectInstance(oma.OBJECT_LWM2M_FIRMWARE_UPDATE, 0)
-	instLocation := reg.CreateObjectInstance(oma.OBJECT_LWM2M_LOCATION, 0)
-	instServer := reg.CreateObjectInstance(oma.OBJECT_LWM2M_SERVER, 0)
-
-	cli.AddObjectInstances(
-		instDevice,
-		instSec,
-		instAccCtrl,
-		instConnMon,
-		instConnStats,
-		instFwUpdate,
-		instLocation,
-		instServer,
-	)
-
 	// Check added enablers
 	test_enablers := []struct {
 		input api.LWM2MObjectType
@@ -62,7 +42,7 @@ func TestExampleObjects(t *testing.T) {
 	}
 
 	for _, c := range test_enablers {
-		assert.NotNil(t, cli.GetObjectEnabler(c.input), "Enabler returned nil", c.input)
+		assert.NotNil(t, cli.GetObject(c.input).GetEnabler(), "Enabler returned nil", c.input)
 	}
 
 	// Device Object
@@ -88,7 +68,7 @@ func TestExampleObjects(t *testing.T) {
 	}
 
 	for _, c := range test_obj_1 {
-		en := cli.GetObjectEnabler(c.typeId)
+		en := cli.GetObject(c.typeId).GetEnabler()
 		lwReq := request.Nil(api.OPERATIONTYPE_READ)
 		response := en.OnRead(c.instanceId, c.resourceId, lwReq)
 		val := response.GetResponseValue().GetValue()

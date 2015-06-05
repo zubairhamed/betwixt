@@ -32,16 +32,18 @@ import (
    ------------------------------------
 */
 
-func TlvPayloadFromObjects(en ObjectEnabler, reg Registry) (ResponseValue, error) {
+func TlvPayloadFromObjects(o Object, reg Registry) (ResponseValue, error) {
 	buf := bytes.NewBuffer([]byte{})
 
-	for _, oi := range en.GetObjectInstances() {
-		m := reg.GetModel(oi.GetTypeId())
+	m := reg.GetModel(o.GetType())
+	en := o.GetEnabler()
+	instances := o.GetInstances()
+	for _, oi := range instances {
 
 		rsrcBuf := bytes.NewBuffer([]byte{})
 		for _, ri := range m.GetResources() {
 			if IsReadableResource(ri) {
-				response := en.OnRead(oi.GetId(), ri.GetId(), nil)
+				response := en.OnRead(oi, ri.GetId(), nil)
 
 				val := response.GetResponseValue()
 				if ri.MultipleValuesAllowed() {
@@ -55,7 +57,7 @@ func TlvPayloadFromObjects(en ObjectEnabler, reg Registry) (ResponseValue, error
 			}
 		}
 
-		if len(en.GetObjectInstances()) > 1 {
+		if len(instances) > 1 {
 			// Create Root TLV Value for Resource
 
 			// Append to Resource Buffer

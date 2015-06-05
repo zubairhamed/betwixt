@@ -40,7 +40,7 @@ type DefaultRegisteredClient struct {
 	addr        string
 	regDate     time.Time
 	updateDate  time.Time
-	objects     []*RegisteredObject
+	objects     map[string][]string
 }
 
 func (c *DefaultRegisteredClient) GetId() string {
@@ -77,4 +77,8 @@ func (c *DefaultRegisteredClient) Update() {
 
 func (c *DefaultRegisteredClient) LastUpdate() time.Time {
 	return c.updateDate
+}
+
+func (c *DefaultRegisteredClient) SetObjects(o map[string][]string) {
+	c.objects = o
 }

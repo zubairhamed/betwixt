@@ -6,6 +6,7 @@ import (
 	. "github.com/zubairhamed/go-commons/network"
 	"log"
 	"net"
+	"strings"
 )
 
 func NewDefaultCoapServer() *canopus.CoapServer {
@@ -69,9 +70,27 @@ func (server *DefaultServer) update(id string) {
 	}
 }
 
-func (server *DefaultServer) register(ep string, addr string) (string, error) {
+func (server *DefaultServer) register(ep string, addr string, resources []*canopus.CoreResource) (string, error) {
 	clientId := canopus.GenerateToken(8)
 	newClient := NewRegisteredClient(ep, clientId, addr)
+
+	objs := make(map[string][]string)
+	for _, o := range resources {
+		t := o.Target[1:len(o.Target)]
+		sp := strings.Split(t, "/")
+
+		if len(sp) > 1 {
+
+		} else {
+
+		}
+
+		log.Println(t, sp[0], sp[1])
+
+		objs[sp[0]] = append(objs[sp[0]], sp[1])
+	}
+
+	newClient.SetObjects(objs)
 
 	server.clients[ep] = newClient
 

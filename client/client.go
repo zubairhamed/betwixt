@@ -22,14 +22,14 @@ func NewDefaultClient(local string, remote string) *DefaultClient {
 
 	return &DefaultClient{
 		coapServer:     coapServer,
-		enabledObjects: make(map[LWM2MObjectType]ObjectEnabler),
+		enabledObjects: make(map[LWM2MObjectType]Object),
 	}
 }
 
 type DefaultClient struct {
 	coapServer     *CoapServer
 	registry       Registry
-	enabledObjects map[LWM2MObjectType]ObjectEnabler
+	enabledObjects map[LWM2MObjectType]Object
 	path           string
 
 	// Events
@@ -64,7 +64,7 @@ func (c *DefaultClient) Register(name string) string {
 	return path
 }
 
-func (c *DefaultClient) GetEnabledObjects() map[LWM2MObjectType]ObjectEnabler {
+func (c *DefaultClient) GetEnabledObjects() map[LWM2MObjectType]Object {
 	return c.enabledObjects
 }
 
@@ -101,20 +101,13 @@ func (c *DefaultClient) UseRegistry(reg Registry) {
 	c.registry = reg
 }
 
-func (c *DefaultClient) EnableObject(t LWM2MObjectType, e RequestHandler) error {
-	if c.enabledObjects[t] == nil {
-
+func (c *DefaultClient) EnableObject(t LWM2MObjectType, e ObjectEnabler) error {
+	_, ok := c.enabledObjects[t]
+	if !ok {
 		if c.registry == nil {
 			return errors.New("No registry found/set")
 		}
-
-		model := c.registry.GetModel(t)
-		en := &core.DefaultObjectEnabler{
-			Handler:   e,
-			Instances: []ObjectInstance{},
-			Model:     model,
-		}
-		c.enabledObjects[t] = en
+		c.enabledObjects[t] = core.NewObject(t, e, c.registry)
 
 		return nil
 	} else {
@@ -122,46 +115,24 @@ func (c *DefaultClient) EnableObject(t LWM2MObjectType, e RequestHandler) error 
 	}
 }
 
-func (c *DefaultClient) AddObjectInstance(instance ObjectInstance) error {
-	if instance != nil {
-		o := c.GetObjectInstance(instance.GetTypeId(), instance.GetId())
-		if o == nil {
-			c.enabledObjects[instance.GetTypeId()].SetObjectInstances(append(c.enabledObjects[instance.GetTypeId()].GetObjectInstances(), instance))
+func (c *DefaultClient) AddObjectInstance(t LWM2MObjectType, instance int) error {
+	o := c.enabledObjects[t]
+	if o != nil {
+		o.AddInstance(instance)
 
-			return nil
-		} else {
-			return errors.New("Instance already exists. Use UpdateObjectInstance instead")
-		}
-	} else {
-		return errors.New("Attempting to add a nil instance")
-	}
-
+		return nil
+ 	}
+	return errors.New("Attempting to add a nil instance")
 }
 
-func (c *DefaultClient) AddObjectInstances(instances ...ObjectInstance) {
+func (c *DefaultClient) AddObjectInstances(t LWM2MObjectType, instances ...int) {
 	for _, o := range instances {
-		c.AddObjectInstance(o)
+		c.AddObjectInstance(t, o)
 	}
 }
 
-func (c *DefaultClient) GetObjectEnabler(n LWM2MObjectType) ObjectEnabler {
+func (c *DefaultClient) GetObject(n LWM2MObjectType) Object {
 	return c.enabledObjects[n]
-}
-
-func (c *DefaultClient) GetObjectInstance(n LWM2MObjectType, instance int) ObjectInstance {
-	enabler := c.enabledObjects[n]
-
-	if enabler != nil {
-		instances := enabler.GetObjectInstances()
-		if len(instances) > 0 {
-			for _, o := range instances {
-				if o.GetId() == instance && o.GetTypeId() == n {
-					return o
-				}
-			}
-		}
-	}
-	return nil
 }
 
 func (c *DefaultClient) Start() {
@@ -200,13 +171,14 @@ func (c *DefaultClient) handleCreateRequest(r Request) Response {
 	}
 
 	t := LWM2MObjectType(objectId)
-	enabler := c.GetObjectEnabler(t)
+	obj := c.GetObject(t)
+	enabler := obj.GetEnabler()
 
 	msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
 	msg.Token = req.GetMessage().Token
 	msg.Payload = NewEmptyPayload()
 
-	if enabler != nil && enabler.GetHandler() != nil {
+	if enabler != nil {
 		lwReq := request.Default(req, OPERATIONTYPE_CREATE)
 		response := enabler.OnCreate(instanceId, resourceId, lwReq)
 		msg.Code = response.GetResponseCode()
@@ -229,13 +201,14 @@ func (c *DefaultClient) handleReadRequest(r Request) Response {
 	}
 
 	t := LWM2MObjectType(objectId)
-	enabler := c.GetObjectEnabler(t)
+	obj := c.GetObject(t)
+	enabler := obj.GetEnabler()
 
 	msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
 	msg.Token = req.GetMessage().Token
 
-	if enabler != nil && enabler.GetHandler() != nil {
-		model := enabler.GetModel()
+	if enabler != nil {
+		model := obj.GetModel()
 		resource := model.GetResource(resourceId)
 
 		if resource == nil {
@@ -265,13 +238,13 @@ func (c *DefaultClient) handleDeleteRequest(r Request) Response {
 	instanceId := req.GetAttributeAsInt("inst")
 
 	t := LWM2MObjectType(objectId)
-	enabler := c.GetObjectEnabler(t)
+	enabler := c.GetObject(t).GetEnabler()
 
 	msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
 	msg.Token = req.GetMessage().Token
 	msg.Payload = NewEmptyPayload()
 
-	if enabler != nil && enabler.GetHandler() != nil {
+	if enabler != nil {
 		lwReq := request.Default(req, OPERATIONTYPE_DELETE)
 
 		response := enabler.OnDelete(instanceId, lwReq)
@@ -305,14 +278,15 @@ func (c *DefaultClient) handleWriteRequest(r Request) Response {
 	}
 
 	t := LWM2MObjectType(objectId)
-	enabler := c.GetObjectEnabler(t)
+	obj := c.GetObject(t)
+	enabler := obj.GetEnabler()
 
 	msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
 	msg.Token = req.GetMessage().Token
 	msg.Payload = NewEmptyPayload()
 
-	if enabler != nil && enabler.GetHandler() != nil {
-		model := enabler.GetModel()
+	if enabler != nil {
+		model := obj.GetModel()
 		resource := model.GetResource(resourceId)
 		if resource == nil {
 			// TODO Write to Object Instance
@@ -345,14 +319,15 @@ func (c *DefaultClient) handleExecuteRequest(r Request) Response {
 	}
 
 	t := LWM2MObjectType(objectId)
-	enabler := c.GetObjectEnabler(t)
+	obj := c.GetObject(t)
+	enabler := obj.GetEnabler()
 
 	msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
 	msg.Token = req.GetMessage().Token
 	msg.Payload = NewEmptyPayload()
 
-	if enabler != nil && enabler.GetHandler() != nil {
-		model := enabler.GetModel()
+	if enabler != nil {
+		model := obj.GetModel()
 		resource := model.GetResource(resourceId)
 		if resource == nil {
 			msg.Code = COAPCODE_404_NOT_FOUND

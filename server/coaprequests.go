@@ -23,8 +23,8 @@ func handleRegister(server *DefaultServer) RouteHandler {
 		req := r.(*canopus.CoapRequest)
 		ep := req.GetUriQuery("ep")
 
-		// resources := canopus.CoreResourcesFromString(req.GetMessage().Payload.String())
-		clientId, err := server.register(ep, req.GetAddress().String())
+		resources := canopus.CoreResourcesFromString(req.GetMessage().Payload.String())
+		clientId, err := server.register(ep, req.GetAddress().String(), resources)
 		if err != nil {
 			log.Println("Error registering client ", ep)
 		}

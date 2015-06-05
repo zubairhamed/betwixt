@@ -2,7 +2,6 @@ package core
 
 import (
 	. "github.com/zubairhamed/betwixt/api"
-	"github.com/zubairhamed/betwixt/core/response"
 )
 
 type DefaultObjectModel struct {
@@ -63,12 +62,12 @@ func (o *DefaultResourceModel) GetResourceType() ValueTypeCode {
 	return o.ResourceType
 }
 
-func NewObjectInstance(id int, t LWM2MObjectType) ObjectInstance {
-	return &DefaultObjectInstance{
-		Id:     id,
-		TypeId: t,
-	}
-}
+//func NewObjectInstance(id int, t LWM2MObjectType) ObjectInstance {
+//	return &DefaultObjectInstance{
+//		Id:     id,
+//		TypeId: t,
+//	}
+//}
 
 type DefaultObjectInstance struct {
 	Id     int
@@ -87,68 +86,51 @@ type DefaultResource struct {
 	Id int
 }
 
-type DefaultObjectEnabler struct {
-	Handler   RequestHandler
-	Instances []ObjectInstance
-	Model     ObjectModel
+type DefaultObject struct {
+	typeId 		LWM2MObjectType
+	model 		ObjectModel
+	enabler 	ObjectEnabler
+	instances 	map[int]bool
 }
 
-func (en *DefaultObjectEnabler) GetHandler() RequestHandler {
-	return en.Handler
+func (o *DefaultObject) GetModel() ObjectModel {
+	return o.model
 }
 
-func (en *DefaultObjectEnabler) GetModel() ObjectModel {
-	return en.Model
+func (o *DefaultObject) GetType() LWM2MObjectType {
+	return o.typeId
 }
 
-func (en *DefaultObjectEnabler) GetObjectInstance(idx int) ObjectInstance {
-	for _, o := range en.Instances {
-		if o.GetId() == idx {
-			return o
+func (o *DefaultObject) GetEnabler()ObjectEnabler {
+	return o.enabler
+}
+
+func (o *DefaultObject) AddInstance(n int) {
+	o.instances[n] = true
+}
+
+func (o *DefaultObject) RemoveInstance(n int) {
+	o.instances[n] = false
+}
+
+func (o *DefaultObject) GetInstances()[]int {
+	instances := []int{}
+
+	for k, v := range o.instances {
+		if v {
+			instances = append(instances, k)
 		}
 	}
-	return nil
+
+	return instances
 }
 
-func (en *DefaultObjectEnabler) GetObjectInstances() []ObjectInstance {
-	return en.Instances
-}
-
-func (en *DefaultObjectEnabler) SetObjectInstances(o []ObjectInstance) {
-	en.Instances = o
-}
-
-func (en *DefaultObjectEnabler) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
-	if en.Handler != nil {
-		return en.Handler.OnRead(instanceId, resourceId, req)
+func NewObject(t LWM2MObjectType, enabler ObjectEnabler, reg Registry) Object {
+	model := reg.GetModel(t)
+	return &DefaultObject {
+		model: model,
+		typeId: t,
+		enabler: enabler,
+		instances: make(map[int]bool),
 	}
-	return nil
-}
-
-func (en *DefaultObjectEnabler) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
-	if en.Handler != nil {
-		return en.Handler.OnDelete(instanceId, req)
-	}
-	return response.NotFound()
-}
-
-func (en *DefaultObjectEnabler) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
-	if en.Handler != nil {
-		return en.Handler.OnWrite(instanceId, resourceId, req)
-	}
-	return response.NotFound()
-}
-
-func (en *DefaultObjectEnabler) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
-	if en.Handler != nil {
-		return en.Handler.OnExecute(instanceId, resourceId, req)
-	}
-	return response.NotFound()
-}
-
-func (en *DefaultObjectEnabler) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
-	if en.Handler != nil {
-		return en.Handler.OnCreate(instanceId, resourceId, req)
-	}
-	return response.NotFound()
 }
