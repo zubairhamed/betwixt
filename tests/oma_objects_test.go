@@ -16,14 +16,14 @@ func TestExampleObjects(t *testing.T) {
 	reg := registry.NewDefaultObjectRegistry()
 	cli := client.NewDefaultClient(":0", "localhost:5683", reg)
 
-	cli.EnableObject(oma.OBJECT_LWM2M_DEVICE, basic.NewExampleDeviceObject(reg))
-	cli.EnableObject(oma.OBJECT_LWM2M_SECURITY, basic.NewExampleSecurityObject(reg))
+	cli.SetEnabler(oma.OBJECT_LWM2M_SERVER, basic.NewExampleConnectivityMonitoringObject(reg))
+	cli.SetEnabler(oma.OBJECT_LWM2M_DEVICE, basic.NewExampleDeviceObject(reg))
+	cli.SetEnabler(oma.OBJECT_LWM2M_SECURITY, basic.NewExampleSecurityObject(reg))
 	cli.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, basic.NewExampleAccessControlObject(reg))
 	cli.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, basic.NewExampleConnectivityMonitoringObject(reg))
 	cli.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS, basic.NewExampleConnectivityStatisticsObject(reg))
 	cli.EnableObject(oma.OBJECT_LWM2M_FIRMWARE_UPDATE, basic.NewExampleFirmwareUpdateObject(reg))
 	cli.EnableObject(oma.OBJECT_LWM2M_LOCATION, basic.NewExampleLocationObject(reg))
-	cli.EnableObject(oma.OBJECT_LWM2M_SERVER, basic.NewExampleConnectivityMonitoringObject(reg))
 
 	// Check added enablers
 	test_enablers := []struct {
@@ -71,6 +71,6 @@ func TestExampleObjects(t *testing.T) {
 		response := en.OnRead(c.instanceId, c.resourceId, lwReq)
 		val := response.GetResponseValue().GetValue()
 
-		assert.Equal(t, val, c.expected, "Unexpected value returned for enabler OnRead: ", val, "vs", c.expected)
+		assert.Equal(t, c.expected, val, "Unexpected value returned for enabler OnRead: ", val, "vs", c.expected)
 	}
 }

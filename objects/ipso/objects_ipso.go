@@ -34,7 +34,7 @@ func (o *IPSOSmartObjects) Initialize() {
 	o.models = make(map[LWM2MObjectType]ObjectModel)
 
 	// This IPSO object is a generic object that can be used with any kind of digital input interface.
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "IPSO Digital Input", Id: 3200, Multiple: true, Mandatory: false, Description: "Generic digital input for non-specific sensors"},
 		&DefaultResourceModel{Id: 5500, Name: "Digital Input State", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_BOOLEAN, RangeOrEnums: "", Units: "", Description: "The current state of a digital input."},
 		&DefaultResourceModel{Id: 5501, Name: "Digital Input Counter", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "", Units: "", Description: "The cumulative value of active state detected.  "},
@@ -47,7 +47,7 @@ func (o *IPSOSmartObjects) Initialize() {
 	)
 
 	// This IPSO object is a generic object that can be used with any kind of digital output interface.
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "IPSO Digital Output", Id: 3201, Multiple: true, Mandatory: false, Description: "Generic digital output for non-specific actuators"},
 		&DefaultResourceModel{Id: 5550, Name: "Digital Output State", Operations: OPERATION_RW, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_BOOLEAN, RangeOrEnums: "", Units: "", Description: "The current state of a digital output."},
 		&DefaultResourceModel{Id: 5551, Name: "Digital Output Polarity", Operations: OPERATION_RW, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_BOOLEAN, RangeOrEnums: "", Units: "", Description: "The polarity of a digital ouput as a Boolean (0 \u003d Normal, 1\u003d Reversed)."},
@@ -55,7 +55,7 @@ func (o *IPSOSmartObjects) Initialize() {
 	)
 
 	// This IPSO object is a generic object that can be used with any kind of analog input interface.
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "IPSO Analog Input", Id: 3202, Multiple: true, Mandatory: false, Description: "Generic analog input for non-specific sensors "},
 		&DefaultResourceModel{Id: 5600, Name: "Analog Input Current Value", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "0-1", Units: "", Description: "The current value of the analog input."},
 		&DefaultResourceModel{Id: 5601, Name: "Min Measured Value", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "", Units: "", Description: "The minimum value measured by the sensor since power ON or reset"},
@@ -68,7 +68,7 @@ func (o *IPSOSmartObjects) Initialize() {
 	)
 
 	// This IPSO object is a generic object that can be used with any kind of analog output interface.
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "IPSO Analog Output", Id: 3203, Multiple: true, Mandatory: false, Description: "This IPSO object is a generic object that can be used with any kind of analog output interface."},
 		&DefaultResourceModel{Id: 5603, Name: "Min Range Value", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "", Units: "", Description: "The minimum value that can be measured by the sensor"},
 		&DefaultResourceModel{Id: 5604, Name: "Max Range Value", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "", Units: "", Description: "The maximum value that can be measured by the sensor"},
@@ -79,7 +79,7 @@ func (o *IPSOSmartObjects) Initialize() {
 	// This IPSO object allows the description of a generic sensor. It is based on the description of a value
 	// and measurement units according to the UCUM specification. Thus, any type of value defined within
 	// the UCUM specification can be reported using this object.
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "IPSO Generic Sensor", Id: 3300, Multiple: true, Mandatory: false, Description: "This IPSO object allow the description of a generic sensor. It is based on the description of a value and a unit according to the UCUM specification. Thus, any type of value defined within this specification can be reporting using this object. \nSpecific object for a given range of sensors is described later in the document, enabling to identify the type of sensors directly from its Object ID. This object may be used as a generic object if a dedicated one does not exist. \n"},
 		&DefaultResourceModel{Id: 5601, Name: "Min Measured Value", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "", Units: "Defined by “Units” resource.", Description: "The minimum value measured by the sensor since power ON or reset"},
 		&DefaultResourceModel{Id: 5602, Name: "Max Measured Value", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "", Units: "Defined by “Units” resource.", Description: "The maximum value measured by the sensor since power ON or reset"},
@@ -95,7 +95,7 @@ func (o *IPSOSmartObjects) Initialize() {
 	// This IPSO object should be used with an illuminance (light intensity) sensor to report an illuminance
 	// measurement. It also provides resources for minimum/maximum measured values and the minimum/maximum
 	// range that can be measured by the sensor. An example measurement unit is Lux (ucum:lx).
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "IPSO Illuminance", Id: 3301, Multiple: true, Mandatory: false, Description: "Illuminance sensor, example units \u003d lx"},
 		&DefaultResourceModel{Id: 5601, Name: "Min Measured Value", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "", Units: "Defined by “Units” resource.", Description: "The minimum value measured by the sensor since power ON or reset"},
 		&DefaultResourceModel{Id: 5602, Name: "Max Measured Value", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "", Units: "Defined by “Units” resource.", Description: "The maximum value measured by the sensor since power ON or reset"},
@@ -109,7 +109,7 @@ func (o *IPSOSmartObjects) Initialize() {
 	// This IPSO object should be used with a presence sensor to report presence detection. It also provides
 	// resources to manage a counter, the type of sensor used (e.g the technology of the probe), and
 	// configuration for the delay between busy and clear detection state.
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "IPSO Presence", Id: 3302, Multiple: true, Mandatory: false, Description: "Presence sensor with digital sensing, optional delay parameters"},
 		&DefaultResourceModel{Id: 5500, Name: "Digital Input State", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_BOOLEAN, RangeOrEnums: "", Units: "", Description: "The current state of the presence sensor"},
 		&DefaultResourceModel{Id: 5501, Name: "Digital Input Counter", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "", Units: "", Description: "The cumulative value of active state detected."},
@@ -122,7 +122,7 @@ func (o *IPSOSmartObjects) Initialize() {
 	// This IPSO object should be used with a temperature sensor to report a temperature measurement.
 	// It also provides resources for minimum/maximum measured values and the minimum/maximum range that
 	// can be measured by the temperature sensor. An example measurement unit is degrees Celsius (ucum:Cel).
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "IPSO Temperature", Id: 3303, Multiple: true, Mandatory: false, Description: "Description: This IPSO object should be used with a temperature sensor to report a temperature measurement.  It also provides resources for minimum/maximum measured values and the minimum/maximum range that can be measured by the temperature sensor. An example measurement unit is degrees Celsius (ucum:Cel). "},
 		&DefaultResourceModel{Id: 5601, Name: "Min Measured Value", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "", Units: "Defined by “Units” resource.", Description: "The minimum value measured by the sensor since power ON or reset"},
 		&DefaultResourceModel{Id: 5602, Name: "Max Measured Value", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "", Units: "Defined by “Units” resource.", Description: "The maximum value measured by the sensor since power ON or reset"},
@@ -137,7 +137,7 @@ func (o *IPSOSmartObjects) Initialize() {
 	// provides resources for minimum/maximum measured values and the minimum/maximum range that can be
 	// measured by the humidity sensor. An example measurement unit is relative humidity as a percentage
 	// (ucum:%).
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "IPSO Humidity", Id: 3304, Multiple: true, Mandatory: false, Description: "Description: This IPSO object should be used with a humidity sensor to report a humidity measurement.  It also provides resources for minimum/maximum measured values and the minimum/maximum range that can be measured by the humidity sensor. An example measurement unit is relative humidity as a percentage (ucum:%). "},
 		&DefaultResourceModel{Id: 5601, Name: "Min Measured Value", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "", Units: "Defined by “Units” resource.", Description: "The minimum value measured by the sensor since power ON or reset"},
 		&DefaultResourceModel{Id: 5602, Name: "Max Measured Value", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "", Units: "Defined by “Units” resource.", Description: "The maximum value measured by the sensor since power ON or reset"},
@@ -152,7 +152,7 @@ func (o *IPSOSmartObjects) Initialize() {
 	// It also provides resources for minimum/maximum measured values and the minimum/maximum range for
 	// both active and reactive power. Il also provides resources for cumulative energy, calibration, and
 	// the power factor.
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "IPSO Power Measurement", Id: 3305, Multiple: true, Mandatory: false, Description: "This IPSO object should be used over a power measurement sensor to report a remote power measurement.  It also provides resources for minimum/maximum measured values and the minimum/maximum range for both active and reactive power. Il also provides resources for cumulative energy, calibration, and the power factor. "},
 		&DefaultResourceModel{Id: 5605, Name: "Reset Min and Max Measured Values", Operations: OPERATION_E, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_OPAQUE, RangeOrEnums: "", Units: "", Description: "Reset the Min and Max Measured Values to Current Value"},
 		&DefaultResourceModel{Id: 5800, Name: "Instantaneous active power", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "", Units: "W", Description: "The current active power"},
@@ -177,7 +177,7 @@ func (o *IPSOSmartObjects) Initialize() {
 	// This IPSO object is dedicated to remote actuation such as ON/OFF action or dimming. A multi-state
 	// output can also be described as a string. This is useful to send pilot wire orders for instance. It
 	// also provides a resource to reflect the time that the device has been switched on.
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "IPSO Actuation", Id: 3306, Multiple: true, Mandatory: false, Description: "This IPSO object is dedicated to remote actuation such as ON/OFF action or dimming. A multi-state output can also be described as a string. This is useful to send pilot wire orders for instance. It also provides a resource to reflect the time that the device has been switched on. "},
 		&DefaultResourceModel{Id: 5750, Name: "Application Type", Operations: OPERATION_RW, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_STRING, RangeOrEnums: "", Units: "", Description: "The Application type of the device, for example “Motion Closure”."},
 		&DefaultResourceModel{Id: 5850, Name: "On/Off", Operations: OPERATION_RW, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_BOOLEAN, RangeOrEnums: "", Units: "", Description: "On/Off\n\n"},
@@ -189,7 +189,7 @@ func (o *IPSOSmartObjects) Initialize() {
 	// This IPSO object should be used to set a desired value to a controller, such as a thermostat. This
 	// object enables a setpoint to be expressed units defined in the UCUM specification, to match an
 	// associated sensor or measurement value. A special resource is added to set the colour of an object.
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "IPSO Set Point", Id: 3308, Multiple: true, Mandatory: false, Description: "Description: This IPSO object should be used to set a desired value to a controller, such as a thermostat. This object enables a setpoint to be expressed units defined in the UCUM specification, to match an associated sensor or measurement value. A special resource is added to set the colour of an object."},
 		&DefaultResourceModel{Id: 5701, Name: "Units", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_STRING, RangeOrEnums: "", Units: "", Description: "If present, the type of sensor defined as the UCUM Unit Definition e.g. “Cel” for Temperature in Celcius."},
 		&DefaultResourceModel{Id: 5706, Name: "Colour", Operations: OPERATION_RW, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_STRING, RangeOrEnums: "", Units: "", Description: "A string representing a value in some color space"},
@@ -199,7 +199,7 @@ func (o *IPSOSmartObjects) Initialize() {
 
 	// This Object is used for demand-response load control and other load control in automation applications
 	// (not limited to power).
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "IPSO Load Control", Id: 3310, Multiple: true, Mandatory: false, Description: "Description: This Object is used for demand-response load control and other load control in automation application (not limited to power)."},
 		&DefaultResourceModel{Id: 5823, Name: "Event Identifier", Operations: OPERATION_RW, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_STRING, RangeOrEnums: "", Units: "", Description: "The event identifier as a string."},
 		&DefaultResourceModel{Id: 5824, Name: "Start Time", Operations: OPERATION_RW, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_STRING, RangeOrEnums: "", Units: "", Description: "Time when the load control event will start started."},
@@ -212,7 +212,7 @@ func (o *IPSOSmartObjects) Initialize() {
 	//  This Object is used to control a light source, such as a LED or other light. It allows a light to
 	// be turned on or off and its dimmer setting to be control as a % between 0 and 100. An optional colour
 	// setting enables a string to be used to indicate the desired colour.
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "IPSO Light Control", Id: 3311, Multiple: true, Mandatory: false, Description: "Description: This Object is used to control a light source, such as a LED or other light.  It allows a light to be turned on or off and its dimmer setting to be control as a % between 0 and 100. An optional colour setting enables a string to be used to indicate the desired colour."},
 		&DefaultResourceModel{Id: 5701, Name: "Sensor Units", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_STRING, RangeOrEnums: "", Units: "", Description: "If present, the type of sensor defined as the UCUM Unit Definition e.g. “Cel” for Temperature in Celcius."},
 		&DefaultResourceModel{Id: 5706, Name: "Colour", Operations: OPERATION_RW, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_STRING, RangeOrEnums: "", Units: "", Description: "A string representing a value in some color space"},
@@ -225,7 +225,7 @@ func (o *IPSOSmartObjects) Initialize() {
 
 	// This Object is used to control a power source, such as a Smart Plug. It allows a power relay to be
 	// turned on or off and its dimmer setting to be control as a % between 0 and 100.
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "IPSO Power Control", Id: 3312, Multiple: true, Mandatory: false, Description: "Description: This Object is used to control a power source, such as a Smart Plug.  It allows a power relay to be turned on or off and its dimmer setting to be control as a % between 0 and 100."},
 		&DefaultResourceModel{Id: 5805, Name: "Cumulative active power ", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "", Units: "Wh", Description: "The total power in Wh that has been used by the load."},
 		&DefaultResourceModel{Id: 5820, Name: "Power factor", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "", Units: "", Description: "The power factor of the load."},
@@ -235,7 +235,7 @@ func (o *IPSOSmartObjects) Initialize() {
 	)
 
 	// This IPSO object can be used to represent a 1-3 axis accelerometer.
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "IPSO Accelerometer", Id: 3313, Multiple: true, Mandatory: false, Description: "Description: This IPSO object can be used to represent a 1-3 axis accelerometer."},
 		&DefaultResourceModel{Id: 5603, Name: "Min Range Value", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "", Units: "Defined by “Units” resource.", Description: "The minimum value that can be measured by the sensor"},
 		&DefaultResourceModel{Id: 5604, Name: "Max Range Value", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "", Units: "Defined by “Units” resource.", Description: "The maximum value that can be measured by the sensor"},
@@ -246,7 +246,7 @@ func (o *IPSOSmartObjects) Initialize() {
 	)
 
 	// This IPSO object can be used to represent a 1-3 axis magnetometer with optional compass direction.
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "IPSO Magnetometer", Id: 3314, Multiple: true, Mandatory: false, Description: "Description: This IPSO object can be used to represent a 1-3 axis magnetometer with optional compass direction."},
 		&DefaultResourceModel{Id: 5701, Name: "Sensor Units", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_STRING, RangeOrEnums: "", Units: "", Description: "Measurement Units Definition e.g. “Cel” for Temperature in Celsius."},
 		&DefaultResourceModel{Id: 5702, Name: "X Value", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "", Units: "Defined by “Units” resource.", Description: "The measured value along the X axis."},
@@ -258,7 +258,7 @@ func (o *IPSOSmartObjects) Initialize() {
 	// This IPSO object should be used with an air pressure sensor to report a barometer measurement.
 	// It also provides resources for minimum/maximum measured values and the minimum/maximum range that
 	// can be measured by the barometer sensor. An example measurement unit is kPa (ucum:kPa).
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "IPSO Barometer", Id: 3315, Multiple: true, Mandatory: false, Description: "Description: This IPSO object should be used with an air pressure sensor to report a barometer measurement.  It also provides resources for minimum/maximum measured values and the minimum/maximum range that can be measured by the barometer sensor. An example measurement unit is kPa (ucum:kPa)."},
 		&DefaultResourceModel{Id: 5601, Name: "Min Measured Value", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "", Units: "Defined by “Units” resource.", Description: "The minimum value measured by the sensor since power ON or reset"},
 		&DefaultResourceModel{Id: 5602, Name: "Max Measured Value", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_FLOAT, RangeOrEnums: "", Units: "Defined by “Units” resource.", Description: "The maximum value measured by the sensor since power ON or reset"},
@@ -270,10 +270,15 @@ func (o *IPSOSmartObjects) Initialize() {
 	)
 }
 
-func (o *IPSOSmartObjects) Get(n LWM2MObjectType) ObjectModel {
+func (o *IPSOSmartObjects) GetObject(n LWM2MObjectType) ObjectModel {
 	return o.models[n]
 }
 
-func (mr *IPSOSmartObjects) Add(m ObjectModel, res ...ResourceModel) {
+func (o *IPSOSmartObjects) GetObjects() map[LWM2MObjectType]ObjectModel {
+	return o.models
+}
 
+func (o *IPSOSmartObjects) AddObject(m ObjectModel, res ...ResourceModel) {
+	m.SetResources(res)
+	o.models[m.GetType()] = m
 }

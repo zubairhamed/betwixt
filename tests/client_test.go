@@ -19,27 +19,37 @@ func TestClient(t *testing.T) {
 
 	cases1 := []struct {
 		in LWM2MObjectType
+	}{
+		{oma.OBJECT_LWM2M_SERVER},
+		{oma.OBJECT_LWM2M_DEVICE},
+		{oma.OBJECT_LWM2M_SECURITY},
+	}
+
+	for _, c := range cases1 {
+		err := cli.EnableObject(c.in, nil)
+
+		assert.NotNil(t, err, "Object should already be enabled: ", c.in)
+	}
+
+
+	cases2 := []struct {
+		in LWM2MObjectType
 		en ObjectEnabler
 	}{
-		{oma.OBJECT_LWM2M_SERVER, basic.NewExampleServerObject(registry)},
 		{oma.OBJECT_LWM2M_ACCESS_CONTROL, basic.NewExampleAccessControlObject(registry)},
-		{oma.OBJECT_LWM2M_DEVICE, basic.NewExampleDeviceObject(registry)},
 		{oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, basic.NewExampleConnectivityMonitoringObject(registry)},
 		{oma.OBJECT_LWM2M_FIRMWARE_UPDATE, basic.NewExampleFirmwareUpdateObject(registry)},
 		{oma.OBJECT_LWM2M_LOCATION, basic.NewExampleLocationObject(registry)},
 		{oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS, basic.NewExampleConnectivityStatisticsObject(registry)},
 	}
 
-	for _, c := range cases1 {
+	for _, c := range cases2 {
 		err := cli.EnableObject(c.in, c.en)
 
 		assert.Nil(t, err, "Error enabling object: ", c.in)
 	}
 
-	assert.Nil(t, cli.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil), "Error enabling object")
-	assert.NotNil(t, cli.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil), "Object should already be enabled")
-
-	cases2 := []struct {
+	cases3 := []struct {
 		in LWM2MObjectType
 	}{
 		{oma.OBJECT_LWM2M_SERVER},
@@ -51,7 +61,7 @@ func TestClient(t *testing.T) {
 		{oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS},
 	}
 
-	for _, c := range cases2 {
+	for _, c := range cases3 {
 		o := cli.GetObject(c.in)
 		assert.NotNil(t, o, "Error getting object: ", c)
 		assert.NotNil(t, o.GetEnabler(), "Error getting object enabler: ", c)

@@ -2,6 +2,7 @@ package core
 
 import (
 	. "github.com/zubairhamed/betwixt/api"
+	"github.com/zubairhamed/betwixt/core/response"
 )
 
 type DefaultObjectModel struct {
@@ -13,8 +14,20 @@ type DefaultObjectModel struct {
 	Resources   []ResourceModel
 }
 
-func (o *DefaultObjectModel) GetId() LWM2MObjectType {
+func (o *DefaultObjectModel) GetType() LWM2MObjectType {
 	return o.Id
+}
+
+func (o *DefaultObjectModel) AllowMultiple() bool {
+	return o.Multiple
+}
+
+func (o *DefaultObjectModel) IsMandatory() bool {
+	return o.Mandatory
+}
+
+func (o *DefaultObjectModel) GetDescription() string {
+	return o.Description
 }
 
 func (o *DefaultObjectModel) SetResources(r []ResourceModel) {
@@ -61,13 +74,6 @@ func (o *DefaultResourceModel) MultipleValuesAllowed() bool {
 func (o *DefaultResourceModel) GetResourceType() ValueTypeCode {
 	return o.ResourceType
 }
-
-//func NewObjectInstance(id int, t LWM2MObjectType) ObjectInstance {
-//	return &DefaultObjectInstance{
-//		Id:     id,
-//		TypeId: t,
-//	}
-//}
 
 type DefaultObjectInstance struct {
 	Id     int
@@ -121,16 +127,48 @@ func (o *DefaultObject) GetInstances()[]int {
 			instances = append(instances, k)
 		}
 	}
-
 	return instances
+}
+
+func (o *DefaultObject) SetEnabler(e ObjectEnabler) {
+	o.enabler = e
 }
 
 func NewObject(t LWM2MObjectType, enabler ObjectEnabler, reg Registry) Object {
 	model := reg.GetModel(t)
+
+	if enabler == nil {
+		enabler = &NullEnabler{}
+	}
+
 	return &DefaultObject {
 		model: model,
 		typeId: t,
 		enabler: enabler,
 		instances: make(map[int]bool),
 	}
+}
+
+type NullEnabler struct {
+
+}
+
+func (e *NullEnabler) OnRead(int, int, Lwm2mRequest) Lwm2mResponse {
+	return response.MethodNotAllowed()
+}
+
+func (e *NullEnabler) OnDelete(int, Lwm2mRequest) Lwm2mResponse {
+	return response.MethodNotAllowed()
+}
+
+func (e *NullEnabler) OnWrite(int, int, Lwm2mRequest) Lwm2mResponse {
+	return response.MethodNotAllowed()
+}
+
+func (e *NullEnabler) OnCreate(int, int, Lwm2mRequest) Lwm2mResponse {
+	return response.MethodNotAllowed()
+}
+
+func (e *NullEnabler) OnExecute(int, int, Lwm2mRequest) Lwm2mResponse {
+	return response.MethodNotAllowed()
 }

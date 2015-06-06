@@ -28,23 +28,27 @@ type ObjectEnabler interface {
 	OnExecute(int, int, Lwm2mRequest) Lwm2mResponse
 }
 
-type ModelSource interface {
+type ObjectSource interface {
 	Initialize()
-	Get(LWM2MObjectType) ObjectModel
-	Add(ObjectModel, ...ResourceModel)
+	GetObject(n LWM2MObjectType) ObjectModel
+	GetObjects() map[LWM2MObjectType]ObjectModel
+	AddObject(m ObjectModel, res ...ResourceModel)
 }
 
 type Registry interface {
 	GetModel(LWM2MObjectType) ObjectModel
-	Register(ModelSource)
-	CreateHandler(LWM2MObjectType)
+	Register(ObjectSource)
+	GetMandatory() []ObjectModel
 }
 
 type ObjectModel interface {
-	GetId() LWM2MObjectType
+	GetType() LWM2MObjectType
+	GetDescription() string
 	SetResources([]ResourceModel)
 	GetResources() []ResourceModel
 	GetResource(n int) ResourceModel
+	AllowMultiple() bool
+	IsMandatory() bool
 }
 
 type ResourceModel interface {
@@ -64,6 +68,7 @@ type LWM2MClient interface {
 	Update()
 	UseRegistry(Registry)
 	EnableObject(LWM2MObjectType, ObjectEnabler) error
+	SetEnabler(LWM2MObjectType, ObjectEnabler)
 	GetRegistry() Registry
 	GetEnabledObjects() map[LWM2MObjectType]Object
 	Start()
@@ -115,5 +120,5 @@ type Object interface {
 	GetEnabler() ObjectEnabler
 	GetType() LWM2MObjectType
 	GetModel() ObjectModel
+	SetEnabler(ObjectEnabler)
 }
-

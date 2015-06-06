@@ -16,7 +16,7 @@ func TestObjectInstancesToTlv(t *testing.T) {
 
 	device := basic.NewExampleDeviceObject(registry)
 
-	cli.EnableObject(oma.OBJECT_LWM2M_DEVICE, device)
+	cli.SetEnabler(oma.OBJECT_LWM2M_DEVICE, device)
 	cli.AddObjectInstance(oma.OBJECT_LWM2M_DEVICE, 0)
 
 	obj := cli.GetObject(oma.OBJECT_LWM2M_DEVICE)

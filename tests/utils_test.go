@@ -107,7 +107,7 @@ func TestBuildResourceStringPayload(t *testing.T) {
 	cli.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, nil)
 
 	str := core.BuildModelResourceStringPayload(cli.GetEnabledObjects())
-	compare := "</0>,</2>,</4>,"
+	compare := "</0>,</1>,</2>,</3>,</4>,"
 
 	assert.Equal(t, str, compare, "Unexpected output building Model Resource String")
 }

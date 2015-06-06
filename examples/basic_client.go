@@ -15,7 +15,7 @@ func main() {
 	setupResources(c, registry)
 
 	c.OnStartup(func() {
-		c.Register("BetwixtClient")
+		c.Register("Bextwixt")
 	})
 
 	c.Start()

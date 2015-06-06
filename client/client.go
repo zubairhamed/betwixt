@@ -20,12 +20,18 @@ func NewDefaultClient(local string, remote string, registry Registry) *DefaultCl
 
 	coapServer := NewServer(localAddr, remoteAddr)
 
-	// TODO Create Mandatory
+	// Create Mandatory
 	c := &DefaultClient{
 		coapServer:     coapServer,
 		enabledObjects: make(map[LWM2MObjectType]Object),
 		registry: registry,
 	}
+
+	mandatory := registry.GetMandatory()
+	for _, o := range mandatory {
+		c.EnableObject(o.GetType(), nil)
+	}
+
 	return c
 }
 
@@ -47,6 +53,10 @@ type DefaultClient struct {
 
 // Operations
 func (c *DefaultClient) Register(name string) string {
+	if len(name) > 10 {
+		log.Fatal("Client#Register: Client name can not exceed 10 characters")
+	}
+
 	req := NewRequest(TYPE_CONFIRMABLE, POST, GenerateMessageId())
 
 	req.SetStringPayload(core.BuildModelResourceStringPayload(c.enabledObjects))
@@ -65,6 +75,13 @@ func (c *DefaultClient) Register(name string) string {
 	c.path = path
 
 	return path
+}
+
+func (c *DefaultClient) SetEnabler(t LWM2MObjectType, e ObjectEnabler) {
+	_, ok := c.enabledObjects[t]
+	if ok {
+		c.enabledObjects[t].SetEnabler(e)
+	}
 }
 
 func (c *DefaultClient) GetEnabledObjects() map[LWM2MObjectType]Object {
@@ -138,7 +155,13 @@ func (c *DefaultClient) GetObject(n LWM2MObjectType) Object {
 	return c.enabledObjects[n]
 }
 
+func (c *DefaultClient) validate() {
+
+}
+
 func (c *DefaultClient) Start() {
+	c.validate()
+
 	s := c.coapServer
 	s.OnStartup(func(evt *Event) {
 		if c.evtOnStartup != nil {
@@ -223,9 +246,10 @@ func (c *DefaultClient) handleReadRequest(r Request) Response {
 			} else {
 				lwReq := request.Default(req, OPERATIONTYPE_READ)
 				response := enabler.OnRead(instanceId, resourceId, lwReq)
+				log.Println(response)
 
 				val := response.GetResponseValue()
-				msg.Code = COAPCODE_205_CONTENT
+				msg.Code = response.GetResponseCode()
 				msg.Payload = NewBytesPayload(val.GetBytes())
 			}
 		}

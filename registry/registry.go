@@ -2,7 +2,6 @@ package registry
 
 import (
 	. "github.com/zubairhamed/betwixt/api"
-	// . "github.com/zubairhamed/betwixt/core"
 	"github.com/zubairhamed/betwixt/objects/ipso"
 	"github.com/zubairhamed/betwixt/objects/oma"
 )
@@ -13,9 +12,9 @@ func NewDefaultObjectRegistry() Registry {
 	return reg
 }
 
-func NewObjectRegistry(s ...ModelSource) Registry {
+func NewObjectRegistry(s ...ObjectSource) Registry {
 	reg := &ObjectRegistry{}
-	reg.sources = []ModelSource{}
+	reg.sources = []ObjectSource{}
 
 	for _, o := range s {
 		reg.Register(o)
@@ -24,23 +23,13 @@ func NewObjectRegistry(s ...ModelSource) Registry {
 }
 
 type ObjectRegistry struct {
-	sources []ModelSource
+	sources []ObjectSource
 }
-
-//func (m *ObjectRegistry) CreateObjectInstance(t LWM2MObjectType, n int) ObjectInstance {
-//	o := m.GetModel(t)
-//	if o != nil {
-//		obj := NewObjectInstance(n, t)
-//
-//		return obj
-//	}
-//	return nil
-//}
 
 func (m *ObjectRegistry) GetModel(n LWM2MObjectType) ObjectModel {
 	for _, s := range m.sources {
 		if s != nil {
-			o := s.Get(n)
+			o := s.GetObject(n)
 			if o != nil {
 				return o
 			}
@@ -49,11 +38,21 @@ func (m *ObjectRegistry) GetModel(n LWM2MObjectType) ObjectModel {
 	return nil
 }
 
-func (m *ObjectRegistry) Register(s ModelSource) {
+func (m *ObjectRegistry) Register(s ObjectSource) {
 	s.Initialize()
 	m.sources = append(m.sources, s)
 }
 
-func (m *ObjectRegistry) CreateHandler(t LWM2MObjectType) {
+func (m *ObjectRegistry) GetMandatory() []ObjectModel {
+	mandatory := []ObjectModel{}
 
+	for _, s := range m.sources {
+		objs := s.GetObjects()
+		for _, o := range objs {
+			if o.IsMandatory() {
+				mandatory = append(mandatory, o)
+			}
+		}
+	}
+	return mandatory
 }

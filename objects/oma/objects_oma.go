@@ -23,7 +23,7 @@ type LWM2MCoreObjects struct {
 func (o *LWM2MCoreObjects) Initialize() {
 	o.models = make(map[LWM2MObjectType]ObjectModel)
 
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "LWM2M Security", Id: 0, Multiple: true, Mandatory: true, Description: ""},
 		&DefaultResourceModel{Id: 0, Name: "LWM2M  Server URI", Operations: OPERATION_NONE, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_STRING, RangeOrEnums: "0-255 bytes", Units: "", Description: ""},
 		&DefaultResourceModel{Id: 1, Name: "Bootstrap Server", Operations: OPERATION_NONE, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_BOOLEAN, RangeOrEnums: "", Units: "", Description: ""},
@@ -39,7 +39,7 @@ func (o *LWM2MCoreObjects) Initialize() {
 		&DefaultResourceModel{Id: 11, Name: "Client Hold Off Time", Operations: OPERATION_NONE, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "", Units: "s", Description: ""},
 	)
 
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "LWM2M Server", Id: 1, Multiple: true, Mandatory: true, Description: ""},
 		&DefaultResourceModel{Id: 0, Name: "Short Server ID", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "1-65535", Units: "", Description: ""},
 		&DefaultResourceModel{Id: 1, Name: "Lifetime", Operations: OPERATION_RW, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "", Units: "s", Description: ""},
@@ -52,7 +52,7 @@ func (o *LWM2MCoreObjects) Initialize() {
 		&DefaultResourceModel{Id: 8, Name: "Registration Update Trigger", Operations: OPERATION_E, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_STRING, RangeOrEnums: "", Units: "", Description: ""},
 	)
 
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "LWM2M Access Control", Id: 2, Multiple: true, Mandatory: false, Description: ""},
 		&DefaultResourceModel{Id: 0, Name: "Object ID", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "1-65534", Units: "", Description: ""},
 		&DefaultResourceModel{Id: 1, Name: "Object Instance ID", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "0-65535", Units: "", Description: ""},
@@ -60,7 +60,7 @@ func (o *LWM2MCoreObjects) Initialize() {
 		&DefaultResourceModel{Id: 3, Name: "Access Control Owner", Operations: OPERATION_RW, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "0-65535", Units: "", Description: ""},
 	)
 
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "Device", Id: 3, Multiple: false, Mandatory: true, Description: ""},
 		&DefaultResourceModel{Id: 0, Name: "Manufacturer", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_STRING, RangeOrEnums: "", Units: "", Description: ""},
 		&DefaultResourceModel{Id: 1, Name: "Model Number", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_STRING, RangeOrEnums: "", Units: "", Description: ""},
@@ -81,7 +81,7 @@ func (o *LWM2MCoreObjects) Initialize() {
 		&DefaultResourceModel{Id: 16, Name: "Supported Binding and Modes", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_STRING, RangeOrEnums: "", Units: "", Description: ""},
 	)
 
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "Connectivity Monitoring", Id: 4, Multiple: false, Mandatory: false, Description: ""},
 		&DefaultResourceModel{Id: 0, Name: "Network Bearer", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "", Units: "", Description: ""},
 		&DefaultResourceModel{Id: 1, Name: "Available Network Bearer", Operations: OPERATION_R, Multiple: true, Mandatory: true, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "", Units: "", Description: ""},
@@ -96,7 +96,7 @@ func (o *LWM2MCoreObjects) Initialize() {
 		&DefaultResourceModel{Id: 10, Name: "SMCC", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "", Units: "", Description: ""},
 	)
 
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "Firmware Update", Id: 5, Multiple: false, Mandatory: false, Description: ""},
 		&DefaultResourceModel{Id: 0, Name: "Package", Operations: OPERATION_W, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_OPAQUE, RangeOrEnums: "", Units: "", Description: ""},
 		&DefaultResourceModel{Id: 1, Name: "Package URI", Operations: OPERATION_W, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_STRING, RangeOrEnums: "0-255 bytes", Units: "", Description: ""},
@@ -106,7 +106,7 @@ func (o *LWM2MCoreObjects) Initialize() {
 		&DefaultResourceModel{Id: 5, Name: "Update Result", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "0-6", Units: "", Description: ""},
 	)
 
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "Location", Id: 6, Multiple: false, Mandatory: false, Description: ""},
 		&DefaultResourceModel{Id: 0, Name: "Latitude", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_STRING, RangeOrEnums: "", Units: "Deg", Description: ""},
 		&DefaultResourceModel{Id: 1, Name: "Longitude", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_STRING, RangeOrEnums: "", Units: "Deg", Description: ""},
@@ -116,7 +116,7 @@ func (o *LWM2MCoreObjects) Initialize() {
 		&DefaultResourceModel{Id: 5, Name: "Timestamp", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_TIME, RangeOrEnums: "0-6", Units: "", Description: ""},
 	)
 
-	o.Add(
+	o.AddObject(
 		&DefaultObjectModel{Name: "Connectivity Statistics", Id: 7, Multiple: false, Mandatory: false, Description: ""},
 		&DefaultResourceModel{Id: 0, Name: "SMS Tx Counter", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "", Units: "", Description: ""},
 		&DefaultResourceModel{Id: 1, Name: "SMS Rx Counter", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "", Units: "", Description: ""},
@@ -144,11 +144,15 @@ func (o *LWM2MCoreObjects) Initialize() {
 	*/
 }
 
-func (o *LWM2MCoreObjects) Get(n LWM2MObjectType) ObjectModel {
+func (o *LWM2MCoreObjects) GetObject(n LWM2MObjectType) ObjectModel {
 	return o.models[n]
 }
 
-func (o *LWM2MCoreObjects) Add(m ObjectModel, res ...ResourceModel) {
+func (o *LWM2MCoreObjects) GetObjects() map[LWM2MObjectType]ObjectModel {
+	return o.models
+}
+
+func (o *LWM2MCoreObjects) AddObject(m ObjectModel, res ...ResourceModel) {
 	m.SetResources(res)
-	o.models[m.GetId()] = m
+	o.models[m.GetType()] = m
 }
