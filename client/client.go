@@ -246,7 +246,6 @@ func (c *DefaultClient) handleReadRequest(r Request) Response {
 			} else {
 				lwReq := request.Default(req, OPERATIONTYPE_READ)
 				response := enabler.OnRead(instanceId, resourceId, lwReq)
-				log.Println(response)
 
 				val := response.GetResponseValue()
 				msg.Code = response.GetResponseCode()
@@ -361,7 +360,6 @@ func (c *DefaultClient) handleExecuteRequest(r Request) Response {
 		}
 
 		if !core.IsExecutableResource(resource) {
-			log.Println("ExecutableResource?", resource.GetOperations())
 			msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 		} else {
 			lwReq := request.Default(req, OPERATIONTYPE_EXECUTE)
