@@ -17,10 +17,10 @@ func NewDefaultCoapServer() *canopus.CoapServer {
 	return canopus.NewServer(localAddr, nil)
 }
 
-func NewDefaultServer() api.Server {
+func NewDefaultServer(port string) api.Server {
 	return &DefaultServer{
 		coapServer: NewDefaultCoapServer(),
-		httpServer: NewDefaultHttpServer(),
+		httpServer: NewDefaultHttpServer(port),
 		clients:    make(map[string]api.RegisteredClient),
 		stats:      &ServerStatistics{},
 	}
