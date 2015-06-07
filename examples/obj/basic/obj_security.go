@@ -2,14 +2,12 @@ package basic
 
 import (
 	. "github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/core"
 	"github.com/zubairhamed/betwixt/core/response"
 	"github.com/zubairhamed/betwixt/objects/oma"
 )
 
 type SecurityObject struct {
 	Model ObjectDefinition
-	Data  *core.ObjectsData
 }
 
 func (o *SecurityObject) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
@@ -33,10 +31,7 @@ func (o *SecurityObject) OnWrite(instanceId int, resourceId int, req Lwm2mReques
 }
 
 func NewExampleSecurityObject(reg Registry) *SecurityObject {
-	data := &core.ObjectsData{
-		Data: make(map[string]interface{}),
-	}
-
+	/*
 	data.Put("/0/0", "coap://bootstrap.example.com")
 	data.Put("/0/1", true)
 	data.Put("/0/2", 0)
@@ -60,13 +55,9 @@ func NewExampleSecurityObject(reg Registry) *SecurityObject {
 	data.Put("/2/4", "[secret key data]")
 	data.Put("/2/10", 102)
 	data.Put("/2/11", 0)
+	*/
 
 	return &SecurityObject{
 		Model: reg.GetModel(oma.OBJECT_LWM2M_SECURITY),
-		Data:  data,
 	}
 }
-
-/*
-
-*/

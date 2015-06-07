@@ -2,7 +2,7 @@ package tests
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/zubairhamed/betwixt/api"
+	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/client"
 	"github.com/zubairhamed/betwixt/core/request"
 	"github.com/zubairhamed/betwixt/examples/obj/basic"
@@ -27,7 +27,7 @@ func TestExampleObjects(t *testing.T) {
 
 	// Check added enablers
 	test_enablers := []struct {
-		input api.LWM2MObjectType
+		input betwixt.LWM2MObjectType
 	}{
 		{oma.OBJECT_LWM2M_DEVICE},
 		{oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS},
@@ -48,7 +48,7 @@ func TestExampleObjects(t *testing.T) {
 		instanceId int
 		resourceId int
 		expected   interface{}
-		typeId     api.LWM2MObjectType
+		typeId     betwixt.LWM2MObjectType
 	}{
 		{0, 0, "Open Mobile Alliance", oma.OBJECT_LWM2M_DEVICE},
 		{0, 1, "Lightweight M2M Client", oma.OBJECT_LWM2M_DEVICE},
@@ -67,7 +67,7 @@ func TestExampleObjects(t *testing.T) {
 
 	for _, c := range test_obj_1 {
 		en := cli.GetObject(c.typeId).GetEnabler()
-		lwReq := request.Nil(api.OPERATIONTYPE_READ)
+		lwReq := request.Nil(betwixt.OPERATIONTYPE_READ)
 		response := en.OnRead(c.instanceId, c.resourceId, lwReq)
 		val := response.GetResponseValue().GetValue()
 

@@ -2,14 +2,12 @@ package basic
 
 import (
 	. "github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/core"
 	"github.com/zubairhamed/betwixt/core/response"
 	"github.com/zubairhamed/betwixt/objects/oma"
 )
 
 type ServerObject struct {
 	Model ObjectDefinition
-	Data  *core.ObjectsData
 }
 
 func (o *ServerObject) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
@@ -33,10 +31,7 @@ func (o *ServerObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequest)
 }
 
 func NewExampleServerObject(reg Registry) *ServerObject {
-	data := &core.ObjectsData{
-		Data: make(map[string]interface{}),
-	}
-
+	/*
 	data.Put("/1/0", 101)
 	data.Put("/1/1", 86400)
 	data.Put("/1/2", 300)
@@ -52,9 +47,9 @@ func NewExampleServerObject(reg Registry) *ServerObject {
 	data.Put("/2/5", 86400)
 	data.Put("/2/6", false)
 	data.Put("/2/7", "UQ")
+	*/
 
 	return &ServerObject{
 		Model: reg.GetModel(oma.OBJECT_LWM2M_SERVER),
-		Data:  data,
 	}
 }

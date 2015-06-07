@@ -53,6 +53,7 @@ func TestGetValueByteLength(t *testing.T) {
 	}
 }
 
+/*
 func TestObjectData(t *testing.T) {
 
 	tests := []struct {
@@ -97,6 +98,7 @@ func TestObjectData(t *testing.T) {
 	data.Clear()
 	assert.Equal(t, data.Length(), 0, "Number of items in ObjectData. Expected", 0, "actual", data.Length())
 }
+*/
 
 func TestBuildResourceStringPayload(t *testing.T) {
 	reg := registry.NewDefaultObjectRegistry()

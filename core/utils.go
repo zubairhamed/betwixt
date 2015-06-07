@@ -86,24 +86,3 @@ func IsWritableResource(m ResourceDefinition) bool {
 	op := m.GetOperations()
 	return (op == OPERATION_RW || op == OPERATION_RWE || op == OPERATION_WE || op == OPERATION_W)
 }
-
-//////////////////////////////////////////////////////
-type ObjectsData struct {
-	Data map[string]interface{}
-}
-
-func (o *ObjectsData) Put(path string, value interface{}) {
-	o.Data[path] = value
-}
-
-func (o *ObjectsData) Get(path string) interface{} {
-	return o.Data[path]
-}
-
-func (o *ObjectsData) Length() int {
-	return len(o.Data)
-}
-
-func (o *ObjectsData) Clear() {
-	o.Data = make(map[string]interface{})
-}

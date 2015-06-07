@@ -2,14 +2,13 @@ package basic
 
 import (
 	. "github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/core"
 	"github.com/zubairhamed/betwixt/core/response"
 	"github.com/zubairhamed/betwixt/objects/oma"
+	"github.com/zubairhamed/betwixt/core/values"
 )
 
 type AccessControlObject struct {
 	Model ObjectDefinition
-	Data  *core.ObjectsData
 }
 
 func (o *AccessControlObject) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
@@ -25,18 +24,111 @@ func (o *AccessControlObject) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mRe
 }
 
 func (o *AccessControlObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
-	return response.Unauthorized()
+	if resourceId == -1 {
+		// Read Object Instance
+	} else {
+		// Read Resource Instance
+		var val ResponseValue
+
+		// resource := o.Model.GetResource(resourceId)
+		switch instanceId {
+			case 0:
+				switch resourceId {
+					case 0:
+					val = values.Integer(1)
+					break
+
+					case 1:
+					val = values.Integer(0)
+					break
+
+					case 2:
+					// "/0/2/101", []byte{0, 15}
+					break
+
+					case 3:
+					break
+				}
+			break
+
+			case 1:
+			switch resourceId {
+				case 0:
+				break
+
+				case 1:
+				break
+
+				case 2:
+				break
+
+				case 3:
+				break
+			}
+			break
+
+			case 2:
+			switch resourceId {
+				case 0:
+				break
+
+				case 1:
+				break
+
+				case 2:
+				break
+
+				case 3:
+				break
+			}
+			break
+
+			case 3:
+			switch resourceId {
+				case 0:
+				break
+
+				case 1:
+				break
+
+				case 2:
+				break
+
+				case 3:
+				break
+			}
+			break
+
+			case 4:
+			switch resourceId {
+				case 0:
+				break
+
+				case 1:
+				break
+
+				case 2:
+				break
+
+				case 3:
+				break
+			}
+			break
+		}
+		if val == nil {
+			return response.NotFound()
+		} else {
+			return response.Content(val)
+		}
+	}
+	return response.NotFound()
 }
 
 func (o *AccessControlObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Unauthorized()
 }
 
-func NewExampleAccessControlObject(reg Registry) *AccessControlObject {
-	data := &core.ObjectsData{
-		Data: make(map[string]interface{}),
-	}
-
+/*
 	data.Put("/0/0", 1)
 	data.Put("/0/1", 0)
 	data.Put("/0/2/101", []byte{0, 15})
@@ -63,9 +155,10 @@ func NewExampleAccessControlObject(reg Registry) *AccessControlObject {
 	data.Put("4/1", 65535)
 	data.Put("4/2/101", []byte{0, 16})
 	data.Put("4/3", 65535)
+*/
 
+func NewExampleAccessControlObject(reg Registry) *AccessControlObject {
 	return &AccessControlObject{
 		Model: reg.GetModel(oma.OBJECT_LWM2M_SECURITY),
-		Data:  data,
 	}
 }

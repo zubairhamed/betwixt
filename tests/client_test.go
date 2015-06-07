@@ -2,7 +2,7 @@ package tests
 
 import (
 	"github.com/stretchr/testify/assert"
-	. "github.com/zubairhamed/betwixt/api"
+	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/client"
 	"github.com/zubairhamed/betwixt/objects/oma"
 	"github.com/zubairhamed/betwixt/registry"
