@@ -2,7 +2,7 @@ package client
 
 import (
 	"errors"
-	. "github.com/zubairhamed/betwixt/api"
+	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/core"
 	"github.com/zubairhamed/betwixt/core/request"
 	. "github.com/zubairhamed/canopus"

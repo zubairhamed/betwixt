@@ -1,40 +1,40 @@
 package core
 
 import (
-	. "github.com/zubairhamed/betwixt/api"
+	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/core/response"
 )
 
-type DefaultObjectModel struct {
+type DefaultObjectDefinition struct {
 	Id          LWM2MObjectType
 	Name        string
 	Description string
 	Multiple    bool
 	Mandatory   bool
-	Resources   []ResourceModel
+	Resources   []ResourceDefinition
 }
 
-func (o *DefaultObjectModel) GetType() LWM2MObjectType {
+func (o *DefaultObjectDefinition) GetType() LWM2MObjectType {
 	return o.Id
 }
 
-func (o *DefaultObjectModel) AllowMultiple() bool {
+func (o *DefaultObjectDefinition) AllowMultiple() bool {
 	return o.Multiple
 }
 
-func (o *DefaultObjectModel) IsMandatory() bool {
+func (o *DefaultObjectDefinition) IsMandatory() bool {
 	return o.Mandatory
 }
 
-func (o *DefaultObjectModel) GetDescription() string {
+func (o *DefaultObjectDefinition) GetDescription() string {
 	return o.Description
 }
 
-func (o *DefaultObjectModel) SetResources(r []ResourceModel) {
+func (o *DefaultObjectDefinition) SetResources(r []ResourceDefinition) {
 	o.Resources = r
 }
 
-func (o *DefaultObjectModel) GetResource(n int) ResourceModel {
+func (o *DefaultObjectDefinition) GetResource(n int) ResourceDefinition {
 	for _, rsrc := range o.Resources {
 		if rsrc.GetId() == n {
 			return rsrc
@@ -43,11 +43,11 @@ func (o *DefaultObjectModel) GetResource(n int) ResourceModel {
 	return nil
 }
 
-func (o *DefaultObjectModel) GetResources() []ResourceModel {
+func (o *DefaultObjectDefinition) GetResources() []ResourceDefinition {
 	return o.Resources
 }
 
-type DefaultResourceModel struct {
+type DefaultResourceDefinition struct {
 	Id           int
 	Name         string
 	Operations   OperationCode
@@ -59,19 +59,19 @@ type DefaultResourceModel struct {
 	Description  string
 }
 
-func (o *DefaultResourceModel) GetId() int {
+func (o *DefaultResourceDefinition) GetId() int {
 	return o.Id
 }
 
-func (o *DefaultResourceModel) GetOperations() OperationCode {
+func (o *DefaultResourceDefinition) GetOperations() OperationCode {
 	return o.Operations
 }
 
-func (o *DefaultResourceModel) MultipleValuesAllowed() bool {
+func (o *DefaultResourceDefinition) MultipleValuesAllowed() bool {
 	return o.Multiple
 }
 
-func (o *DefaultResourceModel) GetResourceType() ValueTypeCode {
+func (o *DefaultResourceDefinition) GetResourceType() ValueTypeCode {
 	return o.ResourceType
 }
 
@@ -94,12 +94,12 @@ type DefaultResource struct {
 
 type DefaultObject struct {
 	typeId 		LWM2MObjectType
-	model 		ObjectModel
+	model 		ObjectDefinition
 	enabler 	ObjectEnabler
 	instances 	map[int]bool
 }
 
-func (o *DefaultObject) GetModel() ObjectModel {
+func (o *DefaultObject) GetModel() ObjectDefinition {
 	return o.model
 }
 

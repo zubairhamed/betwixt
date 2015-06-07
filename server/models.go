@@ -1,11 +1,12 @@
 package server
 
 import (
-	"github.com/zubairhamed/betwixt/api"
+	"github.com/zubairhamed/betwixt"
 	"time"
 )
 
-func NewRegisteredClient(ep string, id string, addr string) api.RegisteredClient {
+// Returns a new instance of DefaultRegisteredClient implementing RegisteredClient
+func NewRegisteredClient(ep string, id string, addr string) betwixt.RegisteredClient {
 	return &DefaultRegisteredClient{
 		name:       ep,
 		id:         id,
@@ -31,16 +32,16 @@ type RegisteredObject struct {
 }
 
 type DefaultRegisteredClient struct {
-	id          string
-	name        string
-	lifetime    int
-	version     string
-	bindingMode api.BindingMode
-	smsNumber   string
-	addr        string
-	regDate     time.Time
-	updateDate  time.Time
-	objects     map[string][]string
+	id          	string
+	name        	string
+	lifetime    	int
+	version     	string
+	bindingMode 	betwixt.BindingMode
+	smsNumber   	string
+	addr        	string
+	regDate     	time.Time
+	updateDate  	time.Time
+	enabledObjects 	map[betwixt.LWM2MObjectType]betwixt.Object
 }
 
 func (c *DefaultRegisteredClient) GetId() string {
@@ -59,7 +60,7 @@ func (c *DefaultRegisteredClient) GetVersion() string {
 	return c.version
 }
 
-func (c *DefaultRegisteredClient) GetBindingMode() api.BindingMode {
+func (c *DefaultRegisteredClient) GetBindingMode() betwixt.BindingMode {
 	return c.bindingMode
 }
 
@@ -77,8 +78,4 @@ func (c *DefaultRegisteredClient) Update() {
 
 func (c *DefaultRegisteredClient) LastUpdate() time.Time {
 	return c.updateDate
-}
-
-func (c *DefaultRegisteredClient) SetObjects(o map[string][]string) {
-	c.objects = o
 }

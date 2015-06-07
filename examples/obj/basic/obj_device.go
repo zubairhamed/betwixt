@@ -1,7 +1,7 @@
 package basic
 
 import (
-	. "github.com/zubairhamed/betwixt/api"
+	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/core"
 	"github.com/zubairhamed/betwixt/core/response"
 	"github.com/zubairhamed/betwixt/core/values"
@@ -10,7 +10,7 @@ import (
 )
 
 type DeviceObject struct {
-	Model       ObjectModel
+	Model       ObjectDefinition
 	currentTime time.Time
 	utcOffset   string
 	timeZone    string

@@ -1,7 +1,7 @@
 package main
 
 import (
-	. "github.com/zubairhamed/betwixt/api"
+	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/client"
 	. "github.com/zubairhamed/betwixt/examples/obj/basic"
 	"github.com/zubairhamed/betwixt/objects/oma"

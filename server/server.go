@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/zubairhamed/betwixt/api"
+	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/canopus"
 	. "github.com/zubairhamed/go-commons/network"
 	"log"
@@ -17,11 +17,11 @@ func NewDefaultCoapServer() *canopus.CoapServer {
 	return canopus.NewServer(localAddr, nil)
 }
 
-func NewDefaultServer(port string) api.Server {
+func NewDefaultServer(port string) betwixt.Server {
 	return &DefaultServer{
 		coapServer: NewDefaultCoapServer(),
 		httpServer: NewDefaultHttpServer(port),
-		clients:    make(map[string]api.RegisteredClient),
+		clients:    make(map[string]betwixt.RegisteredClient),
 		stats:      &ServerStatistics{},
 	}
 }
@@ -29,9 +29,9 @@ func NewDefaultServer(port string) api.Server {
 type DefaultServer struct {
 	coapServer *canopus.CoapServer
 	httpServer *HttpServer
-	registry   api.Registry
+	registry   betwixt.Registry
 	stats      *ServerStatistics
-	clients    map[string]api.RegisteredClient
+	clients    map[string]betwixt.RegisteredClient
 }
 
 func (server *DefaultServer) Start() {
@@ -53,11 +53,11 @@ func (server *DefaultServer) Start() {
 	http.Start()
 }
 
-func (server *DefaultServer) UseRegistry(reg api.Registry) {
+func (server *DefaultServer) UseRegistry(reg betwixt.Registry) {
 	server.registry = reg
 }
 
-func (server *DefaultServer) GetRegisteredClient(id string) api.RegisteredClient {
+func (server *DefaultServer) GetRegisteredClient(id string) betwixt.RegisteredClient {
 	return server.clients[id]
 }
 
@@ -74,23 +74,28 @@ func (server *DefaultServer) register(ep string, addr string, resources []*canop
 	clientId := canopus.GenerateToken(8)
 	newClient := NewRegisteredClient(ep, clientId, addr)
 
-	objs := make(map[string][]string)
 	for _, o := range resources {
 		t := o.Target[1:len(o.Target)]
 		sp := strings.Split(t, "/")
 
+
+
+
 		if len(sp) > 1 {
+			// Has Object Instance
 
 		} else {
+			// Object Only
 
 		}
 
-		log.Println(t, sp[0], sp[1])
+		log.Println("coreresource", sp)
+		// log.Println(t, sp[0], sp[1])
 
-		objs[sp[0]] = append(objs[sp[0]], sp[1])
+		// objs[sp[0]] = append(objs[sp[0]], sp[1])
 	}
 
-	newClient.SetObjects(objs)
+	// newClient.SetObjects(objs)
 
 	server.clients[ep] = newClient
 

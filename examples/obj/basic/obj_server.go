@@ -1,14 +1,14 @@
 package basic
 
 import (
-	. "github.com/zubairhamed/betwixt/api"
+	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/core"
 	"github.com/zubairhamed/betwixt/core/response"
 	"github.com/zubairhamed/betwixt/objects/oma"
 )
 
 type ServerObject struct {
-	Model ObjectModel
+	Model ObjectDefinition
 	Data  *core.ObjectsData
 }
 

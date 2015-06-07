@@ -3,7 +3,7 @@ package core
 import (
 	"bytes"
 	"encoding/binary"
-	. "github.com/zubairhamed/betwixt/api"
+	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/core/values"
 )
 
@@ -70,7 +70,7 @@ func TlvPayloadFromObjects(o Object, reg Registry) (ResponseValue, error) {
 	return values.Tlv(buf.Bytes()), nil
 }
 
-func TlvPayloadFromIntResource(model ResourceModel, vals []int) (ResponseValue, error) {
+func TlvPayloadFromIntResource(model ResourceDefinition, vals []int) (ResponseValue, error) {
 
 	// Resource Instances TLV
 	resourceInstanceBytes := bytes.NewBuffer([]byte{})

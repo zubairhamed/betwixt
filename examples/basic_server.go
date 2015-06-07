@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	s := server.NewDefaultServer()
+	s := server.NewDefaultServer(":8081")
 
 	registry := registry.NewDefaultObjectRegistry()
 

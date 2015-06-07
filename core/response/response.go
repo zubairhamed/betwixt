@@ -1,7 +1,7 @@
 package response
 
 import (
-	. "github.com/zubairhamed/betwixt/api"
+	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/core/values"
 	. "github.com/zubairhamed/canopus"
 )

@@ -1,14 +1,14 @@
 package basic
 
 import (
-	. "github.com/zubairhamed/betwixt/api"
+	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/core/response"
 	"github.com/zubairhamed/betwixt/core/values"
 	"github.com/zubairhamed/betwixt/objects/oma"
 )
 
 type ConnectivityMonitoringObject struct {
-	Model ObjectModel
+	Model ObjectDefinition
 }
 
 func (o *ConnectivityMonitoringObject) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {

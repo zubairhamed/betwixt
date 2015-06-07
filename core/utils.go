@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	. "github.com/zubairhamed/betwixt/api"
+	. "github.com/zubairhamed/betwixt"
 	"sort"
 	"time"
 )
@@ -72,17 +72,17 @@ func BuildModelResourceStringPayload(instances LWM2MObjectInstances) string {
 	return buf.String()
 }
 
-func IsExecutableResource(m ResourceModel) bool {
+func IsExecutableResource(m ResourceDefinition) bool {
 	op := m.GetOperations()
 	return (op == OPERATION_E || op == OPERATION_RE || op == OPERATION_RWE || op == OPERATION_WE)
 }
 
-func IsReadableResource(m ResourceModel) bool {
+func IsReadableResource(m ResourceDefinition) bool {
 	op := m.GetOperations()
 	return (op == OPERATION_RE || op == OPERATION_R || op == OPERATION_RWE || op == OPERATION_RW)
 }
 
-func IsWritableResource(m ResourceModel) bool {
+func IsWritableResource(m ResourceDefinition) bool {
 	op := m.GetOperations()
 	return (op == OPERATION_RW || op == OPERATION_RWE || op == OPERATION_WE || op == OPERATION_W)
 }

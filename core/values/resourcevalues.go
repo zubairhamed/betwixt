@@ -3,7 +3,7 @@ package values
 import (
 	"bytes"
 	"encoding/binary"
-	. "github.com/zubairhamed/betwixt/api"
+	. "github.com/zubairhamed/betwixt"
 	"strconv"
 	"time"
 )

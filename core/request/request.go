@@ -1,10 +1,11 @@
 package request
 
 import (
-	. "github.com/zubairhamed/betwixt/api"
+	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/canopus"
 )
 
+// Default
 func Default(coap *canopus.CoapRequest, op OperationType) Lwm2mRequest {
 	return &DefaultRequest{
 		coap: coap,

@@ -1,7 +1,7 @@
 package registry
 
 import (
-	. "github.com/zubairhamed/betwixt/api"
+	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/objects/ipso"
 	"github.com/zubairhamed/betwixt/objects/oma"
 )
@@ -26,7 +26,7 @@ type ObjectRegistry struct {
 	sources []ObjectSource
 }
 
-func (m *ObjectRegistry) GetModel(n LWM2MObjectType) ObjectModel {
+func (m *ObjectRegistry) GetModel(n LWM2MObjectType) ObjectDefinition {
 	for _, s := range m.sources {
 		if s != nil {
 			o := s.GetObject(n)
@@ -43,8 +43,8 @@ func (m *ObjectRegistry) Register(s ObjectSource) {
 	m.sources = append(m.sources, s)
 }
 
-func (m *ObjectRegistry) GetMandatory() []ObjectModel {
-	mandatory := []ObjectModel{}
+func (m *ObjectRegistry) GetMandatory() []ObjectDefinition {
+	mandatory := []ObjectDefinition{}
 
 	for _, s := range m.sources {
 		objs := s.GetObjects()
