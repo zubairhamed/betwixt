@@ -190,6 +190,7 @@ type RegisteredClient interface {
     GetRegistrationDate() time.Time
     Update()
     LastUpdate() time.Time
+    // GetObject(LWM2MObjectType)
 }
 
 // An Object interface represents an Object used on a client or Objects supported by a Registered Client on a server

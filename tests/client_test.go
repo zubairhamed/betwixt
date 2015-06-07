@@ -4,10 +4,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/client"
-	"github.com/zubairhamed/betwixt/objects/oma"
+	"github.com/zubairhamed/betwixt/objdefs/oma"
 	"github.com/zubairhamed/betwixt/registry"
 	"testing"
-	"github.com/zubairhamed/betwixt/examples/obj/basic"
+	"github.com/zubairhamed/betwixt/enablers"
 )
 
 func TestClient(t *testing.T) {
@@ -36,11 +36,11 @@ func TestClient(t *testing.T) {
 		in LWM2MObjectType
 		en ObjectEnabler
 	}{
-		{oma.OBJECT_LWM2M_ACCESS_CONTROL, basic.NewExampleAccessControlObject(registry)},
-		{oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, basic.NewExampleConnectivityMonitoringObject(registry)},
-		{oma.OBJECT_LWM2M_FIRMWARE_UPDATE, basic.NewExampleFirmwareUpdateObject(registry)},
-		{oma.OBJECT_LWM2M_LOCATION, basic.NewExampleLocationObject(registry)},
-		{oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS, basic.NewExampleConnectivityStatisticsObject(registry)},
+		{oma.OBJECT_LWM2M_ACCESS_CONTROL, enablers.NewNullEnabler()},
+		{oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, enablers.NewNullEnabler()},
+		{oma.OBJECT_LWM2M_FIRMWARE_UPDATE, enablers.NewNullEnabler()},
+		{oma.OBJECT_LWM2M_LOCATION, enablers.NewNullEnabler()},
+		{oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS, enablers.NewNullEnabler()},
 	}
 
 	for _, c := range cases2 {

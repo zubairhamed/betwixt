@@ -2,7 +2,8 @@ package ipso
 
 import (
 	. "github.com/zubairhamed/betwixt"
-	. "github.com/zubairhamed/betwixt/core"
+	. "github.com/zubairhamed/betwixt/objects"
+	. "github.com/zubairhamed/betwixt/resources"
 )
 
 const (

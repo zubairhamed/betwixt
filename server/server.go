@@ -7,6 +7,8 @@ import (
 	"log"
 	"net"
 	"strings"
+	"github.com/zubairhamed/betwixt/objects"
+	"strconv"
 )
 
 func NewDefaultCoapServer() *canopus.CoapServer {
@@ -72,21 +74,19 @@ func (server *DefaultServer) update(id string) {
 
 func (server *DefaultServer) register(ep string, addr string, resources []*canopus.CoreResource) (string, error) {
 	clientId := canopus.GenerateToken(8)
-	newClient := NewRegisteredClient(ep, clientId, addr)
+	cli := NewRegisteredClient(ep, clientId, addr)
 
 	for _, o := range resources {
 		t := o.Target[1:len(o.Target)]
 		sp := strings.Split(t, "/")
 
-
-
+		objectId	, _ := strconv.Atoi(sp[0])
+		obj := objects.NewObject(betwixt.LWM2MObjectType(objectId), nil, server.registry)
 
 		if len(sp) > 1 {
 			// Has Object Instance
-
-		} else {
-			// Object Only
-
+			instanceId, _ := strconv.Atoi(sp[1])
+			obj.AddInstance(instanceId)
 		}
 
 		log.Println("coreresource", sp)
@@ -97,7 +97,7 @@ func (server *DefaultServer) register(ep string, addr string, resources []*canop
 
 	// newClient.SetObjects(objs)
 
-	server.clients[ep] = newClient
+	server.clients[ep] = cli
 
 	return clientId, nil
 }

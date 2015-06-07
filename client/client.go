@@ -3,12 +3,13 @@ package client
 import (
 	"errors"
 	. "github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/core"
-	"github.com/zubairhamed/betwixt/core/request"
+	"github.com/zubairhamed/betwixt/request"
 	. "github.com/zubairhamed/canopus"
 	. "github.com/zubairhamed/go-commons/network"
 	"log"
 	"net"
+	"github.com/zubairhamed/betwixt/utils"
+	"github.com/zubairhamed/betwixt/objects"
 )
 
 func NewDefaultClient(local string, remote string, registry Registry) *DefaultClient {
@@ -59,7 +60,7 @@ func (c *DefaultClient) Register(name string) string {
 
 	req := NewRequest(TYPE_CONFIRMABLE, POST, GenerateMessageId())
 
-	req.SetStringPayload(core.BuildModelResourceStringPayload(c.enabledObjects))
+	req.SetStringPayload(utils.BuildModelResourceStringPayload(c.enabledObjects))
 	req.SetRequestURI("rd")
 	req.SetUriQuery("ep", name)
 	resp, err := c.coapServer.Send(req)
@@ -127,7 +128,7 @@ func (c *DefaultClient) EnableObject(t LWM2MObjectType, e ObjectEnabler) error {
 		if c.registry == nil {
 			return errors.New("No registry found/set")
 		}
-		c.enabledObjects[t] = core.NewObject(t, e, c.registry)
+		c.enabledObjects[t] = objects.NewObject(t, e, c.registry)
 
 		return nil
 	} else {
@@ -241,7 +242,7 @@ func (c *DefaultClient) handleReadRequest(r Request) Response {
 			// TODO: Return TLV of Object Instance
 			msg.Code = COAPCODE_404_NOT_FOUND
 		} else {
-			if !core.IsReadableResource(resource) {
+			if !utils.IsReadableResource(resource) {
 				msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 			} else {
 				lwReq := request.Default(req, OPERATIONTYPE_READ)
@@ -318,7 +319,7 @@ func (c *DefaultClient) handleWriteRequest(r Request) Response {
 			// TODO Write to Object Instance
 			msg.Code = COAPCODE_404_NOT_FOUND
 		} else {
-			if !core.IsWritableResource(resource) {
+			if !utils.IsWritableResource(resource) {
 				msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 			} else {
 				lwReq := request.Default(req, OPERATIONTYPE_WRITE)
@@ -359,7 +360,7 @@ func (c *DefaultClient) handleExecuteRequest(r Request) Response {
 			msg.Code = COAPCODE_404_NOT_FOUND
 		}
 
-		if !core.IsExecutableResource(resource) {
+		if !utils.IsExecutableResource(resource) {
 			msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 		} else {
 			lwReq := request.Default(req, OPERATIONTYPE_EXECUTE)

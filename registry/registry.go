@@ -2,8 +2,8 @@ package registry
 
 import (
 	. "github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/objects/ipso"
-	"github.com/zubairhamed/betwixt/objects/oma"
+	"github.com/zubairhamed/betwixt/objdefs/ipso"
+	"github.com/zubairhamed/betwixt/objdefs/oma"
 )
 
 func NewDefaultObjectRegistry() Registry {

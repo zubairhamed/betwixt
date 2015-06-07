@@ -2,32 +2,32 @@ package tests
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/zubairhamed/betwixt"
+	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/client"
-	"github.com/zubairhamed/betwixt/core/request"
-	"github.com/zubairhamed/betwixt/examples/obj/basic"
-	"github.com/zubairhamed/betwixt/objects/oma"
+	"github.com/zubairhamed/betwixt/request"
+	"github.com/zubairhamed/betwixt/objdefs/oma"
 	"github.com/zubairhamed/betwixt/registry"
 	"testing"
 	"time"
+	"github.com/zubairhamed/betwixt/enablers"
 )
 
 func TestExampleObjects(t *testing.T) {
 	reg := registry.NewDefaultObjectRegistry()
 	cli := client.NewDefaultClient(":0", "localhost:5683", reg)
 
-	cli.SetEnabler(oma.OBJECT_LWM2M_SERVER, basic.NewExampleConnectivityMonitoringObject(reg))
-	cli.SetEnabler(oma.OBJECT_LWM2M_DEVICE, basic.NewExampleDeviceObject(reg))
-	cli.SetEnabler(oma.OBJECT_LWM2M_SECURITY, basic.NewExampleSecurityObject(reg))
-	cli.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, basic.NewExampleAccessControlObject(reg))
-	cli.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, basic.NewExampleConnectivityMonitoringObject(reg))
-	cli.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS, basic.NewExampleConnectivityStatisticsObject(reg))
-	cli.EnableObject(oma.OBJECT_LWM2M_FIRMWARE_UPDATE, basic.NewExampleFirmwareUpdateObject(reg))
-	cli.EnableObject(oma.OBJECT_LWM2M_LOCATION, basic.NewExampleLocationObject(reg))
+	cli.SetEnabler(oma.OBJECT_LWM2M_SERVER, enablers.NewNullEnabler())
+	cli.SetEnabler(oma.OBJECT_LWM2M_DEVICE, NewTestDeviceObject(reg))
+	cli.SetEnabler(oma.OBJECT_LWM2M_SECURITY, enablers.NewNullEnabler())
+	cli.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, enablers.NewNullEnabler())
+	cli.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, enablers.NewNullEnabler())
+	cli.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS, enablers.NewNullEnabler())
+	cli.EnableObject(oma.OBJECT_LWM2M_FIRMWARE_UPDATE, enablers.NewNullEnabler())
+	cli.EnableObject(oma.OBJECT_LWM2M_LOCATION, enablers.NewNullEnabler())
 
 	// Check added enablers
 	test_enablers := []struct {
-		input betwixt.LWM2MObjectType
+		input LWM2MObjectType
 	}{
 		{oma.OBJECT_LWM2M_DEVICE},
 		{oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS},
@@ -48,7 +48,7 @@ func TestExampleObjects(t *testing.T) {
 		instanceId int
 		resourceId int
 		expected   interface{}
-		typeId     betwixt.LWM2MObjectType
+		typeId     LWM2MObjectType
 	}{
 		{0, 0, "Open Mobile Alliance", oma.OBJECT_LWM2M_DEVICE},
 		{0, 1, "Lightweight M2M Client", oma.OBJECT_LWM2M_DEVICE},
@@ -67,7 +67,7 @@ func TestExampleObjects(t *testing.T) {
 
 	for _, c := range test_obj_1 {
 		en := cli.GetObject(c.typeId).GetEnabler()
-		lwReq := request.Nil(betwixt.OPERATIONTYPE_READ)
+		lwReq := request.Nil(OPERATIONTYPE_READ)
 		response := en.OnRead(c.instanceId, c.resourceId, lwReq)
 		val := response.GetResponseValue().GetValue()
 

@@ -3,11 +3,11 @@ package tests
 import (
 	"github.com/stretchr/testify/assert"
 	"github.com/zubairhamed/betwixt/client"
-	"github.com/zubairhamed/betwixt/core"
-	"github.com/zubairhamed/betwixt/objects/oma"
+	"github.com/zubairhamed/betwixt/objdefs/oma"
 	"github.com/zubairhamed/betwixt/registry"
 	"testing"
 	"time"
+	"github.com/zubairhamed/betwixt/utils"
 )
 
 func TestGetValueByteLength(t *testing.T) {
@@ -34,7 +34,7 @@ func TestGetValueByteLength(t *testing.T) {
 	}
 
 	for _, c := range test1 {
-		v, _ := core.GetValueByteLength(c.input)
+		v, _ := utils.GetValueByteLength(c.input)
 		assert.Equal(t, v, uint32(c.expected), "Wrong expected length returned")
 	}
 
@@ -48,7 +48,7 @@ func TestGetValueByteLength(t *testing.T) {
 	}
 
 	for _, c := range test2 {
-		_, err := core.GetValueByteLength(c.input)
+		_, err := utils.GetValueByteLength(c.input)
 		assert.NotNil(t, err, "An error should be returned")
 	}
 }
@@ -108,7 +108,7 @@ func TestBuildResourceStringPayload(t *testing.T) {
 	cli.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, nil)
 	cli.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, nil)
 
-	str := core.BuildModelResourceStringPayload(cli.GetEnabledObjects())
+	str := utils.BuildModelResourceStringPayload(cli.GetEnabledObjects())
 	compare := "</0>,</1>,</2>,</3>,</4>,"
 
 	assert.Equal(t, str, compare, "Unexpected output building Model Resource String")

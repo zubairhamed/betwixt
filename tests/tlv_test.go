@@ -3,24 +3,23 @@ package tests
 import (
 	"github.com/stretchr/testify/assert"
 	"github.com/zubairhamed/betwixt/client"
-	"github.com/zubairhamed/betwixt/core"
-	"github.com/zubairhamed/betwixt/examples/obj/basic"
-	"github.com/zubairhamed/betwixt/objects/oma"
+	"github.com/zubairhamed/betwixt/objdefs/oma"
 	"github.com/zubairhamed/betwixt/registry"
 	"testing"
+	"github.com/zubairhamed/betwixt/values"
 )
 
 func TestObjectInstancesToTlv(t *testing.T) {
-	registry := registry.NewDefaultObjectRegistry()
-	cli := client.NewDefaultClient(":0", "localhost:5683", registry)
+	reg := registry.NewDefaultObjectRegistry()
+	cli := client.NewDefaultClient(":0", "localhost:5683", reg)
 
-	device := basic.NewExampleDeviceObject(registry)
+	device := NewTestDeviceObject(reg)
 
 	cli.SetEnabler(oma.OBJECT_LWM2M_DEVICE, device)
 	cli.AddObjectInstance(oma.OBJECT_LWM2M_DEVICE, 0)
 
 	obj := cli.GetObject(oma.OBJECT_LWM2M_DEVICE)
-	_, err := core.TlvPayloadFromObjects(obj, cli.GetRegistry())
+	_, err := values.TlvPayloadFromObjects(obj, cli.GetRegistry())
 
 	assert.Nil(t, err, "Error thrown attempting to convert Object instance to TLV")
 }
