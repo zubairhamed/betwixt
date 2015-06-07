@@ -5,14 +5,8 @@ import (
 	"time"
 )
 
-type RequestHandler interface {
-	OnRead(int, int, Lwm2mRequest) Lwm2mResponse
-	OnDelete(int, Lwm2mRequest) Lwm2mResponse
-	OnWrite(int, int, Lwm2mRequest) Lwm2mResponse
-	OnCreate(int, int, Lwm2mRequest) Lwm2mResponse
-	OnExecute(int, int, Lwm2mRequest) Lwm2mResponse
-}
-
+// ResponseValue interface represents response to a server request
+// Typical response could be plain text, TLV Binary, TLV JSON
 type ResponseValue interface {
 	GetBytes() []byte
 	GetType() ValueTypeCode
@@ -20,6 +14,7 @@ type ResponseValue interface {
 	GetStringValue() string
 }
 
+//
 type ObjectEnabler interface {
 	OnRead(int, int, Lwm2mRequest) Lwm2mResponse
 	OnDelete(int, Lwm2mRequest) Lwm2mResponse
@@ -110,7 +105,6 @@ type RegisteredClient interface {
 	GetRegistrationDate() time.Time
 	Update()
 	LastUpdate() time.Time
-	SetObjects(map[string][]string)
 }
 
 type Object interface {
