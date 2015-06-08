@@ -65,7 +65,7 @@ func (v *IntegerValue) GetValue() interface{} {
 }
 
 func (v *IntegerValue) GetStringValue() string {
-	return string(v.value)
+	return strconv.Itoa(v.value)
 }
 
 type TimeValue struct {
@@ -146,7 +146,7 @@ func (v *EmptyValue) GetBytes() []byte {
 }
 
 func (v *EmptyValue) GetType() ValueTypeCode {
-	return VALUETYPE_STRING
+	return VALUETYPE_EMPTY
 }
 
 func (v *EmptyValue) GetValue() interface{} {
