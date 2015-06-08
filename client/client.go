@@ -10,6 +10,7 @@ import (
 	"net"
 	"github.com/zubairhamed/betwixt/utils"
 	"github.com/zubairhamed/betwixt/objects"
+	"github.com/zubairhamed/betwixt/enablers"
 )
 
 func NewDefaultClient(local string, remote string, registry Registry) *DefaultClient {
@@ -30,7 +31,7 @@ func NewDefaultClient(local string, remote string, registry Registry) *DefaultCl
 
 	mandatory := registry.GetMandatory()
 	for _, o := range mandatory {
-		c.EnableObject(o.GetType(), nil)
+		c.EnableObject(o.GetType(), enablers.NewNullEnabler())
 	}
 
 	return c

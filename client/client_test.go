@@ -1,9 +1,8 @@
-package tests
+package client
 
 import (
 	"github.com/stretchr/testify/assert"
 	. "github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/client"
 	"github.com/zubairhamed/betwixt/objdefs/oma"
 	"github.com/zubairhamed/betwixt/registry"
 	"testing"
@@ -13,7 +12,7 @@ import (
 func TestClient(t *testing.T) {
 
 	registry := registry.NewDefaultObjectRegistry()
-	cli := client.NewDefaultClient(":0", "localhost:5683", registry)
+	cli := NewDefaultClient(":0", "localhost:5683", registry)
 	assert.NotNil(t, cli, "Error instantiating client")
 	assert.NotNil(t, registry, "Error instantiating registry")
 

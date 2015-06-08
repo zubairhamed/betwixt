@@ -2,7 +2,6 @@ package objects
 
 import (
     . "github.com/zubairhamed/betwixt"
-    "github.com/zubairhamed/betwixt/enablers"
 )
 
 // DefaultObjectDefinition
@@ -67,9 +66,11 @@ func (o *DefaultObjectInstance) GetTypeId() LWM2MObjectType {
 func NewObject(t LWM2MObjectType, enabler ObjectEnabler, reg Registry) Object {
     model := reg.GetModel(t)
 
+    /*
     if enabler == nil {
-        enabler = &enablers.NullEnabler{}
+        enabler = enablers.NewNullEnabler()
     }
+    */
 
     return &DefaultObject {
         model: model,

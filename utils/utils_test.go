@@ -1,13 +1,11 @@
-package tests
+package utils
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/zubairhamed/betwixt/client"
 	"github.com/zubairhamed/betwixt/objdefs/oma"
-	"github.com/zubairhamed/betwixt/registry"
 	"testing"
 	"time"
-	"github.com/zubairhamed/betwixt/utils"
+	"github.com/zubairhamed/betwixt/tests"
 )
 
 func TestGetValueByteLength(t *testing.T) {
@@ -34,7 +32,7 @@ func TestGetValueByteLength(t *testing.T) {
 	}
 
 	for _, c := range test1 {
-		v, _ := utils.GetValueByteLength(c.input)
+		v, _ := GetValueByteLength(c.input)
 		assert.Equal(t, v, uint32(c.expected), "Wrong expected length returned")
 	}
 
@@ -48,7 +46,7 @@ func TestGetValueByteLength(t *testing.T) {
 	}
 
 	for _, c := range test2 {
-		_, err := utils.GetValueByteLength(c.input)
+		_, err := GetValueByteLength(c.input)
 		assert.NotNil(t, err, "An error should be returned")
 	}
 }
@@ -101,15 +99,15 @@ func TestObjectData(t *testing.T) {
 */
 
 func TestBuildResourceStringPayload(t *testing.T) {
-	reg := registry.NewDefaultObjectRegistry()
-	cli := client.NewDefaultClient(":0", "localhost:5683", reg)
+	// reg := registry.NewDefaultObjectRegistry()
+	cli := tests.NewMockClient()
 
 	cli.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil)
 	cli.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, nil)
 	cli.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, nil)
 
-	str := utils.BuildModelResourceStringPayload(cli.GetEnabledObjects())
-	compare := "</0>,</1>,</2>,</3>,</4>,"
+	str := BuildModelResourceStringPayload(cli.GetEnabledObjects())
+	compare := "</0>,</2>,</4>,"
 
 	assert.Equal(t, str, compare, "Unexpected output building Model Resource String")
 }

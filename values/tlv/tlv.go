@@ -1,10 +1,11 @@
-package values
+package tlv
 
 import (
     "bytes"
     "encoding/binary"
     . "github.com/zubairhamed/betwixt"
     "github.com/zubairhamed/betwixt/utils"
+    "github.com/zubairhamed/betwixt/values"
 )
 
 /*
@@ -67,7 +68,7 @@ func TlvPayloadFromObjects(o Object, reg Registry) (ResponseValue, error) {
         buf.Write(rsrcBuf.Bytes())
     }
 
-    return Tlv(buf.Bytes()), nil
+    return values.Tlv(buf.Bytes()), nil
 }
 
 func TlvPayloadFromIntResource(model ResourceDefinition, vals []int) (ResponseValue, error) {
@@ -113,7 +114,7 @@ func TlvPayloadFromIntResource(model ResourceDefinition, vals []int) (ResponseVa
     // Value Field, Append Resource Instances TLV to Resource TLV
     resourceTlv.Write(resourceInstanceBytes.Bytes())
 
-    return Tlv(resourceTlv.Bytes()), nil
+    return values.Tlv(resourceTlv.Bytes()), nil
 }
 
 func CreateTlvTypeField(identType byte, value interface{}, ident int) byte {
