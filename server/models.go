@@ -79,3 +79,10 @@ func (c *DefaultRegisteredClient) Update() {
 func (c *DefaultRegisteredClient) LastUpdate() time.Time {
 	return c.updateDate
 }
+
+func (c *DefaultRegisteredClient) SetObjects(objects map[betwixt.LWM2MObjectType]betwixt.Object) {
+	c.enabledObjects = objects
+}
+
+
+
