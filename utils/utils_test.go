@@ -6,6 +6,8 @@ import (
 	"github.com/zubairhamed/betwixt/tests"
 	"testing"
 	"time"
+	"github.com/zubairhamed/betwixt/registry"
+	"log"
 )
 
 func TestGetValueByteLength(t *testing.T) {
@@ -110,4 +112,11 @@ func TestBuildResourceStringPayload(t *testing.T) {
 	compare := "</0>,</2>,</4>,"
 
 	assert.Equal(t, str, compare, "Unexpected output building Model Resource String")
+}
+
+func TestResourceOperations(t *testing.T) {
+	reg := registry.NewDefaultObjectRegistry()
+
+	dev := reg.GetDefinition(oma.OBJECT_LWM2M_DEVICE)
+	log.Println(IsExecutableResource(dev.GetResource(1)))
 }

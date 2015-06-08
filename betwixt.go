@@ -8,6 +8,8 @@ import (
 type LWM2MObjectType int
 type LWM2MObjectInstances map[LWM2MObjectType]Object
 
+type FnEvent func()
+
 type FnOnStartup func()
 type FnOnRead func()
 type FnOnWrite func()
@@ -21,6 +23,11 @@ type OperationCode int
 type IdentifierType byte
 type BindingMode string
 type OperationType byte
+
+type EventType int
+const (
+	EVENT_START 		EventType = 0
+)
 
 const (
 	VALUETYPE_STRING     ValueTypeCode = 0
@@ -176,6 +183,7 @@ type Lwm2mResponse interface {
 // Server interface defines a LWM2M Server
 type Server interface {
 	UseRegistry(Registry)
+	On(EventType, FnEvent)
 	Start()
 }
 

@@ -5,17 +5,6 @@ import (
 	"time"
 )
 
-// Returns a new instance of DefaultRegisteredClient implementing RegisteredClient
-func NewRegisteredClient(ep string, id string, addr string) betwixt.RegisteredClient {
-	return &DefaultRegisteredClient{
-		name:       ep,
-		id:         id,
-		addr:       addr,
-		regDate:    time.Now(),
-		updateDate: time.Now(),
-	}
-}
-
 type ServerStatistics struct {
 	requestsCount int
 }
@@ -28,7 +17,15 @@ func (s *ServerStatistics) GetRequestsCount() int {
 	return s.requestsCount
 }
 
-type RegisteredObject struct {
+// Returns a new instance of DefaultRegisteredClient implementing RegisteredClient
+func NewRegisteredClient(ep string, id string, addr string) betwixt.RegisteredClient {
+	return &DefaultRegisteredClient{
+		name:       ep,
+		id:         id,
+		addr:       addr,
+		regDate:    time.Now(),
+		updateDate: time.Now(),
+	}
 }
 
 type DefaultRegisteredClient struct {
