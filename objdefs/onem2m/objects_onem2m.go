@@ -1,11 +1,11 @@
 package onem2m
 
 import (
-	. "github.com/zubairhamed/betwixt/api"
+	. "github.com/zubairhamed/betwixt"
 )
 
 const ()
 
 type OneM2MObjects struct {
-	models map[LWM2MObjectType]*ObjectModel
+	models map[LWM2MObjectType]*ObjectDefinition
 }

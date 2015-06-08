@@ -2,9 +2,9 @@ package tests
 
 import (
 	. "github.com/zubairhamed/betwixt"
-	"time"
 	"github.com/zubairhamed/betwixt/response"
 	"github.com/zubairhamed/betwixt/values"
+	"time"
 )
 
 type TestDeviceObject struct {

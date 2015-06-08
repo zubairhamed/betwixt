@@ -32,16 +32,16 @@ type RegisteredObject struct {
 }
 
 type DefaultRegisteredClient struct {
-	id          	string
-	name        	string
-	lifetime    	int
-	version     	string
-	bindingMode 	betwixt.BindingMode
-	smsNumber   	string
-	addr        	string
-	regDate     	time.Time
-	updateDate  	time.Time
-	enabledObjects 	map[betwixt.LWM2MObjectType]betwixt.Object
+	id             string
+	name           string
+	lifetime       int
+	version        string
+	bindingMode    betwixt.BindingMode
+	smsNumber      string
+	addr           string
+	regDate        time.Time
+	updateDate     time.Time
+	enabledObjects map[betwixt.LWM2MObjectType]betwixt.Object
 }
 
 func (c *DefaultRegisteredClient) GetId() string {
@@ -83,6 +83,3 @@ func (c *DefaultRegisteredClient) LastUpdate() time.Time {
 func (c *DefaultRegisteredClient) SetObjects(objects map[betwixt.LWM2MObjectType]betwixt.Object) {
 	c.enabledObjects = objects
 }
-
-
-

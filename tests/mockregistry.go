@@ -1,4 +1,5 @@
 package tests
+
 import (
 	. "github.com/zubairhamed/betwixt"
 )

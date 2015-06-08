@@ -3,14 +3,14 @@ package client
 import (
 	"errors"
 	. "github.com/zubairhamed/betwixt"
+	"github.com/zubairhamed/betwixt/enablers"
+	"github.com/zubairhamed/betwixt/objects"
 	"github.com/zubairhamed/betwixt/request"
+	"github.com/zubairhamed/betwixt/utils"
 	. "github.com/zubairhamed/canopus"
 	. "github.com/zubairhamed/go-commons/network"
 	"log"
 	"net"
-	"github.com/zubairhamed/betwixt/utils"
-	"github.com/zubairhamed/betwixt/objects"
-	"github.com/zubairhamed/betwixt/enablers"
 )
 
 func NewDefaultClient(local string, remote string, registry Registry) *DefaultClient {
@@ -26,7 +26,7 @@ func NewDefaultClient(local string, remote string, registry Registry) *DefaultCl
 	c := &DefaultClient{
 		coapServer:     coapServer,
 		enabledObjects: make(map[LWM2MObjectType]Object),
-		registry: registry,
+		registry:       registry,
 	}
 
 	mandatory := registry.GetMandatory()
@@ -143,7 +143,7 @@ func (c *DefaultClient) AddObjectInstance(t LWM2MObjectType, instance int) error
 		o.AddInstance(instance)
 
 		return nil
- 	}
+	}
 	return errors.New("Attempting to add a nil instance")
 }
 

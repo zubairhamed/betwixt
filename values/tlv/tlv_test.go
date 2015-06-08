@@ -2,9 +2,9 @@ package tlv
 
 import (
 	"github.com/stretchr/testify/assert"
-	"testing"
-	"github.com/zubairhamed/betwixt/tests"
 	"github.com/zubairhamed/betwixt/objdefs/oma"
+	"github.com/zubairhamed/betwixt/tests"
+	"testing"
 )
 
 func TestObjectInstancesToTlv(t *testing.T) {

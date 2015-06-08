@@ -2,13 +2,13 @@ package server
 
 import (
 	"github.com/zubairhamed/betwixt"
+	"github.com/zubairhamed/betwixt/objects"
 	"github.com/zubairhamed/canopus"
 	. "github.com/zubairhamed/go-commons/network"
 	"log"
 	"net"
-	"strings"
-	"github.com/zubairhamed/betwixt/objects"
 	"strconv"
+	"strings"
 )
 
 func NewDefaultCoapServer() *canopus.CoapServer {
@@ -22,7 +22,7 @@ func NewDefaultCoapServer() *canopus.CoapServer {
 func NewDefaultServer(port string) betwixt.Server {
 	return &DefaultServer{
 		coapServer: NewDefaultCoapServer(),
-		httpServer: NewDefaultHttpServer(port),
+		httpServer: NewDefaultHttpServer(),
 		clients:    make(map[string]betwixt.RegisteredClient),
 		stats:      &ServerStatistics{},
 	}
@@ -86,7 +86,7 @@ func (server *DefaultServer) register(ep string, addr string, resources []*canop
 		lwId := betwixt.LWM2MObjectType(objectId)
 
 		obj, ok := objs[lwId]
-		if !ok  {
+		if !ok {
 			obj = objects.NewObject(lwId, nil, server.registry)
 		}
 

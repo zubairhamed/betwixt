@@ -3,9 +3,9 @@ package utils
 import (
 	"github.com/stretchr/testify/assert"
 	"github.com/zubairhamed/betwixt/objdefs/oma"
+	"github.com/zubairhamed/betwixt/tests"
 	"testing"
 	"time"
-	"github.com/zubairhamed/betwixt/tests"
 )
 
 func TestGetValueByteLength(t *testing.T) {

@@ -3,10 +3,10 @@ package client
 import (
 	"github.com/stretchr/testify/assert"
 	. "github.com/zubairhamed/betwixt"
+	"github.com/zubairhamed/betwixt/enablers"
 	"github.com/zubairhamed/betwixt/objdefs/oma"
 	"github.com/zubairhamed/betwixt/registry"
 	"testing"
-	"github.com/zubairhamed/betwixt/enablers"
 )
 
 func TestClient(t *testing.T) {
@@ -29,7 +29,6 @@ func TestClient(t *testing.T) {
 
 		assert.NotNil(t, err, "Object should already be enabled: ", c.in)
 	}
-
 
 	cases2 := []struct {
 		in LWM2MObjectType

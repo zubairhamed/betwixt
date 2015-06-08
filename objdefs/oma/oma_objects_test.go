@@ -4,11 +4,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/client"
+	"github.com/zubairhamed/betwixt/enablers"
 	"github.com/zubairhamed/betwixt/request"
+	"github.com/zubairhamed/betwixt/tests"
 	"testing"
 	"time"
-	"github.com/zubairhamed/betwixt/enablers"
-	"github.com/zubairhamed/betwixt/tests"
 )
 
 func TestExampleObjects(t *testing.T) {
