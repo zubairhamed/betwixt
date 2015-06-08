@@ -1,5 +1,6 @@
 ## Betwixt - A LWM2M Client and Server in Go
 [![Build Status](https://drone.io/github.com/zubairhamed/betwixt/status.png)](https://drone.io/github.com/zubairhamed/betwixt/latest)
+[![Coverage Status](https://coveralls.io/repos/zubairhamed/betwixt/badge.svg?branch=master)](https://coveralls.io/r/zubairhamed/betwixt?branch=master)
 
 ## Requirements & Building
 Go v1.4 (but should work on 1.3 as well)
