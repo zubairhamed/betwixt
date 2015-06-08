@@ -19,7 +19,7 @@ type MockRegistry struct {
 	sources []ObjectSource
 }
 
-func (r *MockRegistry) GetModel(t LWM2MObjectType) ObjectDefinition {
+func (r *MockRegistry) GetDefinition(t LWM2MObjectType) ObjectDefinition {
 	return nil
 }
 

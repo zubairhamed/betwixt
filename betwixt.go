@@ -107,7 +107,7 @@ type ObjectSource interface {
 // Registry interface represents a source from which LWM2M object definitions can be looked up/resolved or
 // stored
 type Registry interface {
-	GetModel(LWM2MObjectType) ObjectDefinition
+	GetDefinition(LWM2MObjectType) ObjectDefinition
 	Register(ObjectSource)
 	GetMandatory() []ObjectDefinition
 }
@@ -192,13 +192,13 @@ type RegisteredClient interface {
 }
 
 // An Object interface represents an Object used on a client or Objects supported by a Registered Client on a server
-// Not to be confused with ObjectModel, which represents the definition of an Object
+// Not to be confused with ObjectDefinition, which represents the definition of an Object
 type Object interface {
 	AddInstance(int)
 	RemoveInstance(int)
 	GetInstances() []int
 	GetEnabler() ObjectEnabler
 	GetType() LWM2MObjectType
-	GetModel() ObjectDefinition
+	GetDefinition() ObjectDefinition
 	SetEnabler(ObjectEnabler)
 }

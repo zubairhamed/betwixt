@@ -32,7 +32,3 @@ func (o *DefaultResourceDefinition) GetResourceType() ValueTypeCode {
 	return o.ResourceType
 }
 
-// DefaultResource
-type DefaultResource struct {
-	Id int
-}

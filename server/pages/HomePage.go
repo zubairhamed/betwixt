@@ -104,7 +104,7 @@ func (p *HomePage) content() string {
 
                           {{ range .Clients }}
                           <tr>
-                            <td><a href="/client/{{.RegistrationID}}/view">{{.Endpoint}}</a></td>
+                            <td><a href="/client/{{.Endpoint}}/view">{{.Endpoint}}</a></td>
                             <td>{{.RegistrationID}}</td>
                             <td>{{.RegistrationDate}}</td>
                             <td>{{.LastUpdate}}</td>

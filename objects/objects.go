@@ -2,6 +2,7 @@ package objects
 
 import (
 	. "github.com/zubairhamed/betwixt"
+	"github.com/zubairhamed/betwixt/enablers"
 )
 
 // DefaultObjectDefinition
@@ -63,16 +64,14 @@ func (o *DefaultObjectInstance) GetTypeId() LWM2MObjectType {
 
 // DefaultObject
 func NewObject(t LWM2MObjectType, enabler ObjectEnabler, reg Registry) Object {
-	model := reg.GetModel(t)
+	def := reg.GetDefinition(t)
 
-	/*
-	   if enabler == nil {
-	       enabler = enablers.NewNullEnabler()
-	   }
-	*/
+	if enabler == nil {
+		enabler = enablers.NewNullEnabler()
+	}
 
 	return &DefaultObject{
-		model:     model,
+		definition:     def,
 		typeId:    t,
 		enabler:   enabler,
 		instances: make(map[int]bool),
@@ -80,14 +79,14 @@ func NewObject(t LWM2MObjectType, enabler ObjectEnabler, reg Registry) Object {
 }
 
 type DefaultObject struct {
-	typeId    LWM2MObjectType
-	model     ObjectDefinition
-	enabler   ObjectEnabler
-	instances map[int]bool
+	typeId    	LWM2MObjectType
+	definition  ObjectDefinition
+	enabler   	ObjectEnabler
+	instances 	map[int]bool
 }
 
-func (o *DefaultObject) GetModel() ObjectDefinition {
-	return o.model
+func (o *DefaultObject) GetDefinition() ObjectDefinition {
+	return o.definition
 }
 
 func (o *DefaultObject) GetType() LWM2MObjectType {

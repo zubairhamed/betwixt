@@ -36,7 +36,7 @@ import (
 func TlvPayloadFromObjects(o Object, reg Registry) (ResponseValue, error) {
 	buf := bytes.NewBuffer([]byte{})
 
-	m := reg.GetModel(o.GetType())
+	m := reg.GetDefinition(o.GetType())
 	en := o.GetEnabler()
 	instances := o.GetInstances()
 	for _, oi := range instances {

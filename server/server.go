@@ -22,7 +22,7 @@ func NewDefaultCoapServer() *canopus.CoapServer {
 func NewDefaultServer(port string) betwixt.Server {
 	return &DefaultServer{
 		coapServer: NewDefaultCoapServer(),
-		httpServer: NewDefaultHttpServer(),
+		httpServer: NewDefaultHttpServer(port),
 		clients:    make(map[string]betwixt.RegisteredClient),
 		stats:      &ServerStatistics{},
 	}

@@ -26,7 +26,7 @@ type ObjectRegistry struct {
 	sources []ObjectSource
 }
 
-func (m *ObjectRegistry) GetModel(n LWM2MObjectType) ObjectDefinition {
+func (m *ObjectRegistry) GetDefinition(n LWM2MObjectType) ObjectDefinition {
 	for _, s := range m.sources {
 		if s != nil {
 			o := s.GetObject(n)

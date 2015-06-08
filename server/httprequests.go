@@ -18,11 +18,13 @@ func SetupHttpRoutes(server *DefaultServer) {
 
 func handleHttpViewClient(server *DefaultServer) RouteHandler {
 	return func(r Request) Response {
+		req := r.(*HttpRequest)
+
+		log.Println(req.GetAttribute("client"))
+
 		page := &pages.ClientDetailPage{}
 
-		type clientdetails struct {
-		}
-
+		type clientdetails struct {}
 		model := clientdetails{}
 
 		return &HttpResponse{

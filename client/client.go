@@ -236,7 +236,7 @@ func (c *DefaultClient) handleReadRequest(r Request) Response {
 	msg.Token = req.GetMessage().Token
 
 	if enabler != nil {
-		model := obj.GetModel()
+		model := obj.GetDefinition()
 		resource := model.GetResource(resourceId)
 
 		if resource == nil {
@@ -314,7 +314,7 @@ func (c *DefaultClient) handleWriteRequest(r Request) Response {
 	msg.Payload = NewEmptyPayload()
 
 	if enabler != nil {
-		model := obj.GetModel()
+		model := obj.GetDefinition()
 		resource := model.GetResource(resourceId)
 		if resource == nil {
 			// TODO Write to Object Instance
@@ -355,7 +355,7 @@ func (c *DefaultClient) handleExecuteRequest(r Request) Response {
 	msg.Payload = NewEmptyPayload()
 
 	if enabler != nil {
-		model := obj.GetModel()
+		model := obj.GetDefinition()
 		resource := model.GetResource(resourceId)
 		if resource == nil {
 			msg.Code = COAPCODE_404_NOT_FOUND

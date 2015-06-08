@@ -16,7 +16,7 @@ func (o *MockObject) GetEnabler() ObjectEnabler {
 func (o *MockObject) GetType() LWM2MObjectType {
 	return LWM2MObjectType(0)
 }
-func (o *MockObject) GetModel() ObjectDefinition {
+func (o *MockObject) GetDefinition() ObjectDefinition {
 	return nil
 }
 func (o *MockObject) SetEnabler(ObjectEnabler) {}
