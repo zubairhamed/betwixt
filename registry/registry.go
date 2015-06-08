@@ -38,6 +38,19 @@ func (m *ObjectRegistry) GetDefinition(n LWM2MObjectType) ObjectDefinition {
 	return nil
 }
 
+func (m *ObjectRegistry) GetDefinitions()[]ObjectDefinition {
+	defs := []ObjectDefinition{}
+
+	for _, s := range m.sources {
+		if s != nil {
+			for _, v := range s.GetObjects() {
+				defs = append(defs, v)
+			}
+		}
+	}
+	return defs
+}
+
 func (m *ObjectRegistry) Register(s ObjectSource) {
 	s.Initialize()
 	m.sources = append(m.sources, s)

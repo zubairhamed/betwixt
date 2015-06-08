@@ -41,3 +41,17 @@ func (r *MockRegistry) GetMandatory() []ObjectDefinition {
 	}
 	return mandatory
 }
+
+func (m *MockRegistry) GetDefinitions()[]ObjectDefinition {
+	defs := []ObjectDefinition{}
+
+	for _, s := range m.sources {
+		if s != nil {
+			for _, v := range s.GetObjects() {
+				defs = append(defs, v)
+			}
+		}
+	}
+	return defs
+}
+

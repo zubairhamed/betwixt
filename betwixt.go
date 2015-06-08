@@ -110,6 +110,7 @@ type Registry interface {
 	GetDefinition(LWM2MObjectType) ObjectDefinition
 	Register(ObjectSource)
 	GetMandatory() []ObjectDefinition
+	GetDefinitions()[]ObjectDefinition
 }
 
 // ObjectDefinition interface defines a LWM2M Object

@@ -69,25 +69,3 @@ func TestClient(t *testing.T) {
 
 	assert.Equal(t, len(cli.GetObject(oma.OBJECT_LWM2M_SECURITY).GetInstances()), 3)
 }
-
-//func TestRegistry(t *testing.T) {
-//	reg := registry.NewDefaultObjectRegistry()
-//
-//	cases := []struct {
-//		o LWM2MObjectType
-//	}{
-//		{oma.OBJECT_LWM2M_SECURITY},
-//		{oma.OBJECT_LWM2M_SERVER},
-//		{oma.OBJECT_LWM2M_ACCESS_CONTROL},
-//		{oma.OBJECT_LWM2M_DEVICE},
-//		{oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING},
-//		{oma.OBJECT_LWM2M_FIRMWARE_UPDATE},
-//		{oma.OBJECT_LWM2M_LOCATION},
-//		{oma.OBJECT_LWM2M_CONNECTIVITY_STATISTICS},
-//	}
-//
-//	for _, c := range cases {
-//		assert.NotNil(t, reg.CreateObjectInstance(c.o, 0), "Created an LWM2M Object: ", c.o)
-//	}
-//	assert.Nil(t, reg.CreateObjectInstance(LWM2MObjectType(-1), 0), "Created an unknown LWM2M Object")
-//}
