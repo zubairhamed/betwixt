@@ -2,12 +2,10 @@ package utils
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/zubairhamed/betwixt/objdefs/oma"
-	"github.com/zubairhamed/betwixt/registry"
 	"github.com/zubairhamed/betwixt/tests"
-	"log"
 	"testing"
 	"time"
+	"github.com/zubairhamed/betwixt"
 )
 
 func TestGetValueByteLength(t *testing.T) {
@@ -101,12 +99,11 @@ func TestObjectData(t *testing.T) {
 */
 
 func TestBuildResourceStringPayload(t *testing.T) {
-	// reg := registry.NewDefaultObjectRegistry()
 	cli := tests.NewMockClient()
 
-	cli.EnableObject(oma.OBJECT_LWM2M_SECURITY, nil)
-	cli.EnableObject(oma.OBJECT_LWM2M_ACCESS_CONTROL, nil)
-	cli.EnableObject(oma.OBJECT_LWM2M_CONNECTIVITY_MONITORING, nil)
+	cli.EnableObject(betwixt.LWM2MObjectType(0), nil)
+	cli.EnableObject(betwixt.LWM2MObjectType(2), nil)
+	cli.EnableObject(betwixt.LWM2MObjectType(4), nil)
 
 	str := BuildModelResourceStringPayload(cli.GetEnabledObjects())
 	compare := "</0>,</2>,</4>,"
@@ -114,9 +111,11 @@ func TestBuildResourceStringPayload(t *testing.T) {
 	assert.Equal(t, str, compare, "Unexpected output building Model Resource String")
 }
 
+/*
 func TestResourceOperations(t *testing.T) {
-	reg := registry.NewDefaultObjectRegistry()
-
-	dev := reg.GetDefinition(oma.OBJECT_LWM2M_DEVICE)
+	omaObjects := &oma.LWM2MCoreObjects{}
+	reg := tests.NewMockRegistry(omaObjects)
+	dev := reg.GetDefinition(betwixt.LWM2MObjectType(3))
 	log.Println(IsExecutableResource(dev.GetResource(1)))
 }
+*/

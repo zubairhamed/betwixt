@@ -12,12 +12,12 @@ import (
 )
 
 func TestExampleObjects(t *testing.T) {
-	omaObjects := &LWM2MCoreObjects{}
+	objs := tests.NewMockObjectSource()
 
-	reg := tests.NewMockRegistry(omaObjects)
+	reg := tests.NewMockRegistry(objs)
 	cli := client.NewDefaultClient(":0", "localhost:5683", reg)
 
-	deviceModel := omaObjects.GetObject(OBJECT_LWM2M_DEVICE)
+	deviceModel := objs.GetObject(OBJECT_LWM2M_DEVICE)
 
 	cli.SetEnabler(OBJECT_LWM2M_SERVER, enablers.NewNullEnabler())
 	cli.SetEnabler(OBJECT_LWM2M_DEVICE, tests.NewTestDeviceObject(deviceModel))
