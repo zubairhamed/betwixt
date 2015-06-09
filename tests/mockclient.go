@@ -15,10 +15,6 @@ type MockClient struct {
 	enabledObjects map[LWM2MObjectType]Object
 }
 
-func NewMockObject(t LWM2MObjectType, enabler ObjectEnabler, reg Registry) Object {
-	return &MockObject{}
-}
-
 func (c *MockClient) AddObjectInstance(LWM2MObjectType, int) error {
 	return nil
 }

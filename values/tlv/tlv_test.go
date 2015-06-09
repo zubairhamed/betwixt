@@ -5,6 +5,7 @@ import (
 	"github.com/zubairhamed/betwixt/objdefs/oma"
 	"github.com/zubairhamed/betwixt/tests"
 	"testing"
+	"log"
 )
 
 func TestObjectInstancesToTlv(t *testing.T) {
@@ -16,7 +17,9 @@ func TestObjectInstancesToTlv(t *testing.T) {
 	obj := tests.NewMockObject(3, device, reg)
 	obj.AddInstance(0)
 
-	_, err := TlvPayloadFromObjects(obj, reg)
+	rv, err := TlvPayloadFromObjects(obj, reg)
+
+	log.Println(rv.GetBytes())
 
 	assert.Nil(t, err, "Error thrown attempting to convert Object instance to TLV")
 }

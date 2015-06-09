@@ -6,6 +6,7 @@ import (
 	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/utils"
 	"github.com/zubairhamed/betwixt/values"
+	"log"
 )
 
 /*
@@ -40,7 +41,6 @@ func TlvPayloadFromObjects(o Object, reg Registry) (ResponseValue, error) {
 	en := o.GetEnabler()
 	instances := o.GetInstances()
 	for _, oi := range instances {
-
 		rsrcBuf := bytes.NewBuffer([]byte{})
 		for _, ri := range m.GetResources() {
 			if utils.IsReadableResource(ri) {
