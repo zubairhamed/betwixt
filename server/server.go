@@ -25,7 +25,7 @@ func NewDefaultServer(port string) betwixt.Server {
 		httpServer: NewDefaultHttpServer(port),
 		clients:    make(map[string]betwixt.RegisteredClient),
 		stats:      &ServerStatistics{},
-		events: 	make(map[betwixt.EventType]betwixt.FnEvent),
+		events:     make(map[betwixt.EventType]betwixt.FnEvent),
 	}
 }
 
@@ -35,7 +35,7 @@ type DefaultServer struct {
 	registry   betwixt.Registry
 	stats      *ServerStatistics
 	clients    map[string]betwixt.RegisteredClient
-	events 	   map[betwixt.EventType]betwixt.FnEvent
+	events     map[betwixt.EventType]betwixt.FnEvent
 }
 
 func (server *DefaultServer) Start() {

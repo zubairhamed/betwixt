@@ -1,9 +1,10 @@
 package registry
+
 import (
-	"testing"
+	"github.com/stretchr/testify/assert"
 	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/objdefs/oma"
-	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestRegistry(t *testing.T) {

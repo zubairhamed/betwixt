@@ -85,6 +85,6 @@ func (c *DefaultRegisteredClient) GetObjects() map[betwixt.LWM2MObjectType]betwi
 	return c.enabledObjects
 }
 
-func (c *DefaultRegisteredClient) GetObject(t betwixt.LWM2MObjectType)(betwixt.Object) {
+func (c *DefaultRegisteredClient) GetObject(t betwixt.LWM2MObjectType) betwixt.Object {
 	return c.enabledObjects[t]
 }

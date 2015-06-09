@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/server/pages"
 	. "github.com/zubairhamed/go-commons/network"
 	"log"
@@ -21,42 +22,22 @@ func handleHttpViewClient(server *DefaultServer) RouteHandler {
 		req := r.(*HttpRequest)
 
 		clientId := req.GetAttribute("client")
-
 		cli := server.GetRegisteredClient(clientId)
-		log.Println(cli.GetId(), cli.GetBindingMode(), cli.GetName(), cli.GetRegistrationDate())
-		log.Println(cli.GetObjects())
-
-		for _, obj := range cli.GetObjects() {
-			for _, objInstanceId := range obj.GetInstances() {
-				log.Println(objInstanceId)
-			}
-
-			for _, resourceInstance := range obj.GetDefinition().GetResources() {
-				log.Println (resourceInstance)
-			}
-		}
-		/*
-	GetType() LWM2MObjectType
-	GetDescription() string
-	SetResources([]ResourceDefinition)
-	GetResources() []ResourceDefinition
-	GetResource(n int) ResourceDefinition
-	AllowMultiple() bool
-	IsMandatory() bool
-
-			Template Model
-			[ [Mandatory] [Multiple] Object Name - Path ]
-			[ Description ]
-
-		*/
 
 		page := &pages.ClientDetailPage{}
 
-		type clientdetails struct {}
-		model := clientdetails{}
+		type model struct {
+			ClientId string
+			Objects  map[betwixt.LWM2MObjectType]betwixt.Object
+		}
+
+		m := &model{
+			Objects:  cli.GetObjects(),
+			ClientId: clientId,
+		}
 
 		return &HttpResponse{
-			TemplateModel: model,
+			TemplateModel: m,
 			Payload:       NewBytesPayload(page.GetContent()),
 		}
 	}

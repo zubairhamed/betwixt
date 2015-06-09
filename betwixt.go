@@ -25,8 +25,9 @@ type BindingMode string
 type OperationType byte
 
 type EventType int
+
 const (
-	EVENT_START 		EventType = 0
+	EVENT_START EventType = 0
 )
 
 const (
@@ -118,11 +119,12 @@ type Registry interface {
 	GetDefinition(LWM2MObjectType) ObjectDefinition
 	Register(ObjectSource)
 	GetMandatory() []ObjectDefinition
-	GetDefinitions()[]ObjectDefinition
+	GetDefinitions() []ObjectDefinition
 }
 
 // ObjectDefinition interface defines a LWM2M Object
 type ObjectDefinition interface {
+	GetName() string
 	GetType() LWM2MObjectType
 	GetDescription() string
 	SetResources([]ResourceDefinition)
@@ -135,9 +137,17 @@ type ObjectDefinition interface {
 // ResourceDefinition interface defines a LWM2M Resource
 type ResourceDefinition interface {
 	GetId() int
+	GetName() string
+	GetDescription() string
+	GetUnits() string
+	GetRangeOrEnums() string
+	IsMandatory() bool
 	MultipleValuesAllowed() bool
 	GetResourceType() ValueTypeCode
 	GetOperations() OperationCode
+	IsExecutable() bool
+	IsWritable() bool
+	IsReadable() bool
 }
 
 // LWM2MClient interface defining a LWM2M Client
@@ -190,17 +200,17 @@ type Server interface {
 // RegisteredClient interface is an instance of a client registered on a server
 type RegisteredClient interface {
 	GetId() string
-	GetName()(string)
-	GetLifetime()(int)
-	GetVersion()(string)
+	GetName() string
+	GetLifetime() int
+	GetVersion() string
 	GetBindingMode() BindingMode
-	GetSmsNumber()(string)
+	GetSmsNumber() string
 	GetRegistrationDate() time.Time
 	Update()
 	LastUpdate() time.Time
 	SetObjects(map[LWM2MObjectType]Object)
-	GetObjects()(map[LWM2MObjectType]Object)
-	GetObject(LWM2MObjectType)(Object)
+	GetObjects() map[LWM2MObjectType]Object
+	GetObject(LWM2MObjectType) Object
 }
 
 // An Object interface represents an Object used on a client or Objects supported by a Registered Client on a server

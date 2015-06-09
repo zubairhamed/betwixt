@@ -15,6 +15,10 @@ type DefaultObjectDefinition struct {
 	Resources   []ResourceDefinition
 }
 
+func (o *DefaultObjectDefinition) GetName() string {
+	return o.Name
+}
+
 func (o *DefaultObjectDefinition) GetType() LWM2MObjectType {
 	return o.Id
 }
@@ -71,18 +75,18 @@ func NewObject(t LWM2MObjectType, enabler ObjectEnabler, reg Registry) Object {
 	}
 
 	return &DefaultObject{
-		definition:     def,
-		typeId:    t,
-		enabler:   enabler,
-		instances: make(map[int]bool),
+		definition: def,
+		typeId:     t,
+		enabler:    enabler,
+		instances:  make(map[int]bool),
 	}
 }
 
 type DefaultObject struct {
-	typeId    	LWM2MObjectType
-	definition  ObjectDefinition
-	enabler   	ObjectEnabler
-	instances 	map[int]bool
+	typeId     LWM2MObjectType
+	definition ObjectDefinition
+	enabler    ObjectEnabler
+	instances  map[int]bool
 }
 
 func (o *DefaultObject) GetDefinition() ObjectDefinition {

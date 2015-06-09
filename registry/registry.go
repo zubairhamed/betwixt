@@ -38,7 +38,7 @@ func (m *ObjectRegistry) GetDefinition(n LWM2MObjectType) ObjectDefinition {
 	return nil
 }
 
-func (m *ObjectRegistry) GetDefinitions()[]ObjectDefinition {
+func (m *ObjectRegistry) GetDefinitions() []ObjectDefinition {
 	defs := []ObjectDefinition{}
 
 	for _, s := range m.sources {

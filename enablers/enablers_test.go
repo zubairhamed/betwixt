@@ -1,8 +1,9 @@
 package enablers
+
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
 	"github.com/zubairhamed/betwixt/response"
+	"testing"
 )
 
 func TestNullEnabler(t *testing.T) {

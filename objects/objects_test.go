@@ -1,4 +1,5 @@
 package objects
+
 import "testing"
 
 func TestObjectDefinition(t *testing.T) {
