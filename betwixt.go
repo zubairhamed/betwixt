@@ -190,15 +190,17 @@ type Server interface {
 // RegisteredClient interface is an instance of a client registered on a server
 type RegisteredClient interface {
 	GetId() string
-	GetName() string
-	GetLifetime() int
-	GetVersion() string
+	GetName()(string)
+	GetLifetime()(int)
+	GetVersion()(string)
 	GetBindingMode() BindingMode
-	GetSmsNumber() string
+	GetSmsNumber()(string)
 	GetRegistrationDate() time.Time
 	Update()
 	LastUpdate() time.Time
 	SetObjects(map[LWM2MObjectType]Object)
+	GetObjects()(map[LWM2MObjectType]Object)
+	GetObject(LWM2MObjectType)(Object)
 }
 
 // An Object interface represents an Object used on a client or Objects supported by a Registered Client on a server

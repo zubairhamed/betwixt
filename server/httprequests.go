@@ -20,7 +20,35 @@ func handleHttpViewClient(server *DefaultServer) RouteHandler {
 	return func(r Request) Response {
 		req := r.(*HttpRequest)
 
-		log.Println(req.GetAttribute("client"))
+		clientId := req.GetAttribute("client")
+
+		cli := server.GetRegisteredClient(clientId)
+		log.Println(cli.GetId(), cli.GetBindingMode(), cli.GetName(), cli.GetRegistrationDate())
+		log.Println(cli.GetObjects())
+
+		for _, obj := range cli.GetObjects() {
+			for _, objInstanceId := range obj.GetInstances() {
+				log.Println(objInstanceId)
+			}
+
+			for _, resourceInstance := range obj.GetDefinition().GetResources() {
+				log.Println (resourceInstance)
+			}
+		}
+		/*
+	GetType() LWM2MObjectType
+	GetDescription() string
+	SetResources([]ResourceDefinition)
+	GetResources() []ResourceDefinition
+	GetResource(n int) ResourceDefinition
+	AllowMultiple() bool
+	IsMandatory() bool
+
+			Template Model
+			[ [Mandatory] [Multiple] Object Name - Path ]
+			[ Description ]
+
+		*/
 
 		page := &pages.ClientDetailPage{}
 

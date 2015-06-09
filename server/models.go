@@ -80,3 +80,11 @@ func (c *DefaultRegisteredClient) LastUpdate() time.Time {
 func (c *DefaultRegisteredClient) SetObjects(objects map[betwixt.LWM2MObjectType]betwixt.Object) {
 	c.enabledObjects = objects
 }
+
+func (c *DefaultRegisteredClient) GetObjects() map[betwixt.LWM2MObjectType]betwixt.Object {
+	return c.enabledObjects
+}
+
+func (c *DefaultRegisteredClient) GetObject(t betwixt.LWM2MObjectType)(betwixt.Object) {
+	return c.enabledObjects[t]
+}

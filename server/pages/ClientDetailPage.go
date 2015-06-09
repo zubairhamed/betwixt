@@ -19,3 +19,5 @@ func (p *ClientDetailPage) content() string {
         </html>
     `
 }
+
+// TODO: func (p *ClientDetailPage) handleRequest()
