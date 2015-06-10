@@ -12,9 +12,110 @@ import (
 func SetupHttpRoutes(server *DefaultServer) {
 	http := server.httpServer
 
+	// Pages
 	http.NewRoute("/", METHOD_GET, handleHttpHome(server))
 	http.NewRoute("/client/{client}/view", METHOD_GET, handleHttpViewClient(server))
 	http.NewRoute("/client/{client}/delete", METHOD_GET, handleHttpDeleteClient(server))
+
+	// APIs
+
+	// Get Clients
+	http.NewRoute("/api/clients", METHOD_GET, func(r Request) Response {
+		page := &pages.BlankPage{}
+
+		return &HttpResponse{
+			TemplateModel: "",
+			Payload: NewBytesPayload(page.GetContent()),
+		}
+	})
+
+	// Read
+	http.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}", METHOD_GET, func(r Request) Response {
+		page := &pages.BlankPage{}
+
+		return &HttpResponse{
+			TemplateModel: "",
+			Payload: NewBytesPayload(page.GetContent()),
+		}
+	})
+
+	http.NewRoute("/api/clients/{client}/{object}/{instance}", METHOD_GET, func(r Request) Response {
+		page := &pages.BlankPage{}
+
+		return &HttpResponse{
+			TemplateModel: "",
+			Payload: NewBytesPayload(page.GetContent()),
+		}
+	})
+
+	// Write
+	http.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}", METHOD_PUT, func(r Request) Response {
+		page := &pages.BlankPage{}
+
+		return &HttpResponse{
+			TemplateModel: "",
+			Payload: NewBytesPayload(page.GetContent()),
+		}
+	})
+
+	http.NewRoute("/api/clients/{client}/{object}/{instance}", METHOD_PUT, func(r Request) Response {
+		page := &pages.BlankPage{}
+
+		return &HttpResponse{
+			TemplateModel: "",
+			Payload: NewBytesPayload(page.GetContent()),
+		}
+	})
+
+	// Delete
+	http.NewRoute("/api/clients/{client}/{object}/{instance}", METHOD_DELETE, func(r Request) Response {
+		page := &pages.BlankPage{}
+
+		return &HttpResponse{
+			TemplateModel: "",
+			Payload: NewBytesPayload(page.GetContent()),
+		}
+	})
+
+	// Observe
+	http.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}/observe", METHOD_POST, func(r Request) Response {
+		page := &pages.BlankPage{}
+
+		return &HttpResponse{
+			TemplateModel: "",
+			Payload: NewBytesPayload(page.GetContent()),
+		}
+	})
+
+	// Cancel Observe
+	http.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}/observe", METHOD_DELETE, func(r Request) Response {
+		page := &pages.BlankPage{}
+
+		return &HttpResponse{
+			TemplateModel: "",
+			Payload: NewBytesPayload(page.GetContent()),
+		}
+	})
+
+	// Execute
+	http.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}", METHOD_POST, func(r Request) Response {
+		page := &pages.BlankPage{}
+
+		return &HttpResponse{
+			TemplateModel: "",
+			Payload: NewBytesPayload(page.GetContent()),
+		}
+	})
+
+	// Create
+	http.NewRoute("/api/clients/{client}/{object}/{instance}", METHOD_POST, func(r Request) Response {
+		page := &pages.BlankPage{}
+
+		return &HttpResponse{
+			TemplateModel: "",
+			Payload: NewBytesPayload(page.GetContent()),
+		}
+	})
 }
 
 func handleHttpViewClient(server *DefaultServer) RouteHandler {
