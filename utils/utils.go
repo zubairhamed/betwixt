@@ -86,3 +86,9 @@ func IsWritableResource(m ResourceDefinition) bool {
 	op := m.GetOperations()
 	return (op == OPERATION_RW || op == OPERATION_RWE || op == OPERATION_WE || op == OPERATION_W)
 }
+
+func CallEvent(e EventType, fn FnEvent) {
+	if fn != nil {
+		go fn()
+	}
+}

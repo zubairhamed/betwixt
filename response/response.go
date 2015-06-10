@@ -5,7 +5,7 @@ package response
 import (
 	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/values"
-	. "github.com/zubairhamed/canopus"
+	"github.com/zubairhamed/canopus"
 )
 
 // 201 Created
@@ -16,8 +16,8 @@ func Created() Lwm2mResponse {
 type CreatedResponse struct {
 }
 
-func (r *CreatedResponse) GetResponseCode() CoapCode {
-	return COAPCODE_201_CREATED
+func (r *CreatedResponse) GetResponseCode() canopus.CoapCode {
+	return canopus.COAPCODE_201_CREATED
 }
 
 func (r *CreatedResponse) GetResponseValue() ResponseValue {
@@ -32,8 +32,8 @@ func Deleted() Lwm2mResponse {
 type DeletedResponse struct {
 }
 
-func (r *DeletedResponse) GetResponseCode() CoapCode {
-	return COAPCODE_202_DELETED
+func (r *DeletedResponse) GetResponseCode() canopus.CoapCode {
+	return canopus.COAPCODE_202_DELETED
 }
 
 func (r *DeletedResponse) GetResponseValue() ResponseValue {
@@ -48,8 +48,8 @@ func Changed() Lwm2mResponse {
 type ChangedResponse struct {
 }
 
-func (r *ChangedResponse) GetResponseCode() CoapCode {
-	return COAPCODE_204_CHANGED
+func (r *ChangedResponse) GetResponseCode() canopus.CoapCode {
+	return canopus.COAPCODE_204_CHANGED
 }
 
 func (r *ChangedResponse) GetResponseValue() ResponseValue {
@@ -67,8 +67,8 @@ type ContentResponse struct {
 	val ResponseValue
 }
 
-func (r *ContentResponse) GetResponseCode() CoapCode {
-	return COAPCODE_205_CONTENT
+func (r *ContentResponse) GetResponseCode() canopus.CoapCode {
+	return canopus.COAPCODE_205_CONTENT
 }
 
 func (r *ContentResponse) GetResponseValue() ResponseValue {
@@ -83,8 +83,8 @@ func BadRequest() Lwm2mResponse {
 type BadRequestResponse struct {
 }
 
-func (r *BadRequestResponse) GetResponseCode() CoapCode {
-	return COAPCODE_400_BAD_REQUEST
+func (r *BadRequestResponse) GetResponseCode() canopus.CoapCode {
+	return canopus.COAPCODE_400_BAD_REQUEST
 }
 
 func (r *BadRequestResponse) GetResponseValue() ResponseValue {
@@ -99,8 +99,8 @@ func Unauthorized() Lwm2mResponse {
 type UnauthorizedResponse struct {
 }
 
-func (r *UnauthorizedResponse) GetResponseCode() CoapCode {
-	return COAPCODE_401_UNAUTHORIZED
+func (r *UnauthorizedResponse) GetResponseCode() canopus.CoapCode {
+	return canopus.COAPCODE_401_UNAUTHORIZED
 }
 
 func (r *UnauthorizedResponse) GetResponseValue() ResponseValue {
@@ -115,8 +115,8 @@ func NotFound() Lwm2mResponse {
 type NotFoundResponse struct {
 }
 
-func (r *NotFoundResponse) GetResponseCode() CoapCode {
-	return COAPCODE_404_NOT_FOUND
+func (r *NotFoundResponse) GetResponseCode() canopus.CoapCode {
+	return canopus.COAPCODE_404_NOT_FOUND
 }
 
 func (r *NotFoundResponse) GetResponseValue() ResponseValue {
@@ -131,8 +131,8 @@ func MethodNotAllowed() Lwm2mResponse {
 type MethodNotAllowedResponse struct {
 }
 
-func (r *MethodNotAllowedResponse) GetResponseCode() CoapCode {
-	return COAPCODE_405_METHOD_NOT_ALLOWED
+func (r *MethodNotAllowedResponse) GetResponseCode() canopus.CoapCode {
+	return canopus.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
 func (r *MethodNotAllowedResponse) GetResponseValue() ResponseValue {
@@ -147,8 +147,8 @@ func Conflict() Lwm2mResponse {
 type ConflictResponse struct {
 }
 
-func (r *ConflictResponse) GetResponseCode() CoapCode {
-	return COAPCODE_409_CONFLICT
+func (r *ConflictResponse) GetResponseCode() canopus.CoapCode {
+	return canopus.COAPCODE_409_CONFLICT
 }
 
 func (r *ConflictResponse) GetResponseValue() ResponseValue {

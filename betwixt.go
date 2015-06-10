@@ -1,7 +1,7 @@
 package betwixt
 
 import (
-	. "github.com/zubairhamed/canopus"
+	"github.com/zubairhamed/canopus"
 	"time"
 )
 
@@ -179,14 +179,14 @@ type LWM2MClient interface {
 // Lwm2mRequest interface represents an incoming request from a server
 type Lwm2mRequest interface {
 	GetPath() string
-	GetMessage() *Message
+	GetMessage() *canopus.Message
 	GetOperationType() OperationType
-	GetCoapRequest() *CoapRequest
+	GetCoapRequest() *canopus.CoapRequest
 }
 
 // Lwm2mResponse interface represents an outgoing response to a server
 type Lwm2mResponse interface {
-	GetResponseCode() CoapCode
+	GetResponseCode() canopus.CoapCode
 	GetResponseValue() ResponseValue
 }
 

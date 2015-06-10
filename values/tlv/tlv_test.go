@@ -4,8 +4,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/zubairhamed/betwixt/objdefs/oma"
 	"github.com/zubairhamed/betwixt/tests"
-	"testing"
 	"log"
+	"testing"
 )
 
 func TestObjectInstancesToTlv(t *testing.T) {

@@ -165,7 +165,7 @@ func (c *DefaultClient) Start() {
 	c.validate()
 
 	s := c.coapServer
-	s.OnStartup(func(evt *Event) {
+	s.On(EVT_START, func() {
 		if c.evtOnStartup != nil {
 			c.evtOnStartup()
 		}

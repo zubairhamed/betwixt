@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/objects"
+	"github.com/zubairhamed/betwixt/utils"
 	"github.com/zubairhamed/canopus"
 	. "github.com/zubairhamed/go-commons/network"
 	"log"
@@ -53,7 +54,7 @@ func (server *DefaultServer) Start() {
 	http := server.httpServer
 	SetupHttpRoutes(server)
 
-	server.callEvent(betwixt.EVENT_START)
+	utils.CallEvent(betwixt.EVENT_START, server.events[betwixt.EVENT_START])
 
 	// Start HTTP Server
 	http.Start()
