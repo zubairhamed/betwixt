@@ -171,6 +171,10 @@ func (c *DefaultClient) Start() {
 		}
 	})
 
+	s.On(EVT_OBSERVE, func() {
+		log.Println("Observe Requested")
+	})
+
 	s.NewRoute("{obj}/{inst}/{rsrc}", GET, c.handleReadRequest)
 	s.NewRoute("{obj}/{inst}", GET, c.handleReadRequest)
 	s.NewRoute("{obj}", GET, c.handleReadRequest)
@@ -402,4 +406,8 @@ func (c *DefaultClient) OnDeregistered(fn FnOnDeregistered) {
 
 func (c *DefaultClient) OnError(fn FnOnError) {
 	c.evtOnError = fn
+}
+
+func (c *DefaultClient) OnObserve(fn FnOnError) {
+
 }

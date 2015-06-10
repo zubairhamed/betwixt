@@ -73,6 +73,9 @@ func (p *ClientDetailPage) content() string {
                                                 {{ end }}
 
                                                 {{ if .IsReadable }}
+                                                <button type="button" class="btn btn-xs btn-primary">observe</button>
+                                                <button type="button" class="btn btn-xs btn-primary">stop</button>
+                                                |
                                                 <button type="button" class="btn btn-xs btn-primary">read</button>
                                                 {{ end }}
 
