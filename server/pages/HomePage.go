@@ -110,8 +110,8 @@ func (p *HomePage) content() string {
                             <td>{{.LastUpdate}}</td>
                             <td>
                               <h4>
-                                <span class="label label-info"><a href="/client/{{.RegistrationID}}/view">View</a></span>
-                                <span class="label label-danger"><a href="/client/{{.RegistrationID}}/delete">Remove</a></span>
+                                <button type="button" class="btn btn-xs btn-info"><a href="/client/{{.Endpoint}}/view">view</a></button>
+                                <button type="button" class="btn btn-xs btn-danger"><a href="/client/{{.Endpoint}}/delete">delete</a></button>
                               </h4>
                             </td>
                           </tr>

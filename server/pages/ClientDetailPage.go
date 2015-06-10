@@ -52,20 +52,21 @@ func (p *ClientDetailPage) content() string {
                             <div class="panel-body">
                             {{ range $objInstance := $value.GetInstances }}
                                 <div class="panel-heading" align="left">
-                                    <h4><button type="button" class="btn btn-xs btn-danger">delete</button> Instance #{{ $objInstance }} - /{{ $objInstance }}</h4>
+                                    <h4><button type="button" class="btn btn-xs btn-danger">delete</button> Instance #{{ $objInstance }} - /{{ $key }}/{{ $objInstance }}</h4>
                                     <h5>{{ $value.GetDefinition.GetDescription }}</h5>
                                 </div>
                                 <table class="table table-condensed">
                                     <thead>
-                                        <th width="20">Path</th>
-                                        <th width="40">Operations</th>
+                                        <th style="width: 20px;">Path</th>
+                                        <th style="width: 100px;">Operations</th>
                                         <th width="400">Name</th>
+                                        <th>Description</th>
                                     </thead>
                                     <tbody>
                                         {{ range $resource := $value.GetDefinition.GetResources }}
                                         <tr>
-                                            <td width="20">/{{ $objInstance }}/{{ $resource.GetId }}</td>
-                                            <td width="40">
+                                            <td>/{{ $key }}/{{ $objInstance }}/{{ $resource.GetId }}</td>
+                                            <td>
                                                 &nbsp;
                                                 {{ if .IsExecutable }}
                                                 <button type="button" class="btn btn-xs btn-success">exec</button>
@@ -79,7 +80,8 @@ func (p *ClientDetailPage) content() string {
                                                 <button type="button" class="btn btn-xs btn-warning">write</button>
                                                 {{ end }}
                                             </td>
-                                            <td width="400">{{ .GetName }}</td>
+                                            <td>{{ .GetName }}</td>
+                                            <td>{{ .GetDescription }}</td>
                                         </tr>
                                         {{ end }}
                                     </tbody>

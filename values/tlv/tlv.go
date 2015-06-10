@@ -6,7 +6,6 @@ import (
 	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/utils"
 	"github.com/zubairhamed/betwixt/values"
-	"log"
 )
 
 /*
