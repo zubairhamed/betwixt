@@ -2,10 +2,10 @@ package utils
 
 import (
 	"github.com/stretchr/testify/assert"
+	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/tests"
 	"testing"
 	"time"
-	"github.com/zubairhamed/betwixt"
 )
 
 func TestGetValueByteLength(t *testing.T) {
@@ -100,6 +100,9 @@ func TestObjectData(t *testing.T) {
 
 func TestBuildResourceStringPayload(t *testing.T) {
 	cli := tests.NewMockClient()
+
+	reg := tests.NewMockRegistry()
+	cli.UseRegistry(reg)
 
 	cli.EnableObject(betwixt.LWM2MObjectType(0), nil)
 	cli.EnableObject(betwixt.LWM2MObjectType(2), nil)
