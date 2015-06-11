@@ -1,39 +1,41 @@
-package tests
+package basic
 
 import (
 	. "github.com/zubairhamed/betwixt"
+	"github.com/zubairhamed/betwixt/objectdefs/oma"
 	"github.com/zubairhamed/betwixt/core/response"
 	"github.com/zubairhamed/betwixt/core/values"
+	"github.com/zubairhamed/betwixt/core/values/tlv"
 	"time"
 )
 
-type TestDeviceObject struct {
+type DeviceObject struct {
 	Model       ObjectDefinition
 	currentTime time.Time
 	utcOffset   string
 	timeZone    string
 }
 
-func (o *TestDeviceObject) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *DeviceObject) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Changed()
 }
 
-func (o *TestDeviceObject) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *DeviceObject) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Created()
 }
 
-func (o *TestDeviceObject) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *DeviceObject) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
 	return response.Deleted()
 }
 
-func (o *TestDeviceObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *DeviceObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	if resourceId == -1 {
 		// Read Object Instance
 	} else {
 		// Read Resource Instance
 		var val ResponseValue
 
-		// resource := o.Model.GetResource(resourceId)
+		resource := o.Model.GetResource(resourceId)
 		switch resourceId {
 		case 0:
 			val = values.String("Open Mobile Alliance")
@@ -52,15 +54,15 @@ func (o *TestDeviceObject) OnRead(instanceId int, resourceId int, req Lwm2mReque
 			break
 
 		case 6:
-			// val, _ = values.TlvPayloadFromIntResource(resource, []int{1, 5})
+			val, _ = tlv.TlvPayloadFromIntResource(resource, []int{oma.POWERSOURCE_INTERNAL, oma.POWERSOURCE_USB})
 			break
 
 		case 7:
-			// val, _ = values.TlvPayloadFromIntResource(resource, []int{3800, 5000})
+			val, _ = tlv.TlvPayloadFromIntResource(resource, []int{3800, 5000})
 			break
 
 		case 8:
-			// val, _ = values.TlvPayloadFromIntResource(resource, []int{125, 900})
+			val, _ = tlv.TlvPayloadFromIntResource(resource, []int{125, 900})
 			break
 
 		case 9:
@@ -72,7 +74,7 @@ func (o *TestDeviceObject) OnRead(instanceId int, resourceId int, req Lwm2mReque
 			break
 
 		case 11:
-			// val, _ = values.TlvPayloadFromIntResource(resource, []int{0})
+			val, _ = tlv.TlvPayloadFromIntResource(resource, []int{0})
 			break
 
 		case 13:
@@ -99,7 +101,7 @@ func (o *TestDeviceObject) OnRead(instanceId int, resourceId int, req Lwm2mReque
 	return response.NotFound()
 }
 
-func (o *TestDeviceObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+func (o *DeviceObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
 	val := req.GetMessage().Payload
 
 	switch resourceId {
@@ -120,21 +122,21 @@ func (o *TestDeviceObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequ
 	return response.Changed()
 }
 
-func (o *TestDeviceObject) Reboot() ResponseValue {
+func (o *DeviceObject) Reboot() ResponseValue {
 	return values.Empty()
 }
 
-func (o *TestDeviceObject) FactoryReset() ResponseValue {
+func (o *DeviceObject) FactoryReset() ResponseValue {
 	return values.Empty()
 }
 
-func (o *TestDeviceObject) ResetErrorCode() string {
+func (o *DeviceObject) ResetErrorCode() string {
 	return ""
 }
 
-func NewTestDeviceObject(def ObjectDefinition) *TestDeviceObject {
-	return &TestDeviceObject{
-		Model:       def,
+func NewExampleDeviceObject(reg Registry) *DeviceObject {
+	return &DeviceObject{
+		Model:       reg.GetDefinition(oma.OBJECT_LWM2M_DEVICE),
 		currentTime: time.Unix(1367491215, 0),
 		utcOffset:   "+02:00",
 		timeZone:    "+02:00",
