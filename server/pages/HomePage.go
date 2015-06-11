@@ -15,8 +15,12 @@ func (p *HomePage) content() string {
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
                 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+                <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+                <script>
+
+                </script>
             </head>
-            <body role="document">
+            <body role="document" ng-app="betwixt">
                 <!-- Fixed navbar -->
                 <nav class="navbar navbar-inverse navbar-fixed-top">
                   <div class="container">
@@ -37,7 +41,7 @@ func (p *HomePage) content() string {
                 <div class="row" style="text-align: center">
                     <div class="col-sm-2">&nbsp;</div>
 
-                    <div class="col-sm-2">
+                    <div class="col-sm-2" ng-model="MemUsage">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Memory</h3>
@@ -88,7 +92,6 @@ func (p *HomePage) content() string {
                     <h3>Registered Clients</h3>
                   </div>
                   <div class="row">
-
                     <div class="col-md-12">
                       <table class="table">
                         <thead>

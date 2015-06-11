@@ -7,6 +7,7 @@ import (
 	"log"
 	"runtime"
 	"strconv"
+	"github.com/zubairhamed/betwixt/server/pages/models"
 )
 
 func SetupHttpRoutes(server *DefaultServer) {
@@ -21,13 +22,47 @@ func SetupHttpRoutes(server *DefaultServer) {
 
 	// Get Clients
 	http.NewRoute("/api/clients", METHOD_GET, func(r Request) Response {
-		page := &pages.BlankPage{}
+		cl := []*models.ClientModel{}
+		for _, v := range server.clients {
+			c := &models.ClientModel{
+				Endpoint:         v.GetName(),
+				RegistrationID:   v.GetId(),
+				RegistrationDate: v.GetRegistrationDate().Format("Jan 2, 2006, 3:04pm (SGT)"),
+				LastUpdate:       v.LastUpdate().Format("Jan 2, 2006, 3:04pm (SGT)"),
+			}
+			cl = append(cl, c)
+		}
 
 		return &HttpResponse{
-			TemplateModel: "",
-			Payload: NewBytesPayload(page.GetContent()),
+			Payload: NewJsonPayload(cl),
 		}
 	})
+
+	http.NewRoute("/api/server/stats", METHOD_GET, func(r Request) Response {
+		var mem runtime.MemStats
+		runtime.ReadMemStats(&mem)
+
+		clientsCount := len(server.clients)
+		log.Println("clientsCount", clientsCount)
+
+		model := &models.StatsModel{
+			ClientsCount: clientsCount,
+			MemUsage: strconv.Itoa(int(mem.Alloc / 1000)),
+			Requests: server.stats.GetRequestsCount(),
+			Errors: 0,
+		}
+
+		return &HttpResponse{
+			Payload: NewJsonPayload(model),
+		}
+	})
+
+	http.NewRoute("/api/server/{{client}}/messages", METHOD_GET, func(r Request) Response {
+		return &HttpResponse{
+			Payload: NewJsonPayload(""),
+		}
+	})
+
 
 	// Read
 	http.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}", METHOD_GET, func(r Request) Response {
