@@ -9,14 +9,22 @@ func (p *ClientDetailPage) GetContent() []byte {
 
 func (p *ClientDetailPage) content() string {
 	return `
-        <html>
+        <html ng-app="betwixt-app">
             <head>
                 <title>Betwixt</title>
+                <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.js"></script>
+                <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.0.js"></script>
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+                <script>
+                    angular.module('betwixt-app', ['ui.bootstrap']);
+                    angular.module('betwixt-app').controller('BetwixtController', function ($scope, $http) {
+                        //
+                    });
+                </script>
             </head>
-            <body role="document">
+            <body role="document" ng-controller="BetwixtController">
                 <!-- Fixed navbar -->
                 <nav class="navbar navbar-inverse navbar-fixed-top">
                     <div class="container">

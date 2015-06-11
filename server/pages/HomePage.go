@@ -9,18 +9,33 @@ func (p *HomePage) GetContent() []byte {
 
 func (p *HomePage) content() string {
 	return `
-        <html>
+        <html ng-app="betwixt-app">
             <head>
                 <title>Betwixt</title>
+                <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.js"></script>
+                <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.0.js"></script>
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-                <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
                 <script>
+                    angular.module('betwixt-app', ['ui.bootstrap']);
+                    angular.module('betwixt-app').controller('BetwixtController', function ($scope, $http) {
 
+                        $http.get("/api/clients").success(function(data) {
+                            console.log(data);
+                            $scope.clients = data;
+                        });
+
+                        $http.get("/api/server/stats").success(function(data) {
+                            $scope.MemUsage = "544";
+                            $scope.ClientsCount = 2;
+                            $scope.RequestCount = 2;
+                            $scope.ErrorsCount = 2;
+                        });
+                    });
                 </script>
             </head>
-            <body role="document" ng-app="betwixt">
+            <body role="document" ng-controller="BetwixtController">
                 <!-- Fixed navbar -->
                 <nav class="navbar navbar-inverse navbar-fixed-top">
                   <div class="container">
@@ -41,13 +56,13 @@ func (p *HomePage) content() string {
                 <div class="row" style="text-align: center">
                     <div class="col-sm-2">&nbsp;</div>
 
-                    <div class="col-sm-2" ng-model="MemUsage">
+                    <div class="col-sm-2">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Memory</h3>
                             </div>
                             <div class="panel-body">
-                              <h1>{{.MemUsage}} KB</h1>
+                              <h1>{{ MemUsage }} KB</h1>
                             </div>
                         </div>
                     </div>
@@ -58,7 +73,7 @@ func (p *HomePage) content() string {
                                 <h3 class="panel-title">Clients</h3>
                             </div>
                             <div class="panel-body">
-                              <h1>{{.ClientsCount}}</h1>
+                              <h1>{{ ClientsCount }}</h1>
                             </div>
                         </div>
                     </div>
@@ -69,7 +84,7 @@ func (p *HomePage) content() string {
                                 <h3 class="panel-title">Requests</h3>
                             </div>
                             <div class="panel-body">
-                              <h1>{{.RequestCount}}</h1>
+                              <h1>{{ RequestCount }}</h1>
                             </div>
                         </div>
                     </div>
@@ -80,7 +95,7 @@ func (p *HomePage) content() string {
                                 <h3 class="panel-title">Errors</h3>
                             </div>
                             <div class="panel-body">
-                              <h1>{{.ErrorsCount}}</h1>
+                              <h1>{{ ErrorsCount }}</h1>
                             </div>
                         </div>
                     </div>
@@ -105,20 +120,18 @@ func (p *HomePage) content() string {
                         </thead>
                         <tbody>
 
-                          {{ range .Clients }}
-                          <tr>
-                            <td><a href="/client/{{.Endpoint}}/view">{{.Endpoint}}</a></td>
-                            <td>{{.RegistrationID}}</td>
-                            <td>{{.RegistrationDate}}</td>
-                            <td>{{.LastUpdate}}</td>
+                          <tr ng-repeat="cli in clients">
+                            <td><a href="/client/{{ cli.Endpoint }}/view">{{ cli.Endpoint }}</a></td>
+                            <td>{{ cli.RegistrationID }}</td>
+                            <td>{{ cli.RegistrationDate }}</td>
+                            <td>{{ cli.LastUpdate }}</td>
                             <td>
                               <h4>
-                                <button type="button" class="btn btn-xs btn-info"><a href="/client/{{.Endpoint}}/view">view</a></button>
-                                <button type="button" class="btn btn-xs btn-danger"><a href="/client/{{.Endpoint}}/delete">delete</a></button>
+                                <button type="button" class="btn btn-xs btn-info"><a href="/client/{{ cli.Endpoint }}/view">view</a></button>
+                                <button type="button" class="btn btn-xs btn-danger"><a href="/client/{{ cli.Endpoint }}/delete">delete</a></button>
                               </h4>
                             </td>
                           </tr>
-                          {{ end }}
 
                         </tbody>
                       </table>
@@ -127,11 +140,6 @@ func (p *HomePage) content() string {
                   </div>
 
                 </div> <!-- /container -->
-
-                <!-- Bootstrap core JavaScript
-                ================================================== -->
-                <!-- Placed at the end of the document so the pages load faster -->
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
             </body>
         </html>
     `

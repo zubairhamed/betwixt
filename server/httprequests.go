@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/zubairhamed/betwixt"
+	// "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/server/pages"
 	. "github.com/zubairhamed/go-commons/network"
 	"log"
@@ -19,7 +19,6 @@ func SetupHttpRoutes(server *DefaultServer) {
 	http.NewRoute("/client/{client}/delete", METHOD_GET, handleHttpDeleteClient(server))
 
 	// APIs
-
 	// Get Clients
 	http.NewRoute("/api/clients", METHOD_GET, func(r Request) Response {
 		cl := []*models.ClientModel{}
@@ -63,118 +62,97 @@ func SetupHttpRoutes(server *DefaultServer) {
 		}
 	})
 
-
 	// Read
-	http.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}", METHOD_GET, func(r Request) Response {
-		page := &pages.BlankPage{}
-
+	http.NewRoute("/api/clients/{client}", METHOD_GET, func(r Request) Response {
 		return &HttpResponse{
-			TemplateModel: "",
-			Payload: NewBytesPayload(page.GetContent()),
+			Payload: NewJsonPayload(""),
+		}
+	})
+
+	http.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}", METHOD_GET, func(r Request) Response {
+		return &HttpResponse{
+			Payload: NewJsonPayload(""),
 		}
 	})
 
 	http.NewRoute("/api/clients/{client}/{object}/{instance}", METHOD_GET, func(r Request) Response {
-		page := &pages.BlankPage{}
-
 		return &HttpResponse{
-			TemplateModel: "",
-			Payload: NewBytesPayload(page.GetContent()),
+			Payload: NewJsonPayload(""),
 		}
 	})
 
 	// Write
 	http.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}", METHOD_PUT, func(r Request) Response {
-		page := &pages.BlankPage{}
-
 		return &HttpResponse{
-			TemplateModel: "",
-			Payload: NewBytesPayload(page.GetContent()),
+			Payload: NewJsonPayload(""),
 		}
 	})
 
 	http.NewRoute("/api/clients/{client}/{object}/{instance}", METHOD_PUT, func(r Request) Response {
-		page := &pages.BlankPage{}
-
 		return &HttpResponse{
-			TemplateModel: "",
-			Payload: NewBytesPayload(page.GetContent()),
+			Payload: NewJsonPayload(""),
 		}
 	})
 
 	// Delete
 	http.NewRoute("/api/clients/{client}/{object}/{instance}", METHOD_DELETE, func(r Request) Response {
-		page := &pages.BlankPage{}
-
 		return &HttpResponse{
-			TemplateModel: "",
-			Payload: NewBytesPayload(page.GetContent()),
+			Payload: NewJsonPayload(""),
 		}
 	})
 
 	// Observe
 	http.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}/observe", METHOD_POST, func(r Request) Response {
-		page := &pages.BlankPage{}
-
 		return &HttpResponse{
-			TemplateModel: "",
-			Payload: NewBytesPayload(page.GetContent()),
+			Payload: NewJsonPayload(""),
 		}
 	})
 
 	// Cancel Observe
 	http.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}/observe", METHOD_DELETE, func(r Request) Response {
-		page := &pages.BlankPage{}
-
 		return &HttpResponse{
-			TemplateModel: "",
-			Payload: NewBytesPayload(page.GetContent()),
+			Payload: NewJsonPayload(""),
 		}
 	})
 
 	// Execute
 	http.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}", METHOD_POST, func(r Request) Response {
-		page := &pages.BlankPage{}
-
 		return &HttpResponse{
-			TemplateModel: "",
-			Payload: NewBytesPayload(page.GetContent()),
+			Payload: NewJsonPayload(""),
 		}
 	})
 
 	// Create
 	http.NewRoute("/api/clients/{client}/{object}/{instance}", METHOD_POST, func(r Request) Response {
-		page := &pages.BlankPage{}
-
 		return &HttpResponse{
-			TemplateModel: "",
-			Payload: NewBytesPayload(page.GetContent()),
+			Payload: NewJsonPayload(""),
 		}
 	})
 }
 
 func handleHttpViewClient(server *DefaultServer) RouteHandler {
 	return func(r Request) Response {
+		page := &pages.ClientDetailPage{}
+		/*
 		req := r.(*HttpRequest)
 
-		clientId := req.GetAttribute("client")
-		cli := server.GetRegisteredClient(clientId)
+clientId := req.GetAttribute("client")
+cli := server.GetRegisteredClient(clientId)
 
-		page := &pages.ClientDetailPage{}
+type model struct {
+	ClientId string
+	Objects  map[betwixt.LWM2MObjectType]betwixt.Object
+}
 
-		type model struct {
-			ClientId string
-			Objects  map[betwixt.LWM2MObjectType]betwixt.Object
-		}
-
-		m := &model{
-			Objects:  cli.GetObjects(),
-			ClientId: clientId,
-		}
+m := &model{
+	Objects:  cli.GetObjects(),
+	ClientId: clientId,
+}
+*/
 
 		return &HttpResponse{
-			TemplateModel: m,
-			Payload:       NewBytesPayload(page.GetContent()),
+			// TemplateModel: m,
+			Payload: NewBytesPayload(page.GetContent()),
 		}
 	}
 }
