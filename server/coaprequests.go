@@ -21,7 +21,13 @@ func SetupCoapRoutes(server *DefaultServer) {
 func handleRegister(server *DefaultServer) RouteHandler {
 	return func(r Request) Response {
 		req := r.(*canopus.CoapRequest)
+
 		ep := req.GetUriQuery("ep")
+		lt := req.GetUriQuery("lt")
+		sms := req.GetUriQuery("sms")
+		binding := req.GetUriQuery("b")
+
+		log.Println("Registering with ep:", ep, "lt:", lt, "sms:", sms, "binding:", binding)
 
 		resources := canopus.CoreResourcesFromString(req.GetMessage().Payload.String())
 		clientId, err := server.register(ep, req.GetAddress().String(), resources)
