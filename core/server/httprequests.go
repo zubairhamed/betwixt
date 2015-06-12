@@ -65,7 +65,8 @@ func SetupHttpRoutes(server *DefaultServer) {
 		}
 	})
 
-	http.NewRoute("/api/server/{{client}}/messages", METHOD_GET, func(r Request) Response {
+	// Get Message, Logs
+	http.NewRoute("/api/server/{client}/messages", METHOD_GET, func(r Request) Response {
 		return &HttpResponse{
 			Payload: NewJsonPayload(""),
 		}
@@ -105,8 +106,16 @@ func SetupHttpRoutes(server *DefaultServer) {
 	})
 
 	http.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}", METHOD_GET, func(r Request) Response {
+		req := r.(*HttpRequest)
+		clientId := req.GetAttribute("client")
+		object := req.GetAttributeAsInt("object")
+		instance := req.GetAttributeAsInt("instance")
+		resource := req.GetAttributeAsInt("resource")
+		cli := server.GetRegisteredClient(clientId)
+
+		cli.Read(object, instance, resource)
 		return &HttpResponse{
-			Payload: NewJsonPayload(""),
+			Payload: NewJsonPayload(cli),
 		}
 	})
 

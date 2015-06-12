@@ -211,6 +211,11 @@ type RegisteredClient interface {
 	SetObjects(map[LWM2MObjectType]Object)
 	GetObjects() map[LWM2MObjectType]Object
 	GetObject(LWM2MObjectType) Object
+	GetAddress() string
+
+	Read(int, int, int)
+	Delete(int, int)
+	Execute(int, int, int)
 }
 
 // An Object interface represents an Object used on a client or Objects supported by a Registered Client on a server

@@ -28,12 +28,13 @@ func (p *ClientDetailPage) content() string {
 	                var OPERATION_WE   = 6;
 	                var OPERATION_RWE  = 7;
 
-
                     angular.module('betwixt-app', ['ui.bootstrap']).config(function($locationProvider) {
                         $locationProvider.html5Mode(true);
                     })
 
                     angular.module('betwixt-app').controller('BetwixtController', function ($scope, $http, $location) {
+                        $scope.resourcevalue = {}
+
                         $scope.IsExecutable = function (o) {
                             op = o.Operations
                             return (op == OPERATION_E || op == OPERATION_RE || op == OPERATION_RWE || op == OPERATION_WE)
@@ -56,18 +57,39 @@ func (p *ClientDetailPage) content() string {
 
                         $scope.opExecute = function (client, object, instance, resource) {
                             alert("Execute");
+                            // POST     /api/clients/{client}/{object}/{instance}/{resource}
+
                         }
 
                         $scope.opRead = function (client, object, instance, resource) {
-                            alert("Read");
+                            key = "/" + object + "/" + instance + "/" + resource;
+                            $http.get("/api/clients/" + client + key).success(function(data) {
+                                console.log(data);
+                                $scope.resourcevalue[key] = "Read a value..";
+                            });
                         }
 
                         $scope.opObserve = function (client, object, instance, resource) {
                             alert("Observe");
+                            // POST     /api/clients/{client}/{object}/{instance}/{resource}/observe
                         }
 
                         $scope.opCancelObserve = function (client, object, instance, resource) {
                             alert("Cancel");
+                            // DELETE   /api/clients/{client}/{object}/{instance}/{resource}/observe
+                        }
+
+                        $scope.opWrite = function (client, object, instance, resource) {
+                            alert("Write");
+                            // PUT      /api/clients/{client}/{object}/{instance}/{resource}
+                        }
+
+                        $scope.opDelete = function (client, object, instance) {
+                            // DELETE   /api/clients/{client}/{object}/{instance}
+                        }
+
+                        $scope.opCreate = function() {
+                            // POST     /api/clients/{client}/{object}/{instance}
                         }
 
                         clientId = $location.path().split("/")[2];
@@ -121,6 +143,7 @@ func (p *ClientDetailPage) content() string {
                                         <th style="width: 100px;">Operations</th>
                                         <th width="400">Name</th>
                                         <th>Description</th>
+                                        <th>&nbsp</th>
                                     </thead>
                                     <tbody>
                                         <tr ng-repeat="resource in value.Definition.Resources">
@@ -133,12 +156,13 @@ func (p *ClientDetailPage) content() string {
                                                 <button type="button" class="btn btn-xs btn-primary" ng-show="{{ IsReadable(resource) }}" ng-click="opCancelObserve(ClientID, key, objInstance, resource.Id)">stop</button>
                                                 <button type="button" class="btn btn-xs btn-primary" ng-show="{{ IsReadable(resource) }}" ng-click="opRead(ClientID, key, objInstance, resource.Id)">read</button>
 
-                                                <button type="button" class="btn btn-xs btn-warning" ng-show="{{ IsWritable(resource) }}">write</button>
+                                                <button type="button" class="btn btn-xs btn-warning" ng-show="{{ IsWritable(resource) }}" ng-click="opWrite(ClientID, key, objInstance, resource.Id)">write</button>
 
                                                 <button type="button" class="btn btn-xs btn-default" ng-show="{{ IsNone(resource) }}">none</button>
                                             </td>
                                             <td>{{ resource.Name }}</td>
                                             <td>{{ resource.Description }}</td>
+                                            <td>{{ resourcevalue['/' + key + '/' + objInstance + '/' + resource.Id] }}</td>
                                         </tr>
                                     </tbody>
                                 </table>

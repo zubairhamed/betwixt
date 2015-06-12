@@ -3,6 +3,10 @@ package server
 import (
 	"github.com/zubairhamed/betwixt"
 	"time"
+	"net"
+	. "github.com/zubairhamed/canopus"
+	"fmt"
+	"log"
 )
 
 type ServerStatistics struct {
@@ -39,6 +43,10 @@ type DefaultRegisteredClient struct {
 	regDate        time.Time
 	updateDate     time.Time
 	enabledObjects map[betwixt.LWM2MObjectType]betwixt.Object
+}
+
+func (c *DefaultRegisteredClient) GetAddress() string {
+	return c.addr
 }
 
 func (c *DefaultRegisteredClient) GetId() string {
@@ -87,4 +95,33 @@ func (c *DefaultRegisteredClient) GetObjects() map[betwixt.LWM2MObjectType]betwi
 
 func (c *DefaultRegisteredClient) GetObject(t betwixt.LWM2MObjectType) betwixt.Object {
 	return c.enabledObjects[t]
+}
+
+func (c *DefaultRegisteredClient) Read(obj int, inst int, rsrc int) {
+	log.Println("READ!")
+	rAddr, err := net.ResolveUDPAddr("udp", c.addr)
+	lAddr, err := net.ResolveUDPAddr("udp", ":0")
+
+	conn, _ := net.DialUDP("udp", lAddr, rAddr)
+
+	uri := fmt.Sprintf("/%d/%d/%d", obj, inst, rsrc)
+	req := NewRequest(TYPE_CONFIRMABLE, GET, GenerateMessageId())
+	req.SetRequestURI(uri)
+
+	log.Println("SendMEssage")
+	response, err := SendMessage(req.GetMessage(), conn)
+
+	log.Println(response)
+	log.Println(response.GetMessage())
+	log.Println(response.GetError())
+	log.Println(response.GetPayload())
+	log.Println(err)
+}
+
+func (c *DefaultRegisteredClient) Delete(int, int) {
+
+}
+
+func (c *DefaultRegisteredClient) Execute(int, int, int) {
+
 }
