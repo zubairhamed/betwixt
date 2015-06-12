@@ -19,10 +19,57 @@ func (p *ClientDetailPage) content() string {
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
                 <script>
+                    var OPERATION_NONE = 0;
+	                var OPERATION_R    = 1;
+	                var OPERATION_W    = 2;
+	                var OPERATION_RW   = 3;
+	                var OPERATION_E    = 4;
+	                var OPERATION_RE   = 5;
+	                var OPERATION_WE   = 6;
+	                var OPERATION_RWE  = 7;
+
+
                     angular.module('betwixt-app', ['ui.bootstrap']).config(function($locationProvider) {
                         $locationProvider.html5Mode(true);
                     })
+
                     angular.module('betwixt-app').controller('BetwixtController', function ($scope, $http, $location) {
+                        $scope.IsExecutable = function (o) {
+                            op = o.Operations
+                            return (op == OPERATION_E || op == OPERATION_RE || op == OPERATION_RWE || op == OPERATION_WE)
+                        }
+
+                        $scope.IsReadable = function (o) {
+                            op = o.Operations
+                            return (op == OPERATION_RE || op == OPERATION_R || op == OPERATION_RWE || op == OPERATION_RW)
+                        }
+
+                        $scope.IsWritable = function (o) {
+                            op = o.Operations
+                            return (op == OPERATION_RW || op == OPERATION_RWE || op == OPERATION_WE || op == OPERATION_W)
+                        }
+
+                        $scope.IsNone = function (o) {
+                            op = o.Operations
+                            return (op == OPERATION_NONE)
+                        }
+
+                        $scope.opExecute = function (client, object, instance, resource) {
+                            alert("Execute");
+                        }
+
+                        $scope.opRead = function (client, object, instance, resource) {
+                            alert("Read");
+                        }
+
+                        $scope.opObserve = function (client, object, instance, resource) {
+                            alert("Observe");
+                        }
+
+                        $scope.opCancelObserve = function (client, object, instance, resource) {
+                            alert("Cancel");
+                        }
+
                         clientId = $location.path().split("/")[2];
 
                         $http.get("/api/clients/" + clientId).success(function(data) {
@@ -63,8 +110,8 @@ func (p *ClientDetailPage) content() string {
                                 </h3>
                             </div>
 
-                            <div class="panel-body">
-                                <div class="panel-heading" align="left" ng-repeat="objInstance in value.Instances">
+                            <div class="panel-body" ng-repeat="objInstance in value.Instances">
+                                <div class="panel-heading" align="left">
                                     <h4><button type="button" class="btn btn-xs btn-danger">delete</button> Instance #{{ objInstance }} - /{{ key }}/{{ objInstance }}</h4>
                                     <h5>{{ value.Definition.Description }}</h5>
                                 </div>
@@ -80,21 +127,15 @@ func (p *ClientDetailPage) content() string {
                                             <td>/{{ key }}/{{ objInstance }}/{{ resource.Id }}</td>
                                             <td>
                                                 &nbsp;
-                                                <!-- TODO -->
-                                                {{ IsExecutable }}
-                                                <button type="button" class="btn btn-xs btn-success">exec</button>
-                                                {{ end }}
+                                                <button type="button" class="btn btn-xs btn-success" ng-show="{{ IsExecutable(resource) }}" ng-click="opExecute(ClientID, key, objInstance, resource.Id)">exec</button>
 
-                                                {{ IsReadable }}
-                                                <button type="button" class="btn btn-xs btn-primary">observe</button>
-                                                <button type="button" class="btn btn-xs btn-primary">stop</button>
-                                                |
-                                                <button type="button" class="btn btn-xs btn-primary">read</button>
-                                                {{ end }}
+                                                <button type="button" class="btn btn-xs btn-primary" ng-show="{{ IsReadable(resource) }}" ng-click="opObserve(ClientID, key, objInstance, resource.Id)">observe</button>
+                                                <button type="button" class="btn btn-xs btn-primary" ng-show="{{ IsReadable(resource) }}" ng-click="opCancelObserve(ClientID, key, objInstance, resource.Id)">stop</button>
+                                                <button type="button" class="btn btn-xs btn-primary" ng-show="{{ IsReadable(resource) }}" ng-click="opRead(ClientID, key, objInstance, resource.Id)">read</button>
 
-                                                {{ IsWritable }}
-                                                <button type="button" class="btn btn-xs btn-warning">write</button>
-                                                {{ end }}
+                                                <button type="button" class="btn btn-xs btn-warning" ng-show="{{ IsWritable(resource) }}">write</button>
+
+                                                <button type="button" class="btn btn-xs btn-default" ng-show="{{ IsNone(resource) }}">none</button>
                                             </td>
                                             <td>{{ resource.Name }}</td>
                                             <td>{{ resource.Description }}</td>
