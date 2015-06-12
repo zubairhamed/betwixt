@@ -12,15 +12,23 @@ func (p *ClientDetailPage) content() string {
         <html ng-app="betwixt-app">
             <head>
                 <title>Betwixt</title>
+                <base href="/">
                 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.js"></script>
                 <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.0.js"></script>
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
                 <script>
-                    angular.module('betwixt-app', ['ui.bootstrap']);
-                    angular.module('betwixt-app').controller('BetwixtController', function ($scope, $http) {
-                        //
+                    angular.module('betwixt-app', ['ui.bootstrap']).config(function($locationProvider) {
+                        $locationProvider.html5Mode(true);
+                    })
+                    angular.module('betwixt-app').controller('BetwixtController', function ($scope, $http, $location) {
+                        clientId = $location.path().split("/")[2];
+
+                        $http.get("/api/clients/" + clientId).success(function(data) {
+                            $scope.ClientID = data.Endpoint
+                            $scope.Objects = data.Objects
+                        });
                     });
                 </script>
             </head>
@@ -38,30 +46,27 @@ func (p *ClientDetailPage) content() string {
                         </div>
                     </div>
                 </nav>
-
                 <div class="container theme-showcase" role="main">
                     <br /><br /><br />
 
                     <div class="row" style="text-align: center">
                         <div class="page-header">
-                            <h3>Client: {{ .ClientId }}</h3>
+                            <h3>Client: {{ ClientID }}</h3>
                         </div>
 
                         <!-- Content Start -->
                         <!-- Each Object -->
-                        {{ range $key, $value := .Objects }}
-                        <div class="panel panel-primary" width="700">
+                        <div class="panel panel-primary" width="700" ng-repeat="(key, value) in Objects">
                             <div class="panel-heading">
                                 <h3 class="panel-title" align="left">
-                                    <button type="button" class="btn btn-xs btn-info">+ new instance</button> {{ $value.GetDefinition.GetName }}
+                                    <button type="button" class="btn btn-xs btn-info">+ new instance</button> {{ value.Definition.Name }}
                                 </h3>
                             </div>
 
                             <div class="panel-body">
-                            {{ range $objInstance := $value.GetInstances }}
-                                <div class="panel-heading" align="left">
-                                    <h4><button type="button" class="btn btn-xs btn-danger">delete</button> Instance #{{ $objInstance }} - /{{ $key }}/{{ $objInstance }}</h4>
-                                    <h5>{{ $value.GetDefinition.GetDescription }}</h5>
+                                <div class="panel-heading" align="left" ng-repeat="objInstance in value.Instances">
+                                    <h4><button type="button" class="btn btn-xs btn-danger">delete</button> Instance #{{ objInstance }} - /{{ key }}/{{ objInstance }}</h4>
+                                    <h5>{{ value.Definition.Description }}</h5>
                                 </div>
                                 <table class="table table-condensed">
                                     <thead>
@@ -71,36 +76,33 @@ func (p *ClientDetailPage) content() string {
                                         <th>Description</th>
                                     </thead>
                                     <tbody>
-                                        {{ range $resource := $value.GetDefinition.GetResources }}
-                                        <tr>
-                                            <td>/{{ $key }}/{{ $objInstance }}/{{ $resource.GetId }}</td>
+                                        <tr ng-repeat="resource in value.Definition.Resources">
+                                            <td>/{{ key }}/{{ objInstance }}/{{ resource.Id }}</td>
                                             <td>
                                                 &nbsp;
-                                                {{ if .IsExecutable }}
+                                                <!-- TODO -->
+                                                {{ IsExecutable }}
                                                 <button type="button" class="btn btn-xs btn-success">exec</button>
                                                 {{ end }}
 
-                                                {{ if .IsReadable }}
+                                                {{ IsReadable }}
                                                 <button type="button" class="btn btn-xs btn-primary">observe</button>
                                                 <button type="button" class="btn btn-xs btn-primary">stop</button>
                                                 |
                                                 <button type="button" class="btn btn-xs btn-primary">read</button>
                                                 {{ end }}
 
-                                                {{ if .IsWritable }}
+                                                {{ IsWritable }}
                                                 <button type="button" class="btn btn-xs btn-warning">write</button>
                                                 {{ end }}
                                             </td>
-                                            <td>{{ .GetName }}</td>
-                                            <td>{{ .GetDescription }}</td>
+                                            <td>{{ resource.Name }}</td>
+                                            <td>{{ resource.Description }}</td>
                                         </tr>
-                                        {{ end }}
                                     </tbody>
                                 </table>
-                            {{ end }}
                             </div>
                         </div>
-                        {{ end }}
                         <!-- Content End -->
                     </div>
                 </div>
@@ -114,4 +116,3 @@ func (p *ClientDetailPage) content() string {
     `
 }
 
-// TODO: func (p *ClientDetailPage) handleRequest()

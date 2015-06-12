@@ -19,13 +19,25 @@ func SetupHttpRoutes(server *DefaultServer) {
 
 	// APIs
 	http.NewRoute("/api/clients", METHOD_GET, func(r Request) Response {
-		cl := []*models.ClientModel{}
+		cl := []models.ClientModel{}
 		for _, v := range server.clients {
-			c := &models.ClientModel{
+
+			objs := make(map[string]models.ObjectModel)
+			for key, val := range v.GetObjects() {
+				objectModel := models.ObjectModel{
+					Instances: val.GetInstances(),
+					Definition: val.GetDefinition(),
+				}
+				typeKey := strconv.Itoa(int(key))
+				objs[typeKey] = objectModel
+			}
+
+			c := models.ClientModel{
 				Endpoint:         v.GetName(),
 				RegistrationID:   v.GetId(),
 				RegistrationDate: v.GetRegistrationDate().Format("Jan 2, 2006, 3:04pm (SGT)"),
 				LastUpdate:       v.LastUpdate().Format("Jan 2, 2006, 3:04pm (SGT)"),
+				Objects: 		  objs,
 			}
 			cl = append(cl, c)
 		}
@@ -61,8 +73,34 @@ func SetupHttpRoutes(server *DefaultServer) {
 
 	// Read
 	http.NewRoute("/api/clients/{client}", METHOD_GET, func(r Request) Response {
+		req := r.(*HttpRequest)
+		clientId := req.GetAttribute("client")
+
+		v := server.GetRegisteredClient(clientId)
+		if v == nil {
+
+		}
+
+		objs := make(map[string]models.ObjectModel)
+		for key, val := range v.GetObjects() {
+			objectModel := models.ObjectModel{
+				Instances: val.GetInstances(),
+				Definition: val.GetDefinition(),
+			}
+			typeKey := strconv.Itoa(int(key))
+			objs[typeKey] = objectModel
+		}
+
+		c := models.ClientModel{
+			Endpoint:         v.GetName(),
+			RegistrationID:   v.GetId(),
+			RegistrationDate: v.GetRegistrationDate().Format("Jan 2, 2006, 3:04pm (SGT)"),
+			LastUpdate:       v.LastUpdate().Format("Jan 2, 2006, 3:04pm (SGT)"),
+			Objects: 		  objs,
+		}
+
 		return &HttpResponse{
-			Payload: NewJsonPayload(""),
+			Payload: NewJsonPayload(c),
 		}
 	})
 

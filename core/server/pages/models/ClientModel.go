@@ -5,4 +5,5 @@ type ClientModel struct {
     RegistrationID   string
     RegistrationDate string
     LastUpdate       string
+    Objects          map[string]ObjectModel
 }

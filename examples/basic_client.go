@@ -15,7 +15,7 @@ func main() {
 	setupResources(c, registry)
 
 	c.OnStartup(func() {
-		c.Register("Betwixt2")
+		c.Register("betwixt")
 	})
 
 	c.Start()
