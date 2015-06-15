@@ -172,6 +172,8 @@ type Server interface {
 	UseRegistry(Registry)
 	On(EventType, FnEvent)
 	Start()
+	GetClients() map[string]RegisteredClient
+	GetStats() ServerStatistics
 }
 
 // RegisteredClient interface is an instance of a client registered on a server
@@ -206,3 +208,10 @@ type Object interface {
 	GetDefinition() ObjectDefinition
 	SetEnabler(ObjectEnabler)
 }
+
+type ServerStatistics interface {
+	IncrementCoapRequestsCount()
+	GetRequestsCount() int
+}
+
+

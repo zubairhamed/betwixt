@@ -12,7 +12,7 @@ func TestCoapRequests(t *testing.T) {
 		coapServer: NewDefaultCoapServer(),
 		httpServer: network.NewDefaultHttpServer(":8081"),
 		clients:    make(map[string]betwixt.RegisteredClient),
-		stats:      &ServerStatistics{},
+		stats:      &DefaultServerStatistics{},
 	}
 
 	SetupCoapRoutes(server)

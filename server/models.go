@@ -9,15 +9,15 @@ import (
 	"github.com/zubairhamed/go-commons/typeval"
 )
 
-type ServerStatistics struct {
+type DefaultServerStatistics struct {
 	requestsCount int
 }
 
-func (s *ServerStatistics) IncrementCoapRequestsCount() {
+func (s *DefaultServerStatistics) IncrementCoapRequestsCount() {
 	s.requestsCount++
 }
 
-func (s *ServerStatistics) GetRequestsCount() int {
+func (s *DefaultServerStatistics) GetRequestsCount() int {
 	return s.requestsCount
 }
 

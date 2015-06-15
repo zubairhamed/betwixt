@@ -25,7 +25,7 @@ func NewDefaultServer(port string) betwixt.Server {
 		coapServer: NewDefaultCoapServer(),
 		httpServer: NewDefaultHttpServer(port),
 		clients:    make(map[string]betwixt.RegisteredClient),
-		stats:      &ServerStatistics{},
+		stats:      &DefaultServerStatistics{},
 		events:     make(map[betwixt.EventType]betwixt.FnEvent),
 	}
 }
@@ -34,7 +34,7 @@ type DefaultServer struct {
 	coapServer *canopus.CoapServer
 	httpServer *HttpServer
 	registry   betwixt.Registry
-	stats      *ServerStatistics
+	stats      betwixt.ServerStatistics
 	clients    map[string]betwixt.RegisteredClient
 	events     map[betwixt.EventType]betwixt.FnEvent
 }
@@ -58,6 +58,14 @@ func (server *DefaultServer) Start() {
 
 	// Start HTTP Server
 	http.Start()
+}
+
+func (server *DefaultServer) GetStats() betwixt.ServerStatistics {
+	return server.stats
+}
+
+func (server *DefaultServer) GetClients()map[string]betwixt.RegisteredClient {
+	return server.clients
 }
 
 func (server *DefaultServer) UseRegistry(reg betwixt.Registry) {

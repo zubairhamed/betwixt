@@ -7,6 +7,7 @@ import (
 	"runtime"
 	"strconv"
 	"github.com/zubairhamed/betwixt/server/pages/models"
+	"github.com/zubairhamed/betwixt"
 )
 
 func SetupHttpRoutes(server *DefaultServer) {
@@ -184,7 +185,7 @@ func SetupHttpRoutes(server *DefaultServer) {
 	})
 }
 
-func handleHttpViewClient(server *DefaultServer) RouteHandler {
+func handleHttpViewClient(server betwixt.Server) RouteHandler {
 	return func(r Request) Response {
 		page := &pages.ClientDetailPage{}
 		/*
@@ -211,7 +212,7 @@ m := &model{
 	}
 }
 
-func handleHttpDeleteClient(server *DefaultServer) RouteHandler {
+func handleHttpDeleteClient(server betwixt.Server) RouteHandler {
 	return func(r Request) Response {
 		page := &pages.HomePage{}
 
@@ -223,7 +224,7 @@ func handleHttpDeleteClient(server *DefaultServer) RouteHandler {
 	}
 }
 
-func handleHttpHome(server *DefaultServer) RouteHandler {
+func handleHttpHome(server betwixt.Server) RouteHandler {
 	return func(r Request) Response {
 
 		page := &pages.HomePage{}
@@ -244,7 +245,7 @@ func handleHttpHome(server *DefaultServer) RouteHandler {
 		}
 
 		cl := []*client{}
-		for _, v := range server.clients {
+		for _, v := range server.GetClients() {
 			c := &client{
 				Endpoint:         v.GetName(),
 				RegistrationID:   v.GetId(),
@@ -262,7 +263,7 @@ func handleHttpHome(server *DefaultServer) RouteHandler {
 			ClientsCount: len(cl),
 			Clients:      cl,
 			MemUsage:     strconv.Itoa(int(mem.Alloc / 1000)),
-			RequestCount: server.stats.GetRequestsCount(),
+			RequestCount: server.GetStats().GetRequestsCount(),
 			ErrorsCount:  0,
 		}
 
