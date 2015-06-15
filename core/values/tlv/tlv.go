@@ -3,9 +3,7 @@ package tlv
 import (
 	"bytes"
 	"encoding/binary"
-	. "github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/core/utils"
-	"github.com/zubairhamed/betwixt/core/values"
+	"github.com/zubairhamed/go-commons/typeval"
 )
 
 /*
@@ -33,6 +31,7 @@ import (
    ------------------------------------
 */
 
+/*
 func TlvPayloadFromObjects(o Object, reg Registry) (ResponseValue, error) {
 	buf := bytes.NewBuffer([]byte{})
 
@@ -69,7 +68,9 @@ func TlvPayloadFromObjects(o Object, reg Registry) (ResponseValue, error) {
 
 	return values.Tlv(buf.Bytes()), nil
 }
+*/
 
+/*
 func TlvPayloadFromIntResource(model ResourceDefinition, vals []int) (ResponseValue, error) {
 
 	// Resource Instances TLV
@@ -115,11 +116,12 @@ func TlvPayloadFromIntResource(model ResourceDefinition, vals []int) (ResponseVa
 
 	return values.Tlv(resourceTlv.Bytes()), nil
 }
+*/
 
 func CreateTlvTypeField(identType byte, value interface{}, ident int) byte {
 	var typeField byte
 
-	valueTypeLength, _ := utils.GetValueByteLength(value)
+	valueTypeLength, _ := typeval.GetValueByteLength(value)
 
 	// Bit 7-6: identifier
 	typeField |= identType
@@ -169,7 +171,7 @@ func CreateTlvIdentifierField(ident int) []byte {
 }
 
 func CreateTlvLengthField(value interface{}) []byte {
-	valueTypeLength, _ := utils.GetValueByteLength(value)
+	valueTypeLength, _ := typeval.GetValueByteLength(value)
 
 	if valueTypeLength > 7 {
 		buf := new(bytes.Buffer)

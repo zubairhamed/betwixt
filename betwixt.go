@@ -3,6 +3,7 @@ package betwixt
 import (
 	"github.com/zubairhamed/canopus"
 	"time"
+	"github.com/zubairhamed/go-commons/typeval"
 )
 
 type LWM2MObjectType int
@@ -18,7 +19,6 @@ type FnOnRegistered func(string)
 type FnOnDeregistered func()
 type FnOnError func()
 
-type ValueTypeCode byte
 type OperationCode int
 type IdentifierType byte
 type BindingMode string
@@ -30,18 +30,7 @@ const (
 	EVENT_START EventType = 0
 )
 
-const (
-	VALUETYPE_STRING     ValueTypeCode = 0
-	VALUETYPE_INTEGER    ValueTypeCode = 1
-	VALUETYPE_FLOAT      ValueTypeCode = 2
-	VALUETYPE_BOOLEAN    ValueTypeCode = 3
-	VALUETYPE_OPAQUE     ValueTypeCode = 4
-	VALUETYPE_TIME       ValueTypeCode = 5
-	VALUETYPE_OBJECTLINK ValueTypeCode = 6
-	VALUETYPE_MULTIPLE   ValueTypeCode = 6
-	VALUETYPE_TLV        ValueTypeCode = 7
-	VALUETYPE_EMPTY      ValueTypeCode = 8
-)
+
 
 const (
 	OPERATION_NONE OperationCode = 0
@@ -85,15 +74,6 @@ const (
 	OPERATIONTYPE_NOTIFY           OperationType = 11
 	OPERATIONTYPE_CANCEL_OBSERVE   OperationType = 12
 )
-
-// ResponseValue interface represents response to a server request
-// Typical response could be plain text, TLV Binary, TLV JSON
-type ResponseValue interface {
-	GetBytes() []byte
-	GetType() ValueTypeCode
-	GetValue() interface{}
-	GetStringValue() string
-}
 
 // ObjectEnabler interface to handler any incoming requests from a server for a given object
 type ObjectEnabler interface {
@@ -143,7 +123,7 @@ type ResourceDefinition interface {
 	GetRangeOrEnums() string
 	IsMandatory() bool
 	MultipleValuesAllowed() bool
-	GetResourceType() ValueTypeCode
+	GetResourceType() typeval.ValueTypeCode
 	GetOperations() OperationCode
 	IsExecutable() bool
 	IsWritable() bool
@@ -156,7 +136,7 @@ type LWM2MClient interface {
 	AddObjectInstances(LWM2MObjectType, ...int)
 	AddResource()
 	AddObject()
-	Register(string) string
+	Register(string) (string, error)
 	Deregister()
 	Update()
 	UseRegistry(Registry)
@@ -187,7 +167,7 @@ type Lwm2mRequest interface {
 // Lwm2mResponse interface represents an outgoing response to a server
 type Lwm2mResponse interface {
 	GetResponseCode() canopus.CoapCode
-	GetResponseValue() ResponseValue
+	GetResponseValue() typeval.Value
 }
 
 // Server interface defines a LWM2M Server
@@ -213,7 +193,7 @@ type RegisteredClient interface {
 	GetObject(LWM2MObjectType) Object
 	GetAddress() string
 
-	Read(int, int, int)
+	Read(int, int, int) (typeval.Value, error)
 	Delete(int, int)
 	Execute(int, int, int)
 }
