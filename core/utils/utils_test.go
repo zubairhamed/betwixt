@@ -6,6 +6,7 @@ import (
 	"github.com/zubairhamed/betwixt/tests"
 	"testing"
 	"time"
+	"github.com/zubairhamed/go-commons/typeval"
 )
 
 func TestGetValueByteLength(t *testing.T) {
@@ -32,7 +33,7 @@ func TestGetValueByteLength(t *testing.T) {
 	}
 
 	for _, c := range test1 {
-		v, _ := GetValueByteLength(c.input)
+		v, _ := typeval.GetValueByteLength(c.input)
 		assert.Equal(t, v, uint32(c.expected), "Wrong expected length returned")
 	}
 
@@ -46,7 +47,7 @@ func TestGetValueByteLength(t *testing.T) {
 	}
 
 	for _, c := range test2 {
-		_, err := GetValueByteLength(c.input)
+		_, err := typeval.GetValueByteLength(c.input)
 		assert.NotNil(t, err, "An error should be returned")
 	}
 }
