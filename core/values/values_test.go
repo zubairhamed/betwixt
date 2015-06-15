@@ -33,11 +33,11 @@ func TestTimeValue(t *testing.T) {
 }
 
 func TestFloatValue(t *testing.T) {
-	val := Float(4.2)
+	val := Float(float32(4.2))
 	assert.Equal(t, VALUETYPE_FLOAT, val.GetType())
-	assert.Equal(t, 4.2, val.GetValue())
+	assert.Equal(t, float32(4.2), val.GetValue())
 	assert.Equal(t, "4", val.GetStringValue())
-	assert.Equal(t, 8, len(val.GetBytes()))
+	assert.Equal(t, 4, len(val.GetBytes()))
 }
 
 func TestBooleanValue(t *testing.T) {
