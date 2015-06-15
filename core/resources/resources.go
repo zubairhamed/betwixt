@@ -2,7 +2,6 @@ package resources
 
 import (
 	. "github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/core/utils"
 	"github.com/zubairhamed/betwixt/core/values/validators"
 	"github.com/zubairhamed/go-commons/typeval"
 )
@@ -54,16 +53,4 @@ func (o *DefaultResourceDefinition) GetRangeOrEnums() string {
 
 func (o *DefaultResourceDefinition) IsMandatory() bool {
 	return o.Mandatory
-}
-
-func (o *DefaultResourceDefinition) IsExecutable() bool {
-	return utils.IsExecutableResource(o)
-}
-
-func (o *DefaultResourceDefinition) IsWritable() bool {
-	return utils.IsWritableResource(o)
-}
-
-func (o *DefaultResourceDefinition) IsReadable() bool {
-	return utils.IsReadableResource(o)
 }

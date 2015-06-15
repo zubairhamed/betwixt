@@ -125,9 +125,6 @@ type ResourceDefinition interface {
 	MultipleValuesAllowed() bool
 	GetResourceType() typeval.ValueTypeCode
 	GetOperations() OperationCode
-	IsExecutable() bool
-	IsWritable() bool
-	IsReadable() bool
 }
 
 // LWM2MClient interface defining a LWM2M Client
