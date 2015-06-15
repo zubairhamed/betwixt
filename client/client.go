@@ -11,14 +11,19 @@ import (
 	. "github.com/zubairhamed/go-commons/network"
 	"log"
 	"net"
+	"github.com/zubairhamed/go-commons/logging"
 )
 
 func NewDefaultClient(local string, remote string, registry Registry) *DefaultClient {
 	localAddr, err := net.ResolveUDPAddr("udp", local)
-	IfErrFatal(err)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	remoteAddr, err := net.ResolveUDPAddr("udp", remote)
-	IfErrFatal(err)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	coapServer := NewServer(localAddr, remoteAddr)
 
@@ -54,9 +59,9 @@ type DefaultClient struct {
 }
 
 // Operations
-func (c *DefaultClient) Register(name string) string {
+func (c *DefaultClient) Register(name string) (string, error) {
 	if len(name) > 10 {
-		log.Fatal("Client#Register: Client name can not exceed 10 characters")
+		return "", errors.New("Client name can not exceed 10 characters")
 	}
 
 	req := NewRequest(TYPE_CONFIRMABLE, POST, GenerateMessageId())
@@ -76,7 +81,7 @@ func (c *DefaultClient) Register(name string) string {
 	}
 	c.path = path
 
-	return path
+	return path, nil
 }
 
 func (c *DefaultClient) SetEnabler(t LWM2MObjectType, e ObjectEnabler) {
@@ -101,7 +106,7 @@ func (c *DefaultClient) Deregister() {
 	resp, err := c.coapServer.Send(req)
 
 	if err != nil {
-		log.Println(err)
+		logging.LogError(err)
 	} else {
 		PrintMessage(resp.GetMessage())
 	}
@@ -172,7 +177,7 @@ func (c *DefaultClient) Start() {
 	})
 
 	s.On(EVT_OBSERVE, func() {
-		log.Println("Observe Requested")
+		logging.LogInfo("Observe Requested")
 	})
 
 	s.NewRoute("{obj}/{inst}/{rsrc}", GET, c.handleReadRequest)
@@ -191,6 +196,7 @@ func (c *DefaultClient) Start() {
 }
 
 func (c *DefaultClient) handleCreateRequest(r Request) Response {
+	logging.LogInfo("Create Request")
 	req := r.(*CoapRequest)
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
@@ -221,6 +227,7 @@ func (c *DefaultClient) handleCreateRequest(r Request) Response {
 }
 
 func (c *DefaultClient) handleReadRequest(r Request) Response {
+	logging.LogInfo("Read Request")
 	req := r.(*CoapRequest)
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
@@ -255,7 +262,8 @@ func (c *DefaultClient) handleReadRequest(r Request) Response {
 
 				val := response.GetResponseValue()
 				msg.Code = response.GetResponseCode()
-				msg.Payload = NewBytesPayload(val.GetBytes())
+				b := utils.BytesFromValue(resource, val)
+				msg.Payload = NewBytesPayload(b)
 			}
 		}
 	} else {
@@ -265,6 +273,7 @@ func (c *DefaultClient) handleReadRequest(r Request) Response {
 }
 
 func (c *DefaultClient) handleDeleteRequest(r Request) Response {
+	logging.LogInfo("Delete Request")
 	req := r.(*CoapRequest)
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
@@ -288,14 +297,15 @@ func (c *DefaultClient) handleDeleteRequest(r Request) Response {
 }
 
 func (c *DefaultClient) handleDiscoverRequest() {
-
+	logging.LogInfo("Discovery Request")
 }
 
 func (c *DefaultClient) handleObserveRequest() {
-
+	logging.LogInfo("Observe Request")
 }
 
 func (c *DefaultClient) handleWriteRequest(r Request) Response {
+	logging.LogInfo("Write Request")
 	req := r.(*CoapRequest)
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
@@ -339,6 +349,7 @@ func (c *DefaultClient) handleWriteRequest(r Request) Response {
 }
 
 func (c *DefaultClient) handleExecuteRequest(r Request) Response {
+	logging.LogInfo("Execute Request")
 	req := r.(*CoapRequest)
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
@@ -375,7 +386,6 @@ func (c *DefaultClient) handleExecuteRequest(r Request) Response {
 	} else {
 		msg.Code = COAPCODE_404_NOT_FOUND
 	}
-
 	return NewResponseWithMessage(msg)
 }
 
