@@ -22,8 +22,8 @@ func (c *MockClient) AddObjectInstance(LWM2MObjectType, int) error {
 func (c *MockClient) AddObjectInstances(LWM2MObjectType, ...int) {}
 func (c *MockClient) AddResource()                               {}
 func (c *MockClient) AddObject()                                 {}
-func (c *MockClient) Register(string) string {
-	return ""
+func (c *MockClient) Register(string) (string, error) {
+	return "", nil
 }
 func (c *MockClient) Deregister() {}
 func (c *MockClient) Update()     {}

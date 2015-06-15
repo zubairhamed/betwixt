@@ -4,8 +4,8 @@ package response
 
 import (
 	. "github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/core/values"
 	"github.com/zubairhamed/canopus"
+	"github.com/zubairhamed/go-commons/typeval"
 )
 
 // 201 Created
@@ -20,8 +20,8 @@ func (r *CreatedResponse) GetResponseCode() canopus.CoapCode {
 	return canopus.COAPCODE_201_CREATED
 }
 
-func (r *CreatedResponse) GetResponseValue() ResponseValue {
-	return values.Empty()
+func (r *CreatedResponse) GetResponseValue() typeval.Value {
+	return typeval.Empty()
 }
 
 // 202 Deleted
@@ -36,8 +36,8 @@ func (r *DeletedResponse) GetResponseCode() canopus.CoapCode {
 	return canopus.COAPCODE_202_DELETED
 }
 
-func (r *DeletedResponse) GetResponseValue() ResponseValue {
-	return values.Empty()
+func (r *DeletedResponse) GetResponseValue() typeval.Value {
+	return typeval.Empty()
 }
 
 // 204 Changed
@@ -52,26 +52,26 @@ func (r *ChangedResponse) GetResponseCode() canopus.CoapCode {
 	return canopus.COAPCODE_204_CHANGED
 }
 
-func (r *ChangedResponse) GetResponseValue() ResponseValue {
-	return values.Empty()
+func (r *ChangedResponse) GetResponseValue() typeval.Value {
+	return typeval.Empty()
 }
 
 // 205 Content
-func Content(val ResponseValue) Lwm2mResponse {
+func Content(val typeval.Value) Lwm2mResponse {
 	return &ContentResponse{
 		val: val,
 	}
 }
 
 type ContentResponse struct {
-	val ResponseValue
+	val typeval.Value
 }
 
 func (r *ContentResponse) GetResponseCode() canopus.CoapCode {
 	return canopus.COAPCODE_205_CONTENT
 }
 
-func (r *ContentResponse) GetResponseValue() ResponseValue {
+func (r *ContentResponse) GetResponseValue() typeval.Value {
 	return r.val
 }
 
@@ -87,8 +87,8 @@ func (r *BadRequestResponse) GetResponseCode() canopus.CoapCode {
 	return canopus.COAPCODE_400_BAD_REQUEST
 }
 
-func (r *BadRequestResponse) GetResponseValue() ResponseValue {
-	return values.Empty()
+func (r *BadRequestResponse) GetResponseValue() typeval.Value {
+	return typeval.Empty()
 }
 
 // 401 Unauthorized
@@ -103,8 +103,8 @@ func (r *UnauthorizedResponse) GetResponseCode() canopus.CoapCode {
 	return canopus.COAPCODE_401_UNAUTHORIZED
 }
 
-func (r *UnauthorizedResponse) GetResponseValue() ResponseValue {
-	return values.Empty()
+func (r *UnauthorizedResponse) GetResponseValue() typeval.Value {
+	return typeval.Empty()
 }
 
 // 404 Not Found
@@ -119,8 +119,8 @@ func (r *NotFoundResponse) GetResponseCode() canopus.CoapCode {
 	return canopus.COAPCODE_404_NOT_FOUND
 }
 
-func (r *NotFoundResponse) GetResponseValue() ResponseValue {
-	return values.Empty()
+func (r *NotFoundResponse) GetResponseValue() typeval.Value {
+	return typeval.Empty()
 }
 
 // 405 Method Not Allowed
@@ -135,8 +135,8 @@ func (r *MethodNotAllowedResponse) GetResponseCode() canopus.CoapCode {
 	return canopus.COAPCODE_405_METHOD_NOT_ALLOWED
 }
 
-func (r *MethodNotAllowedResponse) GetResponseValue() ResponseValue {
-	return values.Empty()
+func (r *MethodNotAllowedResponse) GetResponseValue() typeval.Value {
+	return typeval.Empty()
 }
 
 // 409 Conflict
@@ -151,6 +151,6 @@ func (r *ConflictResponse) GetResponseCode() canopus.CoapCode {
 	return canopus.COAPCODE_409_CONFLICT
 }
 
-func (r *ConflictResponse) GetResponseValue() ResponseValue {
-	return values.Empty()
+func (r *ConflictResponse) GetResponseValue() typeval.Value {
+	return typeval.Empty()
 }

@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/zubairhamed/betwixt/core/registry"
-	"github.com/zubairhamed/betwixt/core/server"
+	"github.com/zubairhamed/betwixt/server"
 )
 
 func main() {

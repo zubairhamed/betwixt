@@ -3,18 +3,21 @@ package resources
 import (
 	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/core/utils"
+	"github.com/zubairhamed/betwixt/core/values/validators"
+	"github.com/zubairhamed/go-commons/typeval"
 )
 
 type DefaultResourceDefinition struct {
-	Id           int
-	Name         string
-	Operations   OperationCode
-	Multiple     bool
-	Mandatory    bool
-	ResourceType ValueTypeCode
-	Units        string
-	RangeOrEnums string
-	Description  string
+	Id           	int
+	Name         	string
+	Operations   	OperationCode
+	Multiple     	bool
+	Mandatory    	bool
+	ResourceType 	typeval.ValueTypeCode
+	Units        	string
+	RangeOrEnums 	string
+	Description  	string
+	ValueValidator 	validators.Validator
 }
 
 func (o *DefaultResourceDefinition) GetId() int {
@@ -29,7 +32,7 @@ func (o *DefaultResourceDefinition) MultipleValuesAllowed() bool {
 	return o.Multiple
 }
 
-func (o *DefaultResourceDefinition) GetResourceType() ValueTypeCode {
+func (o *DefaultResourceDefinition) GetResourceType() typeval.ValueTypeCode {
 	return o.ResourceType
 }
 

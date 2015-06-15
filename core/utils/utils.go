@@ -2,51 +2,67 @@ package utils
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	. "github.com/zubairhamed/betwixt"
 	"sort"
-	"time"
+	"github.com/zubairhamed/go-commons/typeval"
+	. "github.com/zubairhamed/betwixt/core/values/tlv"
 )
 
-func GetValueByteLength(val interface{}) (uint32, error) {
-	if _, ok := val.(int); ok {
-		v := val.(int)
-		if v > 127 || v < -128 {
-			if v > 32767 || v < -32768 {
-				if v > 2147483647 || v < -2147483648 {
-					return 8, nil
-				} else {
-					return 4, nil
+func BytesFromValue(resourceDef ResourceDefinition, v typeval.Value) []byte {
+	if v.GetType() == typeval.VALUETYPE_MULTIPLE {
+		typeOfMultipleValue := v.GetContainedType()
+		if typeOfMultipleValue == typeval.VALUETYPE_INTEGER {
+
+			// Resource Instances TLV
+			resourceInstanceBytes := bytes.NewBuffer([]byte{})
+			if resourceDef.MultipleValuesAllowed() {
+				intValues := v.GetValue().([]typeval.Value)
+				for i, intValue := range intValues {
+					value := intValue.GetValue().(int)
+
+					// Type Field Byte
+					typeField := CreateTlvTypeField(64, value, i)
+					resourceInstanceBytes.Write([]byte{typeField})
+
+					// Identifier Field
+					identifierField := CreateTlvIdentifierField(i)
+					resourceInstanceBytes.Write(identifierField)
+
+					// Length Field
+					lengthField := CreateTlvLengthField(value)
+					resourceInstanceBytes.Write(lengthField)
+
+					// Value Field
+					valueField := CreateTlvValueField(value)
+					resourceInstanceBytes.Write(valueField)
 				}
-			} else {
-				return 2, nil
 			}
-		} else {
-			return 1, nil
-		}
-	} else if _, ok := val.(bool); ok {
-		return 1, nil
-	} else if _, ok := val.(string); ok {
-		v := val.(string)
 
-		return uint32(len(v)), nil
-	} else if _, ok := val.(float64); ok {
-		v := val.(float64)
+			// Resource Root TLV
+			resourceTlv := bytes.NewBuffer([]byte{})
 
-		if v > +3.4E+38 || v < -3.4E+38 {
-			return 8, nil
-		} else {
-			return 4, nil
+			// Byte 7-6: identifier
+			typeField := CreateTlvTypeField(128, resourceInstanceBytes.Bytes(), resourceDef.GetId())
+			resourceTlv.Write([]byte{typeField})
+
+			// Identifier Field
+			identifierField := CreateTlvIdentifierField(resourceDef.GetId())
+			resourceTlv.Write(identifierField)
+
+			// Length Field
+			lengthField := CreateTlvLengthField(resourceInstanceBytes.Bytes())
+			resourceTlv.Write(lengthField)
+
+			// Value Field, Append Resource Instances TLV to Resource TLV
+			resourceTlv.Write(resourceInstanceBytes.Bytes())
+
+			return resourceTlv.Bytes()
 		}
-	} else if _, ok := val.(time.Time); ok {
-		return 8, nil
-	} else if _, ok := val.([]byte); ok {
-		v := val.([]byte)
-		return uint32(len(v)), nil
 	} else {
-		return 0, errors.New("Unknown type")
+		return v.GetBytes()
 	}
+	return nil
 }
 
 func BuildModelResourceStringPayload(instances LWM2MObjectInstances) string {

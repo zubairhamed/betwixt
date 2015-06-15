@@ -4,7 +4,7 @@ import (
 	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/objectdefs/oma"
 	"github.com/zubairhamed/betwixt/core/response"
-	"github.com/zubairhamed/betwixt/core/values"
+	"github.com/zubairhamed/go-commons/typeval"
 )
 
 type AccessControlObject struct {
@@ -28,18 +28,18 @@ func (o *AccessControlObject) OnRead(instanceId int, resourceId int, req Lwm2mRe
 		// Read Object Instance
 	} else {
 		// Read Resource Instance
-		var val ResponseValue
+		var val typeval.Value
 
 		// resource := o.Model.GetResource(resourceId)
 		switch instanceId {
 		case 0:
 			switch resourceId {
 			case 0:
-				val = values.Integer(1)
+				val = typeval.Integer(1)
 				break
 
 			case 1:
-				val = values.Integer(0)
+				val = typeval.Integer(0)
 				break
 
 			case 2:

@@ -6,7 +6,7 @@ import (
 	"net"
 	. "github.com/zubairhamed/canopus"
 	"fmt"
-	"github.com/zubairhamed/betwixt/core/values"
+	"github.com/zubairhamed/go-commons/typeval"
 )
 
 type ServerStatistics struct {
@@ -97,7 +97,7 @@ func (c *DefaultRegisteredClient) GetObject(t betwixt.LWM2MObjectType) betwixt.O
 	return c.enabledObjects[t]
 }
 
-func (c *DefaultRegisteredClient) Read(obj int, inst int, rsrc int) (betwixt.ResponseValue, error) {
+func (c *DefaultRegisteredClient) Read(obj int, inst int, rsrc int) (typeval.Value, error) {
 	rAddr, _ := net.ResolveUDPAddr("udp", c.addr)
 	lAddr, _ := net.ResolveUDPAddr("udp", ":0")
 
@@ -110,7 +110,7 @@ func (c *DefaultRegisteredClient) Read(obj int, inst int, rsrc int) (betwixt.Res
 	response, _ := SendMessage(req.GetMessage(), conn)
 
 	resourceDef := c.GetObject(betwixt.LWM2MObjectType(obj)).GetDefinition().GetResource(rsrc)
-	responseValue := values.ResponseValueByType(resourceDef.GetResourceType(), response.GetMessage().Payload.GetBytes())
+	responseValue := typeval.ValueByType(resourceDef.GetResourceType(), response.GetMessage().Payload.GetBytes())
 
 	return responseValue, nil
 }
