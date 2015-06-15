@@ -3,7 +3,7 @@ package oma
 import (
 	"github.com/stretchr/testify/assert"
 	. "github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/core/client"
+	"github.com/zubairhamed/betwixt/client"
 	"github.com/zubairhamed/betwixt/core/enablers"
 	"github.com/zubairhamed/betwixt/core/request"
 	"github.com/zubairhamed/betwixt/tests"

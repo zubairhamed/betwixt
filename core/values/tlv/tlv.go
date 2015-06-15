@@ -70,54 +70,6 @@ func TlvPayloadFromObjects(o Object, reg Registry) (ResponseValue, error) {
 }
 */
 
-/*
-func TlvPayloadFromIntResource(model ResourceDefinition, vals []int) (ResponseValue, error) {
-
-	// Resource Instances TLV
-	resourceInstanceBytes := bytes.NewBuffer([]byte{})
-
-	if model.MultipleValuesAllowed() {
-		for i, value := range vals {
-			// Type Field Byte
-			typeField := CreateTlvTypeField(64, value, i)
-			resourceInstanceBytes.Write([]byte{typeField})
-
-			// Identifier Field
-			identifierField := CreateTlvIdentifierField(i)
-			resourceInstanceBytes.Write(identifierField)
-
-			// Length Field
-			lengthField := CreateTlvLengthField(value)
-			resourceInstanceBytes.Write(lengthField)
-
-			// Value Field
-			valueField := CreateTlvValueField(value)
-			resourceInstanceBytes.Write(valueField)
-		}
-	}
-
-	// Resource Root TLV
-	resourceTlv := bytes.NewBuffer([]byte{})
-
-	// Byte 7-6: identifier
-	typeField := CreateTlvTypeField(128, resourceInstanceBytes.Bytes(), model.GetId())
-	resourceTlv.Write([]byte{typeField})
-
-	// Identifier Field
-	identifierField := CreateTlvIdentifierField(model.GetId())
-	resourceTlv.Write(identifierField)
-
-	// Length Field
-	lengthField := CreateTlvLengthField(resourceInstanceBytes.Bytes())
-	resourceTlv.Write(lengthField)
-
-	// Value Field, Append Resource Instances TLV to Resource TLV
-	resourceTlv.Write(resourceInstanceBytes.Bytes())
-
-	return values.Tlv(resourceTlv.Bytes()), nil
-}
-*/
-
 func CreateTlvTypeField(identType byte, value interface{}, ident int) byte {
 	var typeField byte
 

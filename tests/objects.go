@@ -3,8 +3,8 @@ package tests
 import (
 	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/core/response"
-	"github.com/zubairhamed/betwixt/core/values"
 	"time"
+	"github.com/zubairhamed/go-commons/typeval"
 )
 
 type TestDeviceObject struct {
@@ -31,24 +31,24 @@ func (o *TestDeviceObject) OnRead(instanceId int, resourceId int, req Lwm2mReque
 		// Read Object Instance
 	} else {
 		// Read Resource Instance
-		var val ResponseValue
+		var val typeval.Value
 
 		// resource := o.Model.GetResource(resourceId)
 		switch resourceId {
 		case 0:
-			val = values.String("Open Mobile Alliance")
+			val = typeval.String("Open Mobile Alliance")
 			break
 
 		case 1:
-			val = values.String("Lightweight M2M Client")
+			val = typeval.String("Lightweight M2M Client")
 			break
 
 		case 2:
-			val = values.String("345000123")
+			val = typeval.String("345000123")
 			break
 
 		case 3:
-			val = values.String("1.0")
+			val = typeval.String("1.0")
 			break
 
 		case 6:
@@ -64,11 +64,11 @@ func (o *TestDeviceObject) OnRead(instanceId int, resourceId int, req Lwm2mReque
 			break
 
 		case 9:
-			val = values.Integer(100)
+			val = typeval.Integer(100)
 			break
 
 		case 10:
-			val = values.Integer(15)
+			val = typeval.Integer(15)
 			break
 
 		case 11:
@@ -76,19 +76,19 @@ func (o *TestDeviceObject) OnRead(instanceId int, resourceId int, req Lwm2mReque
 			break
 
 		case 13:
-			val = values.Time(o.currentTime)
+			val = typeval.Time(o.currentTime)
 			break
 
 		case 14:
-			val = values.String(o.utcOffset)
+			val = typeval.String(o.utcOffset)
 			break
 
 		case 15:
-			val = values.String(o.timeZone)
+			val = typeval.String(o.timeZone)
 			break
 
 		case 16:
-			val = values.String(string(BINDINGMODE_UDP))
+			val = typeval.String(string(BINDINGMODE_UDP))
 			break
 
 		default:
@@ -120,12 +120,12 @@ func (o *TestDeviceObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequ
 	return response.Changed()
 }
 
-func (o *TestDeviceObject) Reboot() ResponseValue {
-	return values.Empty()
+func (o *TestDeviceObject) Reboot() typeval.Value {
+	return typeval.Empty()
 }
 
-func (o *TestDeviceObject) FactoryReset() ResponseValue {
-	return values.Empty()
+func (o *TestDeviceObject) FactoryReset() typeval.Value {
+	return typeval.Empty()
 }
 
 func (o *TestDeviceObject) ResetErrorCode() string {

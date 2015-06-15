@@ -2,9 +2,9 @@ package values
 
 import (
 	"github.com/stretchr/testify/assert"
-	. "github.com/zubairhamed/betwixt"
 	"testing"
 	"time"
+	. "github.com/zubairhamed/go-commons/typeval"
 )
 
 func TestStringValue(t *testing.T) {
@@ -33,7 +33,7 @@ func TestTimeValue(t *testing.T) {
 }
 
 func TestFloatValue(t *testing.T) {
-	val := Float(float64(4.2))
+	val := Float(4.2)
 	assert.Equal(t, VALUETYPE_FLOAT, val.GetType())
 	assert.Equal(t, 4.2, val.GetValue())
 	assert.Equal(t, "4", val.GetStringValue())
@@ -56,6 +56,7 @@ func TestEmptyValue(t *testing.T) {
 	assert.Equal(t, 0, len(val.GetBytes()))
 }
 
+/*
 func TestTlvValue(t *testing.T) {
 	val := Tlv([]byte{0, 1, 2})
 	assert.Equal(t, VALUETYPE_TLV, val.GetType())
@@ -67,3 +68,4 @@ func TestTlvValue(t *testing.T) {
 func TestMultipleResourceInstanceValue(t *testing.T) {
 
 }
+*/
