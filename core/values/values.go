@@ -276,3 +276,47 @@ func (v *TlvValue) GetType() ValueTypeCode {
 func (v *TlvValue) GetValue() interface{} {
 	return v.content
 }
+
+
+func ResponseValueByType(t ValueTypeCode, val []byte) ResponseValue {
+	var responseValue ResponseValue
+	switch t {
+	case VALUETYPE_STRING:
+		responseValue = String(string(val))
+		break;
+
+	case VALUETYPE_INTEGER:
+		buf := bytes.NewBuffer(val)
+		i, _ := binary.ReadVarint(buf)
+
+		responseValue = Integer(i)
+		break;
+
+	case VALUETYPE_FLOAT:
+		break;
+
+	case VALUETYPE_BOOLEAN:
+		break;
+
+	case VALUETYPE_OPAQUE:
+		break;
+
+	case VALUETYPE_TIME:
+		break;
+
+	case VALUETYPE_OBJECTLINK:
+		break;
+
+	case VALUETYPE_MULTIPLE:
+		break;
+
+	case VALUETYPE_TLV:
+		break;
+
+	case VALUETYPE_EMPTY:
+		break;
+	}
+
+	return responseValue
+}
+
