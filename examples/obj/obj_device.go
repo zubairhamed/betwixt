@@ -53,17 +53,14 @@ func (o *DeviceObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) 
 
 		case 6:
 			val = typeval.Integer(oma.POWERSOURCE_INTERNAL, oma.POWERSOURCE_USB)
-			// val, _ = tlv.TlvPayloadFromIntResource(resource, []int{oma.POWERSOURCE_INTERNAL, oma.POWERSOURCE_USB})
 			break
 
 		case 7:
 			val = typeval.Integer(3800, 5000)
-			// val, _ = tlv.TlvPayloadFromIntResource(resource, []int{3800, 5000})
 			break
 
 		case 8:
 			val = typeval.Integer(125, 900)
-			// val, _ = tlv.TlvPayloadFromIntResource(resource, []int{125, 900})
 			break
 
 		case 9:

@@ -9,14 +9,14 @@ import (
 	. "github.com/zubairhamed/betwixt/core/values/tlv"
 )
 
-func BytesFromValue(resourceDef ResourceDefinition, v typeval.Value) []byte {
+func EncodeValue(resourceId int, allowMultipleValues bool, v typeval.Value) []byte {
 	if v.GetType() == typeval.VALUETYPE_MULTIPLE {
 		typeOfMultipleValue := v.GetContainedType()
 		if typeOfMultipleValue == typeval.VALUETYPE_INTEGER {
 
 			// Resource Instances TLV
 			resourceInstanceBytes := bytes.NewBuffer([]byte{})
-			if resourceDef.MultipleValuesAllowed() {
+			if allowMultipleValues {
 				intValues := v.GetValue().([]typeval.Value)
 				for i, intValue := range intValues {
 					value := intValue.GetValue().(int)
@@ -43,11 +43,11 @@ func BytesFromValue(resourceDef ResourceDefinition, v typeval.Value) []byte {
 			resourceTlv := bytes.NewBuffer([]byte{})
 
 			// Byte 7-6: identifier
-			typeField := CreateTlvTypeField(128, resourceInstanceBytes.Bytes(), resourceDef.GetId())
+			typeField := CreateTlvTypeField(128, resourceInstanceBytes.Bytes(), resourceId)
 			resourceTlv.Write([]byte{typeField})
 
 			// Identifier Field
-			identifierField := CreateTlvIdentifierField(resourceDef.GetId())
+			identifierField := CreateTlvIdentifierField(resourceId)
 			resourceTlv.Write(identifierField)
 
 			// Length Field

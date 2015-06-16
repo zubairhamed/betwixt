@@ -262,7 +262,7 @@ func (c *DefaultClient) handleReadRequest(r Request) Response {
 
 				val := response.GetResponseValue()
 				msg.Code = response.GetResponseCode()
-				b := utils.BytesFromValue(resource, val)
+				b := utils.EncodeValue(resource.GetId(), resource.MultipleValuesAllowed(), val)
 				msg.Payload = NewBytesPayload(b)
 			}
 		}
