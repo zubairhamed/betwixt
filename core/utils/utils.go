@@ -11,38 +11,102 @@ import (
 )
 
 func DecodeValue(b []byte) typeval.Value {
+	log.Println("==============================")
 	log.Println("DecodeValue", b)
+
+	DecodeTlvEntry(b)
+
 	return nil
 }
 
+func DecodeTlvEntry(b []byte) typeval.Value {
+	typeField := b[0]
+	typeOfIdentifier := typeField & 192
+	log.Println("Type Field", typeField)
+	log.Println("Type of Identifier", typeOfIdentifier)
+
+	// Type Field Byte
+		// 7-6 : Type of Identifier
+			// 00: Object Instance
+			// 01: Resource Instance with Value for use within a multiple Resource TLV
+			// 10: Multiple Resource, in which case the Value contains one or more Resource Instance TLVs
+			// 11: Resource with Value
+
+		// 5: Length of Identifier
+			// 0: Identifier field is 8 bits
+			// 1: Identifier field is 16 bits
+
+		// 4-3: Type of Length
+			// 00: No length field, the value immediately follows the Identifier field in is of the length indicated by Bits 2-0 of this field
+			// 01: The Length field is 8-bits and Bits 2-0 MUST be ignored
+			// 10: The Length field is 16-bits and Bits 2-0 MUST be ignored
+			// 11: The Length field is 24-bits and Bits 2-0 MUST be ignored
+
+		// 2-0: A 3-bit unsigned integer indicating the Length of the Value.
+
+	// Identifier Bite: 8-bit or 16-bit unsigned integer as indicated by the Type field.
+		// The Length of the following field in bytes.
+
+	// Value: Sequence of bytes of Length
+		// Value of the tag. The format of the value depends on the Resource’s data type (See Appendix C).
+	return nil
+}
+
+const (
+	TYPEFIELD_TYPE_OBJECTINSTANCE = 0
+	TYPEFIELD_TYPE_RESOURCEINSTANCE = 64
+	TYPEFIELD_TYPE_MULTIPLERESOURCE = 128
+	TYPEFIELD_TYPE_RESOURCE = 192
+)
+
+func EncodeObjectInstanceValue() {
+
+}
+
+func EncodeResourceInstanceValue() {
+
+}
+
+func EncodeMultipleResourceValue() {
+
+}
+
+func EncodeResourceValue(resourceId int, v typeval.Value) {
+
+}
+
 func EncodeValue(resourceId int, allowMultipleValues bool, v typeval.Value) []byte {
+	log.Println("typeVal Multiple ? ", v.GetType() == typeval.VALUETYPE_MULTIPLE)
 	if v.GetType() == typeval.VALUETYPE_MULTIPLE {
 		typeOfMultipleValue := v.GetContainedType()
 		if typeOfMultipleValue == typeval.VALUETYPE_INTEGER {
 
 			// Resource Instances TLV
 			resourceInstanceBytes := bytes.NewBuffer([]byte{})
-			if allowMultipleValues {
-				intValues := v.GetValue().([]typeval.Value)
-				for i, intValue := range intValues {
-					value := intValue.GetValue().(int)
+			intValues := v.GetValue().([]typeval.Value)
+			for i, intValue := range intValues {
+				value := intValue.GetValue().(int)
 
-					// Type Field Byte
-					typeField := CreateTlvTypeField(64, value, i)
+				// Type Field Byte
+				if allowMultipleValues {
+					typeField := CreateTlvTypeField(TYPEFIELD_TYPE_RESOURCEINSTANCE, value, i)
 					resourceInstanceBytes.Write([]byte{typeField})
-
-					// Identifier Field
-					identifierField := CreateTlvIdentifierField(i)
-					resourceInstanceBytes.Write(identifierField)
-
-					// Length Field
-					lengthField := CreateTlvLengthField(value)
-					resourceInstanceBytes.Write(lengthField)
-
-					// Value Field
-					valueField := CreateTlvValueField(value)
-					resourceInstanceBytes.Write(valueField)
+				} else {
+					typeField := CreateTlvTypeField(TYPEFIELD_TYPE_RESOURCE, value, i)
+					resourceInstanceBytes.Write([]byte{typeField})
 				}
+
+				// Identifier Field
+				identifierField := CreateTlvIdentifierField(i)
+				resourceInstanceBytes.Write(identifierField)
+
+				// Length Field
+				lengthField := CreateTlvLengthField(value)
+				resourceInstanceBytes.Write(lengthField)
+
+				// Value Field
+				valueField := CreateTlvValueField(value)
+				resourceInstanceBytes.Write(valueField)
 			}
 
 			// Resource Root TLV

@@ -10,18 +10,6 @@ import (
 	"github.com/zubairhamed/betwixt/core/utils"
 )
 
-type DefaultServerStatistics struct {
-	requestsCount int
-}
-
-func (s *DefaultServerStatistics) IncrementCoapRequestsCount() {
-	s.requestsCount++
-}
-
-func (s *DefaultServerStatistics) GetRequestsCount() int {
-	return s.requestsCount
-}
-
 // Returns a new instance of DefaultRegisteredClient implementing RegisteredClient
 func NewRegisteredClient(ep string, id string, addr string) betwixt.RegisteredClient {
 	return &DefaultRegisteredClient{
@@ -109,9 +97,6 @@ func (c *DefaultRegisteredClient) Read(obj int, inst int, rsrc int) (typeval.Val
 	req.SetRequestURI(uri)
 
 	response, _ := SendMessage(req.GetMessage(), conn)
-
-	// resourceDef := c.GetObject(betwixt.LWM2MObjectType(obj)).GetDefinition().GetResource(rsrc)
-	// responseValue := typeval.ValueByType(resourceDef.GetResourceType(), response.GetMessage().Payload.GetBytes())
 
 	responseValue := utils.DecodeValue(response.GetMessage().Payload.GetBytes())
 
