@@ -7,7 +7,13 @@ import (
 	"sort"
 	"github.com/zubairhamed/go-commons/typeval"
 	. "github.com/zubairhamed/betwixt/core/values/tlv"
+	"log"
 )
+
+func DecodeValue(b []byte) typeval.Value {
+	log.Println("DecodeValue", b)
+	return nil
+}
 
 func EncodeValue(resourceId int, allowMultipleValues bool, v typeval.Value) []byte {
 	if v.GetType() == typeval.VALUETYPE_MULTIPLE {

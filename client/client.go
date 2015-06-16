@@ -269,6 +269,7 @@ func (c *DefaultClient) handleReadRequest(r Request) Response {
 	} else {
 		msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 	}
+	log.Prinln("Returning Message", msg)
 	return NewResponseWithMessage(msg)
 }
 
