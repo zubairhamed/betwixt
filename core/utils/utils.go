@@ -8,21 +8,24 @@ import (
 	"github.com/zubairhamed/go-commons/typeval"
 	. "github.com/zubairhamed/betwixt/core/values/tlv"
 	"log"
+	"encoding/binary"
 )
 
 func DecodeValue(b []byte, resourceDef ResourceDefinition) typeval.Value {
 
 	var val typeval.Value
 	if resourceDef.MultipleValuesAllowed() {
-		log.Println("Decode TLV")
 		val = DecodeTlv(b, resourceDef)
 	} else {
-		log.Println("Decode Value")
 		switch resourceDef.GetResourceType() {
 		case typeval.VALUETYPE_STRING:
+			val = typeval.String(string(b[:len(b)]))
 			break
 
 		case typeval.VALUETYPE_INTEGER:
+			buf := bytes.NewBuffer(b)
+			intVal, _ := binary.ReadVarint(buf)
+			val = typeval.Integer(int(intVal))
 			break
 		}
 	}

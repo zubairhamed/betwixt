@@ -64,8 +64,12 @@ func (p *ClientDetailPage) content() string {
                         $scope.opRead = function (client, object, instance, resource) {
                             key = "/" + object + "/" + instance + "/" + resource;
                             $http.get("/api/clients/" + client + key).success(function(data) {
-                                console.log(data);
-                                $scope.resourcevalue[key] = "Read a value..";
+                                out = ""
+                                for (i=0; i < data.Content.length; i++) {
+                                    v = data.Content[i]
+                                    out += v.Value + " "
+                                }
+                                $scope.resourcevalue[key] = out;
                             });
                         }
 

@@ -269,7 +269,6 @@ func (c *DefaultClient) handleReadRequest(r Request) Response {
 	} else {
 		msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 	}
-	log.Println("Returning Message", msg.Payload.GetBytes())
 	return NewResponseWithMessage(msg)
 }
 
@@ -311,8 +310,6 @@ func (c *DefaultClient) handleWriteRequest(r Request) Response {
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
-
-	log.Println(req.GetMessage().Payload)
 
 	var resourceId = -1
 
