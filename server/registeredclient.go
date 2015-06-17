@@ -87,6 +87,10 @@ func (c *DefaultRegisteredClient) GetObject(t betwixt.LWM2MObjectType) betwixt.O
 	return c.enabledObjects[t]
 }
 
+func (c *DefaultRegisteredClient) ReadObject(obj int, inst int) (typeval.Value, error) {
+	return nil, nil
+}
+
 func (c *DefaultRegisteredClient) ReadResource(obj int, inst int, rsrc int) (typeval.Value, error) {
 	rAddr, _ := net.ResolveUDPAddr("udp", c.addr)
 	lAddr, _ := net.ResolveUDPAddr("udp", ":0")
@@ -97,7 +101,7 @@ func (c *DefaultRegisteredClient) ReadResource(obj int, inst int, rsrc int) (typ
 	req := NewRequest(TYPE_CONFIRMABLE, GET, GenerateMessageId())
 	req.SetRequestURI(uri)
 
-	resourceDefinition := c.GetObject(obj).GetDefinition().GetResource(inst)
+	resourceDefinition := c.GetObject(betwixt.LWM2MObjectType(obj)).GetDefinition().GetResource(inst)
 	if resourceDefinition.MultipleValuesAllowed() {
 		req.SetMediaType(network.MEDIATYPE_TLV_VND_OMA_LWM2M)
 	} else {
@@ -105,10 +109,7 @@ func (c *DefaultRegisteredClient) ReadResource(obj int, inst int, rsrc int) (typ
 	}
 
 	response, _ := SendMessage(req.GetMessage(), conn)
-
-	responseValue := utils.DecodeValue(response.GetMessage().Payload.GetBytes())
-
-
+	responseValue := utils.DecodeValue(response.GetMessage().Payload.GetBytes(), resourceDefinition)
 
 	return responseValue, nil
 }

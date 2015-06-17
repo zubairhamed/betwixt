@@ -10,16 +10,27 @@ import (
 	"log"
 )
 
-func DecodeValue(b []byte) typeval.Value {
-	log.Println("==============================")
-	log.Println("DecodeValue", b)
+func DecodeValue(b []byte, resourceDef ResourceDefinition) typeval.Value {
 
-	DecodeTlvEntry(b)
+	var val typeval.Value
+	if resourceDef.MultipleValuesAllowed() {
+		log.Println("Decode TLV")
+		val = DecodeTlv(b, resourceDef)
+	} else {
+		log.Println("Decode Value")
+		switch resourceDef.GetResourceType() {
+		case typeval.VALUETYPE_STRING:
+			break
 
-	return nil
+		case typeval.VALUETYPE_INTEGER:
+			break
+		}
+	}
+	return val
 }
 
-func DecodeTlvEntry(b []byte) typeval.Value {
+
+func DecodeTlv(b []byte, resourceDef ResourceDefinition) typeval.Value {
 	typeField := b[0]
 	typeOfIdentifier := typeField & 192
 	log.Println("Type Field", typeField)
@@ -88,11 +99,14 @@ func EncodeValue(resourceId int, allowMultipleValues bool, v typeval.Value) []by
 				value := intValue.GetValue().(int)
 
 				// Type Field Byte
+				log.Println("###### AllowMultipleValues", allowMultipleValues)
 				if allowMultipleValues {
 					typeField := CreateTlvTypeField(TYPEFIELD_TYPE_RESOURCEINSTANCE, value, i)
+					log.Println("Type Field == ", typeField)
 					resourceInstanceBytes.Write([]byte{typeField})
 				} else {
 					typeField := CreateTlvTypeField(TYPEFIELD_TYPE_RESOURCE, value, i)
+					log.Println("Type Field == ", typeField)
 					resourceInstanceBytes.Write([]byte{typeField})
 				}
 
