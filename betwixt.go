@@ -192,7 +192,8 @@ type RegisteredClient interface {
 	GetObject(LWM2MObjectType) Object
 	GetAddress() string
 
-	Read(int, int, int) (typeval.Value, error)
+	ReadObject(int, int) (typeval.Value, error)
+	ReadResource(int, int, int) (typeval.Value, error)
 	Delete(int, int)
 	Execute(int, int, int)
 }

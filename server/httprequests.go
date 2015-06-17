@@ -114,7 +114,7 @@ func SetupHttpRoutes(server *DefaultServer) {
 		resource := req.GetAttributeAsInt("resource")
 		cli := server.GetRegisteredClient(clientId)
 
-		val, _ := cli.Read(object, instance, resource)
+		val, _ := cli.ReadResource(object, instance, resource)
 
 		payload := &models.ExecuteResponseModel{
 			Content: []*models.ContentValueModel{
