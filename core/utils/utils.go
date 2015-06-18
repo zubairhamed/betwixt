@@ -12,9 +12,10 @@ import (
 )
 
 func DecodeValue(b []byte, resourceDef ResourceDefinition) typeval.Value {
-
+	log.Println("Mutliple Values ALlowed?? ", resourceDef.MultipleValuesAllowed(), resourceDef.GetName())
 	var val typeval.Value
 	if resourceDef.MultipleValuesAllowed() {
+		log.Println("Multiple Values Allowed")
 		val = DecodeTlv(b, resourceDef)
 	} else {
 		switch resourceDef.GetResourceType() {
@@ -32,12 +33,29 @@ func DecodeValue(b []byte, resourceDef ResourceDefinition) typeval.Value {
 	return val
 }
 
+const(
+	TLV_FIELD_IDENTIFIER_TYPE 	= 192
+	TLV_FIELD_IDENTIFIER_LENGTH = 32
+	TLV_FIELD_TYPE_OF_LENGTH 	= 24
+	TLV_FIELD_LENGTH_OF_VALUE 	= 7
+)
+
+func DescribeTLVField(b byte) {
+
+}
 
 func DecodeTlv(b []byte, resourceDef ResourceDefinition) typeval.Value {
+	log.Println("Decoding TLV Value")
 	typeField := b[0]
-	typeOfIdentifier := typeField & 192
-	log.Println("Type Field", typeField)
-	log.Println("Type of Identifier", typeOfIdentifier)
+	typeOfIdentifier := typeField & TLV_FIELD_IDENTIFIER_TYPE
+	lengthOfIdentifier := typeField & TLV_FIELD_IDENTIFIER_LENGTH
+	typeOfLength := typeField & TLV_FIELD_TYPE_OF_LENGTH
+	lengthOfValue := typeField & TLV_FIELD_LENGTH_OF_VALUE
+
+	DescribeTLVField(typeField)
+	log.Println(typeOfIdentifier, lengthOfIdentifier, typeOfLength, lengthOfValue)
+
+
 
 	// Type Field Byte
 		// 7-6 : Type of Identifier
@@ -90,7 +108,6 @@ func EncodeResourceValue(resourceId int, v typeval.Value) {
 }
 
 func EncodeValue(resourceId int, allowMultipleValues bool, v typeval.Value) []byte {
-	log.Println("typeVal Multiple ? ", v.GetType() == typeval.VALUETYPE_MULTIPLE)
 	if v.GetType() == typeval.VALUETYPE_MULTIPLE {
 		typeOfMultipleValue := v.GetContainedType()
 		if typeOfMultipleValue == typeval.VALUETYPE_INTEGER {
@@ -102,14 +119,11 @@ func EncodeValue(resourceId int, allowMultipleValues bool, v typeval.Value) []by
 				value := intValue.GetValue().(int)
 
 				// Type Field Byte
-				log.Println("###### AllowMultipleValues", allowMultipleValues)
 				if allowMultipleValues {
 					typeField := CreateTlvTypeField(TYPEFIELD_TYPE_RESOURCEINSTANCE, value, i)
-					log.Println("Type Field == ", typeField)
 					resourceInstanceBytes.Write([]byte{typeField})
 				} else {
 					typeField := CreateTlvTypeField(TYPEFIELD_TYPE_RESOURCE, value, i)
-					log.Println("Type Field == ", typeField)
 					resourceInstanceBytes.Write([]byte{typeField})
 				}
 

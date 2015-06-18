@@ -101,7 +101,7 @@ func (c *DefaultRegisteredClient) ReadResource(obj int, inst int, rsrc int) (typ
 	req := NewRequest(TYPE_CONFIRMABLE, GET, GenerateMessageId())
 	req.SetRequestURI(uri)
 
-	resourceDefinition := c.GetObject(betwixt.LWM2MObjectType(obj)).GetDefinition().GetResource(inst)
+	resourceDefinition := c.GetObject(betwixt.LWM2MObjectType(obj)).GetDefinition().GetResource(rsrc)
 	if resourceDefinition.MultipleValuesAllowed() {
 		req.SetMediaType(network.MEDIATYPE_TLV_VND_OMA_LWM2M)
 	} else {
