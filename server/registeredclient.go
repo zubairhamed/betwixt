@@ -9,6 +9,7 @@ import (
 	"github.com/zubairhamed/go-commons/typeval"
 	"github.com/zubairhamed/betwixt/core/utils"
 	"github.com/zubairhamed/go-commons/network"
+	"log"
 )
 
 // Returns a new instance of DefaultRegisteredClient implementing RegisteredClient
@@ -87,11 +88,11 @@ func (c *DefaultRegisteredClient) GetObject(t betwixt.LWM2MObjectType) betwixt.O
 	return c.enabledObjects[t]
 }
 
-func (c *DefaultRegisteredClient) ReadObject(obj int, inst int) (typeval.Value, error) {
+func (c *DefaultRegisteredClient) ReadObject(obj uint16, inst uint16) (typeval.Value, error) {
 	return nil, nil
 }
 
-func (c *DefaultRegisteredClient) ReadResource(obj int, inst int, rsrc int) (typeval.Value, error) {
+func (c *DefaultRegisteredClient) ReadResource(obj uint16, inst uint16, rsrc uint16) (typeval.Value, error) {
 	rAddr, _ := net.ResolveUDPAddr("udp", c.addr)
 	lAddr, _ := net.ResolveUDPAddr("udp", ":0")
 
@@ -109,7 +110,8 @@ func (c *DefaultRegisteredClient) ReadResource(obj int, inst int, rsrc int) (typ
 	}
 
 	response, _ := SendMessage(req.GetMessage(), conn)
-	responseValue := utils.DecodeValue(response.GetMessage().Payload.GetBytes(), resourceDefinition)
+	responseValue, err := utils.DecodeResourceValue(rsrc, response.GetMessage().Payload.GetBytes(), resourceDefinition)
+	log.Println(err)
 
 	return responseValue, nil
 }

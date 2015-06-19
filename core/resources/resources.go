@@ -7,7 +7,7 @@ import (
 )
 
 type DefaultResourceDefinition struct {
-	Id           	int
+	Id           	uint16
 	Name         	string
 	Operations   	OperationCode
 	Multiple     	bool
@@ -19,7 +19,7 @@ type DefaultResourceDefinition struct {
 	ValueValidator 	validators.Validator
 }
 
-func (o *DefaultResourceDefinition) GetId() int {
+func (o *DefaultResourceDefinition) GetId() uint16 {
 	return o.Id
 }
 

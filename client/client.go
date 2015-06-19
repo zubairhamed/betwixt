@@ -248,7 +248,7 @@ func (c *DefaultClient) handleReadRequest(r Request) Response {
 
 	if enabler != nil {
 		model := obj.GetDefinition()
-		resource := model.GetResource(resourceId)
+		resource := model.GetResource(uint16(resourceId))
 
 		if resource == nil {
 			// TODO: Return TLV of Object Instance
@@ -327,7 +327,7 @@ func (c *DefaultClient) handleWriteRequest(r Request) Response {
 
 	if enabler != nil {
 		model := obj.GetDefinition()
-		resource := model.GetResource(resourceId)
+		resource := model.GetResource(uint16(resourceId))
 		if resource == nil {
 			// TODO Write to Object Instance
 			msg.Code = COAPCODE_404_NOT_FOUND
@@ -369,7 +369,7 @@ func (c *DefaultClient) handleExecuteRequest(r Request) Response {
 
 	if enabler != nil {
 		model := obj.GetDefinition()
-		resource := model.GetResource(resourceId)
+		resource := model.GetResource(uint16(resourceId))
 		if resource == nil {
 			msg.Code = COAPCODE_404_NOT_FOUND
 		}

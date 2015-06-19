@@ -39,7 +39,7 @@ func (o *DefaultObjectDefinition) SetResources(r []ResourceDefinition) {
 	o.Resources = r
 }
 
-func (o *DefaultObjectDefinition) GetResource(n int) ResourceDefinition {
+func (o *DefaultObjectDefinition) GetResource(n uint16) ResourceDefinition {
 	for _, rsrc := range o.Resources {
 		if rsrc.GetId() == n {
 			return rsrc

@@ -70,7 +70,7 @@ func TlvPayloadFromObjects(o Object, reg Registry) (ResponseValue, error) {
 }
 */
 
-func CreateTlvTypeField(identType byte, value interface{}, ident int) byte {
+func CreateTlvTypeField(identType byte, value interface{}, ident uint16) byte {
 	var typeField byte
 
 	valueTypeLength, _ := typeval.GetValueByteLength(value)
@@ -108,7 +108,7 @@ func CreateTlvTypeField(identType byte, value interface{}, ident int) byte {
 	return typeField
 }
 
-func CreateTlvIdentifierField(ident int) []byte {
+func CreateTlvIdentifierField(ident uint16) []byte {
 	// Identifier Byte
 	if ident > 255 {
 		// 16-Bit

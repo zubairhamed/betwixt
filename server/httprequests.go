@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"github.com/zubairhamed/betwixt/server/pages/models"
 	"github.com/zubairhamed/betwixt"
+	"github.com/zubairhamed/go-commons/typeval"
+	"github.com/zubairhamed/betwixt/core/utils"
 )
 
 func SetupHttpRoutes(server *DefaultServer) {
@@ -114,13 +116,24 @@ func SetupHttpRoutes(server *DefaultServer) {
 		resource := req.GetAttributeAsInt("resource")
 		cli := server.GetRegisteredClient(clientId)
 
-		val, _ := cli.ReadResource(object, instance, resource)
+		val, _ := cli.ReadResource(uint16(object), uint16(instance), uint16(resource))
+
+		var displayValue string
+		if val.GetType() == typeval.VALUETYPE_MULTIPLE {
+			resources := val.(utils.MultipleResourceValue)
+
+			log.Println("resources returned ", resources)
+		} else {
+			resource := val.(*utils.ResourceValue)
+
+			displayValue = resource.GetValue()
+		}
 
 		payload := &models.ExecuteResponseModel{
 			Content: []*models.ContentValueModel{
 				&models.ContentValueModel{
 					Id: resource,
-					Value: val.GetValue(),
+					Value: displayValue,
 				},
 			},
 		}
