@@ -1,6 +1,6 @@
 package models
 
 type ContentValueModel struct {
-	Id 		int
-	Value 	string
+	Id 		uint16
+	Value 	interface{}
 }

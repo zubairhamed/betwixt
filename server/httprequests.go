@@ -10,6 +10,8 @@ import (
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/go-commons/typeval"
 	"github.com/zubairhamed/betwixt/core/utils"
+	"github.com/zubairhamed/go-commons/logging"
+	"errors"
 )
 
 func SetupHttpRoutes(server *DefaultServer) {
@@ -118,24 +120,29 @@ func SetupHttpRoutes(server *DefaultServer) {
 
 		val, _ := cli.ReadResource(uint16(object), uint16(instance), uint16(resource))
 
-		var displayValue string
-		if val.GetType() == typeval.VALUETYPE_MULTIPLE {
-			resources := val.(utils.MultipleResourceValue)
+		if val == nil {
+			logging.LogError(errors.New("Value returned by ReadResource is nil"))
+		}
+		contentModels := []*models.ContentValueModel{}
+		if val.GetType() == typeval.VALUETYPE_MULTIRESOURCE {
+			resources := val.(*utils.MultipleResourceValue).GetValue().([]*utils.ResourceValue)
 
-			log.Println("resources returned ", resources)
+			for _, resource := range resources {
+				contentModels = append(contentModels, &models.ContentValueModel{
+					Id: resource.GetId(),
+					Value: resource.GetValue(),
+				})
+			}
 		} else {
 			resource := val.(*utils.ResourceValue)
-
-			displayValue = resource.GetValue()
+			contentModels = append(contentModels, &models.ContentValueModel{
+				Id: resource.GetId(),
+				Value: resource.GetValue(),
+			})
 		}
 
 		payload := &models.ExecuteResponseModel{
-			Content: []*models.ContentValueModel{
-				&models.ContentValueModel{
-					Id: resource,
-					Value: displayValue,
-				},
-			},
+			Content: contentModels,
 		}
 
 		return &HttpResponse{
