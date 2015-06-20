@@ -65,6 +65,10 @@ func (o *DeviceObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) 
 
 		case 9:
 			val = typeval.Integer(100)
+			// val = typeval.Integer(1000)
+			// val = typeval.Integer(10000)
+			// val = typeval.Integer(100000)
+			// val = typeval.Integer(1000000)
 			break
 
 		case 10:
