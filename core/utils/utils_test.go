@@ -4,9 +4,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/tests"
+	"github.com/zubairhamed/go-commons/typeval"
 	"testing"
 	"time"
-	"github.com/zubairhamed/go-commons/typeval"
 )
 
 func TestGetValueByteLength(t *testing.T) {

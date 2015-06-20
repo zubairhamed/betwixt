@@ -2,10 +2,10 @@ package basic
 
 import (
 	. "github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/objectdefs/oma"
 	"github.com/zubairhamed/betwixt/core/response"
-	"time"
+	"github.com/zubairhamed/betwixt/objectdefs/oma"
 	"github.com/zubairhamed/go-commons/typeval"
+	"time"
 )
 
 type DeviceObject struct {
@@ -65,6 +65,10 @@ func (o *DeviceObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) 
 
 		case 9:
 			val = typeval.Integer(100)
+			// val = typeval.Integer(1000)
+			// val = typeval.Integer(10000)
+			// val = typeval.Integer(100000)
+			// val = typeval.Integer(1000000)
 			break
 
 		case 10:

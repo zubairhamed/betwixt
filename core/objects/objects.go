@@ -3,6 +3,8 @@ package objects
 import (
 	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/core/enablers"
+	"github.com/zubairhamed/betwixt/core/values/validators"
+	"github.com/zubairhamed/go-commons/typeval"
 )
 
 // DefaultObjectDefinition
@@ -39,7 +41,7 @@ func (o *DefaultObjectDefinition) SetResources(r []ResourceDefinition) {
 	o.Resources = r
 }
 
-func (o *DefaultObjectDefinition) GetResource(n int) ResourceDefinition {
+func (o *DefaultObjectDefinition) GetResource(n uint16) ResourceDefinition {
 	for _, rsrc := range o.Resources {
 		if rsrc.GetId() == n {
 			return rsrc
@@ -122,4 +124,127 @@ func (o *DefaultObject) GetInstances() []int {
 
 func (o *DefaultObject) SetEnabler(e ObjectEnabler) {
 	o.enabler = e
+}
+
+type DefaultResourceDefinition struct {
+	Id             uint16
+	Name           string
+	Operations     OperationCode
+	Multiple       bool
+	Mandatory      bool
+	ResourceType   typeval.ValueTypeCode
+	Units          string
+	RangeOrEnums   string
+	Description    string
+	ValueValidator validators.Validator
+}
+
+func (o *DefaultResourceDefinition) GetId() uint16 {
+	return o.Id
+}
+
+func (o *DefaultResourceDefinition) GetOperations() OperationCode {
+	return o.Operations
+}
+
+func (o *DefaultResourceDefinition) MultipleValuesAllowed() bool {
+	return o.Multiple
+}
+
+func (o *DefaultResourceDefinition) GetResourceType() typeval.ValueTypeCode {
+	return o.ResourceType
+}
+
+func (o *DefaultResourceDefinition) GetName() string {
+	return o.Name
+}
+
+func (o *DefaultResourceDefinition) GetDescription() string {
+	return o.Description
+}
+
+func (o *DefaultResourceDefinition) GetUnits() string {
+	return o.Units
+}
+
+func (o *DefaultResourceDefinition) GetRangeOrEnums() string {
+	return o.RangeOrEnums
+}
+
+func (o *DefaultResourceDefinition) IsMandatory() bool {
+	return o.Mandatory
+}
+
+type ObjectValue struct {
+	instanceId uint16
+	typeId     LWM2MObjectType
+	resources  []typeval.Value
+}
+
+func NewResourceValue(id uint16, value typeval.Value) typeval.Value {
+	return &ResourceValue{
+		id:    id,
+		value: value,
+	}
+}
+
+type ResourceValue struct {
+	id    uint16
+	value typeval.Value
+}
+
+func (v ResourceValue) GetId() uint16 {
+	return v.id
+}
+
+func (v ResourceValue) GetBytes() []byte {
+	return v.value.GetBytes()
+}
+
+func (v ResourceValue) GetContainedType() typeval.ValueTypeCode {
+	return typeval.VALUETYPE_RESOURCE
+}
+
+func (v ResourceValue) GetType() typeval.ValueTypeCode {
+	return typeval.VALUETYPE_RESOURCE
+}
+
+func (v ResourceValue) GetStringValue() string {
+	return ""
+}
+
+func (v ResourceValue) GetValue() interface{} {
+	return v.value.GetValue()
+}
+
+func NewMultipleResourceValue(id uint16, value []*ResourceValue) typeval.Value {
+	return &MultipleResourceValue{
+		id:        id,
+		instances: value,
+	}
+}
+
+type MultipleResourceValue struct {
+	id        uint16
+	instances []*ResourceValue
+}
+
+func (v MultipleResourceValue) GetBytes() []byte {
+	return []byte{}
+}
+
+func (v MultipleResourceValue) GetContainedType() typeval.ValueTypeCode {
+	return typeval.VALUETYPE_RESOURCE
+}
+
+func (v MultipleResourceValue) GetType() typeval.ValueTypeCode {
+	return typeval.VALUETYPE_MULTIRESOURCE
+}
+
+func (v MultipleResourceValue) GetStringValue() string {
+	return ""
+}
+
+func (v MultipleResourceValue) GetValue() interface{} {
+	return v.instances
 }

@@ -3,8 +3,8 @@ package tests
 import (
 	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/core/response"
-	"time"
 	"github.com/zubairhamed/go-commons/typeval"
+	"time"
 )
 
 type TestDeviceObject struct {

@@ -2,11 +2,11 @@ package betwixt
 
 import (
 	"github.com/zubairhamed/canopus"
-	"time"
 	"github.com/zubairhamed/go-commons/typeval"
+	"time"
 )
 
-type LWM2MObjectType int
+type LWM2MObjectType uint16
 type LWM2MObjectInstances map[LWM2MObjectType]Object
 
 type FnEvent func()
@@ -29,8 +29,6 @@ type EventType int
 const (
 	EVENT_START EventType = 0
 )
-
-
 
 const (
 	OPERATION_NONE OperationCode = 0
@@ -109,14 +107,14 @@ type ObjectDefinition interface {
 	GetDescription() string
 	SetResources([]ResourceDefinition)
 	GetResources() []ResourceDefinition
-	GetResource(n int) ResourceDefinition
+	GetResource(n uint16) ResourceDefinition
 	AllowMultiple() bool
 	IsMandatory() bool
 }
 
 // ResourceDefinition interface defines a LWM2M Resource
 type ResourceDefinition interface {
-	GetId() int
+	GetId() uint16
 	GetName() string
 	GetDescription() string
 	GetUnits() string
@@ -192,7 +190,8 @@ type RegisteredClient interface {
 	GetObject(LWM2MObjectType) Object
 	GetAddress() string
 
-	Read(int, int, int) (typeval.Value, error)
+	ReadObject(uint16, uint16) (typeval.Value, error)
+	ReadResource(uint16, uint16, uint16) (typeval.Value, error)
 	Delete(int, int)
 	Execute(int, int, int)
 }
@@ -213,5 +212,3 @@ type ServerStatistics interface {
 	IncrementCoapRequestsCount()
 	GetRequestsCount() int
 }
-
-

@@ -2,10 +2,10 @@ package main
 
 import (
 	. "github.com/zubairhamed/betwixt"
-	. "github.com/zubairhamed/betwixt/examples/obj"
 	"github.com/zubairhamed/betwixt/client"
-	"github.com/zubairhamed/betwixt/objectdefs/oma"
 	"github.com/zubairhamed/betwixt/core/registry"
+	. "github.com/zubairhamed/betwixt/examples/obj"
+	"github.com/zubairhamed/betwixt/objectdefs/oma"
 )
 
 func main() {

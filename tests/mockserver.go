@@ -1,4 +1,5 @@
 package tests
+
 import (
 	"github.com/zubairhamed/betwixt"
 )
@@ -10,7 +11,7 @@ func NewMockServer() betwixt.Server {
 }
 
 type MockServer struct {
-	stats 	betwixt.ServerStatistics
+	stats betwixt.ServerStatistics
 }
 
 func (server *MockServer) Start() {

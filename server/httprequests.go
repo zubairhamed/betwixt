@@ -1,13 +1,17 @@
 package server
 
 import (
+	"errors"
+	"github.com/zubairhamed/betwixt"
+	"github.com/zubairhamed/betwixt/core/objects"
 	"github.com/zubairhamed/betwixt/server/pages"
+	"github.com/zubairhamed/betwixt/server/pages/models"
+	"github.com/zubairhamed/go-commons/logging"
 	. "github.com/zubairhamed/go-commons/network"
+	"github.com/zubairhamed/go-commons/typeval"
 	"log"
 	"runtime"
 	"strconv"
-	"github.com/zubairhamed/betwixt/server/pages/models"
-	"github.com/zubairhamed/betwixt"
 )
 
 func SetupHttpRoutes(server *DefaultServer) {
@@ -26,7 +30,7 @@ func SetupHttpRoutes(server *DefaultServer) {
 			objs := make(map[string]models.ObjectModel)
 			for key, val := range v.GetObjects() {
 				objectModel := models.ObjectModel{
-					Instances: val.GetInstances(),
+					Instances:  val.GetInstances(),
 					Definition: val.GetDefinition(),
 				}
 				typeKey := strconv.Itoa(int(key))
@@ -38,7 +42,7 @@ func SetupHttpRoutes(server *DefaultServer) {
 				RegistrationID:   v.GetId(),
 				RegistrationDate: v.GetRegistrationDate().Format("Jan 2, 2006, 3:04pm (SGT)"),
 				LastUpdate:       v.LastUpdate().Format("Jan 2, 2006, 3:04pm (SGT)"),
-				Objects: 		  objs,
+				Objects:          objs,
 			}
 			cl = append(cl, c)
 		}
@@ -56,9 +60,9 @@ func SetupHttpRoutes(server *DefaultServer) {
 
 		model := &models.StatsModel{
 			ClientsCount: clientsCount,
-			MemUsage: strconv.Itoa(int(mem.Alloc / 1000)),
-			Requests: server.stats.GetRequestsCount(),
-			Errors: 0,
+			MemUsage:     strconv.Itoa(int(mem.Alloc / 1000)),
+			Requests:     server.stats.GetRequestsCount(),
+			Errors:       0,
 		}
 
 		return &HttpResponse{
@@ -86,7 +90,7 @@ func SetupHttpRoutes(server *DefaultServer) {
 		objs := make(map[string]models.ObjectModel)
 		for key, val := range v.GetObjects() {
 			objectModel := models.ObjectModel{
-				Instances: val.GetInstances(),
+				Instances:  val.GetInstances(),
 				Definition: val.GetDefinition(),
 			}
 			typeKey := strconv.Itoa(int(key))
@@ -98,7 +102,7 @@ func SetupHttpRoutes(server *DefaultServer) {
 			RegistrationID:   v.GetId(),
 			RegistrationDate: v.GetRegistrationDate().Format("Jan 2, 2006, 3:04pm (SGT)"),
 			LastUpdate:       v.LastUpdate().Format("Jan 2, 2006, 3:04pm (SGT)"),
-			Objects: 		  objs,
+			Objects:          objs,
 		}
 
 		return &HttpResponse{
@@ -114,15 +118,31 @@ func SetupHttpRoutes(server *DefaultServer) {
 		resource := req.GetAttributeAsInt("resource")
 		cli := server.GetRegisteredClient(clientId)
 
-		val, _ := cli.Read(object, instance, resource)
+		val, _ := cli.ReadResource(uint16(object), uint16(instance), uint16(resource))
+
+		if val == nil {
+			logging.LogError(errors.New("Value returned by ReadResource is nil"))
+		}
+		contentModels := []*models.ContentValueModel{}
+		if val.GetType() == typeval.VALUETYPE_MULTIRESOURCE {
+			resources := val.(*objects.MultipleResourceValue).GetValue().([]*objects.ResourceValue)
+
+			for _, resource := range resources {
+				contentModels = append(contentModels, &models.ContentValueModel{
+					Id:    resource.GetId(),
+					Value: resource.GetValue(),
+				})
+			}
+		} else {
+			resource := val.(*objects.ResourceValue)
+			contentModels = append(contentModels, &models.ContentValueModel{
+				Id:    resource.GetId(),
+				Value: resource.GetValue(),
+			})
+		}
 
 		payload := &models.ExecuteResponseModel{
-			Content: []*models.ContentValueModel{
-				&models.ContentValueModel{
-					Id: resource,
-					Value: val.GetValue(),
-				},
-			},
+			Content: contentModels,
 		}
 
 		return &HttpResponse{
@@ -189,21 +209,21 @@ func handleHttpViewClient(server betwixt.Server) RouteHandler {
 	return func(r Request) Response {
 		page := &pages.ClientDetailPage{}
 		/*
-		req := r.(*HttpRequest)
+				req := r.(*HttpRequest)
 
-clientId := req.GetAttribute("client")
-cli := server.GetRegisteredClient(clientId)
+		clientId := req.GetAttribute("client")
+		cli := server.GetRegisteredClient(clientId)
 
-type model struct {
-	ClientId string
-	Objects  map[betwixt.LWM2MObjectType]betwixt.Object
-}
+		type model struct {
+			ClientId string
+			Objects  map[betwixt.LWM2MObjectType]betwixt.Object
+		}
 
-m := &model{
-	Objects:  cli.GetObjects(),
-	ClientId: clientId,
-}
-*/
+		m := &model{
+			Objects:  cli.GetObjects(),
+			ClientId: clientId,
+		}
+		*/
 
 		return &HttpResponse{
 			// TemplateModel: m,

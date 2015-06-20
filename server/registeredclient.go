@@ -1,26 +1,16 @@
 package server
 
 import (
-	"github.com/zubairhamed/betwixt"
-	"time"
-	"net"
-	. "github.com/zubairhamed/canopus"
 	"fmt"
-	"github.com/zubairhamed/go-commons/typeval"
+	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/core/utils"
+	. "github.com/zubairhamed/canopus"
+	"github.com/zubairhamed/go-commons/network"
+	"github.com/zubairhamed/go-commons/typeval"
+	"log"
+	"net"
+	"time"
 )
-
-type DefaultServerStatistics struct {
-	requestsCount int
-}
-
-func (s *DefaultServerStatistics) IncrementCoapRequestsCount() {
-	s.requestsCount++
-}
-
-func (s *DefaultServerStatistics) GetRequestsCount() int {
-	return s.requestsCount
-}
 
 // Returns a new instance of DefaultRegisteredClient implementing RegisteredClient
 func NewRegisteredClient(ep string, id string, addr string) betwixt.RegisteredClient {
@@ -98,7 +88,11 @@ func (c *DefaultRegisteredClient) GetObject(t betwixt.LWM2MObjectType) betwixt.O
 	return c.enabledObjects[t]
 }
 
-func (c *DefaultRegisteredClient) Read(obj int, inst int, rsrc int) (typeval.Value, error) {
+func (c *DefaultRegisteredClient) ReadObject(obj uint16, inst uint16) (typeval.Value, error) {
+	return nil, nil
+}
+
+func (c *DefaultRegisteredClient) ReadResource(obj uint16, inst uint16, rsrc uint16) (typeval.Value, error) {
 	rAddr, _ := net.ResolveUDPAddr("udp", c.addr)
 	lAddr, _ := net.ResolveUDPAddr("udp", ":0")
 
@@ -108,12 +102,16 @@ func (c *DefaultRegisteredClient) Read(obj int, inst int, rsrc int) (typeval.Val
 	req := NewRequest(TYPE_CONFIRMABLE, GET, GenerateMessageId())
 	req.SetRequestURI(uri)
 
+	resourceDefinition := c.GetObject(betwixt.LWM2MObjectType(obj)).GetDefinition().GetResource(rsrc)
+	if resourceDefinition.MultipleValuesAllowed() {
+		req.SetMediaType(network.MEDIATYPE_TLV_VND_OMA_LWM2M)
+	} else {
+		req.SetMediaType(network.MEDIATYPE_TEXT_PLAIN_VND_OMA_LWM2M)
+	}
+
 	response, _ := SendMessage(req.GetMessage(), conn)
-
-	// resourceDef := c.GetObject(betwixt.LWM2MObjectType(obj)).GetDefinition().GetResource(rsrc)
-	// responseValue := typeval.ValueByType(resourceDef.GetResourceType(), response.GetMessage().Payload.GetBytes())
-
-	responseValue := utils.DecodeValue(response.GetMessage().Payload.GetBytes())
+	responseValue, err := utils.DecodeResourceValue(rsrc, response.GetMessage().Payload.GetBytes(), resourceDefinition)
+	log.Println(err)
 
 	return responseValue, nil
 }

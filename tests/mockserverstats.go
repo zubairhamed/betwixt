@@ -1,7 +1,6 @@
 package tests
 
 type MockServerStatistics struct {
-
 }
 
 func (s *MockServerStatistics) IncrementCoapRequestsCount() {

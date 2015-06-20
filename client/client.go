@@ -8,10 +8,10 @@ import (
 	"github.com/zubairhamed/betwixt/core/request"
 	"github.com/zubairhamed/betwixt/core/utils"
 	. "github.com/zubairhamed/canopus"
+	"github.com/zubairhamed/go-commons/logging"
 	. "github.com/zubairhamed/go-commons/network"
 	"log"
 	"net"
-	"github.com/zubairhamed/go-commons/logging"
 )
 
 func NewDefaultClient(local string, remote string, registry Registry) *DefaultClient {
@@ -248,7 +248,7 @@ func (c *DefaultClient) handleReadRequest(r Request) Response {
 
 	if enabler != nil {
 		model := obj.GetDefinition()
-		resource := model.GetResource(resourceId)
+		resource := model.GetResource(uint16(resourceId))
 
 		if resource == nil {
 			// TODO: Return TLV of Object Instance
@@ -269,7 +269,7 @@ func (c *DefaultClient) handleReadRequest(r Request) Response {
 	} else {
 		msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
 	}
-	log.Prinln("Returning Message", msg)
+	log.Println("Outgoing READ data ", msg.Payload.GetBytes())
 	return NewResponseWithMessage(msg)
 }
 
@@ -312,8 +312,6 @@ func (c *DefaultClient) handleWriteRequest(r Request) Response {
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
 
-	log.Println(req.GetMessage().Payload)
-
 	var resourceId = -1
 
 	if attrResource != "" {
@@ -330,7 +328,7 @@ func (c *DefaultClient) handleWriteRequest(r Request) Response {
 
 	if enabler != nil {
 		model := obj.GetDefinition()
-		resource := model.GetResource(resourceId)
+		resource := model.GetResource(uint16(resourceId))
 		if resource == nil {
 			// TODO Write to Object Instance
 			msg.Code = COAPCODE_404_NOT_FOUND
@@ -372,7 +370,7 @@ func (c *DefaultClient) handleExecuteRequest(r Request) Response {
 
 	if enabler != nil {
 		model := obj.GetDefinition()
-		resource := model.GetResource(resourceId)
+		resource := model.GetResource(uint16(resourceId))
 		if resource == nil {
 			msg.Code = COAPCODE_404_NOT_FOUND
 		}
