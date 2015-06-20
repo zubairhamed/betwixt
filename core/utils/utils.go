@@ -7,7 +7,7 @@ import (
 	"fmt"
 	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/core/objects"
-	. "github.com/zubairhamed/betwixt/core/values/tlv"
+	. "github.com/zubairhamed/betwixt/core/utils/tlv"
 	"github.com/zubairhamed/go-commons/logging"
 	"github.com/zubairhamed/go-commons/typeval"
 	"log"
@@ -28,17 +28,16 @@ const (
 	TYPEFIELD_TYPE_RESOURCE         = 192 // 11
 )
 
-func DecodeTypeField(typeField byte) (byte, byte, byte, byte) {
-	typeOfIdentifier := typeField & TLV_FIELD_IDENTIFIER_TYPE
-	lengthOfIdentifier := typeField & TLV_FIELD_IDENTIFIER_LENGTH
-	typeOfLength := typeField & TLV_FIELD_TYPE_OF_LENGTH
-	lengthOfValue := typeField & TLV_FIELD_LENGTH_OF_VALUE
+func DecodeTypeField(typeField byte) (typeOfIdentifier byte, lengthOfIdentifier byte, typeOfLength byte, lengthOfValue byte) {
+	typeOfIdentifier = typeField & TLV_FIELD_IDENTIFIER_TYPE
+	lengthOfIdentifier = typeField & TLV_FIELD_IDENTIFIER_LENGTH
+	typeOfLength = typeField & TLV_FIELD_TYPE_OF_LENGTH
+	lengthOfValue = typeField & TLV_FIELD_LENGTH_OF_VALUE
 
-	return typeOfIdentifier, lengthOfIdentifier, typeOfLength, lengthOfValue
+	return
 }
 
 func ValueFromBytes(b []byte, v typeval.ValueTypeCode) typeval.Value {
-	log.Println("ValueFromBytes", b)
 	if len(b) == 0 {
 		return typeval.Empty()
 	}

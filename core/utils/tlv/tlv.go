@@ -30,46 +30,6 @@ import (
 
    ------------------------------------
 */
-
-/*
-func TlvPayloadFromObjects(o Object, reg Registry) (ResponseValue, error) {
-	buf := bytes.NewBuffer([]byte{})
-
-	m := reg.GetDefinition(o.GetType())
-	en := o.GetEnabler()
-	instances := o.GetInstances()
-	for _, oi := range instances {
-		rsrcBuf := bytes.NewBuffer([]byte{})
-		for _, ri := range m.GetResources() {
-			if utils.IsReadableResource(ri) {
-				response := en.OnRead(oi, ri.GetId(), nil)
-
-				val := response.GetResponseValue()
-				if ri.MultipleValuesAllowed() {
-					rsrcBuf.Write(val.GetBytes())
-				} else {
-					if ri.GetResourceType() == VALUETYPE_INTEGER {
-						v, _ := TlvPayloadFromIntResource(ri, []int{val.GetValue().(int)})
-						rsrcBuf.Write(v.GetBytes())
-					}
-				}
-			}
-		}
-
-		if len(instances) > 1 {
-			// Create Root TLV Value for Resource
-
-			// Append to Resource Buffer
-			// buf.Write(..)
-		}
-		// Append to Resource TLV to Main Buffer
-		buf.Write(rsrcBuf.Bytes())
-	}
-
-	return values.Tlv(buf.Bytes()), nil
-}
-*/
-
 func CreateTlvTypeField(identType byte, value interface{}, ident uint16) byte {
 	var typeField byte
 

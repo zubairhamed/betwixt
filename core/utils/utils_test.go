@@ -52,52 +52,82 @@ func TestGetValueByteLength(t *testing.T) {
 	}
 }
 
-/*
-func TestObjectData(t *testing.T) {
+func TestDecodeTypeField(t *testing.T) {
+	var data []byte
 
-	tests := []struct {
-		path  string
-		value interface{}
-	}{
-		{"/0/0", 1},
-		{"/0/1", 0},
-		{"/0/2/101", []byte{0, 15}},
-		{"/0/3", 101},
-		{"/1/0", 1},
-		{"/1/1", 1},
-		{"/1/2/102", []byte{0, 15}},
-		{"/1/3", 102},
-		{"/2/0", 3},
-		{"/2/1", 0},
-		{"/2/2/101", []byte{0, 15}},
-		{"/2/2/102", []byte{0, 1}},
-		{"/2/3", 101},
-		{"/3/0", 4},
-		{"/3/1", 0},
-		{"/3/2/101", []byte{0, 1}},
-		{"/3/2/0", []byte{0, 1}},
-		{"/3/3", 101},
-		{"/4/0", 5},
-		{"/4/1", 65535},
-		{"/4/2/101", []byte{0, 16}},
-		{"/4/3", 65535},
-	}
+	data = []byte{134, 6, 65, 0, 1, 65, 1, 5}
+	typeOfIdentifier, lengthOfIdentifier, typeOfLength, lengthOfValue := DecodeTypeField(data[0])
 
-	data := &core.ObjectsData{
-		Data: make(map[string]interface{}),
-	}
+	assert.Equal(t, byte(TYPEFIELD_TYPE_MULTIPLERESOURCE), typeOfIdentifier)
+	assert.Equal(t, byte(0), lengthOfIdentifier)
+	assert.Equal(t, byte(0), typeOfLength)
+	assert.Equal(t, byte(6), lengthOfValue)
 
-	for _, c := range tests {
-		data.Put(c.path, c.value)
-		assert.Equal(t, data.Get(c.path), c.value, "Value get not equal to put: (", c.path, "vs", c.value)
-	}
+	data = []byte{136, 7, 8, 66, 0, 14, 216, 66, 1, 19, 136}
+	typeOfIdentifier, lengthOfIdentifier, typeOfLength, lengthOfValue = DecodeTypeField(data[0])
+	assert.Equal(t, byte(TYPEFIELD_TYPE_MULTIPLERESOURCE), typeOfIdentifier)
+	assert.Equal(t, byte(0), lengthOfIdentifier)
+	assert.Equal(t, byte(8), typeOfLength)
+	assert.Equal(t, byte(0), lengthOfValue)
 
-	assert.Equal(t, data.Length(), 22, "Number of items in ObjectData. Expected", 22, "actual", data.Length())
-
-	data.Clear()
-	assert.Equal(t, data.Length(), 0, "Number of items in ObjectData. Expected", 0, "actual", data.Length())
+	data = []byte{135, 8, 65, 0, 125, 66, 1, 3, 132}
+	typeOfIdentifier, lengthOfIdentifier, typeOfLength, lengthOfValue = DecodeTypeField(data[0])
+	assert.Equal(t, byte(TYPEFIELD_TYPE_MULTIPLERESOURCE), typeOfIdentifier)
+	assert.Equal(t, byte(0), lengthOfIdentifier)
+	assert.Equal(t, byte(0), typeOfLength)
+	assert.Equal(t, byte(7), lengthOfValue)
 }
-*/
+
+func TestValueFromBytes(t *testing.T) {
+
+	var data []byte
+	var val typeval.Value
+
+	data = []byte{79, 112, 101, 110, 32, 77, 111, 98, 105, 108, 101, 32, 65, 108, 108, 105, 97, 110, 99, 101}
+	val = ValueFromBytes(data, typeval.VALUETYPE_STRING)
+	assert.Equal(t, "Open Mobile Alliance", val.GetValue().(string))
+
+	data = []byte{76, 105, 103, 104, 116, 119, 101, 105, 103, 104, 116, 32, 77, 50, 77, 32, 67, 108, 105, 101, 110, 116}
+	val = ValueFromBytes(data, typeval.VALUETYPE_STRING)
+	assert.Equal(t, "Lightweight M2M Client", val.GetValue().(string))
+
+	data = []byte{49, 46, 48}
+	val = ValueFromBytes(data, typeval.VALUETYPE_STRING)
+	assert.Equal(t, "1.0", val.GetValue().(string))
+}
+
+func TestValidResourceTypeField(t *testing.T) {
+	var data []byte
+	data = []byte{134, 6, 65, 0, 1, 65, 1, 5}
+	err := ValidResourceTypeField(data)
+	assert.Nil(t, nil, err)
+}
+
+func TestDecodeIdentifierField(t *testing.T) {
+	/*
+func DecodeIdentifierField(b []byte, pos int) (identifier uint16, typeLength int) {
+	 */
+}
+
+func TestDecodeLengthField(t *testing.T) {
+	/*
+func DecodeLengthField(b []byte, pos int) (valueLength uint64, typeLength int) {
+	 */
+}
+
+func TestDecodeResourceValue(t *testing.T) {
+	//func DecodeResourceValue(resourceId uint16, b []byte, resourceDef ResourceDefinition) (typeval.Value, error) {
+}
+
+func TestEncodeValue(t *testing.T) {
+	// func EncodeValue(resourceId uint16, allowMultipleValues bool, v typeval.Value) []byte {
+}
+
+func TestResourceOperations(t *testing.T) {
+	//	func IsExecutableResource(m ResourceDefinition) bool {
+	//	func IsReadableResource(m ResourceDefinition) bool {
+	//	func IsWritableResource(m ResourceDefinition) bool {
+}
 
 func TestBuildResourceStringPayload(t *testing.T) {
 	cli := tests.NewMockClient()
@@ -114,12 +144,3 @@ func TestBuildResourceStringPayload(t *testing.T) {
 
 	assert.Equal(t, str, compare, "Unexpected output building Model Resource String")
 }
-
-/*
-func TestResourceOperations(t *testing.T) {
-	omaObjects := &oma.LWM2MCoreObjects{}
-	reg := tests.NewMockRegistry(omaObjects)
-	dev := reg.GetDefinition(betwixt.LWM2MObjectType(3))
-	log.Println(IsExecutableResource(dev.GetResource(1)))
-}
-*/
