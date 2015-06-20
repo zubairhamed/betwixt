@@ -1,8 +1,9 @@
 package server
+
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
 	"github.com/zubairhamed/betwixt/tests"
+	"testing"
 )
 
 func TestHandleHttpHome(t *testing.T) {
@@ -26,7 +27,6 @@ func TestHandleHttpDelete(t *testing.T) {
 
 	assert.NotNil(t, response)
 }
-
 
 func TestHandleHttpViewClient(t *testing.T) {
 	server := tests.NewMockServer()

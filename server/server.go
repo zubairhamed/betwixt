@@ -64,7 +64,7 @@ func (server *DefaultServer) GetStats() betwixt.ServerStatistics {
 	return server.stats
 }
 
-func (server *DefaultServer) GetClients()map[string]betwixt.RegisteredClient {
+func (server *DefaultServer) GetClients() map[string]betwixt.RegisteredClient {
 	return server.clients
 }
 

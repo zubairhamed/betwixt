@@ -2,9 +2,9 @@ package values
 
 import (
 	"github.com/stretchr/testify/assert"
+	. "github.com/zubairhamed/go-commons/typeval"
 	"testing"
 	"time"
-	. "github.com/zubairhamed/go-commons/typeval"
 )
 
 func TestStringValue(t *testing.T) {

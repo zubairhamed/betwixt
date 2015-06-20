@@ -2,8 +2,8 @@ package basic
 
 import (
 	. "github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/objectdefs/oma"
 	"github.com/zubairhamed/betwixt/core/response"
+	"github.com/zubairhamed/betwixt/objectdefs/oma"
 )
 
 type ConnectivityMonitoringObject struct {

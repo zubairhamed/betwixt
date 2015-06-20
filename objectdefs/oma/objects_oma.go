@@ -3,7 +3,6 @@ package oma
 import (
 	. "github.com/zubairhamed/betwixt"
 	. "github.com/zubairhamed/betwixt/core/objects"
-	. "github.com/zubairhamed/betwixt/core/resources"
 	"github.com/zubairhamed/betwixt/core/values/validators"
 	. "github.com/zubairhamed/go-commons/typeval"
 )
@@ -27,7 +26,7 @@ func (o *LWM2MCoreObjects) Initialize() {
 	o.models = make(map[LWM2MObjectType]ObjectDefinition)
 
 	o.AddObject(
-		&DefaultObjectDefinition{Name: "LWM2M Security", Id: 0, Multiple: true, Mandatory: true,},
+		&DefaultObjectDefinition{Name: "LWM2M Security", Id: 0, Multiple: true, Mandatory: true},
 		&DefaultResourceDefinition{Id: 0, Name: "LWM2M  Server URI", Operations: OPERATION_NONE, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_STRING, RangeOrEnums: "0-255 bytes", ValueValidator: validators.NewRangeValidator(0, 255)},
 		&DefaultResourceDefinition{Id: 1, Name: "Bootstrap Server", Operations: OPERATION_NONE, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_BOOLEAN},
 		&DefaultResourceDefinition{Id: 2, Name: "Security Mode", Operations: OPERATION_NONE, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "0-3", ValueValidator: validators.NewRangeValidator(0, 3)},
@@ -39,13 +38,13 @@ func (o *LWM2MCoreObjects) Initialize() {
 		&DefaultResourceDefinition{Id: 8, Name: "SMS Binding Secret Keys", Operations: OPERATION_NONE, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_OPAQUE, RangeOrEnums: "32-48 bytes", ValueValidator: validators.NewRangeValidator(32, 48)},
 		&DefaultResourceDefinition{Id: 9, Name: "LWM2M Server SMS Number", Operations: OPERATION_NONE, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_INTEGER},
 		&DefaultResourceDefinition{Id: 10, Name: "Short Server ID", Operations: OPERATION_NONE, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "1-65535", ValueValidator: validators.NewRangeValidator(1, 65535)},
-		&DefaultResourceDefinition{Id: 11, Name: "Client Hold Off Time", Operations: OPERATION_NONE, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_INTEGER, Units: "s",},
+		&DefaultResourceDefinition{Id: 11, Name: "Client Hold Off Time", Operations: OPERATION_NONE, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_INTEGER, Units: "s"},
 	)
 
 	o.AddObject(
-		&DefaultObjectDefinition{Name: "LWM2M Server", Id: 1, Multiple: true, Mandatory: true,},
+		&DefaultObjectDefinition{Name: "LWM2M Server", Id: 1, Multiple: true, Mandatory: true},
 		&DefaultResourceDefinition{Id: 0, Name: "Short Server ID", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "1-65535", ValueValidator: validators.NewRangeValidator(1, 65535)},
-		&DefaultResourceDefinition{Id: 1, Name: "Lifetime", Operations: OPERATION_RW, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_INTEGER, Units: "s",},
+		&DefaultResourceDefinition{Id: 1, Name: "Lifetime", Operations: OPERATION_RW, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_INTEGER, Units: "s"},
 		&DefaultResourceDefinition{Id: 2, Name: "Default Minimum Period", Operations: OPERATION_RW, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_INTEGER, Units: "s"},
 		&DefaultResourceDefinition{Id: 3, Name: "Default Maximum Period", Operations: OPERATION_RW, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_INTEGER, Units: "s"},
 		&DefaultResourceDefinition{Id: 4, Name: "Disable", Operations: OPERATION_E, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_STRING},
@@ -56,7 +55,7 @@ func (o *LWM2MCoreObjects) Initialize() {
 	)
 
 	o.AddObject(
-		&DefaultObjectDefinition{Name: "LWM2M Access Control", Id: 2, Multiple: true, Mandatory: false,},
+		&DefaultObjectDefinition{Name: "LWM2M Access Control", Id: 2, Multiple: true, Mandatory: false},
 		&DefaultResourceDefinition{Id: 0, Name: "Object ID", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "1-65534", ValueValidator: validators.NewRangeValidator(1, 65534)},
 		&DefaultResourceDefinition{Id: 1, Name: "Object Instance ID", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "0-65535", ValueValidator: validators.NewRangeValidator(0, 65535)},
 		&DefaultResourceDefinition{Id: 2, Name: "ACL", Operations: OPERATION_RW, Multiple: true, Mandatory: false, ResourceType: VALUETYPE_INTEGER, RangeOrEnums: "16-bit", ValueValidator: validators.NewRangeValidator(-32768, 32767)},
@@ -64,7 +63,7 @@ func (o *LWM2MCoreObjects) Initialize() {
 	)
 
 	o.AddObject(
-		&DefaultObjectDefinition{Name: "Device", Id: 3, Multiple: false, Mandatory: true,},
+		&DefaultObjectDefinition{Name: "Device", Id: 3, Multiple: false, Mandatory: true},
 		&DefaultResourceDefinition{Id: 0, Name: "Manufacturer", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_STRING},
 		&DefaultResourceDefinition{Id: 1, Name: "Model Number", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_STRING},
 		&DefaultResourceDefinition{Id: 2, Name: "Serial Number", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_STRING},
@@ -85,7 +84,7 @@ func (o *LWM2MCoreObjects) Initialize() {
 	)
 
 	o.AddObject(
-		&DefaultObjectDefinition{Name: "Connectivity Monitoring", Id: 4, Multiple: false, Mandatory: false,},
+		&DefaultObjectDefinition{Name: "Connectivity Monitoring", Id: 4, Multiple: false, Mandatory: false},
 		&DefaultResourceDefinition{Id: 0, Name: "Network Bearer", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_INTEGER},
 		&DefaultResourceDefinition{Id: 1, Name: "Available Network Bearer", Operations: OPERATION_R, Multiple: true, Mandatory: true, ResourceType: VALUETYPE_INTEGER},
 		&DefaultResourceDefinition{Id: 2, Name: "Radio Signal Strength", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_INTEGER, Units: "dBm"},
@@ -100,7 +99,7 @@ func (o *LWM2MCoreObjects) Initialize() {
 	)
 
 	o.AddObject(
-		&DefaultObjectDefinition{Name: "Firmware Update", Id: 5, Multiple: false, Mandatory: false,},
+		&DefaultObjectDefinition{Name: "Firmware Update", Id: 5, Multiple: false, Mandatory: false},
 		&DefaultResourceDefinition{Id: 0, Name: "Package", Operations: OPERATION_W, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_OPAQUE},
 		&DefaultResourceDefinition{Id: 1, Name: "Package URI", Operations: OPERATION_W, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_STRING, RangeOrEnums: "0-255 bytes", ValueValidator: validators.NewRangeValidator(0, 255)},
 		&DefaultResourceDefinition{Id: 2, Name: "Update", Operations: OPERATION_E, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_STRING},
@@ -110,7 +109,7 @@ func (o *LWM2MCoreObjects) Initialize() {
 	)
 
 	o.AddObject(
-		&DefaultObjectDefinition{Name: "Location", Id: 6, Multiple: false, Mandatory: false,},
+		&DefaultObjectDefinition{Name: "Location", Id: 6, Multiple: false, Mandatory: false},
 		&DefaultResourceDefinition{Id: 0, Name: "Latitude", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_STRING, Units: "Deg"},
 		&DefaultResourceDefinition{Id: 1, Name: "Longitude", Operations: OPERATION_R, Multiple: false, Mandatory: true, ResourceType: VALUETYPE_STRING, Units: "Deg"},
 		&DefaultResourceDefinition{Id: 2, Name: "Altitude", Operations: OPERATION_R, Multiple: false, Mandatory: false, ResourceType: VALUETYPE_STRING, Units: "m"},

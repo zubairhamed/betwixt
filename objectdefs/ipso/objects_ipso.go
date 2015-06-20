@@ -3,7 +3,6 @@ package ipso
 import (
 	. "github.com/zubairhamed/betwixt"
 	. "github.com/zubairhamed/betwixt/core/objects"
-	. "github.com/zubairhamed/betwixt/core/resources"
 	. "github.com/zubairhamed/go-commons/typeval"
 )
 

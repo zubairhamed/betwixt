@@ -3,8 +3,8 @@ package response
 import (
 	"github.com/stretchr/testify/assert"
 	. "github.com/zubairhamed/canopus"
-	"testing"
 	"github.com/zubairhamed/go-commons/typeval"
+	"testing"
 )
 
 func TestResponse(t *testing.T) {

@@ -2,8 +2,8 @@ package betwixt
 
 import (
 	"github.com/zubairhamed/canopus"
-	"time"
 	"github.com/zubairhamed/go-commons/typeval"
+	"time"
 )
 
 type LWM2MObjectType uint16
@@ -29,8 +29,6 @@ type EventType int
 const (
 	EVENT_START EventType = 0
 )
-
-
 
 const (
 	OPERATION_NONE OperationCode = 0
@@ -214,5 +212,3 @@ type ServerStatistics interface {
 	IncrementCoapRequestsCount()
 	GetRequestsCount() int
 }
-
-

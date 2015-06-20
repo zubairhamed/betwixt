@@ -184,4 +184,3 @@ func (p *ClientDetailPage) content() string {
         </html>
     `
 }
-

@@ -2,114 +2,33 @@ package utils
 
 import (
 	"bytes"
-	"fmt"
-	. "github.com/zubairhamed/betwixt"
-	"sort"
-	"github.com/zubairhamed/go-commons/typeval"
-	. "github.com/zubairhamed/betwixt/core/values/tlv"
-	"log"
 	"encoding/binary"
 	"errors"
+	"fmt"
+	. "github.com/zubairhamed/betwixt"
+	"github.com/zubairhamed/betwixt/core/objects"
+	. "github.com/zubairhamed/betwixt/core/values/tlv"
 	"github.com/zubairhamed/go-commons/logging"
-)
-
-
-
-const(
-	TLV_FIELD_IDENTIFIER_TYPE 	= 192
-	TLV_FIELD_IDENTIFIER_LENGTH = 32
-	TLV_FIELD_TYPE_OF_LENGTH 	= 24
-	TLV_FIELD_LENGTH_OF_VALUE 	= 7
+	"github.com/zubairhamed/go-commons/typeval"
+	"log"
+	"sort"
 )
 
 const (
-	TYPEFIELD_TYPE_OBJECTINSTANCE 	= 0		// 00
-	TYPEFIELD_TYPE_RESOURCEINSTANCE = 64	// 01
-	TYPEFIELD_TYPE_MULTIPLERESOURCE = 128	// 10
-	TYPEFIELD_TYPE_RESOURCE 		= 192	// 11
+	TLV_FIELD_IDENTIFIER_TYPE   = 192
+	TLV_FIELD_IDENTIFIER_LENGTH = 32
+	TLV_FIELD_TYPE_OF_LENGTH    = 24
+	TLV_FIELD_LENGTH_OF_VALUE   = 7
 )
 
-/*
-	MultipleValue
-		[]ObjectValue
- */
+const (
+	TYPEFIELD_TYPE_OBJECTINSTANCE   = 0   // 00
+	TYPEFIELD_TYPE_RESOURCEINSTANCE = 64  // 01
+	TYPEFIELD_TYPE_MULTIPLERESOURCE = 128 // 10
+	TYPEFIELD_TYPE_RESOURCE         = 192 // 11
+)
 
-type ObjectValue struct {
-	instanceId 		uint16
-	typeId 			LWM2MObjectType
-	resources 		[]typeval.Value
-}
-
-func NewResourceValue(id uint16, value typeval.Value) typeval.Value {
-	return &ResourceValue{
-		id: id,
-		value: value,
-	}
-}
-
-type ResourceValue struct {
-	id 		uint16
-	value 	typeval.Value
-}
-
-func (v ResourceValue) GetId() (uint16) {
-	return v.id
-}
-
-func (v ResourceValue) GetBytes() ([]byte) {
-	return v.value.GetBytes()
-}
-
-func (v ResourceValue) GetContainedType() (typeval.ValueTypeCode) {
-	return typeval.VALUETYPE_RESOURCE
-}
-
-func (v ResourceValue) GetType() (typeval.ValueTypeCode) {
-	return typeval.VALUETYPE_RESOURCE
-}
-
-func (v ResourceValue) GetStringValue() (string) {
-	return ""
-}
-
-func (v ResourceValue) GetValue() interface{} {
-	return v.value.GetValue()
-}
-
-func NewMultipleResourceValue(id uint16, value []*ResourceValue) typeval.Value {
-	return &MultipleResourceValue{
-		id: id,
-		instances: value,
-	}
-}
-
-type MultipleResourceValue struct {
-	id 			uint16
-	instances 	[]*ResourceValue
-}
-
-func (v MultipleResourceValue) GetBytes() ([]byte) {
-	return []byte{}
-}
-
-func (v MultipleResourceValue) GetContainedType() (typeval.ValueTypeCode) {
-	return typeval.VALUETYPE_RESOURCE
-}
-
-func (v MultipleResourceValue) GetType() (typeval.ValueTypeCode) {
-	return typeval.VALUETYPE_MULTIRESOURCE
-}
-
-func (v MultipleResourceValue) GetStringValue() (string) {
-	return ""
-}
-
-func (v MultipleResourceValue) GetValue() interface{} {
-	return v.instances
-}
-
-
-func DecodeTypeField(typeField byte)(byte, byte, byte, byte) {
+func DecodeTypeField(typeField byte) (byte, byte, byte, byte) {
 	typeOfIdentifier := typeField & TLV_FIELD_IDENTIFIER_TYPE
 	lengthOfIdentifier := typeField & TLV_FIELD_IDENTIFIER_LENGTH
 	typeOfLength := typeField & TLV_FIELD_TYPE_OF_LENGTH
@@ -129,30 +48,12 @@ func ValueFromBytes(b []byte, v typeval.ValueTypeCode) typeval.Value {
 		return typeval.String(string(b))
 
 	case typeval.VALUETYPE_INTEGER:
-		intLen := len(b)
-		if intLen == 1 {
-			return typeval.Integer(int(b[0]))
-		} else
-		if intLen == 2 {
-			return typeval.Integer(int(b[1]) | (int(b[0]) << 8))
-		} else
-		if intLen == 4 {
-			return typeval.Integer(int(b[3]) | (int(b[2]) << 8) | (int(b[1]) << 16) | (int(b[0]) << 24))
-		} else
-		if intLen == 8 {
-			return typeval.Integer(int(b[7]) | (int(b[6]) << 8) | (int(b[5]) << 16) | (int(b[4]) << 24) | (int(b[3]) << 32) | (int(b[2]) << 40) | (int(b[1]) << 48) | (int(b[0]) << 56))
-		} else {
-			// Error
-		}
+		return typeval.BytesToIntegerValue(b)
 	}
-	return typeval.String("")
+	return typeval.Empty()
 }
 
-//func BytesToInt(b []byte) int {
-//	return int(b[0]) | int(b[1] <<8 )
-//}
-
-func ValidResourceTypeField(b []byte) (error){
+func ValidResourceTypeField(b []byte) error {
 	typeField := b[0]
 
 	typeFieldTypeOfIdentifier, _, _, _ := DecodeTypeField(typeField)
@@ -163,38 +64,35 @@ func ValidResourceTypeField(b []byte) (error){
 	return nil
 }
 
-func DecodeIdentifierField(b []byte, pos int)(identifier uint16, typeLength int) {
+func DecodeIdentifierField(b []byte, pos int) (identifier uint16, typeLength int) {
 	_, typeFieldLengthOfIdentifier, _, _ := DecodeTypeField(b[0])
 
 	if typeFieldLengthOfIdentifier == 0 {
-		_identifier, _ := binary.Uvarint(b[pos:pos+1])
+		_identifier, _ := binary.Uvarint(b[pos : pos+1])
 		identifier = uint16(_identifier)
 		typeLength = 1
 	} else {
-		_identifier, _ := binary.Uvarint(b[pos:pos+2])
+		_identifier, _ := binary.Uvarint(b[pos : pos+2])
 		identifier = uint16(_identifier)
 		typeLength = 2
 	}
 	return
 }
 
-func DecodeLengthField(b []byte, pos int)(valueLength uint64, typeLength int) {
+func DecodeLengthField(b []byte, pos int) (valueLength uint64, typeLength int) {
 	_, _, typeFieldTypeOfLength, typeFieldLengthOfValue := DecodeTypeField(b[0])
 
 	typeLength = 0
 	if typeFieldTypeOfLength == 0 {
 		valueLength = uint64(typeFieldLengthOfValue)
-	} else
-	if typeFieldTypeOfLength == 8 {
-		valueLength, _ = binary.Uvarint(b[pos:pos+1])
+	} else if typeFieldTypeOfLength == 8 {
+		valueLength, _ = binary.Uvarint(b[pos : pos+1])
 		typeLength = 1
-	} else
-	if typeFieldTypeOfLength == 16 {
-		valueLength, _ = binary.Uvarint(b[pos:pos+2])
+	} else if typeFieldTypeOfLength == 16 {
+		valueLength, _ = binary.Uvarint(b[pos : pos+2])
 		typeLength = 2
-	} else
-	if typeFieldTypeOfLength == 24 {
-		valueLength, _ = binary.Uvarint(b[pos:pos+3])
+	} else if typeFieldTypeOfLength == 24 {
+		valueLength, _ = binary.Uvarint(b[pos : pos+3])
 		typeLength = 3
 	} else {
 		// Invalid type of Length}
@@ -244,13 +142,13 @@ func DecodeResourceValue(resourceId uint16, b []byte, resourceDef ResourceDefini
 				bytesLeft = bytesLeft[actualValueLength:]
 			}
 
-			decodedValues := []*ResourceValue{}
+			decodedValues := []*objects.ResourceValue{}
 			for _, r := range resourceBytes {
 				v, _ := DecodeResourceValue(identifier, r, resourceDef)
-				decodedValues = append(decodedValues, v.(*ResourceValue))
+				decodedValues = append(decodedValues, v.(*objects.ResourceValue))
 			}
 
-			return NewMultipleResourceValue(identifier, decodedValues), nil
+			return objects.NewMultipleResourceValue(identifier, decodedValues), nil
 		} else {
 			valueOffset := 1
 			_, identifierTypeLength := DecodeIdentifierField(b, valueOffset)
@@ -260,10 +158,10 @@ func DecodeResourceValue(resourceId uint16, b []byte, resourceDef ResourceDefini
 			valueOffset += valueTypeLength
 
 			bytesValue := b[valueOffset:]
-			return NewResourceValue(resourceId, ValueFromBytes(bytesValue, resourceDef.GetResourceType())), nil
+			return objects.NewResourceValue(resourceId, ValueFromBytes(bytesValue, resourceDef.GetResourceType())), nil
 		}
 	} else {
-		return NewResourceValue(resourceId, ValueFromBytes(b, resourceDef.GetResourceType())), nil
+		return objects.NewResourceValue(resourceId, ValueFromBytes(b, resourceDef.GetResourceType())), nil
 	}
 }
 
@@ -318,7 +216,7 @@ func EncodeValue(resourceId uint16, allowMultipleValues bool, v typeval.Value) [
 			// Value Field, Append Resource Instances TLV to Resource TLV
 			resourceTlv.Write(resourceInstanceBytes.Bytes())
 
-			log.Println("NOT SINGLE!!");
+			log.Println("NOT SINGLE!!")
 			return resourceTlv.Bytes()
 		}
 	} else {

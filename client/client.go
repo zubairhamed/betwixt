@@ -8,10 +8,10 @@ import (
 	"github.com/zubairhamed/betwixt/core/request"
 	"github.com/zubairhamed/betwixt/core/utils"
 	. "github.com/zubairhamed/canopus"
+	"github.com/zubairhamed/go-commons/logging"
 	. "github.com/zubairhamed/go-commons/network"
 	"log"
 	"net"
-	"github.com/zubairhamed/go-commons/logging"
 )
 
 func NewDefaultClient(local string, remote string, registry Registry) *DefaultClient {

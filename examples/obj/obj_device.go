@@ -2,10 +2,10 @@ package basic
 
 import (
 	. "github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/objectdefs/oma"
 	"github.com/zubairhamed/betwixt/core/response"
-	"time"
+	"github.com/zubairhamed/betwixt/objectdefs/oma"
 	"github.com/zubairhamed/go-commons/typeval"
+	"time"
 )
 
 type DeviceObject struct {

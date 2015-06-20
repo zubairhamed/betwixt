@@ -1,15 +1,15 @@
 package server
 
 import (
-	"github.com/zubairhamed/betwixt"
-	"time"
-	"net"
-	. "github.com/zubairhamed/canopus"
 	"fmt"
-	"github.com/zubairhamed/go-commons/typeval"
+	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/core/utils"
+	. "github.com/zubairhamed/canopus"
 	"github.com/zubairhamed/go-commons/network"
+	"github.com/zubairhamed/go-commons/typeval"
 	"log"
+	"net"
+	"time"
 )
 
 // Returns a new instance of DefaultRegisteredClient implementing RegisteredClient
