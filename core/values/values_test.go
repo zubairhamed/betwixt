@@ -20,7 +20,7 @@ func TestIntegerValue(t *testing.T) {
 	assert.Equal(t, VALUETYPE_INTEGER, val.GetType())
 	assert.Equal(t, 42, val.GetValue())
 	assert.Equal(t, "42", val.GetStringValue())
-	assert.Equal(t, 2, len(val.GetBytes()))
+	assert.Equal(t, 1, len(val.GetBytes()))
 }
 
 func TestTimeValue(t *testing.T) {
