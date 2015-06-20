@@ -10,6 +10,7 @@ import (
 	"log"
 	"encoding/binary"
 	"errors"
+	"github.com/zubairhamed/go-commons/logging"
 )
 
 
@@ -147,107 +148,94 @@ func ValueFromBytes(b []byte, v typeval.ValueTypeCode) typeval.Value {
 	return typeval.String("")
 }
 
-func BytesToInt(b []byte) int {
-	return int(b[0]) | int(b[1] <<8 )
+//func BytesToInt(b []byte) int {
+//	return int(b[0]) | int(b[1] <<8 )
+//}
+
+func ValidResourceTypeField(b []byte) (error){
+	typeField := b[0]
+
+	typeFieldTypeOfIdentifier, _, _, _ := DecodeTypeField(typeField)
+
+	if typeFieldTypeOfIdentifier != TYPEFIELD_TYPE_RESOURCEINSTANCE && typeFieldTypeOfIdentifier != TYPEFIELD_TYPE_MULTIPLERESOURCE && typeFieldTypeOfIdentifier != TYPEFIELD_TYPE_RESOURCE {
+		return errors.New("Invalid identifier. Expecting a resource identifier")
+	}
+	return nil
+}
+
+func DecodeIdentifierField(b []byte, pos int)(identifier uint16, typeLength int) {
+	_, typeFieldLengthOfIdentifier, _, _ := DecodeTypeField(b[0])
+
+	if typeFieldLengthOfIdentifier == 0 {
+		_identifier, _ := binary.Uvarint(b[pos:pos+1])
+		identifier = uint16(_identifier)
+		typeLength = 1
+	} else {
+		_identifier, _ := binary.Uvarint(b[pos:pos+2])
+		identifier = uint16(_identifier)
+		typeLength = 2
+	}
+	return
+}
+
+func DecodeLengthField(b []byte, pos int)(valueLength uint64, typeLength int) {
+	_, _, typeFieldTypeOfLength, typeFieldLengthOfValue := DecodeTypeField(b[0])
+
+	typeLength = 0
+	if typeFieldTypeOfLength == 0 {
+		valueLength = uint64(typeFieldLengthOfValue)
+	} else
+	if typeFieldTypeOfLength == 8 {
+		valueLength, _ = binary.Uvarint(b[pos:pos+1])
+		typeLength = 1
+	} else
+	if typeFieldTypeOfLength == 16 {
+		valueLength, _ = binary.Uvarint(b[pos:pos+2])
+		typeLength = 2
+	} else
+	if typeFieldTypeOfLength == 24 {
+		valueLength, _ = binary.Uvarint(b[pos:pos+3])
+		typeLength = 3
+	} else {
+		// Invalid type of Length}
+	}
+	return
 }
 
 func DecodeResourceValue(resourceId uint16, b []byte, resourceDef ResourceDefinition) (typeval.Value, error) {
 	log.Println("Parsing", b)
 	if resourceDef.MultipleValuesAllowed() {
-		typeField := b[0]
-		typeFieldTypeOfIdentifier, typeFieldLengthOfIdentifier, typeFieldTypeOfLength, typeFieldLengthOfValue := DecodeTypeField(typeField)
 
-		if typeFieldTypeOfIdentifier != TYPEFIELD_TYPE_RESOURCEINSTANCE && typeFieldTypeOfIdentifier != TYPEFIELD_TYPE_MULTIPLERESOURCE && typeFieldTypeOfIdentifier != TYPEFIELD_TYPE_RESOURCE {
-			log.Println(typeFieldTypeOfIdentifier)
-			return nil, errors.New("Invalid identifier. Expecting a resource identifier")
+		err := ValidResourceTypeField(b)
+		if err != nil {
+			logging.LogError(err)
 		}
+
+		typeFieldTypeOfIdentifier, _, _, _ := DecodeTypeField(b[0])
 
 		if typeFieldTypeOfIdentifier == TYPEFIELD_TYPE_MULTIPLERESOURCE {
 			valueOffset := 1
-			var identifier uint16
-			if typeFieldLengthOfIdentifier == 0 {
-				_identifier, _ := binary.Uvarint(b[valueOffset:valueOffset+1])
-				identifier = uint16(_identifier)
-				valueOffset += 1
-			} else {
-				_identifier, _ := binary.Uvarint(b[valueOffset:valueOffset+2])
-				identifier = uint16(_identifier)
-				valueOffset += 2
-			}
+			identifier, identifierTypeLength := DecodeIdentifierField(b, valueOffset)
+			valueOffset += identifierTypeLength
 
-			var valueFieldLength uint64
-			if typeFieldTypeOfLength == 0 {
-				log.Println("typeFieldTypeOfLength == 0")
-				log.Println("typeFieldLengthOfValue", typeFieldLengthOfValue)
-				valueFieldLength = uint64(typeFieldLengthOfValue)
-			} else
-			if typeFieldTypeOfLength == 8 {
-				log.Println("typeFieldTypeOfLength == 8: ", b[valueOffset:valueOffset+1])
-				valueFieldLength, _ = binary.Uvarint(b[valueOffset:valueOffset+1])
-				valueOffset += 1
-			} else
-			if typeFieldTypeOfLength == 16 {
-				log.Println("typeFieldTypeOfLength == 16: ", b[valueOffset:valueOffset+2])
-				valueFieldLength, _ = binary.Uvarint(b[valueOffset:valueOffset+2])
-				valueOffset += 2
-			} else
-			if typeFieldTypeOfLength == 24 {
-				log.Println("typeFieldTypeOfLength == 24: ", b[valueOffset:valueOffset+3])
-				valueFieldLength, _ = binary.Uvarint(b[valueOffset:valueOffset+3])
-				valueOffset += 3
-			} else {
-				// Invalid type of Length}
-			}
-			log.Println("A Value Field Length", valueFieldLength, typeFieldTypeOfLength, typeFieldLengthOfValue)
-
-			log.Println("Value Offset for bytesValue", valueOffset)
+			_, valueTypeLength := DecodeLengthField(b, valueOffset)
+			valueOffset += valueTypeLength
 			bytesValue := b[valueOffset:]
 
 			bytesLeft := bytesValue
-			log.Println("Bytes Left", bytesLeft)
 			resourceBytes := [][]byte{}
 			for len(bytesLeft) > 0 {
-
-				typeField := bytesLeft[0]
-				log.Println("tf", typeField)
-				typeFieldTypeOfIdentifier, typeFieldLengthOfIdentifier, typeFieldTypeOfLength, typeFieldLengthOfValue := DecodeTypeField(typeField)
-
-				if typeFieldTypeOfIdentifier != TYPEFIELD_TYPE_RESOURCEINSTANCE && typeFieldTypeOfIdentifier != TYPEFIELD_TYPE_MULTIPLERESOURCE && typeFieldTypeOfIdentifier != TYPEFIELD_TYPE_RESOURCE {
-					log.Println(typeFieldTypeOfIdentifier)
-					return nil, errors.New("Invalid identifier. Expecting a resource identifier")
+				err := ValidResourceTypeField(bytesLeft)
+				if err != nil {
+					logging.LogError(err)
 				}
 
 				valueOffset := 1
-				if typeFieldLengthOfIdentifier == 0 {
-					valueOffset += 1
-				} else {
-					valueOffset += 2
-				}
+				_, identifierTypeLength := DecodeIdentifierField(bytesLeft, valueOffset)
+				valueOffset += identifierTypeLength
 
-				var valueFieldLength uint64
-				if typeFieldTypeOfLength == 0 {
-					log.Println("typeFieldTypeOfLength == 0")
-					log.Println("typeFieldLengthOfValue", typeFieldLengthOfValue)
-					valueFieldLength = uint64(typeFieldLengthOfValue)
-				} else
-				if typeFieldTypeOfLength == 8 {
-					log.Println("typeFieldTypeOfLength == 8: ", b[valueOffset:valueOffset+1])
-					valueFieldLength, _ = binary.Uvarint(b[valueOffset:valueOffset+1])
-					valueOffset += 1
-				} else
-				if typeFieldTypeOfLength == 16 {
-					log.Println("typeFieldTypeOfLength == 16: ", b[valueOffset:valueOffset+2])
-					valueFieldLength, _ = binary.Uvarint(b[valueOffset:valueOffset+2])
-					valueOffset += 2
-				} else
-				if typeFieldTypeOfLength == 24 {
-					log.Println("typeFieldTypeOfLength == 24: ", b[valueOffset:valueOffset+3])
-					valueFieldLength, _ = binary.Uvarint(b[valueOffset:valueOffset+3])
-					valueOffset += 3
-				} else {
-					// Invalid type of Length}
-				}
-				log.Println("B Value Field Length", valueFieldLength)
+				valueFieldLength, valueTypeLength := DecodeLengthField(bytesLeft, valueOffset)
+				valueOffset += valueTypeLength
 
 				actualValueLength := (uint64(valueOffset) + valueFieldLength)
 
@@ -265,215 +253,18 @@ func DecodeResourceValue(resourceId uint16, b []byte, resourceDef ResourceDefini
 			return NewMultipleResourceValue(identifier, decodedValues), nil
 		} else {
 			valueOffset := 1
-			if typeFieldLengthOfIdentifier == 0 {
-				valueOffset += 1
-			} else {
-				valueOffset += 2
-			}
+			_, identifierTypeLength := DecodeIdentifierField(b, valueOffset)
+			valueOffset += identifierTypeLength
 
-			totalValueLength := len(b)
-			var valueFieldLength uint64
-			if typeFieldTypeOfLength == 0 {
-				log.Println("typeFieldTypeOfLength == 0")
-				log.Println("typeFieldLengthOfValue", typeFieldLengthOfValue)
-				valueFieldLength = uint64(typeFieldLengthOfValue)
-			} else
-			if typeFieldTypeOfLength == 8 {
-				log.Println("typeFieldTypeOfLength == 8: ", b[valueOffset:valueOffset+1])
-				valueFieldLength, _ = binary.Uvarint(b[valueOffset:valueOffset+1])
-				valueOffset += 1
-			} else
-			if typeFieldTypeOfLength == 16 {
-				log.Println("typeFieldTypeOfLength == 16: ", b[valueOffset:valueOffset+2])
-				valueFieldLength, _ = binary.Uvarint(b[valueOffset:valueOffset+2])
-				valueOffset += 2
-			} else
-			if typeFieldTypeOfLength == 24 {
-				log.Println("typeFieldTypeOfLength == 24: ", b[valueOffset:valueOffset+3])
-				valueFieldLength, _ = binary.Uvarint(b[valueOffset:valueOffset+3])
-				valueOffset += 3
-			} else {
-				// Invalid type of Length}
-			}
-			log.Println("C Value Field Length", valueFieldLength)
+			_, valueTypeLength := DecodeLengthField(b, valueOffset)
+			valueOffset += valueTypeLength
 
-			actualValueLength := (uint64(valueOffset) + valueFieldLength)
-			if uint64(totalValueLength) != actualValueLength {
-				return nil, errors.New("Resource is of invalid length.")
-			}
 			bytesValue := b[valueOffset:]
 			return NewResourceValue(resourceId, ValueFromBytes(bytesValue, resourceDef.GetResourceType())), nil
 		}
 	} else {
 		return NewResourceValue(resourceId, ValueFromBytes(b, resourceDef.GetResourceType())), nil
 	}
-
-
-	/*
-	if resourceDef.MultipleValuesAllowed() {
-
-
-		if typeOfIdentifier == TYPEFIELD_TYPE_RESOURCEINSTANCE || typeOfIdentifier == TYPEFIELD_TYPE_RESOURCE {
-			log.Println("Resource Instance/Value")
-			if typeOfLength == 0 {
-				if lengthOfIdentifier == 0 {
-					if len(b) != 2 {
-
-					} else {
-						log.Println("Identifier is ", b[1])
-					}
-				} else {
-					if len(b) != 3 {
-						return nil, errors.New("Resource value is of invalid length. Expecting 3 bytes.")
-					} else {
-						log.Println("Identifier is ", b[1:2])
-					}
-				}
-				log.Println("Value is ", lengthOfValue)
-			} else {
-				valueOffset := 1
-				if lengthOfIdentifier == 0 {
-					valueOffset += 1
-				} else {
-					valueOffset += 2
-				}
-
-				var valueLength uint64
-
-				if typeOfLength == 1 {
-					// 8-bit length value
-					valueLength, _ = binary.Uvarint(b[valueOffset:valueOffset+1])
-					valueOffset += 1
-				} else
-				if typeOfLength == 2 {
-					// 16-bit length value
-					valueLength, _ = binary.Uvarint(b[valueOffset:valueOffset+2])
-					valueOffset += 2
-				} else
-				if typeOfLength == 3 {
-					// 24 bit length value
-					valueLength, _ = binary.Uvarint(b[valueOffset:valueOffset+3])
-					valueOffset += 3
-				}
-				log.Println("Value length == ", valueLength)
-
-				// Validate resource value length
-
-				log.Println("Value is ", b[valueOffset:])
-			}
-
-			log.Println("Went OK for Single Resource")
-			return nil, nil
-		} else {
-			// parse all byte content for resource
-			// create MultiResource
-			// call DecodeResourceValue(byte, resourceDef)
-			log.Println("Went OK for Multi Resource")
-			return nil, nil
-		}
-	} else {
-		return NewResourceValue()
-		log.Println("Went OK for Single Resource")
-		return nil, nil
-	}
-	*/
-}
-
-func DecodeObjectValue(b []byte, objectDef ObjectDefinition) typeval.Value {
-	// if type identifier is not object value, return error
-
-	// parse all byte content
-	// call DecodeObjectTlv(bytes)
-	return nil
-}
-
-func DecodeObjectTlv() {
-	// [] Value
-	// for each resource
-		// parse all byte content for resource
-		// call DecodeResourceValue(bytes, resourceDef)
-
-	// create ObjectValue
-}
-
-func DecodeResourceTlv() {
-	// if
-}
-
-func DecodeTlv(b []byte, resourceDef ResourceDefinition) typeval.Value {
-	log.Println("Decoding TLV Value")
-	typeField := b[0]
-	typeOfIdentifier := typeField & TLV_FIELD_IDENTIFIER_TYPE
-	lengthOfIdentifier := typeField & TLV_FIELD_IDENTIFIER_LENGTH
-	typeOfLength := typeField & TLV_FIELD_TYPE_OF_LENGTH
-	lengthOfValue := typeField & TLV_FIELD_LENGTH_OF_VALUE
-
-
-	if typeOfIdentifier == TYPEFIELD_TYPE_OBJECTINSTANCE {
-		// Extract all Object TLV Values
-
-		// Parse ObjectBytes
-		// DecodeObjectTlv()
-		// return []ObjectValue
-	} else
-	if typeOfIdentifier == TYPEFIELD_TYPE_RESOURCEINSTANCE {
-		// DecodeResourceInstanceTlv([]byte)
-		// return ResourceInstanceValue
-	} else
-	if typeOfIdentifier == TYPEFIELD_TYPE_MULTIPLERESOURCE {
-
-	} else
-	if typeOfIdentifier == TYPEFIELD_TYPE_RESOURCE {
-
-	} else {
-		// Unknown
-	}
-	// DescribeTLVField(typeField)
-	log.Println(typeOfIdentifier, lengthOfIdentifier, typeOfLength, lengthOfValue)
-
-
-
-	// Type Field Byte
-		// 7-6 : Type of Identifier
-			// 00: Object Instance
-			// 01: Resource Instance with Value for use within a multiple Resource TLV
-			// 10: Multiple Resource, in which case the Value contains one or more Resource Instance TLVs
-			// 11: Resource with Value
-
-		// 5: Length of Identifier
-			// 0: Identifier field is 8 bits
-			// 1: Identifier field is 16 bits
-
-		// 4-3: Type of Length
-			// 00: No length field, the value immediately follows the Identifier field in is of the length indicated by Bits 2-0 of this field
-			// 01: The Length field is 8-bits and Bits 2-0 MUST be ignored
-			// 10: The Length field is 16-bits and Bits 2-0 MUST be ignored
-			// 11: The Length field is 24-bits and Bits 2-0 MUST be ignored
-
-		// 2-0: A 3-bit unsigned integer indicating the Length of the Value.
-
-	// Identifier Byte: 8-bit or 16-bit unsigned integer as indicated by the Type field.
-		// The Length of the following field in bytes.
-
-	// Value: Sequence of bytes of Length
-		// Value of the tag. The format of the value depends on the Resource’s data type (See Appendix C).
-	return nil
-}
-
-func EncodeObjectInstanceValue() {
-
-}
-
-func EncodeResourceInstanceValue() {
-
-}
-
-func EncodeMultipleResourceValue() {
-
-}
-
-func EncodeResourceValue(resourceId int, v typeval.Value) {
-
 }
 
 func EncodeValue(resourceId uint16, allowMultipleValues bool, v typeval.Value) []byte {
