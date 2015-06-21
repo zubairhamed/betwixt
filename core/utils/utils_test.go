@@ -94,28 +94,65 @@ func TestValueFromBytes(t *testing.T) {
 	data = []byte{49, 46, 48}
 	val = ValueFromBytes(data, typeval.VALUETYPE_STRING)
 	assert.Equal(t, "1.0", val.GetValue().(string))
+
+	data = []byte{}
+	val = ValueFromBytes(data, typeval.VALUETYPE_STRING)
+	assert.Equal(t, typeval.VALUETYPE_EMPTY, val.GetType() )
+
+	data =[]byte{ 100 }
+	val = ValueFromBytes(data, typeval.VALUETYPE_INTEGER)
+	assert.Equal(t, 100, val.GetValue().(int))
+
+	data = []byte{}
+	val = ValueFromBytes(data, typeval.VALUETYPE_OBJECTLINK)
+	assert.Equal(t, typeval.VALUETYPE_EMPTY, val.GetType() )
+
 }
 
 func TestValidResourceTypeField(t *testing.T) {
 	var data []byte
+	var err error
+
 	data = []byte{134, 6, 65, 0, 1, 65, 1, 5}
-	err := ValidResourceTypeField(data)
-	assert.Nil(t, nil, err)
+	err = ValidResourceTypeField(data)
+	assert.Nil(t, err)
+
+	data = []byte{1, 6, 65, 0, 1, 65, 1, 5}
+	err = ValidResourceTypeField(data)
+	assert.NotNil(t, err)
 }
 
 func TestDecodeIdentifierField(t *testing.T) {
-	/*
-func DecodeIdentifierField(b []byte, pos int) (identifier uint16, typeLength int) {
-	 */
+
+	var data []byte
+	data = []byte{136, 7, 8, 66, 0, 14, 216, 66, 1, 19, 136}
+
+	identifier, length := DecodeIdentifierField(data, 1)
+
+	assert.Equal(t, byte(7), byte(identifier))
+	assert.Equal(t, 1, length)
 }
 
 func TestDecodeLengthField(t *testing.T) {
-	/*
-func DecodeLengthField(b []byte, pos int) (valueLength uint64, typeLength int) {
-	 */
+
+	var data []byte
+	data = []byte{136, 7, 8, 66, 0, 14, 216, 66, 1, 19, 136}
+	valueLength, typeLength := DecodeLengthField(data, 2)
+
+	assert.Equal(t, byte(8), byte(valueLength))
+	assert.Equal(t, 1, typeLength)
 }
 
 func TestDecodeResourceValue(t *testing.T) {
+	/*
+	var data []byte
+	data = []byte{136, 7, 8, 66, 0, 14, 216, 66, 1, 19, 136}
+
+	val, err := DecodeResourceValue(7, data, nil)
+
+	log.Println(val, err)
+	*/
+
 	//func DecodeResourceValue(resourceId uint16, b []byte, resourceDef ResourceDefinition) (typeval.Value, error) {
 }
 

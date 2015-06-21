@@ -5,6 +5,7 @@ import (
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/go-commons/network"
 	"testing"
+	"github.com/zubairhamed/betwixt/tests"
 )
 
 func TestCoapRequests(t *testing.T) {
@@ -26,4 +27,43 @@ func TestCoapRequests(t *testing.T) {
 
 func TestHttpRequests(t *testing.T) {
 
+}
+
+func TestHandleHttpHome(t *testing.T) {
+	server := tests.NewMockServer()
+
+	fn := handleHttpHome(server)
+
+	assert.NotNil(t, fn)
+	response := fn(nil)
+
+	assert.NotNil(t, response)
+}
+
+func TestHandleHttpDelete(t *testing.T) {
+	server := tests.NewMockServer()
+
+	fn := handleHttpDeleteClient(server)
+
+	assert.NotNil(t, fn)
+	response := fn(nil)
+
+	assert.NotNil(t, response)
+}
+
+func TestHandleHttpViewClient(t *testing.T) {
+	server := tests.NewMockServer()
+
+	fn := handleHttpViewClient(server)
+
+	assert.NotNil(t, fn)
+	response := fn(nil)
+
+	assert.NotNil(t, response)
+}
+
+func TestSetupRoutes(t *testing.T) {
+	server := tests.NewMockServer()
+
+	SetupHttpRoutes(server)
 }

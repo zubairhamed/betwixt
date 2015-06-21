@@ -100,7 +100,6 @@ func DecodeLengthField(b []byte, pos int) (valueLength uint64, typeLength int) {
 }
 
 func DecodeResourceValue(resourceId uint16, b []byte, resourceDef ResourceDefinition) (typeval.Value, error) {
-	log.Println("Parsing", b)
 	if resourceDef.MultipleValuesAllowed() {
 
 		err := ValidResourceTypeField(b)
