@@ -39,6 +39,10 @@ type DefaultServer struct {
 	events     map[betwixt.EventType]betwixt.FnEvent
 }
 
+func (server *DefaultServer) GetHttpServer() (*HttpServer) {
+	return server.httpServer
+}
+
 func (server *DefaultServer) Start() {
 	coap := server.coapServer
 
@@ -72,7 +76,7 @@ func (server *DefaultServer) UseRegistry(reg betwixt.Registry) {
 	server.registry = reg
 }
 
-func (server *DefaultServer) GetRegisteredClient(id string) betwixt.RegisteredClient {
+func (server *DefaultServer) GetClient(id string) betwixt.RegisteredClient {
 	return server.clients[id]
 }
 

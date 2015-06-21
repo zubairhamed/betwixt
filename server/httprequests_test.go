@@ -38,3 +38,9 @@ func TestHandleHttpViewClient(t *testing.T) {
 
 	assert.NotNil(t, response)
 }
+
+func TestSetupRoutes(t *testing.T) {
+	server := tests.NewMockServer()
+
+	SetupHttpRoutes(server)
+}

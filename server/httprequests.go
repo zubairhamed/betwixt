@@ -14,8 +14,8 @@ import (
 	"strconv"
 )
 
-func SetupHttpRoutes(server *DefaultServer) {
-	http := server.httpServer
+func SetupHttpRoutes(server betwixt.Server) {
+	http := server.GetHttpServer()
 
 	// Pages
 	http.NewRoute("/", METHOD_GET, handleHttpHome(server))
@@ -25,7 +25,7 @@ func SetupHttpRoutes(server *DefaultServer) {
 	// APIs
 	http.NewRoute("/api/clients", METHOD_GET, func(r Request) Response {
 		cl := []models.ClientModel{}
-		for _, v := range server.clients {
+		for _, v := range server.GetClients() {
 
 			objs := make(map[string]models.ObjectModel)
 			for key, val := range v.GetObjects() {
@@ -56,12 +56,12 @@ func SetupHttpRoutes(server *DefaultServer) {
 		var mem runtime.MemStats
 		runtime.ReadMemStats(&mem)
 
-		clientsCount := len(server.clients)
+		clientsCount := len(server.GetClients())
 
 		model := &models.StatsModel{
 			ClientsCount: clientsCount,
 			MemUsage:     strconv.Itoa(int(mem.Alloc / 1000)),
-			Requests:     server.stats.GetRequestsCount(),
+			Requests:     server.GetStats().GetRequestsCount(),
 			Errors:       0,
 		}
 
@@ -82,7 +82,7 @@ func SetupHttpRoutes(server *DefaultServer) {
 		req := r.(*HttpRequest)
 		clientId := req.GetAttribute("client")
 
-		v := server.GetRegisteredClient(clientId)
+		v := server.GetClient(clientId)
 		if v == nil {
 
 		}
@@ -116,7 +116,7 @@ func SetupHttpRoutes(server *DefaultServer) {
 		object := req.GetAttributeAsInt("object")
 		instance := req.GetAttributeAsInt("instance")
 		resource := req.GetAttributeAsInt("resource")
-		cli := server.GetRegisteredClient(clientId)
+		cli := server.GetClient(clientId)
 
 		val, _ := cli.ReadResource(uint16(object), uint16(instance), uint16(resource))
 
