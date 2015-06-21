@@ -38,7 +38,7 @@ func (server *MockServer) GetStats() betwixt.ServerStatistics {
 }
 
 func (server *MockServer) GetHttpServer() (*network.HttpServer) {
-	return nil
+	return server.httpServer
 }
 
 func (server *MockServer) GetClient(id string) betwixt.RegisteredClient {
