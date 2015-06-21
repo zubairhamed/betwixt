@@ -5,6 +5,7 @@ import (
 	"github.com/zubairhamed/betwixt/core/enablers"
 	"github.com/zubairhamed/betwixt/core/values/validators"
 	"github.com/zubairhamed/go-commons/typeval"
+	"bytes"
 )
 
 // DefaultObjectDefinition
@@ -210,7 +211,7 @@ func (v ResourceValue) GetType() typeval.ValueTypeCode {
 }
 
 func (v ResourceValue) GetStringValue() string {
-	return ""
+	return v.value.GetStringValue()
 }
 
 func (v ResourceValue) GetValue() interface{} {
@@ -242,7 +243,13 @@ func (v MultipleResourceValue) GetType() typeval.ValueTypeCode {
 }
 
 func (v MultipleResourceValue) GetStringValue() string {
-	return ""
+	var buf bytes.Buffer
+
+	for _, res := range v.instances {
+		buf.WriteString(res.GetStringValue())
+		buf.WriteString(",")
+	}
+	return buf.String()
 }
 
 func (v MultipleResourceValue) GetValue() interface{} {
