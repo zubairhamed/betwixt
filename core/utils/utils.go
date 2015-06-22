@@ -11,6 +11,7 @@ import (
 	"github.com/zubairhamed/go-commons/logging"
 	"github.com/zubairhamed/go-commons/typeval"
 	"sort"
+	"log"
 )
 
 const (
@@ -47,7 +48,14 @@ func ValueFromBytes(b []byte, v typeval.ValueTypeCode) typeval.Value {
 
 	case typeval.VALUETYPE_INTEGER:
 		return typeval.BytesToIntegerValue(b)
+
+	case typeval.VALUETYPE_TIME:
+		log.Println(b)
+		log.Println(typeval.BytesToIntegerValue(b))
+		return typeval.String("")
 	}
+
+
 	return typeval.Empty()
 }
 
