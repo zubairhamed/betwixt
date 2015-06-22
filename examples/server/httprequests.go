@@ -3,14 +3,14 @@ package server
 import (
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/core/objects"
-	"github.com/zubairhamed/betwixt/server/pages"
-	"github.com/zubairhamed/betwixt/server/pages/models"
 	"github.com/zubairhamed/go-commons/logging"
 	. "github.com/zubairhamed/go-commons/network"
 	"github.com/zubairhamed/go-commons/typeval"
 	"log"
 	"runtime"
 	"strconv"
+	"github.com/zubairhamed/betwixt/examples/server/pages/models"
+	"github.com/zubairhamed/betwixt/examples/server/pages"
 )
 
 func SetupHttpRoutes(server betwixt.Server) {

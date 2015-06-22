@@ -1,8 +1,6 @@
-package main
+package server
 
 import (
-	"github.com/zubairhamed/betwixt/core/registry"
-	"github.com/zubairhamed/betwixt/server"
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/core/objects"
 	"github.com/zubairhamed/betwixt/core/utils"
@@ -13,16 +11,6 @@ import (
 	"strings"
 	"github.com/zubairhamed/go-commons/logging"
 )
-
-func main() {
-	s := server.NewDefaultServer(":8081")
-
-	registry := registry.NewDefaultObjectRegistry()
-
-	s.UseRegistry(registry)
-
-	s.Start()
-}
 
 
 func NewDefaultCoapServer() *canopus.CoapServer {
@@ -55,6 +43,11 @@ type DefaultServer struct {
 func (server *DefaultServer) GetHttpServer() (*HttpServer) {
 	return server.httpServer
 }
+
+func (server *DefaultServer) GetHttpServer() (*HttpServer) {
+	return server.httpServer
+}
+
 
 func (server *DefaultServer) Start() {
 	coap := server.coapServer
