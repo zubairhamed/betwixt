@@ -7,7 +7,6 @@ import (
 	. "github.com/zubairhamed/canopus"
 	"github.com/zubairhamed/go-commons/network"
 	"github.com/zubairhamed/go-commons/typeval"
-	"log"
 	"net"
 	"time"
 )
@@ -110,8 +109,7 @@ func (c *DefaultRegisteredClient) ReadResource(obj uint16, inst uint16, rsrc uin
 	}
 
 	response, _ := SendMessage(req.GetMessage(), conn)
-	responseValue, err := utils.DecodeResourceValue(rsrc, response.GetMessage().Payload.GetBytes(), resourceDefinition)
-	log.Println(err)
+	responseValue, _ := utils.DecodeResourceValue(rsrc, response.GetMessage().Payload.GetBytes(), resourceDefinition)
 
 	return responseValue, nil
 }

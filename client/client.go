@@ -73,7 +73,7 @@ func (c *DefaultClient) Register(name string) (string, error) {
 
 	path := ""
 	if err != nil {
-		log.Println(err)
+		logging.LogError(err)
 	} else {
 		PrintMessage(resp.GetMessage())
 

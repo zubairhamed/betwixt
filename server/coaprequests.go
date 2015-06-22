@@ -3,7 +3,7 @@ package server
 import (
 	"github.com/zubairhamed/canopus"
 	. "github.com/zubairhamed/go-commons/network"
-	"log"
+	"github.com/zubairhamed/go-commons/logging"
 )
 
 func SetupCoapRoutes(server *DefaultServer) {
@@ -23,16 +23,14 @@ func handleRegister(server *DefaultServer) RouteHandler {
 		req := r.(*canopus.CoapRequest)
 
 		ep := req.GetUriQuery("ep")
-		lt := req.GetUriQuery("lt")
-		sms := req.GetUriQuery("sms")
-		binding := req.GetUriQuery("b")
-
-		log.Println("Registering with ep:", ep, "lt:", lt, "sms:", sms, "binding:", binding)
+		// lt := req.GetUriQuery("lt")
+		// sms := req.GetUriQuery("sms")
+		// binding := req.GetUriQuery("b")
 
 		resources := canopus.CoreResourcesFromString(req.GetMessage().Payload.String())
 		clientId, err := server.register(ep, req.GetAddress().String(), resources)
 		if err != nil {
-			log.Println("Error registering client ", ep)
+			logging.LogWarn("Error registering client ", ep)
 		}
 
 		msg := canopus.NewMessageOfType(canopus.TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)

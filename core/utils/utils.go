@@ -10,7 +10,6 @@ import (
 	. "github.com/zubairhamed/betwixt/core/utils/tlv"
 	"github.com/zubairhamed/go-commons/logging"
 	"github.com/zubairhamed/go-commons/typeval"
-	"log"
 	"sort"
 )
 
@@ -214,7 +213,6 @@ func EncodeValue(resourceId uint16, allowMultipleValues bool, v typeval.Value) [
 			// Value Field, Append Resource Instances TLV to Resource TLV
 			resourceTlv.Write(resourceInstanceBytes.Bytes())
 
-			log.Println("NOT SINGLE!!")
 			return resourceTlv.Bytes()
 		}
 	} else {

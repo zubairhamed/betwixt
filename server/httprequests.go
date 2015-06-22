@@ -1,7 +1,6 @@
 package server
 
 import (
-	"errors"
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/core/objects"
 	"github.com/zubairhamed/betwixt/server/pages"
@@ -121,7 +120,7 @@ func SetupHttpRoutes(server betwixt.Server) {
 		val, _ := cli.ReadResource(uint16(object), uint16(instance), uint16(resource))
 
 		if val == nil {
-			logging.LogError(errors.New("Value returned by ReadResource is nil"))
+			logging.LogError("Value returned by ReadResource is nil")
 		}
 		contentModels := []*models.ContentValueModel{}
 		if val.GetType() == typeval.VALUETYPE_MULTIRESOURCE {
