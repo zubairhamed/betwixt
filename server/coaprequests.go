@@ -4,9 +4,10 @@ import (
 	"github.com/zubairhamed/canopus"
 	. "github.com/zubairhamed/go-commons/network"
 	"github.com/zubairhamed/go-commons/logging"
+	"github.com/zubairhamed/betwixt"
 )
 
-func SetupCoapRoutes(server *DefaultServer) {
+func SetupCoapRoutes(server betwixt.Server) {
 	coap := server.coapServer
 
 	coap.On(canopus.EVT_MESSAGE, func() {
