@@ -3,6 +3,7 @@ package tests
 import (
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/go-commons/network"
+	"github.com/zubairhamed/canopus"
 )
 
 func NewMockServer() betwixt.Server {
@@ -15,6 +16,7 @@ func NewMockServer() betwixt.Server {
 type MockServer struct {
 	stats betwixt.ServerStatistics
 	httpServer *network.HttpServer
+	coapServer *canopus.CoapServer
 }
 
 func (server *MockServer) Start() {
@@ -40,6 +42,11 @@ func (server *MockServer) GetStats() betwixt.ServerStatistics {
 func (server *MockServer) GetHttpServer() (*network.HttpServer) {
 	return server.httpServer
 }
+
+func (server *MockServer) GetCoapServer() (*canopus.CoapServer) {
+	return server.coapServer
+}
+
 
 func (server *MockServer) GetClient(id string) betwixt.RegisteredClient {
 	return nil
