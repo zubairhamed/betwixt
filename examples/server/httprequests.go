@@ -3,26 +3,31 @@ package server
 import (
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/core/objects"
-	"github.com/zubairhamed/betwixt/server/pages"
-	"github.com/zubairhamed/betwixt/server/pages/models"
 	"github.com/zubairhamed/go-commons/logging"
 	. "github.com/zubairhamed/go-commons/network"
 	"github.com/zubairhamed/go-commons/typeval"
 	"log"
 	"runtime"
 	"strconv"
+	"github.com/zubairhamed/betwixt/examples/server/pages/models"
+	"github.com/zubairhamed/betwixt/examples/server/pages"
+	"net/http"
 )
 
 func SetupHttpRoutes(server betwixt.Server) {
-	http := server.GetHttpServer()
+	httpServer := server.GetHttpServer()
 
 	// Pages
-	http.NewRoute("/", METHOD_GET, handleHttpHome(server))
-	http.NewRoute("/client/{client}/view", METHOD_GET, handleHttpViewClient(server))
-	http.NewRoute("/client/{client}/delete", METHOD_GET, handleHttpDeleteClient(server))
+	httpServer.NewRoute("/", METHOD_GET, handleHttpHome(server))
+
+	fs := http.FileServer(http.Dir("./static"))
+	http.Handle("/static/", fs)
+
+	httpServer.NewRoute("/client/{client}/view", METHOD_GET, handleHttpViewClient(server))
+	httpServer.NewRoute("/client/{client}/delete", METHOD_GET, handleHttpDeleteClient(server))
 
 	// APIs
-	http.NewRoute("/api/clients", METHOD_GET, func(r Request) Response {
+	httpServer.NewRoute("/api/clients", METHOD_GET, func(r Request) Response {
 		cl := []models.ClientModel{}
 		for _, v := range server.GetClients() {
 
@@ -51,7 +56,7 @@ func SetupHttpRoutes(server betwixt.Server) {
 		}
 	})
 
-	http.NewRoute("/api/server/stats", METHOD_GET, func(r Request) Response {
+	httpServer.NewRoute("/api/server/stats", METHOD_GET, func(r Request) Response {
 		var mem runtime.MemStats
 		runtime.ReadMemStats(&mem)
 
@@ -70,14 +75,14 @@ func SetupHttpRoutes(server betwixt.Server) {
 	})
 
 	// Get Message, Logs
-	http.NewRoute("/api/server/{client}/messages", METHOD_GET, func(r Request) Response {
+	httpServer.NewRoute("/api/server/{client}/messages", METHOD_GET, func(r Request) Response {
 		return &HttpResponse{
 			Payload: NewJsonPayload(""),
 		}
 	})
 
 	// Read
-	http.NewRoute("/api/clients/{client}", METHOD_GET, func(r Request) Response {
+	httpServer.NewRoute("/api/clients/{client}", METHOD_GET, func(r Request) Response {
 		req := r.(*HttpRequest)
 		clientId := req.GetAttribute("client")
 
@@ -109,7 +114,7 @@ func SetupHttpRoutes(server betwixt.Server) {
 		}
 	})
 
-	http.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}", METHOD_GET, func(r Request) Response {
+	httpServer.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}", METHOD_GET, func(r Request) Response {
 		req := r.(*HttpRequest)
 		clientId := req.GetAttribute("client")
 		object := req.GetAttributeAsInt("object")
@@ -149,55 +154,55 @@ func SetupHttpRoutes(server betwixt.Server) {
 		}
 	})
 
-	http.NewRoute("/api/clients/{client}/{object}/{instance}", METHOD_GET, func(r Request) Response {
+	httpServer.NewRoute("/api/clients/{client}/{object}/{instance}", METHOD_GET, func(r Request) Response {
 		return &HttpResponse{
 			Payload: NewJsonPayload(""),
 		}
 	})
 
 	// Write
-	http.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}", METHOD_PUT, func(r Request) Response {
+	httpServer.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}", METHOD_PUT, func(r Request) Response {
 		return &HttpResponse{
 			Payload: NewJsonPayload(""),
 		}
 	})
 
-	http.NewRoute("/api/clients/{client}/{object}/{instance}", METHOD_PUT, func(r Request) Response {
+	httpServer.NewRoute("/api/clients/{client}/{object}/{instance}", METHOD_PUT, func(r Request) Response {
 		return &HttpResponse{
 			Payload: NewJsonPayload(""),
 		}
 	})
 
 	// Delete
-	http.NewRoute("/api/clients/{client}/{object}/{instance}", METHOD_DELETE, func(r Request) Response {
+	httpServer.NewRoute("/api/clients/{client}/{object}/{instance}", METHOD_DELETE, func(r Request) Response {
 		return &HttpResponse{
 			Payload: NewJsonPayload(""),
 		}
 	})
 
 	// Observe
-	http.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}/observe", METHOD_POST, func(r Request) Response {
+	httpServer.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}/observe", METHOD_POST, func(r Request) Response {
 		return &HttpResponse{
 			Payload: NewJsonPayload(""),
 		}
 	})
 
 	// Cancel Observe
-	http.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}/observe", METHOD_DELETE, func(r Request) Response {
+	httpServer.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}/observe", METHOD_DELETE, func(r Request) Response {
 		return &HttpResponse{
 			Payload: NewJsonPayload(""),
 		}
 	})
 
 	// Execute
-	http.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}", METHOD_POST, func(r Request) Response {
+	httpServer.NewRoute("/api/clients/{client}/{object}/{instance}/{resource}", METHOD_POST, func(r Request) Response {
 		return &HttpResponse{
 			Payload: NewJsonPayload(""),
 		}
 	})
 
 	// Create
-	http.NewRoute("/api/clients/{client}/{object}/{instance}", METHOD_POST, func(r Request) Response {
+	httpServer.NewRoute("/api/clients/{client}/{object}/{instance}", METHOD_POST, func(r Request) Response {
 		return &HttpResponse{
 			Payload: NewJsonPayload(""),
 		}

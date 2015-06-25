@@ -175,6 +175,7 @@ type Server interface {
 	GetClient(id string) RegisteredClient
 	GetStats() ServerStatistics
 	GetHttpServer() *network.HttpServer
+	GetCoapServer() *canopus.CoapServer
 }
 
 // RegisteredClient interface is an instance of a client registered on a server
