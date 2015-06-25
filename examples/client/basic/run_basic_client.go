@@ -4,7 +4,7 @@ import (
 	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/client"
 	"github.com/zubairhamed/betwixt/core/registry"
-	. "github.com/zubairhamed/betwixt/examples/client/basic"
+	. "github.com/zubairhamed/betwixt/examples/client/basic/objects"
 	"github.com/zubairhamed/betwixt/objectdefs/oma"
 )
 
