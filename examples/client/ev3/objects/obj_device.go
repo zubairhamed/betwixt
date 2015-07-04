@@ -2,8 +2,6 @@ package ev3
 
 import (
 	. "github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/core/response"
-	"github.com/zubairhamed/betwixt/objectdefs/oma"
 	"github.com/zubairhamed/go-commons/typeval"
 	"time"
 )
@@ -16,15 +14,15 @@ type DeviceObject struct {
 }
 
 func (o *DeviceObject) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
-	return response.Changed()
+	return Changed()
 }
 
 func (o *DeviceObject) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
-	return response.Created()
+	return Created()
 }
 
 func (o *DeviceObject) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
-	return response.Deleted()
+	return Deleted()
 }
 
 func (o *DeviceObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
@@ -52,7 +50,7 @@ func (o *DeviceObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) 
 			break
 
 		case 6:
-			val = typeval.Integer(oma.POWERSOURCE_INTERNAL, oma.POWERSOURCE_USB)
+			val = typeval.Integer(POWERSOURCE_INTERNAL, POWERSOURCE_USB)
 			break
 
 		case 7:
@@ -99,9 +97,9 @@ func (o *DeviceObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) 
 		default:
 			break
 		}
-		return response.Content(val)
+		return Content(val)
 	}
-	return response.NotFound()
+	return NotFound()
 }
 
 func (o *DeviceObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
@@ -120,9 +118,9 @@ func (o *DeviceObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequest)
 		break
 
 	default:
-		return response.NotFound()
+		return NotFound()
 	}
-	return response.Changed()
+	return Changed()
 }
 
 func (o *DeviceObject) Reboot() typeval.Value {
@@ -139,7 +137,7 @@ func (o *DeviceObject) ResetErrorCode() string {
 
 func NewExampleDeviceObject(reg Registry) *DeviceObject {
 	return &DeviceObject{
-		Model:       reg.GetDefinition(oma.OBJECT_LWM2M_DEVICE),
+		Model:       reg.GetDefinition(OMA_OBJECT_LWM2M_DEVICE),
 		currentTime: time.Unix(1367491215, 0),
 		utcOffset:   "+02:00",
 		timeZone:    "+02:00",

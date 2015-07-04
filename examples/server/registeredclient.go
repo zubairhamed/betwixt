@@ -3,7 +3,6 @@ package server
 import (
 	"fmt"
 	"github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/core/utils"
 	. "github.com/zubairhamed/canopus"
 	"github.com/zubairhamed/go-commons/network"
 	"github.com/zubairhamed/go-commons/typeval"
@@ -109,7 +108,7 @@ func (c *DefaultRegisteredClient) ReadResource(obj uint16, inst uint16, rsrc uin
 	}
 
 	response, _ := SendMessage(req.GetMessage(), conn)
-	responseValue, _ := utils.DecodeResourceValue(rsrc, response.GetMessage().Payload.GetBytes(), resourceDefinition)
+	responseValue, _ := betwixt.DecodeResourceValue(rsrc, response.GetMessage().Payload.GetBytes(), resourceDefinition)
 
 	return responseValue, nil
 }

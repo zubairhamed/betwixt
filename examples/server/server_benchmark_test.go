@@ -2,8 +2,6 @@ package server
 
 import (
 	"github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/client"
-	"github.com/zubairhamed/betwixt/core/registry"
 	"log"
 	"os"
 	"runtime/pprof"
@@ -15,10 +13,10 @@ func BenchmarkServer(b *testing.B) {
 	f, _ := os.Create("profiler.prof")
 	pprof.StartCPUProfile(f)
 	server := NewDefaultServer(":8181")
-	reg := registry.NewDefaultObjectRegistry()
+	reg := betwixt.NewDefaultObjectRegistry()
 	server.UseRegistry(reg)
 
-	cli := client.NewDefaultClient(":0", "localhost:5683", reg)
+	cli := betwixt.NewDefaultClient(":0", "localhost:5683", reg)
 	cli.OnStartup(func() {
 		for i := 1; i <= 5000; i++ {
 			name := "bet" + strconv.Itoa(i)

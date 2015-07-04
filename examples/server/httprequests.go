@@ -2,7 +2,6 @@ package server
 
 import (
 	"github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/core/objects"
 	"github.com/zubairhamed/go-commons/logging"
 	. "github.com/zubairhamed/go-commons/network"
 	"github.com/zubairhamed/go-commons/typeval"
@@ -129,7 +128,7 @@ func SetupHttpRoutes(server betwixt.Server) {
 		}
 		contentModels := []*models.ContentValueModel{}
 		if val.GetType() == typeval.VALUETYPE_MULTIRESOURCE {
-			resources := val.(*objects.MultipleResourceValue).GetValue().([]*objects.ResourceValue)
+			resources := val.(*betwixt.MultipleResourceValue).GetValue().([]*betwixt.ResourceValue)
 
 			for _, resource := range resources {
 				contentModels = append(contentModels, &models.ContentValueModel{
@@ -138,7 +137,7 @@ func SetupHttpRoutes(server betwixt.Server) {
 				})
 			}
 		} else {
-			resource := val.(*objects.ResourceValue)
+			resource := val.(*betwixt.ResourceValue)
 			contentModels = append(contentModels, &models.ContentValueModel{
 				Id:    resource.GetId(),
 				Value: resource.GetValue(),

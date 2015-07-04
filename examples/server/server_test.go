@@ -2,17 +2,16 @@ package server
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/zubairhamed/betwixt"
+	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/go-commons/network"
 	"testing"
-	"github.com/zubairhamed/betwixt/tests"
 )
 
 func TestCoapRequests(t *testing.T) {
 	server := &DefaultServer{
 		coapServer: NewDefaultCoapServer(),
 		httpServer: network.NewDefaultHttpServer(":8081"),
-		clients:    make(map[string]betwixt.RegisteredClient),
+		clients:    make(map[string]RegisteredClient),
 		stats:      &DefaultServerStatistics{},
 	}
 
@@ -30,7 +29,7 @@ func TestHttpRequests(t *testing.T) {
 }
 
 func TestHandleHttpHome(t *testing.T) {
-	server := tests.NewMockServer()
+	server := NewMockServer()
 
 	fn := handleHttpHome(server)
 
@@ -41,7 +40,7 @@ func TestHandleHttpHome(t *testing.T) {
 }
 
 func TestHandleHttpDelete(t *testing.T) {
-	server := tests.NewMockServer()
+	server := NewMockServer()
 
 	fn := handleHttpDeleteClient(server)
 
@@ -52,7 +51,7 @@ func TestHandleHttpDelete(t *testing.T) {
 }
 
 func TestHandleHttpViewClient(t *testing.T) {
-	server := tests.NewMockServer()
+	server := NewMockServer()
 
 	fn := handleHttpViewClient(server)
 
@@ -63,7 +62,7 @@ func TestHandleHttpViewClient(t *testing.T) {
 }
 
 func TestSetupRoutes(t *testing.T) {
-	server := tests.NewMockServer()
+	server := NewMockServer()
 
 	SetupHttpRoutes(server)
 }

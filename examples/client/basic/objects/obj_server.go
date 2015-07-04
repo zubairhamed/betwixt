@@ -2,8 +2,6 @@ package basic
 
 import (
 	. "github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/core/response"
-	"github.com/zubairhamed/betwixt/objectdefs/oma"
 )
 
 type ServerObject struct {
@@ -11,23 +9,23 @@ type ServerObject struct {
 }
 
 func (o *ServerObject) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
-	return response.Unauthorized()
+	return Unauthorized()
 }
 
 func (o *ServerObject) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
-	return response.Unauthorized()
+	return Unauthorized()
 }
 
 func (o *ServerObject) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
-	return response.Unauthorized()
+	return Unauthorized()
 }
 
 func (o *ServerObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
-	return response.Unauthorized()
+	return Unauthorized()
 }
 
 func (o *ServerObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
-	return response.Unauthorized()
+	return Unauthorized()
 }
 
 func NewExampleServerObject(reg Registry) *ServerObject {
@@ -50,6 +48,6 @@ func NewExampleServerObject(reg Registry) *ServerObject {
 	*/
 
 	return &ServerObject{
-		Model: reg.GetDefinition(oma.OBJECT_LWM2M_SERVER),
+		Model: reg.GetDefinition(OMA_OBJECT_LWM2M_SERVER),
 	}
 }

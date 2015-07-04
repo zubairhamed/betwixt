@@ -1,14 +1,14 @@
 package main
 
 import (
-	"github.com/zubairhamed/betwixt/core/registry"
 	. "github.com/zubairhamed/betwixt/examples/server"
+	"github.com/zubairhamed/betwixt"
 )
 
 func main() {
 	s := NewDefaultServer(":8081")
 
-	registry := registry.NewDefaultObjectRegistry()
+	registry := betwixt.NewDefaultObjectRegistry()
 
 	s.UseRegistry(registry)
 

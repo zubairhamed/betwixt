@@ -2,8 +2,6 @@ package ev3
 
 import (
 	. "github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/core/response"
-	"github.com/zubairhamed/betwixt/objectdefs/oma"
 	"github.com/zubairhamed/go-commons/typeval"
 )
 
@@ -12,15 +10,15 @@ type AccessControlObject struct {
 }
 
 func (o *AccessControlObject) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
-	return response.Unauthorized()
+	return Unauthorized()
 }
 
 func (o *AccessControlObject) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
-	return response.Unauthorized()
+	return Unauthorized()
 }
 
 func (o *AccessControlObject) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
-	return response.Unauthorized()
+	return Unauthorized()
 }
 
 func (o *AccessControlObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
@@ -116,16 +114,16 @@ func (o *AccessControlObject) OnRead(instanceId int, resourceId int, req Lwm2mRe
 			break
 		}
 		if val == nil {
-			return response.NotFound()
+			return NotFound()
 		} else {
-			return response.Content(val)
+			return Content(val)
 		}
 	}
-	return response.NotFound()
+	return NotFound()
 }
 
 func (o *AccessControlObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
-	return response.Unauthorized()
+	return Unauthorized()
 }
 
 /*
@@ -159,6 +157,6 @@ func (o *AccessControlObject) OnWrite(instanceId int, resourceId int, req Lwm2mR
 
 func NewExampleAccessControlObject(reg Registry) *AccessControlObject {
 	return &AccessControlObject{
-		Model: reg.GetDefinition(oma.OBJECT_LWM2M_SECURITY),
+		Model: reg.GetDefinition(OMA_OBJECT_LWM2M_SECURITY),
 	}
 }

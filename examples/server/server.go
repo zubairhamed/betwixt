@@ -2,8 +2,6 @@ package server
 
 import (
 	"github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/core/objects"
-	"github.com/zubairhamed/betwixt/core/utils"
 	"github.com/zubairhamed/canopus"
 	. "github.com/zubairhamed/go-commons/network"
 	"net"
@@ -64,7 +62,7 @@ func (server *DefaultServer) Start() {
 	http := server.httpServer
 	SetupHttpRoutes(server)
 
-	utils.CallEvent(betwixt.EVENT_START, server.events[betwixt.EVENT_START])
+	betwixt.CallLwm2mEvent(betwixt.EVENT_START, server.events[betwixt.EVENT_START])
 
 	// Start HTTP Server
 	http.Start()
@@ -110,7 +108,7 @@ func (server *DefaultServer) register(ep string, addr string, resources []*canop
 
 		obj, ok := objs[lwId]
 		if !ok {
-			obj = objects.NewObject(lwId, nil, server.registry)
+			obj = betwixt.NewObject(lwId, nil, server.registry)
 		}
 
 		if len(sp) > 1 {
