@@ -2,9 +2,9 @@ package betwixt
 
 import (
 	"github.com/zubairhamed/canopus"
+	"github.com/zubairhamed/go-commons/network"
 	"github.com/zubairhamed/go-commons/typeval"
 	"time"
-	"github.com/zubairhamed/go-commons/network"
 )
 
 type LWM2MObjectType uint16

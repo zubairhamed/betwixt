@@ -40,4 +40,3 @@ func setupEv3Resources(client LWM2MClient, reg Registry) {
 	client.EnableObject(OMA_OBJECT_LWM2M_LOCATION, NewExampleLocationObject(reg))
 	client.EnableObject(OMA_OBJECT_LWM2M_CONNECTIVITY_STATISTICS, NewExampleConnectivityStatisticsObject(reg))
 }
-

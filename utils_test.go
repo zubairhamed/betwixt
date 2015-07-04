@@ -95,15 +95,15 @@ func TestValueFromBytes(t *testing.T) {
 
 	data = []byte{}
 	val = ValueFromBytes(data, typeval.VALUETYPE_STRING)
-	assert.Equal(t, typeval.VALUETYPE_EMPTY, val.GetType() )
+	assert.Equal(t, typeval.VALUETYPE_EMPTY, val.GetType())
 
-	data =[]byte{ 100 }
+	data = []byte{100}
 	val = ValueFromBytes(data, typeval.VALUETYPE_INTEGER)
 	assert.Equal(t, 100, val.GetValue().(int))
 
 	data = []byte{}
 	val = ValueFromBytes(data, typeval.VALUETYPE_OBJECTLINK)
-	assert.Equal(t, typeval.VALUETYPE_EMPTY, val.GetType() )
+	assert.Equal(t, typeval.VALUETYPE_EMPTY, val.GetType())
 
 }
 
@@ -143,12 +143,12 @@ func TestDecodeLengthField(t *testing.T) {
 
 func TestDecodeResourceValue(t *testing.T) {
 	/*
-	var data []byte
-	data = []byte{136, 7, 8, 66, 0, 14, 216, 66, 1, 19, 136}
+		var data []byte
+		data = []byte{136, 7, 8, 66, 0, 14, 216, 66, 1, 19, 136}
 
-	val, err := DecodeResourceValue(7, data, nil)
+		val, err := DecodeResourceValue(7, data, nil)
 
-	log.Println(val, err)
+		log.Println(val, err)
 	*/
 
 	//func DecodeResourceValue(resourceId uint16, b []byte, resourceDef ResourceDefinition) (typeval.Value, error) {

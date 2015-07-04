@@ -3,13 +3,12 @@ package server
 import (
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/canopus"
+	"github.com/zubairhamed/go-commons/logging"
 	. "github.com/zubairhamed/go-commons/network"
 	"net"
 	"strconv"
 	"strings"
-	"github.com/zubairhamed/go-commons/logging"
 )
-
 
 func NewDefaultCoapServer() *canopus.CoapServer {
 	localAddr, err := net.ResolveUDPAddr("udp", ":5683")
@@ -38,14 +37,13 @@ type DefaultServer struct {
 	events     map[betwixt.EventType]betwixt.FnEvent
 }
 
-func (server *DefaultServer) GetCoapServer() (*canopus.CoapServer) {
+func (server *DefaultServer) GetCoapServer() *canopus.CoapServer {
 	return server.coapServer
 }
 
-func (server *DefaultServer) GetHttpServer() (*HttpServer) {
+func (server *DefaultServer) GetHttpServer() *HttpServer {
 	return server.httpServer
 }
-
 
 func (server *DefaultServer) Start() {
 	coap := server.coapServer

@@ -1,8 +1,8 @@
 package main
 
 import (
-	. "github.com/zubairhamed/betwixt/examples/server"
 	"github.com/zubairhamed/betwixt"
+	. "github.com/zubairhamed/betwixt/examples/server"
 )
 
 func main() {
@@ -14,5 +14,3 @@ func main() {
 
 	s.Start()
 }
-
-

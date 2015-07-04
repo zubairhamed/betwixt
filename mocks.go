@@ -1,11 +1,11 @@
 package betwixt
 
 import (
-	"time"
-	"github.com/zubairhamed/go-commons/typeval"
+	"errors"
 	"github.com/zubairhamed/canopus"
 	"github.com/zubairhamed/go-commons/network"
-	"errors"
+	"github.com/zubairhamed/go-commons/typeval"
+	"time"
 )
 
 type TestDeviceObject struct {
@@ -155,13 +155,13 @@ func (s *MockServerStatistics) GetRequestsCount() int {
 
 func NewMockServer() Server {
 	return &MockServer{
-		stats: 		&MockServerStatistics{},
+		stats:      &MockServerStatistics{},
 		httpServer: network.NewDefaultHttpServer("8080"),
 	}
 }
 
 type MockServer struct {
-	stats ServerStatistics
+	stats      ServerStatistics
 	httpServer *network.HttpServer
 	coapServer *canopus.CoapServer
 }
@@ -186,14 +186,13 @@ func (server *MockServer) GetStats() ServerStatistics {
 	return server.stats
 }
 
-func (server *MockServer) GetHttpServer() (*network.HttpServer) {
+func (server *MockServer) GetHttpServer() *network.HttpServer {
 	return server.httpServer
 }
 
-func (server *MockServer) GetCoapServer() (*canopus.CoapServer) {
+func (server *MockServer) GetCoapServer() *canopus.CoapServer {
 	return server.coapServer
 }
-
 
 func (server *MockServer) GetClient(id string) RegisteredClient {
 	return nil
@@ -298,14 +297,9 @@ type MockClient struct {
 func (c *MockClient) AddObjectInstance(LWM2MObjectType, int) error {
 	return nil
 }
-func (c *MockClient) AddObjectInstances(LWM2MObjectType, ...int) {}
-func (c *MockClient) AddResource()                               {}
-func (c *MockClient) AddObject()                                 {}
 func (c *MockClient) Register(string) (string, error) {
 	return "", nil
 }
-func (c *MockClient) Deregister() {}
-func (c *MockClient) Update()     {}
 func (c *MockClient) UseRegistry(r Registry) {
 	c.registry = r
 }
@@ -321,7 +315,6 @@ func (c *MockClient) EnableObject(t LWM2MObjectType, e ObjectEnabler) error {
 	}
 }
 
-func (c *MockClient) SetEnabler(LWM2MObjectType, ObjectEnabler) {}
 func (c *MockClient) GetRegistry() Registry {
 	return c.registry
 }
@@ -329,12 +322,17 @@ func (c *MockClient) GetEnabledObjects() map[LWM2MObjectType]Object {
 	return c.enabledObjects
 }
 
-func (c *MockClient) Start()                          {}
-func (c *MockClient) OnStartup(FnOnStartup)           {}
-func (c *MockClient) OnRead(FnOnRead)                 {}
-func (c *MockClient) OnWrite(FnOnWrite)               {}
-func (c *MockClient) OnExecute(FnOnExecute)           {}
-func (c *MockClient) OnRegistered(FnOnRegistered)     {}
-func (c *MockClient) OnDeregistered(FnOnDeregistered) {}
-func (c *MockClient) OnError(FnOnError)               {}
-
+func (c *MockClient) AddObjectInstances(LWM2MObjectType, ...int) {}
+func (c *MockClient) AddResource()                               {}
+func (c *MockClient) AddObject()                                 {}
+func (c *MockClient) Deregister()                                {}
+func (c *MockClient) Update()                                    {}
+func (c *MockClient) SetEnabler(LWM2MObjectType, ObjectEnabler)  {}
+func (c *MockClient) Start()                                     {}
+func (c *MockClient) OnStartup(FnOnStartup)                      {}
+func (c *MockClient) OnRead(FnOnRead)                            {}
+func (c *MockClient) OnWrite(FnOnWrite)                          {}
+func (c *MockClient) OnExecute(FnOnExecute)                      {}
+func (c *MockClient) OnRegistered(FnOnRegistered)                {}
+func (c *MockClient) OnDeregistered(FnOnDeregistered)            {}
+func (c *MockClient) OnError(FnOnError)                          {}

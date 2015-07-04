@@ -1,9 +1,9 @@
 package betwixt
 
 import (
-	"testing"
-	"github.com/zubairhamed/canopus"
 	"github.com/stretchr/testify/assert"
+	"github.com/zubairhamed/canopus"
+	"testing"
 )
 
 func TestDefaultRequestObject(t *testing.T) {

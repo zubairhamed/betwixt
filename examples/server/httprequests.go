@@ -2,15 +2,15 @@ package server
 
 import (
 	"github.com/zubairhamed/betwixt"
+	"github.com/zubairhamed/betwixt/examples/server/pages"
+	"github.com/zubairhamed/betwixt/examples/server/pages/models"
 	"github.com/zubairhamed/go-commons/logging"
 	. "github.com/zubairhamed/go-commons/network"
 	"github.com/zubairhamed/go-commons/typeval"
 	"log"
+	"net/http"
 	"runtime"
 	"strconv"
-	"github.com/zubairhamed/betwixt/examples/server/pages/models"
-	"github.com/zubairhamed/betwixt/examples/server/pages"
-	"net/http"
 )
 
 func SetupHttpRoutes(server betwixt.Server) {
@@ -212,20 +212,20 @@ func handleHttpViewClient(server betwixt.Server) RouteHandler {
 	return func(r Request) Response {
 		page := &pages.ClientDetailPage{}
 		/*
-				req := r.(*HttpRequest)
+					req := r.(*HttpRequest)
 
-		clientId := req.GetAttribute("client")
-		cli := server.GetRegisteredClient(clientId)
+			clientId := req.GetAttribute("client")
+			cli := server.GetRegisteredClient(clientId)
 
-		type model struct {
-			ClientId string
-			Objects  map[betwixt.LWM2MObjectType]betwixt.Object
-		}
+			type model struct {
+				ClientId string
+				Objects  map[betwixt.LWM2MObjectType]betwixt.Object
+			}
 
-		m := &model{
-			Objects:  cli.GetObjects(),
-			ClientId: clientId,
-		}
+			m := &model{
+				Objects:  cli.GetObjects(),
+				ClientId: clientId,
+			}
 		*/
 
 		return &HttpResponse{

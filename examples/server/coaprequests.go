@@ -2,8 +2,8 @@ package server
 
 import (
 	"github.com/zubairhamed/canopus"
-	. "github.com/zubairhamed/go-commons/network"
 	"github.com/zubairhamed/go-commons/logging"
+	. "github.com/zubairhamed/go-commons/network"
 )
 
 func SetupCoapRoutes(server *DefaultServer) {

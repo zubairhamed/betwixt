@@ -1,8 +1,8 @@
 package betwixt
 
 import (
-	"github.com/zubairhamed/go-commons/typeval"
 	"bytes"
+	"github.com/zubairhamed/go-commons/typeval"
 )
 
 // DefaultObjectDefinition

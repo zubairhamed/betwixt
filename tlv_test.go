@@ -1,8 +1,8 @@
 package betwixt
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestCreateIdentifierField(t *testing.T) {
@@ -25,49 +25,50 @@ func TestCreateIdentifierField(t *testing.T) {
 
 func TestCreateTlvTypeField(t *testing.T) {
 	/*
-	func CreateTlvTypeField(identType byte, value interface{}, ident uint16) byte {
-		var typeField byte
+		func CreateTlvTypeField(identType byte, value interface{}, ident uint16) byte {
+			var typeField byte
 
-		valueTypeLength, _ := typeval.GetValueByteLength(value)
+			valueTypeLength, _ := typeval.GetValueByteLength(value)
 
-		// Bit 7-6: identifier
-		typeField |= identType
+			// Bit 7-6: identifier
+			typeField |= identType
 
-		// Bit 5
-		if ident > 255 {
-			typeField |= 32
-		}
+			// Bit 5
+			if ident > 255 {
+				typeField |= 32
+			}
 
-		// Bit 4-3
-		if valueTypeLength > 7 {
-			if valueTypeLength < 256 {
-				typeField |= 8
-			} else {
-				if valueTypeLength < 65535 {
-					typeField |= 16
+			// Bit 4-3
+			if valueTypeLength > 7 {
+				if valueTypeLength < 256 {
+					typeField |= 8
 				} else {
-					if valueTypeLength > 16777215 {
-						// Error, size exceeds allowed (> 16.7MB)
+					if valueTypeLength < 65535 {
+						typeField |= 16
 					} else {
-						// Size is 16777215 or less
-						typeField |= 24
+						if valueTypeLength > 16777215 {
+							// Error, size exceeds allowed (> 16.7MB)
+						} else {
+							// Size is 16777215 or less
+							typeField |= 24
+						}
 					}
 				}
+			} else {
+				// Set bit 2-0 instead
+				b := byte(valueTypeLength)
+				typeField |= b
 			}
-		} else {
-			// Set bit 2-0 instead
-			b := byte(valueTypeLength)
-			typeField |= b
-		}
 
-		return typeField
-	}
-	 */
+			return typeField
+		}
+	*/
 }
 
 func TestCreateTlvLengthField(t *testing.T) {
 
 }
+
 /*
 func CreateTlvLengthField(value interface{}) []byte {
 	valueTypeLength, _ := typeval.GetValueByteLength(value)
@@ -85,6 +86,7 @@ func CreateTlvLengthField(value interface{}) []byte {
 func TestCreateTlvValueField(t *testing.T) {
 
 }
+
 /*
 func CreateTlvValueField(value int) []byte {
 	buf := new(bytes.Buffer)

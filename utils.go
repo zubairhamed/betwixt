@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"github.com/zubairhamed/go-commons/logging"
 	"github.com/zubairhamed/go-commons/typeval"
-	"sort"
 	"log"
+	"sort"
 )
 
 const (
@@ -51,7 +51,6 @@ func ValueFromBytes(b []byte, v typeval.ValueTypeCode) typeval.Value {
 		log.Println(typeval.BytesToIntegerValue(b))
 		return typeval.String("")
 	}
-
 
 	return typeval.Empty()
 }
