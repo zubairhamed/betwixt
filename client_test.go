@@ -8,9 +8,26 @@ import (
 func TestClient(t *testing.T) {
 
 	registry := NewDefaultObjectRegistry()
-	cli := NewDefaultClient(":0", "localhost:5683", registry)
+
+	_, err := NewDefaultClient(":0", "blahblah", registry)
+	assert.NotNil(t, err)
+
+	_, err = NewDefaultClient("blahblah", "localhost:5683", registry)
+	assert.NotNil(t, err)
+
+	cli, err := NewDefaultClient(":0", "localhost:5683", registry)
+	assert.Nil(t, err)
 	assert.NotNil(t, cli, "Error instantiating client")
 	assert.NotNil(t, registry, "Error instantiating registry")
+
+
+//	_, err = cli.Register("xxxxxxxxxxx")
+//	assert.NotNil(t, err)
+//
+//	path, err := cli.Register("xxxxxxxxxx")
+//	assert.Nil(t, err)
+//	log.Println(path)
+
 
 	cases1 := []struct {
 		in LWM2MObjectType

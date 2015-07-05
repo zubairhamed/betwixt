@@ -16,7 +16,7 @@ func BenchmarkServer(b *testing.B) {
 	reg := betwixt.NewDefaultObjectRegistry()
 	server.UseRegistry(reg)
 
-	cli := betwixt.NewDefaultClient(":0", "localhost:5683", reg)
+	cli, _ := betwixt.NewDefaultClient(":0", "localhost:5683", reg)
 	cli.OnStartup(func() {
 		for i := 1; i <= 5000; i++ {
 			name := "bet" + strconv.Itoa(i)

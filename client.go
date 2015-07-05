@@ -5,19 +5,18 @@ import (
 	. "github.com/zubairhamed/canopus"
 	"github.com/zubairhamed/go-commons/logging"
 	. "github.com/zubairhamed/go-commons/network"
-	"log"
 	"net"
 )
 
-func NewDefaultClient(local string, remote string, registry Registry) *DefaultClient {
+func NewDefaultClient(local string, remote string, registry Registry) (*DefaultClient, error) {
 	localAddr, err := net.ResolveUDPAddr("udp", local)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	remoteAddr, err := net.ResolveUDPAddr("udp", remote)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	coapServer := NewServer(localAddr, remoteAddr)
@@ -34,7 +33,7 @@ func NewDefaultClient(local string, remote string, registry Registry) *DefaultCl
 		c.EnableObject(o.GetType(), NewNullEnabler())
 	}
 
-	return c
+	return c, nil
 }
 
 type DefaultClient struct {

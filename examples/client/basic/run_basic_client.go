@@ -7,7 +7,7 @@ import (
 
 func main() {
 	registry := NewDefaultObjectRegistry()
-	c := NewDefaultClient(":0", "localhost:5683", registry)
+	c, _ := NewDefaultClient(":0", "localhost:5683", registry)
 
 	setupResources(c, registry)
 
