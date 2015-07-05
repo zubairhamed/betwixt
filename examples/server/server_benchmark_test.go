@@ -23,13 +23,11 @@ func BenchmarkServer(b *testing.B) {
 			log.Println("Calling ", name)
 			cli.Register(name)
 		}
-		log.Println("Done!")
 		pprof.StopCPUProfile()
 		os.Exit(0)
 	})
 
 	server.On(betwixt.EVENT_START, func() {
-		log.Println("EVent atart")
 		cli.Start()
 	})
 

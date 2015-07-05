@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/zubairhamed/go-commons/logging"
 	"github.com/zubairhamed/go-commons/typeval"
-	"log"
 	"sort"
 )
 
@@ -47,8 +46,6 @@ func ValueFromBytes(b []byte, v typeval.ValueTypeCode) typeval.Value {
 		return typeval.BytesToIntegerValue(b)
 
 	case typeval.VALUETYPE_TIME:
-		log.Println(b)
-		log.Println(typeval.BytesToIntegerValue(b))
 		return typeval.String("")
 	}
 
