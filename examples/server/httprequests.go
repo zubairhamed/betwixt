@@ -2,7 +2,7 @@ package server
 
 import (
 	"github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/examples/server/pages/models"
+	"github.com/zubairhamed/betwixt/examples/server/models"
 	"github.com/zubairhamed/go-commons/logging"
 	"github.com/zubairhamed/go-commons/typeval"
 	"runtime"
