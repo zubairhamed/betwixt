@@ -8,6 +8,7 @@ import (
 	"net"
 	"strconv"
 	"strings"
+	"github.com/zubairhamed/sugoi"
 )
 
 func NewDefaultCoapServer() *canopus.CoapServer {
@@ -30,7 +31,7 @@ func NewDefaultServer(port string) betwixt.Server {
 
 type DefaultServer struct {
 	coapServer *canopus.CoapServer
-	httpServer *HttpServer
+	httpServer *sugoi.SugoiServer
 	registry   betwixt.Registry
 	stats      betwixt.ServerStatistics
 	clients    map[string]betwixt.RegisteredClient
@@ -41,7 +42,7 @@ func (server *DefaultServer) GetCoapServer() *canopus.CoapServer {
 	return server.coapServer
 }
 
-func (server *DefaultServer) GetHttpServer() *HttpServer {
+func (server *DefaultServer) GetHttpServer() *sugoi.SugoiServer {
 	return server.httpServer
 }
 
@@ -63,7 +64,7 @@ func (server *DefaultServer) Start() {
 	betwixt.CallLwm2mEvent(betwixt.EVENT_START, server.events[betwixt.EVENT_START])
 
 	// Start HTTP Server
-	http.Start()
+	http.Serve()
 }
 
 func (server *DefaultServer) GetStats() betwixt.ServerStatistics {

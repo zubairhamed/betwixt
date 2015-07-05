@@ -2,9 +2,10 @@ package betwixt
 
 import (
 	"github.com/zubairhamed/canopus"
-	"github.com/zubairhamed/go-commons/network"
+	// "github.com/zubairhamed/go-commons/network"
 	"github.com/zubairhamed/go-commons/typeval"
 	"time"
+	"github.com/zubairhamed/sugoi"
 )
 
 type LWM2MObjectType uint16
@@ -174,7 +175,7 @@ type Server interface {
 	GetClients() map[string]RegisteredClient
 	GetClient(id string) RegisteredClient
 	GetStats() ServerStatistics
-	GetHttpServer() *network.HttpServer
+	GetHttpServer() *sugoi.SugoiServer
 	GetCoapServer() *canopus.CoapServer
 }
 

@@ -6,6 +6,7 @@ import (
 	"github.com/zubairhamed/go-commons/network"
 	"github.com/zubairhamed/go-commons/typeval"
 	"time"
+	"github.com/zubairhamed/sugoi"
 )
 
 type TestDeviceObject struct {
@@ -162,7 +163,7 @@ func NewMockServer() Server {
 
 type MockServer struct {
 	stats      ServerStatistics
-	httpServer *network.HttpServer
+	httpServer *sugoi.SugoiServer
 	coapServer *canopus.CoapServer
 }
 
@@ -186,7 +187,7 @@ func (server *MockServer) GetStats() ServerStatistics {
 	return server.stats
 }
 
-func (server *MockServer) GetHttpServer() *network.HttpServer {
+func (server *MockServer) GetHttpServer() *sugoi.SugoiServer {
 	return server.httpServer
 }
 
