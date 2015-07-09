@@ -14,10 +14,10 @@ func SetupHttpRoutes(server betwixt.Server) {
 	httpServer := server.GetHttpServer()
 
 	// Pages
-	httpServer.GET("/", handleHttpHome(server))
-	httpServer.GET("/client/:client/view", handleHttpViewClient(server))
+	httpServer.Get("/", handleHttpHome(server))
+	httpServer.Get("/client/:client/view", handleHttpViewClient(server))
 
-	httpServer.GET("/api/clients", func(r *sugoi.Request) sugoi.Content {
+	httpServer.Get("/api/clients", func(r *sugoi.Request) sugoi.Content {
 		cl := []models.ClientModel{}
 		for _, v := range server.GetClients() {
 
@@ -44,7 +44,7 @@ func SetupHttpRoutes(server betwixt.Server) {
 		return cl
 	})
 
-	httpServer.GET("/api/server/stats", func(r *sugoi.Request) sugoi.Content {
+	httpServer.Get("/api/server/stats", func(r *sugoi.Request) sugoi.Content {
 		var mem runtime.MemStats
 		runtime.ReadMemStats(&mem)
 
@@ -61,12 +61,12 @@ func SetupHttpRoutes(server betwixt.Server) {
 	})
 
 	// Get Message, Logs
-	httpServer.GET("/api/server/:client/messages", func(r *sugoi.Request) sugoi.Content {
+	httpServer.Get("/api/server/:client/messages", func(r *sugoi.Request) sugoi.Content {
 		return sugoi.OK()
 	})
 
 	// Read
-	httpServer.GET("/api/clients/:client", func(req *sugoi.Request) sugoi.Content {
+	httpServer.Get("/api/clients/:client", func(req *sugoi.Request) sugoi.Content {
 		clientId := req.GetAttribute("client")
 
 		v := server.GetClient(clientId)
@@ -95,7 +95,7 @@ func SetupHttpRoutes(server betwixt.Server) {
 		return c
 	})
 
-	httpServer.GET("/api/clients/:client/:object/:instance/:resource", func(req *sugoi.Request) sugoi.Content {
+	httpServer.Get("/api/clients/:client/:object/:instance/:resource", func(req *sugoi.Request) sugoi.Content {
 		clientId := req.GetAttribute("client")
 		object := req.GetAttributeAsInt("object")
 		instance := req.GetAttributeAsInt("instance")
@@ -132,41 +132,41 @@ func SetupHttpRoutes(server betwixt.Server) {
 		return payload
 	})
 
-	httpServer.GET("/api/clients/:client/:object/:instance", func(r *sugoi.Request) sugoi.Content {
+	httpServer.Get("/api/clients/:client/:object/:instance", func(r *sugoi.Request) sugoi.Content {
 		return sugoi.OK()
 	})
 
 	// Write
-	httpServer.PUT("/api/clients/:client/:object/:instance/:resource", func(r *sugoi.Request) sugoi.Content {
+	httpServer.Put("/api/clients/:client/:object/:instance/:resource", func(r *sugoi.Request) sugoi.Content {
 		return sugoi.OK()
 	})
 
-	httpServer.PUT("/api/clients/:client/:object/:instance", func(r *sugoi.Request) sugoi.Content {
+	httpServer.Put("/api/clients/:client/:object/:instance", func(r *sugoi.Request) sugoi.Content {
 		return sugoi.OK()
 	})
 
 	// Delete
-	httpServer.DELETE("/api/clients/:client/:object/:instance", func(r *sugoi.Request) sugoi.Content {
+	httpServer.Delete("/api/clients/:client/:object/:instance", func(r *sugoi.Request) sugoi.Content {
 		return sugoi.OK()
 	})
 
 	// Observe
-	httpServer.POST("/api/clients/:client/:object/:instance/:resource/observe", func(r *sugoi.Request) sugoi.Content {
+	httpServer.Post("/api/clients/:client/:object/:instance/:resource/observe", func(r *sugoi.Request) sugoi.Content {
 		return sugoi.OK()
 	})
 
 	// Cancel Observe
-	httpServer.DELETE("/api/clients/:client/:object/:instance/:resource/observe", func(r *sugoi.Request) sugoi.Content {
+	httpServer.Delete("/api/clients/:client/:object/:instance/:resource/observe", func(r *sugoi.Request) sugoi.Content {
 		return sugoi.OK()
 	})
 
 	// Execute
-	httpServer.POST("/api/clients/:client/:object/:instance/:resource", func(r *sugoi.Request) sugoi.Content {
+	httpServer.Post("/api/clients/:client/:object/:instance/:resource", func(r *sugoi.Request) sugoi.Content {
 		return sugoi.OK()
 	})
 
 	// Create
-	httpServer.POST("/api/clients/:client/:object/:instance", func(r *sugoi.Request) sugoi.Content {
+	httpServer.Post("/api/clients/:client/:object/:instance", func(r *sugoi.Request) sugoi.Content {
 		return sugoi.OK()
 	})
 }

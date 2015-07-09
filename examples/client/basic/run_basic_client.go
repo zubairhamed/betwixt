@@ -13,6 +13,8 @@ func main() {
 
 	c.OnStartup(func() {
 		c.Register("betwixt")
+
+		// TODO: Randomly fire change events for values changed
 	})
 
 	c.Start()

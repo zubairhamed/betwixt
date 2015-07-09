@@ -1,3 +1,4 @@
 gom 'github.com/zubairhamed/go-commons'
 gom 'github.com/zubairhamed/canopus'
+gom 'github.com/zubairhamed/sugoi'
 gom 'github.com/stretchr/testify/assert'
