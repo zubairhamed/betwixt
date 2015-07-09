@@ -3,7 +3,6 @@ package betwixt
 import (
 	"errors"
 	"github.com/zubairhamed/canopus"
-	"github.com/zubairhamed/go-commons/network"
 	"github.com/zubairhamed/go-commons/typeval"
 	"time"
 	"github.com/zubairhamed/sugoi"
@@ -157,7 +156,7 @@ func (s *MockServerStatistics) GetRequestsCount() int {
 func NewMockServer() Server {
 	return &MockServer{
 		stats:      &MockServerStatistics{},
-		httpServer: network.NewDefaultHttpServer("8080"),
+		httpServer: sugoi.NewSugoi("8080"),
 	}
 }
 
