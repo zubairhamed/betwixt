@@ -3,14 +3,14 @@ package server
 import (
 	"github.com/stretchr/testify/assert"
 	. "github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/go-commons/network"
 	"testing"
+	"github.com/zubairhamed/sugoi"
 )
 
 func TestCoapRequests(t *testing.T) {
 	server := &DefaultServer{
 		coapServer: NewDefaultCoapServer(),
-		httpServer: network.NewDefaultHttpServer(":8081"),
+		httpServer: sugoi.NewSugoi("8081"),
 		clients:    make(map[string]RegisteredClient),
 		stats:      &DefaultServerStatistics{},
 	}

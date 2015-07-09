@@ -4,7 +4,6 @@ import (
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/canopus"
 	"github.com/zubairhamed/go-commons/logging"
-	. "github.com/zubairhamed/go-commons/network"
 	"net"
 	"strconv"
 	"strings"
@@ -22,7 +21,7 @@ func NewDefaultCoapServer() *canopus.CoapServer {
 func NewDefaultServer(port string) betwixt.Server {
 	return &DefaultServer{
 		coapServer: NewDefaultCoapServer(),
-		httpServer: NewDefaultHttpServer(port),
+		httpServer: sugoi.NewSugoi("8081"),
 		clients:    make(map[string]betwixt.RegisteredClient),
 		stats:      &DefaultServerStatistics{},
 		events:     make(map[betwixt.EventType]betwixt.FnEvent),
