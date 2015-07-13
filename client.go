@@ -164,13 +164,13 @@ func (c *DefaultClient) Start() {
 	c.validate()
 
 	s := c.coapServer
-	s.On(EVT_START, func() {
+	s.OnStart(func (server *CoapServer){
 		if c.evtOnStartup != nil {
 			c.evtOnStartup()
 		}
 	})
 
-	s.On(EVT_OBSERVE, func() {
+	s.OnObserve(func (resource string){
 		logging.LogInfo("Observe Requested")
 	})
 

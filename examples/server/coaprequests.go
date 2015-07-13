@@ -9,7 +9,7 @@ import (
 func SetupCoapRoutes(server *DefaultServer) {
 	coap := server.coapServer
 
-	coap.On(canopus.EVT_MESSAGE, func() {
+	coap.OnMessage(func (msg *canopus.Message){
 		server.stats.IncrementCoapRequestsCount()
 	})
 
