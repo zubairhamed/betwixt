@@ -170,7 +170,7 @@ func (c *DefaultClient) Start() {
 		}
 	})
 
-	s.OnObserve(func (resource string){
+	s.OnObserve(func (resource string, msg *Message){
 		logging.LogInfo("Observe Requested")
 	})
 
