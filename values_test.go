@@ -2,7 +2,6 @@ package betwixt
 
 import (
 	"github.com/stretchr/testify/assert"
-	. "github.com/zubairhamed/go-commons/typeval"
 	"testing"
 	"time"
 )

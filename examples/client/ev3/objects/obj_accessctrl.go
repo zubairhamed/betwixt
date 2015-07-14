@@ -2,7 +2,6 @@ package ev3
 
 import (
 	. "github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/go-commons/typeval"
 )
 
 type AccessControlObject struct {
@@ -26,18 +25,18 @@ func (o *AccessControlObject) OnRead(instanceId int, resourceId int, req Lwm2mRe
 		// Read Object Instance
 	} else {
 		// Read Resource Instance
-		var val typeval.Value
+		var val Value
 
 		// resource := o.Model.GetResource(resourceId)
 		switch instanceId {
 		case 0:
 			switch resourceId {
 			case 0:
-				val = typeval.Integer(1)
+				val = Integer(1)
 				break
 
 			case 1:
-				val = typeval.Integer(0)
+				val = Integer(0)
 				break
 
 			case 2:

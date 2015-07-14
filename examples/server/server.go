@@ -3,17 +3,17 @@ package server
 import (
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/canopus"
-	"github.com/zubairhamed/go-commons/logging"
 	"net"
 	"strconv"
 	"strings"
 	"github.com/zubairhamed/sugoi"
+	"log"
 )
 
 func NewDefaultCoapServer() *canopus.CoapServer {
 	localAddr, err := net.ResolveUDPAddr("udp", ":5683")
 	if err != nil {
-		logging.LogError("Error starting CoAP Server: ", err)
+		log.Fatal("Error starting CoAP Server: ", err)
 	}
 	return canopus.NewServer(localAddr, nil)
 }

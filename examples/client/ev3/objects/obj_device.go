@@ -2,7 +2,6 @@ package ev3
 
 import (
 	. "github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/go-commons/typeval"
 	"time"
 )
 
@@ -30,68 +29,68 @@ func (o *DeviceObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) 
 		// Read Object Instance
 	} else {
 		// Read Resource Instance
-		var val typeval.Value
+		var val Value
 
 		switch resourceId {
 		case 0:
-			val = typeval.String("Open Mobile Alliance")
+			val = String("Open Mobile Alliance")
 			break
 
 		case 1:
-			val = typeval.String("Lightweight M2M Client")
+			val = String("Lightweight M2M Client")
 			break
 
 		case 2:
-			val = typeval.String("345000123")
+			val = String("345000123")
 			break
 
 		case 3:
-			val = typeval.String("1.0")
+			val = String("1.0")
 			break
 
 		case 6:
-			val = typeval.Integer(POWERSOURCE_INTERNAL, POWERSOURCE_USB)
+			val = Integer(POWERSOURCE_INTERNAL, POWERSOURCE_USB)
 			break
 
 		case 7:
-			val = typeval.Integer(3800, 5000)
+			val = Integer(3800, 5000)
 			break
 
 		case 8:
-			val = typeval.Integer(125, 900)
+			val = Integer(125, 900)
 			break
 
 		case 9:
-			val = typeval.Integer(100)
-			// val = typeval.Integer(1000)
-			// val = typeval.Integer(10000)
-			// val = typeval.Integer(100000)
-			// val = typeval.Integer(1000000)
+			val = Integer(100)
+			// val = Integer(1000)
+			// val = Integer(10000)
+			// val = Integer(100000)
+			// val = Integer(1000000)
 			break
 
 		case 10:
-			val = typeval.Integer(15)
+			val = Integer(15)
 			break
 
 		case 11:
-			val = typeval.MultipleIntegers(typeval.Integer(0))
+			val = MultipleIntegers(Integer(0))
 			// val, _ = tlv.TlvPayloadFromIntResource(resource, []int{0})
 			break
 
 		case 13:
-			val = typeval.Time(o.currentTime)
+			val = Time(o.currentTime)
 			break
 
 		case 14:
-			val = typeval.String(o.utcOffset)
+			val = String(o.utcOffset)
 			break
 
 		case 15:
-			val = typeval.String(o.timeZone)
+			val = String(o.timeZone)
 			break
 
 		case 16:
-			val = typeval.String(string(BINDINGMODE_UDP))
+			val = String(string(BINDINGMODE_UDP))
 			break
 
 		default:
@@ -123,12 +122,12 @@ func (o *DeviceObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequest)
 	return Changed()
 }
 
-func (o *DeviceObject) Reboot() typeval.Value {
-	return typeval.Empty()
+func (o *DeviceObject) Reboot() Value {
+	return Empty()
 }
 
-func (o *DeviceObject) FactoryReset() typeval.Value {
-	return typeval.Empty()
+func (o *DeviceObject) FactoryReset() Value {
+	return Empty()
 }
 
 func (o *DeviceObject) ResetErrorCode() string {

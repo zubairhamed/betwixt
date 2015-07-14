@@ -1,9 +1,5 @@
 package betwixt
 
-import (
-	. "github.com/zubairhamed/go-commons/typeval"
-)
-
 const (
 	POWERSOURCE_DC            = 0
 	POWERSOURCE_INTERNAL      = 1

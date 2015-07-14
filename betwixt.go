@@ -2,8 +2,6 @@ package betwixt
 
 import (
 	"github.com/zubairhamed/canopus"
-	// "github.com/zubairhamed/go-commons/network"
-	"github.com/zubairhamed/go-commons/typeval"
 	"time"
 	"github.com/zubairhamed/sugoi"
 )
@@ -123,7 +121,7 @@ type ResourceDefinition interface {
 	GetRangeOrEnums() string
 	IsMandatory() bool
 	MultipleValuesAllowed() bool
-	GetResourceType() typeval.ValueTypeCode
+	GetResourceType() ValueTypeCode
 	GetOperations() OperationCode
 }
 
@@ -158,13 +156,13 @@ type Lwm2mRequest interface {
 	GetPath() string
 	GetMessage() *canopus.Message
 	GetOperationType() OperationType
-	GetCoapRequest() *canopus.CoapRequest
+	GetCoapRequest() *canopus.Request
 }
 
 // Lwm2mResponse interface represents an outgoing response to a server
 type Lwm2mResponse interface {
 	GetResponseCode() canopus.CoapCode
-	GetResponseValue() typeval.Value
+	GetResponseValue() Value
 }
 
 // Server interface defines a LWM2M Server
@@ -195,8 +193,8 @@ type RegisteredClient interface {
 	GetObject(LWM2MObjectType) Object
 	GetAddress() string
 
-	ReadObject(uint16, uint16) (typeval.Value, error)
-	ReadResource(uint16, uint16, uint16) (typeval.Value, error)
+	ReadObject(uint16, uint16) (Value, error)
+	ReadResource(uint16, uint16, uint16) (Value, error)
 	Delete(int, int)
 	Execute(int, int, int)
 }

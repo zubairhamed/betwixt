@@ -3,7 +3,6 @@ package betwixt
 import (
 	"bytes"
 	"encoding/binary"
-	"github.com/zubairhamed/go-commons/typeval"
 )
 
 /*
@@ -33,7 +32,7 @@ import (
 func CreateTlvTypeField(identType byte, value interface{}, ident uint16) byte {
 	var typeField byte
 
-	valueTypeLength, _ := typeval.GetValueByteLength(value)
+	valueTypeLength, _ := GetValueByteLength(value)
 
 	// Bit 7-6: identifier
 	typeField |= identType
@@ -83,7 +82,7 @@ func CreateTlvIdentifierField(ident uint16) []byte {
 }
 
 func CreateTlvLengthField(value interface{}) []byte {
-	valueTypeLength, _ := typeval.GetValueByteLength(value)
+	valueTypeLength, _ := GetValueByteLength(value)
 
 	if valueTypeLength > 7 {
 		buf := new(bytes.Buffer)

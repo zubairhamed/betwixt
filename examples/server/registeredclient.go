@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"github.com/zubairhamed/betwixt"
 	. "github.com/zubairhamed/canopus"
-	"github.com/zubairhamed/go-commons/network"
-	"github.com/zubairhamed/go-commons/typeval"
 	"net"
 	"time"
 )
@@ -86,11 +84,11 @@ func (c *DefaultRegisteredClient) GetObject(t betwixt.LWM2MObjectType) betwixt.O
 	return c.enabledObjects[t]
 }
 
-func (c *DefaultRegisteredClient) ReadObject(obj uint16, inst uint16) (typeval.Value, error) {
+func (c *DefaultRegisteredClient) ReadObject(obj uint16, inst uint16) (betwixt.Value, error) {
 	return nil, nil
 }
 
-func (c *DefaultRegisteredClient) ReadResource(obj uint16, inst uint16, rsrc uint16) (typeval.Value, error) {
+func (c *DefaultRegisteredClient) ReadResource(obj uint16, inst uint16, rsrc uint16) (betwixt.Value, error) {
 	rAddr, _ := net.ResolveUDPAddr("udp", c.addr)
 	lAddr, _ := net.ResolveUDPAddr("udp", ":0")
 
@@ -102,9 +100,9 @@ func (c *DefaultRegisteredClient) ReadResource(obj uint16, inst uint16, rsrc uin
 
 	resourceDefinition := c.GetObject(betwixt.LWM2MObjectType(obj)).GetDefinition().GetResource(rsrc)
 	if resourceDefinition.MultipleValuesAllowed() {
-		req.SetMediaType(network.MEDIATYPE_TLV_VND_OMA_LWM2M)
+		req.SetMediaType(MEDIATYPE_TLV_VND_OMA_LWM2M)
 	} else {
-		req.SetMediaType(network.MEDIATYPE_TEXT_PLAIN_VND_OMA_LWM2M)
+		req.SetMediaType(MEDIATYPE_TEXT_PLAIN_VND_OMA_LWM2M)
 	}
 
 	response, _ := SendMessage(req.GetMessage(), conn)

@@ -2,7 +2,6 @@ package betwixt
 
 import (
 	"bytes"
-	"github.com/zubairhamed/go-commons/typeval"
 )
 
 // DefaultObjectDefinition
@@ -130,7 +129,7 @@ type DefaultResourceDefinition struct {
 	Operations     OperationCode
 	Multiple       bool
 	Mandatory      bool
-	ResourceType   typeval.ValueTypeCode
+	ResourceType   ValueTypeCode
 	Units          string
 	RangeOrEnums   string
 	Description    string
@@ -149,7 +148,7 @@ func (o *DefaultResourceDefinition) MultipleValuesAllowed() bool {
 	return o.Multiple
 }
 
-func (o *DefaultResourceDefinition) GetResourceType() typeval.ValueTypeCode {
+func (o *DefaultResourceDefinition) GetResourceType() ValueTypeCode {
 	return o.ResourceType
 }
 
@@ -176,10 +175,10 @@ func (o *DefaultResourceDefinition) IsMandatory() bool {
 type ObjectValue struct {
 	instanceId uint16
 	typeId     LWM2MObjectType
-	resources  []typeval.Value
+	resources  []Value
 }
 
-func NewResourceValue(id uint16, value typeval.Value) typeval.Value {
+func NewResourceValue(id uint16, value Value) Value {
 	return &ResourceValue{
 		id:    id,
 		value: value,
@@ -188,7 +187,7 @@ func NewResourceValue(id uint16, value typeval.Value) typeval.Value {
 
 type ResourceValue struct {
 	id    uint16
-	value typeval.Value
+	value Value
 }
 
 func (v ResourceValue) GetId() uint16 {
@@ -199,12 +198,12 @@ func (v ResourceValue) GetBytes() []byte {
 	return v.value.GetBytes()
 }
 
-func (v ResourceValue) GetContainedType() typeval.ValueTypeCode {
-	return typeval.VALUETYPE_RESOURCE
+func (v ResourceValue) GetContainedType() ValueTypeCode {
+	return VALUETYPE_RESOURCE
 }
 
-func (v ResourceValue) GetType() typeval.ValueTypeCode {
-	return typeval.VALUETYPE_RESOURCE
+func (v ResourceValue) GetType() ValueTypeCode {
+	return VALUETYPE_RESOURCE
 }
 
 func (v ResourceValue) GetStringValue() string {
@@ -215,7 +214,7 @@ func (v ResourceValue) GetValue() interface{} {
 	return v.value.GetValue()
 }
 
-func NewMultipleResourceValue(id uint16, value []*ResourceValue) typeval.Value {
+func NewMultipleResourceValue(id uint16, value []*ResourceValue) Value {
 	return &MultipleResourceValue{
 		id:        id,
 		instances: value,
@@ -231,12 +230,12 @@ func (v MultipleResourceValue) GetBytes() []byte {
 	return []byte{}
 }
 
-func (v MultipleResourceValue) GetContainedType() typeval.ValueTypeCode {
-	return typeval.VALUETYPE_RESOURCE
+func (v MultipleResourceValue) GetContainedType() ValueTypeCode {
+	return VALUETYPE_RESOURCE
 }
 
-func (v MultipleResourceValue) GetType() typeval.ValueTypeCode {
-	return typeval.VALUETYPE_MULTIRESOURCE
+func (v MultipleResourceValue) GetType() ValueTypeCode {
+	return VALUETYPE_MULTIRESOURCE
 }
 
 func (v MultipleResourceValue) GetStringValue() string {

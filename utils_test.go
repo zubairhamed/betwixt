@@ -2,7 +2,6 @@ package betwixt
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/zubairhamed/go-commons/typeval"
 	"testing"
 	"time"
 )
@@ -31,7 +30,7 @@ func TestGetValueByteLength(t *testing.T) {
 	}
 
 	for _, c := range test1 {
-		v, _ := typeval.GetValueByteLength(c.input)
+		v, _ := GetValueByteLength(c.input)
 		assert.Equal(t, v, uint32(c.expected), "Wrong expected length returned")
 	}
 
@@ -45,7 +44,7 @@ func TestGetValueByteLength(t *testing.T) {
 	}
 
 	for _, c := range test2 {
-		_, err := typeval.GetValueByteLength(c.input)
+		_, err := GetValueByteLength(c.input)
 		assert.NotNil(t, err, "An error should be returned")
 	}
 }
@@ -79,31 +78,31 @@ func TestDecodeTypeField(t *testing.T) {
 func TestValueFromBytes(t *testing.T) {
 
 	var data []byte
-	var val typeval.Value
+	var val Value
 
 	data = []byte{79, 112, 101, 110, 32, 77, 111, 98, 105, 108, 101, 32, 65, 108, 108, 105, 97, 110, 99, 101}
-	val = ValueFromBytes(data, typeval.VALUETYPE_STRING)
+	val = ValueFromBytes(data, VALUETYPE_STRING)
 	assert.Equal(t, "Open Mobile Alliance", val.GetValue().(string))
 
 	data = []byte{76, 105, 103, 104, 116, 119, 101, 105, 103, 104, 116, 32, 77, 50, 77, 32, 67, 108, 105, 101, 110, 116}
-	val = ValueFromBytes(data, typeval.VALUETYPE_STRING)
+	val = ValueFromBytes(data, VALUETYPE_STRING)
 	assert.Equal(t, "Lightweight M2M Client", val.GetValue().(string))
 
 	data = []byte{49, 46, 48}
-	val = ValueFromBytes(data, typeval.VALUETYPE_STRING)
+	val = ValueFromBytes(data, VALUETYPE_STRING)
 	assert.Equal(t, "1.0", val.GetValue().(string))
 
 	data = []byte{}
-	val = ValueFromBytes(data, typeval.VALUETYPE_STRING)
-	assert.Equal(t, typeval.VALUETYPE_EMPTY, val.GetType())
+	val = ValueFromBytes(data, VALUETYPE_STRING)
+	assert.Equal(t, VALUETYPE_EMPTY, val.GetType())
 
 	data = []byte{100}
-	val = ValueFromBytes(data, typeval.VALUETYPE_INTEGER)
+	val = ValueFromBytes(data, VALUETYPE_INTEGER)
 	assert.Equal(t, 100, val.GetValue().(int))
 
 	data = []byte{}
-	val = ValueFromBytes(data, typeval.VALUETYPE_OBJECTLINK)
-	assert.Equal(t, typeval.VALUETYPE_EMPTY, val.GetType())
+	val = ValueFromBytes(data, VALUETYPE_OBJECTLINK)
+	assert.Equal(t, VALUETYPE_EMPTY, val.GetType())
 
 }
 
@@ -151,11 +150,11 @@ func TestDecodeResourceValue(t *testing.T) {
 		log.Println(val, err)
 	*/
 
-	//func DecodeResourceValue(resourceId uint16, b []byte, resourceDef ResourceDefinition) (typeval.Value, error) {
+	//func DecodeResourceValue(resourceId uint16, b []byte, resourceDef ResourceDefinition) (Value, error) {
 }
 
 func TestEncodeValue(t *testing.T) {
-	// func EncodeValue(resourceId uint16, allowMultipleValues bool, v typeval.Value) []byte {
+	// func EncodeValue(resourceId uint16, allowMultipleValues bool, v Value) []byte {
 }
 
 func TestResourceOperations(t *testing.T) {

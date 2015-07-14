@@ -3,9 +3,8 @@ package betwixt
 import (
 	"errors"
 	. "github.com/zubairhamed/canopus"
-	"github.com/zubairhamed/go-commons/logging"
-	. "github.com/zubairhamed/go-commons/network"
 	"net"
+	"log"
 )
 
 func NewDefaultClient(local string, remote string, registry Registry) (*DefaultClient, error) {
@@ -67,10 +66,8 @@ func (c *DefaultClient) Register(name string) (string, error) {
 
 	path := ""
 	if err != nil {
-		logging.LogError(err)
+		log.Println(err)
 	} else {
-		PrintMessage(resp.GetMessage())
-
 		path = resp.GetMessage().GetLocationPath()
 	}
 	c.path = path
@@ -97,12 +94,10 @@ func (c *DefaultClient) Deregister() {
 	req := NewRequest(TYPE_CONFIRMABLE, DELETE, GenerateMessageId())
 
 	req.SetRequestURI(c.path)
-	resp, err := c.coapServer.Send(req)
+	_, err := c.coapServer.Send(req)
 
 	if err != nil {
-		logging.LogError(err)
-	} else {
-		PrintMessage(resp.GetMessage())
+		log.Println(err)
 	}
 }
 
@@ -171,7 +166,7 @@ func (c *DefaultClient) Start() {
 	})
 
 	s.OnObserve(func (resource string, msg *Message){
-		logging.LogInfo("Observe Requested")
+		log.Println("Observe Requested")
 	})
 
 	s.NewRoute("{obj}/{inst}/{rsrc}", GET, c.handleReadRequest)
@@ -189,9 +184,8 @@ func (c *DefaultClient) Start() {
 	c.coapServer.Start()
 }
 
-func (c *DefaultClient) handleCreateRequest(r Request) Response {
-	logging.LogInfo("Create Request")
-	req := r.(*CoapRequest)
+func (c *DefaultClient) handleCreateRequest(req *Request) *Response {
+	log.Println("Create Request")
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
@@ -220,9 +214,8 @@ func (c *DefaultClient) handleCreateRequest(r Request) Response {
 	return NewResponseWithMessage(msg)
 }
 
-func (c *DefaultClient) handleReadRequest(r Request) Response {
-	logging.LogInfo("Read Request")
-	req := r.(*CoapRequest)
+func (c *DefaultClient) handleReadRequest(req *Request) *Response {
+	log.Println("Read Request")
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
@@ -266,9 +259,8 @@ func (c *DefaultClient) handleReadRequest(r Request) Response {
 	return NewResponseWithMessage(msg)
 }
 
-func (c *DefaultClient) handleDeleteRequest(r Request) Response {
-	logging.LogInfo("Delete Request")
-	req := r.(*CoapRequest)
+func (c *DefaultClient) handleDeleteRequest(req *Request) *Response {
+	log.Println("Delete Request")
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
 
@@ -291,16 +283,15 @@ func (c *DefaultClient) handleDeleteRequest(r Request) Response {
 }
 
 func (c *DefaultClient) handleDiscoverRequest() {
-	logging.LogInfo("Discovery Request")
+	log.Println("Discovery Request")
 }
 
 func (c *DefaultClient) handleObserveRequest() {
-	logging.LogInfo("Observe Request")
+	log.Println("Observe Request")
 }
 
-func (c *DefaultClient) handleWriteRequest(r Request) Response {
-	logging.LogInfo("Write Request")
-	req := r.(*CoapRequest)
+func (c *DefaultClient) handleWriteRequest(req *Request) *Response {
+	log.Println("Write Request")
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
@@ -340,9 +331,8 @@ func (c *DefaultClient) handleWriteRequest(r Request) Response {
 	return NewResponseWithMessage(msg)
 }
 
-func (c *DefaultClient) handleExecuteRequest(r Request) Response {
-	logging.LogInfo("Execute Request")
-	req := r.(*CoapRequest)
+func (c *DefaultClient) handleExecuteRequest(req *Request) *Response {
+	log.Println("Execute Request")
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")

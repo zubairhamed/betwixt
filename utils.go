@@ -5,9 +5,8 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"github.com/zubairhamed/go-commons/logging"
-	"github.com/zubairhamed/go-commons/typeval"
 	"sort"
+	"log"
 )
 
 const (
@@ -33,23 +32,23 @@ func DecodeTypeField(typeField byte) (typeOfIdentifier byte, lengthOfIdentifier 
 	return
 }
 
-func ValueFromBytes(b []byte, v typeval.ValueTypeCode) typeval.Value {
+func ValueFromBytes(b []byte, v ValueTypeCode) Value {
 	if len(b) == 0 {
-		return typeval.Empty()
+		return Empty()
 	}
 
 	switch v {
-	case typeval.VALUETYPE_STRING:
-		return typeval.String(string(b))
+	case VALUETYPE_STRING:
+		return String(string(b))
 
-	case typeval.VALUETYPE_INTEGER:
-		return typeval.BytesToIntegerValue(b)
+	case VALUETYPE_INTEGER:
+		return BytesToIntegerValue(b)
 
-	case typeval.VALUETYPE_TIME:
-		return typeval.String("")
+	case VALUETYPE_TIME:
+		return String("")
 	}
 
-	return typeval.Empty()
+	return Empty()
 }
 
 func ValidResourceTypeField(b []byte) error {
@@ -99,12 +98,12 @@ func DecodeLengthField(b []byte, pos int) (valueLength uint64, typeLength int) {
 	return
 }
 
-func DecodeResourceValue(resourceId uint16, b []byte, resourceDef ResourceDefinition) (typeval.Value, error) {
+func DecodeResourceValue(resourceId uint16, b []byte, resourceDef ResourceDefinition) (Value, error) {
 	if resourceDef.MultipleValuesAllowed() {
 
 		err := ValidResourceTypeField(b)
 		if err != nil {
-			logging.LogError(err)
+			log.Println(err)
 		}
 
 		typeFieldTypeOfIdentifier, _, _, _ := DecodeTypeField(b[0])
@@ -123,7 +122,7 @@ func DecodeResourceValue(resourceId uint16, b []byte, resourceDef ResourceDefini
 			for len(bytesLeft) > 0 {
 				err := ValidResourceTypeField(bytesLeft)
 				if err != nil {
-					logging.LogError(err)
+					log.Println(err)
 				}
 
 				valueOffset := 1
@@ -163,14 +162,14 @@ func DecodeResourceValue(resourceId uint16, b []byte, resourceDef ResourceDefini
 	}
 }
 
-func EncodeValue(resourceId uint16, allowMultipleValues bool, v typeval.Value) []byte {
-	if v.GetType() == typeval.VALUETYPE_MULTIPLE {
+func EncodeValue(resourceId uint16, allowMultipleValues bool, v Value) []byte {
+	if v.GetType() == VALUETYPE_MULTIPLE {
 		typeOfMultipleValue := v.GetContainedType()
-		if typeOfMultipleValue == typeval.VALUETYPE_INTEGER {
+		if typeOfMultipleValue == VALUETYPE_INTEGER {
 
 			// Resource Instances TLV
 			resourceInstanceBytes := bytes.NewBuffer([]byte{})
-			intValues := v.GetValue().([]typeval.Value)
+			intValues := v.GetValue().([]Value)
 			for i, intValue := range intValues {
 				value := intValue.GetValue().(int)
 

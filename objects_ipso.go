@@ -1,9 +1,5 @@
 package betwixt
 
-import (
-	. "github.com/zubairhamed/go-commons/typeval"
-)
-
 const (
 	IPSO_OBJECT_IPSO_DIGITAL_INPUT     LWM2MObjectType = 3200
 	IPSO_OBJECT_IPSO_DIGITAL_OUTPUT    LWM2MObjectType = 3201

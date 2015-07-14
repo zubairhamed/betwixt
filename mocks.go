@@ -3,7 +3,6 @@ package betwixt
 import (
 	"errors"
 	"github.com/zubairhamed/canopus"
-	"github.com/zubairhamed/go-commons/typeval"
 	"time"
 	"github.com/zubairhamed/sugoi"
 )
@@ -32,24 +31,24 @@ func (o *TestDeviceObject) OnRead(instanceId int, resourceId int, req Lwm2mReque
 		// Read Object Instance
 	} else {
 		// Read Resource Instance
-		var val typeval.Value
+		var val Value
 
 		// resource := o.Model.GetResource(resourceId)
 		switch resourceId {
 		case 0:
-			val = typeval.String("Open Mobile Alliance")
+			val = String("Open Mobile Alliance")
 			break
 
 		case 1:
-			val = typeval.String("Lightweight M2M Client")
+			val = String("Lightweight M2M Client")
 			break
 
 		case 2:
-			val = typeval.String("345000123")
+			val = String("345000123")
 			break
 
 		case 3:
-			val = typeval.String("1.0")
+			val = String("1.0")
 			break
 
 		case 6:
@@ -65,11 +64,11 @@ func (o *TestDeviceObject) OnRead(instanceId int, resourceId int, req Lwm2mReque
 			break
 
 		case 9:
-			val = typeval.Integer(100)
+			val = Integer(100)
 			break
 
 		case 10:
-			val = typeval.Integer(15)
+			val = Integer(15)
 			break
 
 		case 11:
@@ -77,19 +76,19 @@ func (o *TestDeviceObject) OnRead(instanceId int, resourceId int, req Lwm2mReque
 			break
 
 		case 13:
-			val = typeval.Time(o.currentTime)
+			val = Time(o.currentTime)
 			break
 
 		case 14:
-			val = typeval.String(o.utcOffset)
+			val = String(o.utcOffset)
 			break
 
 		case 15:
-			val = typeval.String(o.timeZone)
+			val = String(o.timeZone)
 			break
 
 		case 16:
-			val = typeval.String(string(BINDINGMODE_UDP))
+			val = String(string(BINDINGMODE_UDP))
 			break
 
 		default:
@@ -121,12 +120,12 @@ func (o *TestDeviceObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequ
 	return Changed()
 }
 
-func (o *TestDeviceObject) Reboot() typeval.Value {
-	return typeval.Empty()
+func (o *TestDeviceObject) Reboot() Value {
+	return Empty()
 }
 
-func (o *TestDeviceObject) FactoryReset() typeval.Value {
-	return typeval.Empty()
+func (o *TestDeviceObject) FactoryReset() Value {
+	return Empty()
 }
 
 func (o *TestDeviceObject) ResetErrorCode() string {

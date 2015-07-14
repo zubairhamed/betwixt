@@ -3,11 +3,10 @@ package server
 import (
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/examples/server/models"
-	"github.com/zubairhamed/go-commons/logging"
-	"github.com/zubairhamed/go-commons/typeval"
 	"runtime"
 	"strconv"
 	"github.com/zubairhamed/sugoi"
+	"log"
 )
 
 func SetupHttpRoutes(server betwixt.Server) {
@@ -105,10 +104,10 @@ func SetupHttpRoutes(server betwixt.Server) {
 		val, _ := cli.ReadResource(uint16(object), uint16(instance), uint16(resource))
 
 		if val == nil {
-			logging.LogError("Value returned by ReadResource is nil")
+			log.Println("Value returned by ReadResource is nil")
 		}
 		contentModels := []*models.ContentValueModel{}
-		if val.GetType() == typeval.VALUETYPE_MULTIRESOURCE {
+		if val.GetType() == betwixt.VALUETYPE_MULTIRESOURCE {
 			resources := val.(*betwixt.MultipleResourceValue).GetValue().([]*betwixt.ResourceValue)
 
 			for _, resource := range resources {

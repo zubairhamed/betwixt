@@ -5,15 +5,15 @@ import (
 )
 
 // Default
-func Default(coap *canopus.CoapRequest, op OperationType) Lwm2mRequest {
+func Default(coap *canopus.Request, op OperationType) Lwm2mRequest {
 	return &DefaultRequest{
 		coap: coap,
-		op:   op,
+		op:  op,
 	}
 }
 
 type DefaultRequest struct {
-	coap *canopus.CoapRequest
+	coap *canopus.Request
 	op   OperationType
 }
 
@@ -29,7 +29,7 @@ func (r *DefaultRequest) GetOperationType() OperationType {
 	return r.op
 }
 
-func (r *DefaultRequest) GetCoapRequest() *canopus.CoapRequest {
+func (r *DefaultRequest) GetCoapRequest() *canopus.Request {
 	return r.coap
 }
 
@@ -55,6 +55,6 @@ func (r *NilRequest) GetOperationType() OperationType {
 	return r.op
 }
 
-func (r *NilRequest) GetCoapRequest() *canopus.CoapRequest {
+func (r *NilRequest) GetCoapRequest() *canopus.Request {
 	return nil
 }
