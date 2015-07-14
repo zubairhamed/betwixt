@@ -14,7 +14,7 @@ func TestDefaultRequestObject(t *testing.T) {
 
 	assert.NotNil(t, def.GetMessage())
 	assert.Equal(t, uint16(12345), def.GetMessage().MessageId)
-	assert.Equal(t, "/rd", def.GetPath())
+	assert.Equal(t, "/rd", def.GetMessage().GetUriPath())
 	assert.Equal(t, OPERATIONTYPE_REGISTER, def.GetOperationType())
 
 	assert.NotNil(t, def.GetCoapRequest())

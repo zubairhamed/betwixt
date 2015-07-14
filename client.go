@@ -60,7 +60,7 @@ func (c *DefaultClient) Register(name string) (string, error) {
 	req := NewRequest(TYPE_CONFIRMABLE, POST, GenerateMessageId())
 
 	req.SetStringPayload(BuildModelResourceStringPayload(c.enabledObjects))
-	req.SetRequestURI("rd")
+	req.SetRequestURI("/rd")
 	req.SetUriQuery("ep", name)
 	resp, err := c.coapServer.Send(req)
 
@@ -71,6 +71,8 @@ func (c *DefaultClient) Register(name string) (string, error) {
 		path = resp.GetMessage().GetLocationPath()
 	}
 	c.path = path
+
+	PrintMessage(resp.GetMessage())
 
 	return path, nil
 }
@@ -169,17 +171,17 @@ func (c *DefaultClient) Start() {
 		log.Println("Observe Requested")
 	})
 
-	s.NewRoute("{obj}/{inst}/{rsrc}", GET, c.handleReadRequest)
-	s.NewRoute("{obj}/{inst}", GET, c.handleReadRequest)
-	s.NewRoute("{obj}", GET, c.handleReadRequest)
+	s.Get("/:obj/:inst/:rsrc", c.handleReadRequest)
+	s.Get("/:obj/:inst", c.handleReadRequest)
+	s.Get("/:obj", c.handleReadRequest)
 
-	s.NewRoute("{obj}/{inst}/{rsrc}", PUT, c.handleWriteRequest)
-	s.NewRoute("{obj}/{inst}", PUT, c.handleWriteRequest)
+	s.Put("/:obj/:inst/:rsrc", c.handleWriteRequest)
+	s.Put("/:obj/:inst", c.handleWriteRequest)
 
-	s.NewRoute("{obj}/{inst}", DELETE, c.handleDeleteRequest)
+	s.Delete("/:obj/:inst", c.handleDeleteRequest)
 
-	s.NewRoute("{obj}/{inst}/{rsrc}", POST, c.handleExecuteRequest)
-	s.NewRoute("{obj}/{inst}", POST, c.handleCreateRequest)
+	s.Post("/:obj/:inst/:rsrc", c.handleExecuteRequest)
+	s.Post("/:obj/:inst", c.handleCreateRequest)
 
 	c.coapServer.Start()
 }

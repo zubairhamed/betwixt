@@ -94,7 +94,7 @@ func (c *DefaultRegisteredClient) ReadResource(obj uint16, inst uint16, rsrc uin
 
 	conn, _ := net.DialUDP("udp", lAddr, rAddr)
 
-	uri := fmt.Sprintf("%d/%d/%d", obj, inst, rsrc)
+	uri := fmt.Sprintf("/%d/%d/%d", obj, inst, rsrc)
 	req := NewRequest(TYPE_CONFIRMABLE, GET, GenerateMessageId())
 	req.SetRequestURI(uri)
 
@@ -106,6 +106,7 @@ func (c *DefaultRegisteredClient) ReadResource(obj uint16, inst uint16, rsrc uin
 	}
 
 	response, _ := SendMessage(req.GetMessage(), conn)
+	PrintMessage(response.GetMessage())
 	responseValue, _ := betwixt.DecodeResourceValue(rsrc, response.GetMessage().Payload.GetBytes(), resourceDefinition)
 
 	return responseValue, nil

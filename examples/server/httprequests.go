@@ -99,6 +99,7 @@ func SetupHttpRoutes(server betwixt.Server) {
 		object := req.GetAttributeAsInt("object")
 		instance := req.GetAttributeAsInt("instance")
 		resource := req.GetAttributeAsInt("resource")
+
 		cli := server.GetClient(clientId)
 
 		val, _ := cli.ReadResource(uint16(object), uint16(instance), uint16(resource))

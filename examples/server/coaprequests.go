@@ -8,13 +8,13 @@ import (
 func SetupCoapRoutes(server *DefaultServer) {
 	coap := server.coapServer
 
-	coap.OnMessage(func (*Message, bool){
+	coap.OnMessage(func (msg *Message, inbound bool){
 		server.stats.IncrementCoapRequestsCount()
 	})
 
-	coap.NewRoute("rd", POST, handleRegister(server))
-	coap.NewRoute("rd/{id}", PUT, handleUpdate(server))
-	coap.NewRoute("rd/{id}", DELETE, handleDelete(server))
+	coap.Post("/rd", handleRegister(server))
+	coap.Put("/rd/:id", handleUpdate(server))
+	coap.Delete("/rd/:id", handleDelete(server))
 }
 
 func handleRegister(server *DefaultServer) RouteHandler {
