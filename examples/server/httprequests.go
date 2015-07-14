@@ -3,10 +3,10 @@ package server
 import (
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/examples/server/models"
-	"runtime"
-	"strconv"
 	"github.com/zubairhamed/sugoi"
 	"log"
+	"runtime"
+	"strconv"
 )
 
 func SetupHttpRoutes(server betwixt.Server) {

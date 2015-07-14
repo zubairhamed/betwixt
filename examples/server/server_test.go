@@ -3,8 +3,8 @@ package server
 import (
 	"github.com/stretchr/testify/assert"
 	. "github.com/zubairhamed/betwixt"
-	"testing"
 	"github.com/zubairhamed/sugoi"
+	"testing"
 )
 
 func TestCoapRequests(t *testing.T) {

@@ -3,8 +3,8 @@ package betwixt
 import (
 	"errors"
 	"github.com/zubairhamed/canopus"
-	"time"
 	"github.com/zubairhamed/sugoi"
+	"time"
 )
 
 type TestDeviceObject struct {

@@ -8,7 +8,7 @@ import (
 func SetupCoapRoutes(server *DefaultServer) {
 	coap := server.coapServer
 
-	coap.OnMessage(func (msg *Message, inbound bool){
+	coap.OnMessage(func(msg *Message, inbound bool) {
 		server.stats.IncrementCoapRequestsCount()
 	})
 

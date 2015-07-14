@@ -3,8 +3,8 @@ package betwixt
 import (
 	"errors"
 	. "github.com/zubairhamed/canopus"
-	"net"
 	"log"
+	"net"
 )
 
 func NewDefaultClient(local string, remote string, registry Registry) (*DefaultClient, error) {
@@ -161,13 +161,13 @@ func (c *DefaultClient) Start() {
 	c.validate()
 
 	s := c.coapServer
-	s.OnStart(func (server *CoapServer){
+	s.OnStart(func(server *CoapServer) {
 		if c.evtOnStartup != nil {
 			c.evtOnStartup()
 		}
 	})
 
-	s.OnObserve(func (resource string, msg *Message){
+	s.OnObserve(func(resource string, msg *Message) {
 		log.Println("Observe Requested")
 	})
 

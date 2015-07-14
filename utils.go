@@ -5,8 +5,8 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"sort"
 	"log"
+	"sort"
 )
 
 const (

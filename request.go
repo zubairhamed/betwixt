@@ -8,7 +8,7 @@ import (
 func Default(coap *canopus.Request, op OperationType) Lwm2mRequest {
 	return &DefaultRequest{
 		coap: coap,
-		op:  op,
+		op:   op,
 	}
 }
 

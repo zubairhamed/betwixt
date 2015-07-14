@@ -3,11 +3,11 @@ package server
 import (
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/canopus"
+	"github.com/zubairhamed/sugoi"
+	"log"
 	"net"
 	"strconv"
 	"strings"
-	"github.com/zubairhamed/sugoi"
-	"log"
 )
 
 func NewDefaultCoapServer() *canopus.CoapServer {

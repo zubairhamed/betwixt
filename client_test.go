@@ -20,14 +20,12 @@ func TestClient(t *testing.T) {
 	assert.NotNil(t, cli, "Error instantiating client")
 	assert.NotNil(t, registry, "Error instantiating registry")
 
-
-//	_, err = cli.Register("xxxxxxxxxxx")
-//	assert.NotNil(t, err)
-//
-//	path, err := cli.Register("xxxxxxxxxx")
-//	assert.Nil(t, err)
-//	log.Println(path)
-
+	//	_, err = cli.Register("xxxxxxxxxxx")
+	//	assert.NotNil(t, err)
+	//
+	//	path, err := cli.Register("xxxxxxxxxx")
+	//	assert.Nil(t, err)
+	//	log.Println(path)
 
 	cases1 := []struct {
 		in LWM2MObjectType

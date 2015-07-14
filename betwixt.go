@@ -2,8 +2,8 @@ package betwixt
 
 import (
 	"github.com/zubairhamed/canopus"
-	"time"
 	"github.com/zubairhamed/sugoi"
+	"time"
 )
 
 type LWM2MObjectType uint16
