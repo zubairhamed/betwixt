@@ -21,11 +21,13 @@ func main() {
 	setupResources(c, registry)
 
 	c.OnStartup(func() {
+		// When client has started up, register itself with a LWM2M server
 		c.Register("betwixt")
 
 		// TODO: Randomly fire change events for values changed
 	})
 
+	// Start client's CoAP listen
 	c.Start()
 }
 
