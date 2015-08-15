@@ -5,7 +5,6 @@ import (
 	"encoding/binary"
 )
 
-
 //   |-------------||-------------||-------------||-------- ........ -----|
 //       8-bit        8 or 16 bit     0-24 bit
 //       Type          Identifier     Length                 Value

@@ -1,4 +1,3 @@
-// Definitions for types, codes and variables used in LWM2M
 package betwixt
 
 import (
@@ -7,21 +6,36 @@ import (
 	"time"
 )
 
+// LWM2MObjectType represents a LWM2M Object Type
 type LWM2MObjectType uint16
+
+// LWM2MObjectInstances contains instances of LWM2M Objects by Type
 type LWM2MObjectInstances map[LWM2MObjectType]Object
 
+// Event Callback
 type FnEvent func()
+
+// Event Callback for OnStartup
 type FnOnStartup func()
+
+// Event Callback for a read request
 type FnOnRead func()
+
+// Event Callback for a write request
 type FnOnWrite func()
+
+// Event Callback for an execute request
 type FnOnExecute func()
+
+// Event Callback for a register request
 type FnOnRegistered func(string)
+
+// Event Callback for a deregister request
 type FnOnDeregistered func()
+
+// Event Callback when an error occurs
 type FnOnError func()
 
-type OperationCode int
-type IdentifierType byte
-type BindingMode string
 type OperationType byte
 
 type EventType int
@@ -31,6 +45,7 @@ const (
 )
 
 // LWM2M Operation Types
+type OperationCode int
 const (
 	OPERATION_NONE OperationCode = 0
 	OPERATION_R    OperationCode = 1
@@ -43,6 +58,7 @@ const (
 )
 
 // Type of LWM2M value
+type IdentifierType byte
 const (
 	IDENTIFIER_OBJECT_INSTANCE     IdentifierType = 0
 	IDENTIFIER_RESOURCE_INSTANCE   IdentifierType = 1
@@ -51,6 +67,7 @@ const (
 )
 
 // Binding Modes
+type BindingMode string
 const (
 	BINDINGMODE_UDP                         BindingMode = "U"
 	BINDINGMODE_UDP_WITH_QUEUE_MODE         BindingMode = "UQ"
@@ -215,6 +232,7 @@ type Object interface {
 	SetEnabler(ObjectEnabler)
 }
 
+// ServerStatistics Statistics recorded for the server
 type ServerStatistics interface {
 	IncrementCoapRequestsCount()
 	GetRequestsCount() int
