@@ -1,3 +1,4 @@
+// Definitions for types, codes and variables used in LWM2M
 package betwixt
 
 import (
@@ -10,7 +11,6 @@ type LWM2MObjectType uint16
 type LWM2MObjectInstances map[LWM2MObjectType]Object
 
 type FnEvent func()
-
 type FnOnStartup func()
 type FnOnRead func()
 type FnOnWrite func()
@@ -30,6 +30,7 @@ const (
 	EVENT_START EventType = 0
 )
 
+// LWM2M Operation Types
 const (
 	OPERATION_NONE OperationCode = 0
 	OPERATION_R    OperationCode = 1
@@ -41,6 +42,7 @@ const (
 	OPERATION_RWE  OperationCode = 7
 )
 
+// Type of LWM2M value
 const (
 	IDENTIFIER_OBJECT_INSTANCE     IdentifierType = 0
 	IDENTIFIER_RESOURCE_INSTANCE   IdentifierType = 1
@@ -48,6 +50,7 @@ const (
 	IDENTIFIER_RESOURCE_WITH_VALUE IdentifierType = 3
 )
 
+// Binding Modes
 const (
 	BINDINGMODE_UDP                         BindingMode = "U"
 	BINDINGMODE_UDP_WITH_QUEUE_MODE         BindingMode = "UQ"
@@ -57,6 +60,7 @@ const (
 	BINDINGMODE_UDP_WITH_QUEUE_MODE_AND_SMS BindingMode = "UQS"
 )
 
+// Operation Types
 const (
 	OPERATIONTYPE_REGISTER         OperationType = 0
 	OPERATIONTYPE_UPDATE           OperationType = 1

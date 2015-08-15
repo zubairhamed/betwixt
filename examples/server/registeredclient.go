@@ -105,7 +105,7 @@ func (c *DefaultRegisteredClient) ReadResource(obj uint16, inst uint16, rsrc uin
 		req.SetMediaType(MEDIATYPE_TEXT_PLAIN_VND_OMA_LWM2M)
 	}
 
-	response, _ := SendMessage(req.GetMessage(), conn)
+	response, _ := SendMessage(req.GetMessage(), NewCanopusUDPConnection(conn))
 	PrintMessage(response.GetMessage())
 	responseValue, _ := betwixt.DecodeResourceValue(rsrc, response.GetMessage().Payload.GetBytes(), resourceDefinition)
 
