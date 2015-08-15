@@ -4,7 +4,7 @@ import (
 	"github.com/zubairhamed/canopus"
 )
 
-// Default
+// Default is a helper/shortcut method which creates a Default LWM2M Request
 func Default(coap *canopus.Request, op OperationType) Lwm2mRequest {
 	return &DefaultRequest{
 		coap: coap,

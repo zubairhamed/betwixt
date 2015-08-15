@@ -21,6 +21,7 @@ const (
 	IPSO_OBJECT_IPSO_BAROMETER         LWM2MObjectType = 3315
 )
 
+// This represents a list of LWM2M objects registered to the OMA NA for LWM2M donated by IPSO
 type IPSOSmartObjects struct {
 	models map[LWM2MObjectType]ObjectDefinition
 }

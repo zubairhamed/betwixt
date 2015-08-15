@@ -23,6 +23,7 @@ const (
 	TYPEFIELD_TYPE_RESOURCE         = 192 // 11
 )
 
+// DecodeTypeField extracts/decodes the TLV type field from a byte array
 func DecodeTypeField(typeField byte) (typeOfIdentifier byte, lengthOfIdentifier byte, typeOfLength byte, lengthOfValue byte) {
 	typeOfIdentifier = typeField & TLV_FIELD_IDENTIFIER_TYPE
 	lengthOfIdentifier = typeField & TLV_FIELD_IDENTIFIER_LENGTH
@@ -32,6 +33,7 @@ func DecodeTypeField(typeField byte) (typeOfIdentifier byte, lengthOfIdentifier 
 	return
 }
 
+// Extract value from a LWM2M byte fragment
 func ValueFromBytes(b []byte, v ValueTypeCode) Value {
 	if len(b) == 0 {
 		return Empty()
@@ -51,6 +53,7 @@ func ValueFromBytes(b []byte, v ValueTypeCode) Value {
 	return Empty()
 }
 
+// ValidResourceTypeField Checks if a type field is of a valid type (resource instance, multiple resource etc)
 func ValidResourceTypeField(b []byte) error {
 	typeField := b[0]
 
@@ -62,6 +65,7 @@ func ValidResourceTypeField(b []byte) error {
 	return nil
 }
 
+// Decodes the identifier field and returns the type and length
 func DecodeIdentifierField(b []byte, pos int) (identifier uint16, typeLength int) {
 	_, typeFieldLengthOfIdentifier, _, _ := DecodeTypeField(b[0])
 
@@ -77,6 +81,7 @@ func DecodeIdentifierField(b []byte, pos int) (identifier uint16, typeLength int
 	return
 }
 
+// DecodeLengthField decodes the length field and returns the type and value length
 func DecodeLengthField(b []byte, pos int) (valueLength uint64, typeLength int) {
 	_, _, typeFieldTypeOfLength, typeFieldLengthOfValue := DecodeTypeField(b[0])
 
@@ -98,6 +103,7 @@ func DecodeLengthField(b []byte, pos int) (valueLength uint64, typeLength int) {
 	return
 }
 
+// DecodeResourceValue decodes the resource value
 func DecodeResourceValue(resourceId uint16, b []byte, resourceDef ResourceDefinition) (Value, error) {
 	if resourceDef.MultipleValuesAllowed() {
 
@@ -162,6 +168,7 @@ func DecodeResourceValue(resourceId uint16, b []byte, resourceDef ResourceDefini
 	}
 }
 
+// EncodeValue encodes the resource id and value and returns a byte array representation
 func EncodeValue(resourceId uint16, allowMultipleValues bool, v Value) []byte {
 	if v.GetType() == VALUETYPE_MULTIPLE {
 		typeOfMultipleValue := v.GetContainedType()
@@ -221,6 +228,8 @@ func EncodeValue(resourceId uint16, allowMultipleValues bool, v Value) []byte {
 	return nil
 }
 
+// BuildModelResourceStringPayload creates the string representation of resources for a LWM2M client in the
+// Core-Resource format
 func BuildModelResourceStringPayload(instances LWM2MObjectInstances) string {
 	var buf bytes.Buffer
 
@@ -244,16 +253,19 @@ func BuildModelResourceStringPayload(instances LWM2MObjectInstances) string {
 	return buf.String()
 }
 
+// Checks if a resource type is executable
 func IsExecutableResource(m ResourceDefinition) bool {
 	op := m.GetOperations()
 	return (op == OPERATION_E || op == OPERATION_RE || op == OPERATION_RWE || op == OPERATION_WE)
 }
 
+// Checks if a resource type is readable
 func IsReadableResource(m ResourceDefinition) bool {
 	op := m.GetOperations()
 	return (op == OPERATION_RE || op == OPERATION_R || op == OPERATION_RWE || op == OPERATION_RW)
 }
 
+// Checks if a resource type is writable
 func IsWritableResource(m ResourceDefinition) bool {
 	op := m.GetOperations()
 	return (op == OPERATION_RW || op == OPERATION_RWE || op == OPERATION_WE || op == OPERATION_W)

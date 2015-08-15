@@ -67,6 +67,7 @@ func CreateTlvTypeField(identType byte, value interface{}, ident uint16) byte {
 	return typeField
 }
 
+// CreateTlvIdentifierField Creates a TLV Identifier field
 func CreateTlvIdentifierField(ident uint16) []byte {
 	// Identifier Byte
 	if ident > 255 {
@@ -81,6 +82,7 @@ func CreateTlvIdentifierField(ident uint16) []byte {
 	}
 }
 
+// CreateTlvLengthField creates a TLV Length Field
 func CreateTlvLengthField(value interface{}) []byte {
 	valueTypeLength, _ := GetValueByteLength(value)
 
@@ -93,6 +95,7 @@ func CreateTlvLengthField(value interface{}) []byte {
 	return []byte{}
 }
 
+// CreateTlvValueField creates a TLV Value Field
 func CreateTlvValueField(value int) []byte {
 	buf := new(bytes.Buffer)
 	binary.Write(buf, binary.BigEndian, uint64(value))

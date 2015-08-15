@@ -1,5 +1,7 @@
 package betwixt
 
+// NewDefaultObjectRegistry instantiates a default rgistry containing the Starter Pack
+// objects and IPSO smart objects
 func NewDefaultObjectRegistry() Registry {
 	reg := NewObjectRegistry(&LWM2MCoreObjects{}, &IPSOSmartObjects{})
 
@@ -16,6 +18,9 @@ func NewObjectRegistry(s ...ObjectSource) Registry {
 	return reg
 }
 
+// ObjectRegistry is a registry containing known LWM2M objects registered to te OMA NA as well
+// as custom objects
+// It contains multiple ObjectSources which in turns each contains multiple Object definitions
 type ObjectRegistry struct {
 	sources []ObjectSource
 }
@@ -45,11 +50,14 @@ func (m *ObjectRegistry) GetDefinitions() []ObjectDefinition {
 	return defs
 }
 
+// Registers a new ObjectSource to the tegistry
 func (m *ObjectRegistry) Register(s ObjectSource) {
 	s.Initialize()
 	m.sources = append(m.sources, s)
 }
 
+// Get all object definitions which are mandatory to be registered by
+// a client (such as Firmware, Device etc)
 func (m *ObjectRegistry) GetMandatory() []ObjectDefinition {
 	mandatory := []ObjectDefinition{}
 

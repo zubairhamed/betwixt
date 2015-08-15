@@ -78,6 +78,7 @@ const (
 	OMA_OBJECT_LWM2M_CONNECTIVITY_STATISTICS LWM2MObjectType = 7
 )
 
+// This represents a list of LWM2M Starter Pack objects registered to the OMA NA
 type LWM2MCoreObjects struct {
 	models map[LWM2MObjectType]ObjectDefinition
 }

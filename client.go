@@ -7,6 +7,7 @@ import (
 	"net"
 )
 
+// NewDefaultClient instantiates a new instance of LWM2M Client
 func NewDefaultClient(local string, remote string, registry Registry) (*DefaultClient, error) {
 	localAddr, err := net.ResolveUDPAddr("udp", local)
 	if err != nil {
@@ -51,7 +52,8 @@ type DefaultClient struct {
 	evtOnError        FnOnError
 }
 
-// Operations
+// Registers this client to a LWM2M Server instance
+// name must be unique and be less than 10 characers
 func (c *DefaultClient) Register(name string) (string, error) {
 	if len(name) > 10 {
 		return "", errors.New("Client name can not exceed 10 characters")
@@ -77,6 +79,7 @@ func (c *DefaultClient) Register(name string) (string, error) {
 	return path, nil
 }
 
+// Sets/Defines an Enabler for a given LWM2M Object Type
 func (c *DefaultClient) SetEnabler(t LWM2MObjectType, e ObjectEnabler) {
 	_, ok := c.enabledObjects[t]
 	if ok {
@@ -84,14 +87,17 @@ func (c *DefaultClient) SetEnabler(t LWM2MObjectType, e ObjectEnabler) {
 	}
 }
 
+// Returns a list of LWM2M Enabled Objects
 func (c *DefaultClient) GetEnabledObjects() map[LWM2MObjectType]Object {
 	return c.enabledObjects
 }
 
+// Returns the registry used for looking up LWM2M object type definitions
 func (c *DefaultClient) GetRegistry() Registry {
 	return c.registry
 }
 
+// Unregisters this client from a LWM2M server which was previously registered
 func (c *DefaultClient) Deregister() {
 	req := NewRequest(TYPE_CONFIRMABLE, DELETE, GenerateMessageId())
 
@@ -119,6 +125,7 @@ func (c *DefaultClient) UseRegistry(reg Registry) {
 	c.registry = reg
 }
 
+// Registes an object enabler for a given LWM2M object type
 func (c *DefaultClient) EnableObject(t LWM2MObjectType, e ObjectEnabler) error {
 	_, ok := c.enabledObjects[t]
 	if !ok {
@@ -133,6 +140,7 @@ func (c *DefaultClient) EnableObject(t LWM2MObjectType, e ObjectEnabler) error {
 	}
 }
 
+// Adds a new object instance for a previously enabled LWM2M object type
 func (c *DefaultClient) AddObjectInstance(t LWM2MObjectType, instance int) error {
 	o := c.enabledObjects[t]
 	if o != nil {
@@ -143,6 +151,7 @@ func (c *DefaultClient) AddObjectInstance(t LWM2MObjectType, instance int) error
 	return errors.New("Attempting to add a nil instance")
 }
 
+// Adds a list of object instance for a previously enabled LWM2M object type
 func (c *DefaultClient) AddObjectInstances(t LWM2MObjectType, instances ...int) {
 	for _, o := range instances {
 		c.AddObjectInstance(t, o)
@@ -157,6 +166,7 @@ func (c *DefaultClient) validate() {
 
 }
 
+// Starts up the LWM2M client, listens to incoming requests and fires the OnStart event
 func (c *DefaultClient) Start() {
 	c.validate()
 
@@ -186,6 +196,7 @@ func (c *DefaultClient) Start() {
 	c.coapServer.Start()
 }
 
+// Handles LWM2M Create Requests (not to be mistaken for/not the same as  CoAP PUT)
 func (c *DefaultClient) handleCreateRequest(req *Request) *Response {
 	log.Println("Create Request")
 	attrResource := req.GetAttribute("rsrc")
@@ -216,6 +227,7 @@ func (c *DefaultClient) handleCreateRequest(req *Request) *Response {
 	return NewResponseWithMessage(msg)
 }
 
+// Handles LWM2M Read Requests (not to be mistaken for/not the same as  CoAP GET)
 func (c *DefaultClient) handleReadRequest(req *Request) *Response {
 	log.Println("Read Request")
 	attrResource := req.GetAttribute("rsrc")
@@ -261,6 +273,7 @@ func (c *DefaultClient) handleReadRequest(req *Request) *Response {
 	return NewResponseWithMessage(msg)
 }
 
+// Handles LWM2M Delete Requests (not to be mistaken for/not the same as  CoAP DELETE)
 func (c *DefaultClient) handleDeleteRequest(req *Request) *Response {
 	log.Println("Delete Request")
 	objectId := req.GetAttributeAsInt("obj")
@@ -292,6 +305,7 @@ func (c *DefaultClient) handleObserveRequest() {
 	log.Println("Observe Request")
 }
 
+// Handles LWM2M Write Requests (not to be mistaken for/not the same as  CoAP POST)
 func (c *DefaultClient) handleWriteRequest(req *Request) *Response {
 	log.Println("Write Request")
 	attrResource := req.GetAttribute("rsrc")
@@ -333,6 +347,7 @@ func (c *DefaultClient) handleWriteRequest(req *Request) *Response {
 	return NewResponseWithMessage(msg)
 }
 
+// Handles LWM2M Execute Requests
 func (c *DefaultClient) handleExecuteRequest(req *Request) *Response {
 	log.Println("Execute Request")
 	attrResource := req.GetAttribute("rsrc")

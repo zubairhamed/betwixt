@@ -6,7 +6,7 @@ import (
 	"github.com/zubairhamed/canopus"
 )
 
-// 201 Created
+// Created creates a LWM2M Response (CreatedResponse) with CoAP code 201 - Created
 func Created() Lwm2mResponse {
 	return &CreatedResponse{}
 }
@@ -22,7 +22,7 @@ func (r *CreatedResponse) GetResponseValue() Value {
 	return Empty()
 }
 
-// 202 Deleted
+// Deleted creates a LWM2M Response (DeletedResponse) with CoAP code 202 - Deleted
 func Deleted() Lwm2mResponse {
 	return &DeletedResponse{}
 }
@@ -38,7 +38,7 @@ func (r *DeletedResponse) GetResponseValue() Value {
 	return Empty()
 }
 
-// 204 Changed
+// Changed creates a LWM2M Response (ChangedResponse) with CoAP code 204 - Changed
 func Changed() Lwm2mResponse {
 	return &ChangedResponse{}
 }
@@ -54,7 +54,7 @@ func (r *ChangedResponse) GetResponseValue() Value {
 	return Empty()
 }
 
-// 205 Content
+// Content creates a LWM2M Response (ContentResponse) with CoAP code 205 - Content
 func Content(val Value) Lwm2mResponse {
 	return &ContentResponse{
 		val: val,
@@ -73,7 +73,7 @@ func (r *ContentResponse) GetResponseValue() Value {
 	return r.val
 }
 
-// 400 Bad Request
+// BadRequest creates a LWM2M Response (BadRequestResponse) with CoAP code 400 - Bad Request
 func BadRequest() Lwm2mResponse {
 	return &BadRequestResponse{}
 }
@@ -89,7 +89,7 @@ func (r *BadRequestResponse) GetResponseValue() Value {
 	return Empty()
 }
 
-// 401 Unauthorized
+// Unauthorized creates a LWM2M Response (UnauthorizedResponse) with CoAP code 401 - Unauthorized
 func Unauthorized() Lwm2mResponse {
 	return &UnauthorizedResponse{}
 }
@@ -105,7 +105,7 @@ func (r *UnauthorizedResponse) GetResponseValue() Value {
 	return Empty()
 }
 
-// 404 Not Found
+// NotFound creates a LWM2M Response (NotFoundResponse) with CoAP code 404 - Not Found
 func NotFound() Lwm2mResponse {
 	return &NotFoundResponse{}
 }
@@ -121,7 +121,7 @@ func (r *NotFoundResponse) GetResponseValue() Value {
 	return Empty()
 }
 
-// 405 Method Not Allowed
+/// MethodNotAllowed creates a LWM2M Response (MethodNotAllowedResponse) with CoAP code 405 - Method Not Allowed
 func MethodNotAllowed() Lwm2mResponse {
 	return &MethodNotAllowedResponse{}
 }
@@ -137,7 +137,7 @@ func (r *MethodNotAllowedResponse) GetResponseValue() Value {
 	return Empty()
 }
 
-// 409 Conflict
+// Conflict creates a LWM2M Response (ConflictResponse) with CoAP code 409 - Conflict
 func Conflict() Lwm2mResponse {
 	return &ConflictResponse{}
 }

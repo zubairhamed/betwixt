@@ -4,7 +4,8 @@ import (
 	"bytes"
 )
 
-// DefaultObjectDefinition
+// Objects are fundamental part of LWM2M
+// DefaultObjectDefinition describes a LWM2M Object
 type DefaultObjectDefinition struct {
 	Id          LWM2MObjectType
 	Name        string
