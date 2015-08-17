@@ -18,7 +18,7 @@ func SetupCoapRoutes(server *DefaultServer) {
 }
 
 func handleRegister(server *DefaultServer) RouteHandler {
-	return func(req *Request) *Response {
+	return func(req CoapRequest) CoapResponse {
 		ep := req.GetUriQuery("ep")
 		// lt := req.GetUriQuery("lt")
 		// sms := req.GetUriQuery("sms")
@@ -40,7 +40,7 @@ func handleRegister(server *DefaultServer) RouteHandler {
 }
 
 func handleUpdate(server *DefaultServer) RouteHandler {
-	return func(req *Request) *Response {
+	return func(req CoapRequest) CoapResponse {
 		id := req.GetAttribute("id")
 
 		server.update(id)
@@ -54,7 +54,7 @@ func handleUpdate(server *DefaultServer) RouteHandler {
 }
 
 func handleDelete(server *DefaultServer) RouteHandler {
-	return func(req *Request) *Response {
+	return func(req CoapRequest) CoapResponse {
 		id := req.GetAttribute("id")
 
 		server.delete(id)

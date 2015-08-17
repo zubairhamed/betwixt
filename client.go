@@ -197,7 +197,7 @@ func (c *DefaultClient) Start() {
 }
 
 // Handles LWM2M Create Requests (not to be mistaken for/not the same as  CoAP PUT)
-func (c *DefaultClient) handleCreateRequest(req *Request) *Response {
+func (c *DefaultClient) handleCreateRequest(req CoapRequest) CoapResponse {
 	log.Println("Create Request")
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
@@ -228,7 +228,7 @@ func (c *DefaultClient) handleCreateRequest(req *Request) *Response {
 }
 
 // Handles LWM2M Read Requests (not to be mistaken for/not the same as  CoAP GET)
-func (c *DefaultClient) handleReadRequest(req *Request) *Response {
+func (c *DefaultClient) handleReadRequest(req CoapRequest) CoapResponse {
 	log.Println("Read Request")
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
@@ -274,7 +274,7 @@ func (c *DefaultClient) handleReadRequest(req *Request) *Response {
 }
 
 // Handles LWM2M Delete Requests (not to be mistaken for/not the same as  CoAP DELETE)
-func (c *DefaultClient) handleDeleteRequest(req *Request) *Response {
+func (c *DefaultClient) handleDeleteRequest(req CoapRequest) CoapResponse {
 	log.Println("Delete Request")
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
@@ -306,7 +306,7 @@ func (c *DefaultClient) handleObserveRequest() {
 }
 
 // Handles LWM2M Write Requests (not to be mistaken for/not the same as  CoAP POST)
-func (c *DefaultClient) handleWriteRequest(req *Request) *Response {
+func (c *DefaultClient) handleWriteRequest(req CoapRequest) CoapResponse {
 	log.Println("Write Request")
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
@@ -348,7 +348,7 @@ func (c *DefaultClient) handleWriteRequest(req *Request) *Response {
 }
 
 // Handles LWM2M Execute Requests
-func (c *DefaultClient) handleExecuteRequest(req *Request) *Response {
+func (c *DefaultClient) handleExecuteRequest(req CoapRequest) CoapResponse {
 	log.Println("Execute Request")
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")

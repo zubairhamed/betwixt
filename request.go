@@ -5,7 +5,7 @@ import (
 )
 
 // Default is a helper/shortcut method which creates a Default LWM2M Request
-func Default(coap *canopus.Request, op OperationType) Lwm2mRequest {
+func Default(coap canopus.CoapRequest, op OperationType) Lwm2mRequest {
 	return &DefaultRequest{
 		coap: coap,
 		op:   op,
@@ -13,7 +13,7 @@ func Default(coap *canopus.Request, op OperationType) Lwm2mRequest {
 }
 
 type DefaultRequest struct {
-	coap *canopus.Request
+	coap canopus.CoapRequest
 	op   OperationType
 }
 
@@ -29,7 +29,7 @@ func (r *DefaultRequest) GetOperationType() OperationType {
 	return r.op
 }
 
-func (r *DefaultRequest) GetCoapRequest() *canopus.Request {
+func (r *DefaultRequest) GetCoapRequest() canopus.CoapRequest {
 	return r.coap
 }
 
@@ -55,6 +55,6 @@ func (r *NilRequest) GetOperationType() OperationType {
 	return r.op
 }
 
-func (r *NilRequest) GetCoapRequest() *canopus.Request {
+func (r *NilRequest) GetCoapRequest() canopus.CoapRequest {
 	return nil
 }
