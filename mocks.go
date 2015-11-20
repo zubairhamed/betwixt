@@ -163,7 +163,7 @@ func NewMockServer() Server {
 type MockServer struct {
 	stats      ServerStatistics
 	httpServer *sugoi.SugoiServer
-	coapServer *canopus.CoapServer
+	coapServer canopus.CoapServer
 }
 
 func (server *MockServer) Start() {
@@ -190,7 +190,7 @@ func (server *MockServer) GetHttpServer() *sugoi.SugoiServer {
 	return server.httpServer
 }
 
-func (server *MockServer) GetCoapServer() *canopus.CoapServer {
+func (server *MockServer) GetCoapServer() canopus.CoapServer {
 	return server.coapServer
 }
 

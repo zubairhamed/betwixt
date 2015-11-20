@@ -37,7 +37,7 @@ func NewDefaultClient(local string, remote string, registry Registry) (*DefaultC
 }
 
 type DefaultClient struct {
-	coapServer     *CoapServer
+	coapServer     CoapServer
 	registry       Registry
 	enabledObjects map[LWM2MObjectType]Object
 	path           string
@@ -171,7 +171,7 @@ func (c *DefaultClient) Start() {
 	c.validate()
 
 	s := c.coapServer
-	s.OnStart(func(server *CoapServer) {
+	s.OnStart(func(server CoapServer) {
 		if c.evtOnStartup != nil {
 			c.evtOnStartup()
 		}

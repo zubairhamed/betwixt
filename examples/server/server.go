@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func NewDefaultCoapServer() *canopus.CoapServer {
+func NewDefaultCoapServer() canopus.CoapServer {
 	localAddr, err := net.ResolveUDPAddr("udp", ":5683")
 	if err != nil {
 		log.Fatal("Error starting CoAP Server: ", err)
@@ -29,7 +29,7 @@ func NewDefaultServer(port string) betwixt.Server {
 }
 
 type DefaultServer struct {
-	coapServer *canopus.CoapServer
+	coapServer canopus.CoapServer
 	httpServer *sugoi.SugoiServer
 	registry   betwixt.Registry
 	stats      betwixt.ServerStatistics
@@ -37,7 +37,7 @@ type DefaultServer struct {
 	events     map[betwixt.EventType]betwixt.FnEvent
 }
 
-func (server *DefaultServer) GetCoapServer() *canopus.CoapServer {
+func (server *DefaultServer) GetCoapServer() canopus.CoapServer {
 	return server.coapServer
 }
 
