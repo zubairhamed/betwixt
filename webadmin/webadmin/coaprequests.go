@@ -1,4 +1,4 @@
-package server
+package webadmin
 
 import (
 	. "github.com/zubairhamed/canopus"

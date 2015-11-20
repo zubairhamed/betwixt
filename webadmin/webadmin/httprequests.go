@@ -1,8 +1,8 @@
-package server
+package webadmin
 
 import (
 	"github.com/zubairhamed/betwixt"
-	"github.com/zubairhamed/betwixt/examples/server/models"
+	"github.com/zubairhamed/betwixt/webadmin/models"
 	"github.com/zubairhamed/sugoi"
 	"log"
 	"runtime"

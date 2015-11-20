@@ -1,4 +1,4 @@
-package server
+package webadmin
 
 type DefaultServerStatistics struct {
 	requestsCount int
