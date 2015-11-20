@@ -156,13 +156,13 @@ func (s *MockServerStatistics) GetRequestsCount() int {
 func NewMockServer() Server {
 	return &MockServer{
 		stats:      &MockServerStatistics{},
-		httpServer: sugoi.NewSugoi("8080"),
+		httpServer: sugoi.NewHttpServer("8080"),
 	}
 }
 
 type MockServer struct {
 	stats      ServerStatistics
-	httpServer *sugoi.SugoiServer
+	httpServer sugoi.HttpServer
 	coapServer canopus.CoapServer
 }
 
@@ -186,7 +186,7 @@ func (server *MockServer) GetStats() ServerStatistics {
 	return server.stats
 }
 
-func (server *MockServer) GetHttpServer() *sugoi.SugoiServer {
+func (server *MockServer) GetHttpServer() sugoi.HttpServer {
 	return server.httpServer
 }
 

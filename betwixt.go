@@ -194,7 +194,7 @@ type Server interface {
 	GetClients() map[string]RegisteredClient
 	GetClient(id string) RegisteredClient
 	GetStats() ServerStatistics
-	GetHttpServer() *sugoi.SugoiServer
+	GetHttpServer() sugoi.HttpServer
 	GetCoapServer() canopus.CoapServer
 }
 

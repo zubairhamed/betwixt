@@ -21,7 +21,7 @@ func NewDefaultCoapServer() canopus.CoapServer {
 func NewDefaultServer(port string) betwixt.Server {
 	return &DefaultServer{
 		coapServer: NewDefaultCoapServer(),
-		httpServer: sugoi.NewSugoi("8081"),
+		httpServer: sugoi.NewHttpServer("8081"),
 		clients:    make(map[string]betwixt.RegisteredClient),
 		stats:      &DefaultServerStatistics{},
 		events:     make(map[betwixt.EventType]betwixt.FnEvent),
@@ -30,7 +30,7 @@ func NewDefaultServer(port string) betwixt.Server {
 
 type DefaultServer struct {
 	coapServer canopus.CoapServer
-	httpServer *sugoi.SugoiServer
+	httpServer sugoi.HttpServer
 	registry   betwixt.Registry
 	stats      betwixt.ServerStatistics
 	clients    map[string]betwixt.RegisteredClient
@@ -41,7 +41,7 @@ func (server *DefaultServer) GetCoapServer() canopus.CoapServer {
 	return server.coapServer
 }
 
-func (server *DefaultServer) GetHttpServer() *sugoi.SugoiServer {
+func (server *DefaultServer) GetHttpServer() sugoi.HttpServer {
 	return server.httpServer
 }
 
@@ -63,7 +63,7 @@ func (server *DefaultServer) Start() {
 	betwixt.CallLwm2mEvent(betwixt.EVENT_START, server.events[betwixt.EVENT_START])
 
 	// Start HTTP Server
-	http.Serve()
+	http.Start()
 }
 
 func (server *DefaultServer) GetStats() betwixt.ServerStatistics {
