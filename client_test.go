@@ -9,14 +9,13 @@ func TestClient(t *testing.T) {
 
 	registry := NewDefaultObjectRegistry()
 
-	_, err := NewDefaultClient(":0", "blahblah", registry)
-	assert.NotNil(t, err)
+	cli := NewDefaultClient("0", "blahblah", registry)
+	assert.NotNil(t, cli)
 
-	_, err = NewDefaultClient("blahblah", "localhost:5683", registry)
-	assert.NotNil(t, err)
+	cli = NewDefaultClient("blahblah", "localhost:5683", registry)
+	assert.NotNil(t, cli)
 
-	cli, err := NewDefaultClient(":0", "localhost:5683", registry)
-	assert.Nil(t, err)
+	cli = NewDefaultClient("0", "localhost:5683", registry)
 	assert.NotNil(t, cli, "Error instantiating client")
 	assert.NotNil(t, registry, "Error instantiating registry")
 

@@ -4,18 +4,12 @@ import (
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/canopus"
 	"github.com/zubairhamed/sugoi"
-	"log"
-	"net"
 	"strconv"
 	"strings"
 )
 
 func NewDefaultCoapServer() canopus.CoapServer {
-	localAddr, err := net.ResolveUDPAddr("udp", ":5683")
-	if err != nil {
-		log.Fatal("Error starting CoAP Server: ", err)
-	}
-	return canopus.NewServer(localAddr, nil)
+	return canopus.NewServer("5683", "")
 }
 
 func NewDefaultServer(port string) betwixt.Server {

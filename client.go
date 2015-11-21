@@ -4,22 +4,11 @@ import (
 	"errors"
 	. "github.com/zubairhamed/canopus"
 	"log"
-	"net"
 )
 
 // NewDefaultClient instantiates a new instance of LWM2M Client
-func NewDefaultClient(local string, remote string, registry Registry) (*DefaultClient, error) {
-	localAddr, err := net.ResolveUDPAddr("udp", local)
-	if err != nil {
-		return nil, err
-	}
-
-	remoteAddr, err := net.ResolveUDPAddr("udp", remote)
-	if err != nil {
-		return nil, err
-	}
-
-	coapServer := NewServer(localAddr, remoteAddr)
+func NewDefaultClient(local string, remote string, registry Registry) *DefaultClient {
+	coapServer := NewServer(local, remote)
 
 	// Create Mandatory
 	c := &DefaultClient{
@@ -33,7 +22,7 @@ func NewDefaultClient(local string, remote string, registry Registry) (*DefaultC
 		c.EnableObject(o.GetType(), NewNullEnabler())
 	}
 
-	return c, nil
+	return c
 }
 
 type DefaultClient struct {

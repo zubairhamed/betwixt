@@ -10,7 +10,7 @@ func TestExampleObjects(t *testing.T) {
 	omaObjects := &LWM2MCoreObjects{}
 
 	reg := NewMockRegistry(omaObjects)
-	cli, _ := NewDefaultClient(":0", "localhost:5683", reg)
+	cli := NewDefaultClient("0", "localhost:5683", reg)
 
 	deviceModel := omaObjects.GetObject(OMA_OBJECT_LWM2M_DEVICE)
 

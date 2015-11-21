@@ -7,7 +7,7 @@ import (
 
 func main() {
 	registry := NewDefaultObjectRegistry()
-	c, _ := NewDefaultClient(":0", "192.168.1.212:5683", registry)
+	c := NewDefaultClient(":0", "192.168.1.212:5683", registry)
 
 	setupEv3Resources(c, registry)
 

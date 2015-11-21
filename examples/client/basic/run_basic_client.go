@@ -6,13 +6,16 @@ import (
 )
 
 func main() {
+
+	cli := StandardCommandLineFlags()
+
 	registry := NewDefaultObjectRegistry()
-	c, _ := NewDefaultClient(":0", "localhost:5683", registry)
+	c := NewDefaultClient(":0", cli.Server, registry)
 
 	setupResources(c, registry)
 
 	c.OnStartup(func() {
-		c.Register("betwixt")
+		c.Register(cli.Name)
 
 		// TODO: Randomly fire change events for values changed
 	})
