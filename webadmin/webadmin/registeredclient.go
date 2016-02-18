@@ -95,17 +95,17 @@ func (c *DefaultRegisteredClient) ReadResource(obj uint16, inst uint16, rsrc uin
 	conn, _ := net.DialUDP("udp", lAddr, rAddr)
 
 	uri := fmt.Sprintf("/%d/%d/%d", obj, inst, rsrc)
-	req := NewRequest(TYPE_CONFIRMABLE, GET, GenerateMessageId())
+	req := NewRequest(MessageConfirmable, Get, GenerateMessageID())
 	req.SetRequestURI(uri)
 
 	resourceDefinition := c.GetObject(betwixt.LWM2MObjectType(obj)).GetDefinition().GetResource(rsrc)
 	if resourceDefinition.MultipleValuesAllowed() {
-		req.SetMediaType(MEDIATYPE_TLV_VND_OMA_LWM2M)
+		req.SetMediaType(MediaTypeTlvVndOmaLwm2m)
 	} else {
-		req.SetMediaType(MEDIATYPE_TEXT_PLAIN_VND_OMA_LWM2M)
+		req.SetMediaType(MediaTypeTextPlainVndOmaLwm2m)
 	}
 
-	response, _ := SendMessage(req.GetMessage(), NewCanopusUDPConnection(conn))
+	response, _ := SendMessage(req.GetMessage(), NewUDPConnection(conn))
 	PrintMessage(response.GetMessage())
 	responseValue, _ := betwixt.DecodeResourceValue(rsrc, response.GetMessage().Payload.GetBytes(), resourceDefinition)
 

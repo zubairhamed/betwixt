@@ -18,7 +18,7 @@ type DefaultRequest struct {
 }
 
 func (r *DefaultRequest) GetPath() string {
-	return r.coap.GetMessage().GetUriPath()
+	return r.coap.GetMessage().GetURIPath()
 }
 
 func (r *DefaultRequest) GetMessage() *canopus.Message {

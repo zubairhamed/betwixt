@@ -19,7 +19,7 @@ func SetupCoapRoutes(server *DefaultServer) {
 
 func handleRegister(server *DefaultServer) RouteHandler {
 	return func(req CoapRequest) CoapResponse {
-		ep := req.GetUriQuery("ep")
+		ep := req.GetURIQuery("ep")
 		// lt := req.GetUriQuery("lt")
 		// sms := req.GetUriQuery("sms")
 		// binding := req.GetUriQuery("b")
@@ -30,10 +30,10 @@ func handleRegister(server *DefaultServer) RouteHandler {
 			log.Println("Error registering client ", ep)
 		}
 
-		msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+		msg := NewMessageOfType(MessageAcknowledgment, req.GetMessage().MessageID)
 		msg.Token = req.GetMessage().Token
-		msg.AddOption(OPTION_LOCATION_PATH, "rd/"+clientId)
-		msg.Code = COAPCODE_201_CREATED
+		msg.AddOption(OptionLocationPath, "rd/"+clientId)
+		msg.Code = CoapCodeCreated
 
 		return NewResponseWithMessage(msg)
 	}
@@ -45,9 +45,9 @@ func handleUpdate(server *DefaultServer) RouteHandler {
 
 		server.update(id)
 
-		msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+		msg := NewMessageOfType(MessageAcknowledgment, req.GetMessage().MessageID)
 		msg.Token = req.GetMessage().Token
-		msg.Code = COAPCODE_204_CHANGED
+		msg.Code = CoapCodeChanged
 
 		return NewResponseWithMessage(msg)
 	}
@@ -59,9 +59,9 @@ func handleDelete(server *DefaultServer) RouteHandler {
 
 		server.delete(id)
 
-		msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+		msg := NewMessageOfType(MessageAcknowledgment, req.GetMessage().MessageID)
 		msg.Token = req.GetMessage().Token
-		msg.Code = COAPCODE_202_DELETED
+		msg.Code = CoapCodeDeleted
 
 		return NewResponseWithMessage(msg)
 	}

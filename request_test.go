@@ -7,14 +7,14 @@ import (
 )
 
 func TestDefaultRequestObject(t *testing.T) {
-	coapReq := canopus.NewRequest(canopus.TYPE_CONFIRMABLE, canopus.COAPCODE_204_CHANGED, 12345)
+	coapReq := canopus.NewRequest(canopus.MessageConfirmable, canopus.CoapCodeChanged, 12345)
 	coapReq.SetRequestURI("/rd")
 
 	def := Default(coapReq, OPERATIONTYPE_REGISTER)
 
 	assert.NotNil(t, def.GetMessage())
-	assert.Equal(t, uint16(12345), def.GetMessage().MessageId)
-	assert.Equal(t, "/rd", def.GetMessage().GetUriPath())
+	assert.Equal(t, uint16(12345), def.GetMessage().MessageID)
+	assert.Equal(t, "/rd", def.GetMessage().GetURIPath())
 	assert.Equal(t, OPERATIONTYPE_REGISTER, def.GetOperationType())
 
 	assert.NotNil(t, def.GetCoapRequest())

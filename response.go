@@ -15,7 +15,7 @@ type CreatedResponse struct {
 }
 
 func (r *CreatedResponse) GetResponseCode() canopus.CoapCode {
-	return canopus.COAPCODE_201_CREATED
+	return canopus.CoapCodeCreated
 }
 
 func (r *CreatedResponse) GetResponseValue() Value {
@@ -31,7 +31,7 @@ type DeletedResponse struct {
 }
 
 func (r *DeletedResponse) GetResponseCode() canopus.CoapCode {
-	return canopus.COAPCODE_202_DELETED
+	return canopus.CoapCodeDeleted
 }
 
 func (r *DeletedResponse) GetResponseValue() Value {
@@ -47,7 +47,7 @@ type ChangedResponse struct {
 }
 
 func (r *ChangedResponse) GetResponseCode() canopus.CoapCode {
-	return canopus.COAPCODE_204_CHANGED
+	return canopus.CoapCodeChanged
 }
 
 func (r *ChangedResponse) GetResponseValue() Value {
@@ -66,7 +66,7 @@ type ContentResponse struct {
 }
 
 func (r *ContentResponse) GetResponseCode() canopus.CoapCode {
-	return canopus.COAPCODE_205_CONTENT
+	return canopus.CoapCodeContent
 }
 
 func (r *ContentResponse) GetResponseValue() Value {
@@ -82,7 +82,7 @@ type BadRequestResponse struct {
 }
 
 func (r *BadRequestResponse) GetResponseCode() canopus.CoapCode {
-	return canopus.COAPCODE_400_BAD_REQUEST
+	return canopus.CoapCodeBadRequest
 }
 
 func (r *BadRequestResponse) GetResponseValue() Value {
@@ -98,7 +98,7 @@ type UnauthorizedResponse struct {
 }
 
 func (r *UnauthorizedResponse) GetResponseCode() canopus.CoapCode {
-	return canopus.COAPCODE_401_UNAUTHORIZED
+	return canopus.CoapCodeUnauthorized
 }
 
 func (r *UnauthorizedResponse) GetResponseValue() Value {
@@ -114,7 +114,7 @@ type NotFoundResponse struct {
 }
 
 func (r *NotFoundResponse) GetResponseCode() canopus.CoapCode {
-	return canopus.COAPCODE_404_NOT_FOUND
+	return canopus.CoapCodeNotFound
 }
 
 func (r *NotFoundResponse) GetResponseValue() Value {
@@ -130,7 +130,7 @@ type MethodNotAllowedResponse struct {
 }
 
 func (r *MethodNotAllowedResponse) GetResponseCode() canopus.CoapCode {
-	return canopus.COAPCODE_405_METHOD_NOT_ALLOWED
+	return canopus.CoapCodeMethodNotAllowed
 }
 
 func (r *MethodNotAllowedResponse) GetResponseValue() Value {
@@ -146,7 +146,7 @@ type ConflictResponse struct {
 }
 
 func (r *ConflictResponse) GetResponseCode() canopus.CoapCode {
-	return canopus.COAPCODE_409_CONFLICT
+	return canopus.CoapCodeConflict
 }
 
 func (r *ConflictResponse) GetResponseValue() Value {
