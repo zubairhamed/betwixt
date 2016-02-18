@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
+	"flag"
 	"fmt"
 	"log"
 	"sort"
-	"flag"
 )
 
 const (
@@ -279,8 +279,8 @@ func CallLwm2mEvent(e EventType, fn FnEvent) {
 }
 
 type CliFlags struct {
-	Name 	string
-	Server 	string
+	Name   string
+	Server string
 }
 
 func StandardCommandLineFlags() *CliFlags {
@@ -290,7 +290,7 @@ func StandardCommandLineFlags() *CliFlags {
 	flag.Parse()
 
 	return &CliFlags{
-		Name: *name,
+		Name:   *name,
 		Server: *server,
 	}
 }

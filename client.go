@@ -48,16 +48,16 @@ func (c *DefaultClient) Register(name string) (string, error) {
 		return "", errors.New("Client name can not exceed 10 characters")
 	}
 
-	req := NewRequest(TYPE_CONFIRMABLE, POST, GenerateMessageId())
+	req := NewRequest(MessageConfirmable, Post, GenerateMessageID())
 
 	req.SetStringPayload(BuildModelResourceStringPayload(c.enabledObjects))
 	req.SetRequestURI("/rd")
-	req.SetUriQuery("ep", name)
+	req.SetURIQuery("ep", name)
 	resp, err := c.coapServer.Send(req)
 
 	path := ""
 	if err != nil {
-		log.Println(err)
+		return "", err
 	} else {
 		path = resp.GetMessage().GetLocationPath()
 	}
@@ -88,7 +88,7 @@ func (c *DefaultClient) GetRegistry() Registry {
 
 // Unregisters this client from a LWM2M server which was previously registered
 func (c *DefaultClient) Deregister() {
-	req := NewRequest(TYPE_CONFIRMABLE, DELETE, GenerateMessageId())
+	req := NewRequest(MessageConfirmable, Delete, GenerateMessageID())
 
 	req.SetRequestURI(c.path)
 	_, err := c.coapServer.Send(req)
@@ -202,7 +202,7 @@ func (c *DefaultClient) handleCreateRequest(req CoapRequest) CoapResponse {
 	obj := c.GetObject(t)
 	enabler := obj.GetEnabler()
 
-	msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+	msg := NewMessageOfType(MessageAcknowledgment, req.GetMessage().MessageID)
 	msg.Token = req.GetMessage().Token
 	msg.Payload = NewEmptyPayload()
 
@@ -211,7 +211,7 @@ func (c *DefaultClient) handleCreateRequest(req CoapRequest) CoapResponse {
 		response := enabler.OnCreate(instanceId, resourceId, lwReq)
 		msg.Code = response.GetResponseCode()
 	} else {
-		msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
+		msg.Code = CoapCodeMethodNotAllowed
 	}
 	return NewResponseWithMessage(msg)
 }
@@ -233,7 +233,7 @@ func (c *DefaultClient) handleReadRequest(req CoapRequest) CoapResponse {
 	obj := c.GetObject(t)
 	enabler := obj.GetEnabler()
 
-	msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+	msg := NewMessageOfType(MessageAcknowledgment, req.GetMessage().MessageID)
 	msg.Token = req.GetMessage().Token
 
 	if enabler != nil {
@@ -242,10 +242,10 @@ func (c *DefaultClient) handleReadRequest(req CoapRequest) CoapResponse {
 
 		if resource == nil {
 			// TODO: Return TLV of Object Instance
-			msg.Code = COAPCODE_404_NOT_FOUND
+			msg.Code = CoapCodeNotFound
 		} else {
 			if !IsReadableResource(resource) {
-				msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
+				msg.Code = CoapCodeMethodNotAllowed
 			} else {
 				lwReq := Default(req, OPERATIONTYPE_READ)
 				response := enabler.OnRead(instanceId, resourceId, lwReq)
@@ -257,7 +257,7 @@ func (c *DefaultClient) handleReadRequest(req CoapRequest) CoapResponse {
 			}
 		}
 	} else {
-		msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
+		msg.Code = CoapCodeMethodNotAllowed
 	}
 	return NewResponseWithMessage(msg)
 }
@@ -271,7 +271,7 @@ func (c *DefaultClient) handleDeleteRequest(req CoapRequest) CoapResponse {
 	t := LWM2MObjectType(objectId)
 	enabler := c.GetObject(t).GetEnabler()
 
-	msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+	msg := NewMessageOfType(MessageAcknowledgment, req.GetMessage().MessageID)
 	msg.Token = req.GetMessage().Token
 	msg.Payload = NewEmptyPayload()
 
@@ -281,7 +281,7 @@ func (c *DefaultClient) handleDeleteRequest(req CoapRequest) CoapResponse {
 		response := enabler.OnDelete(instanceId, lwReq)
 		msg.Code = response.GetResponseCode()
 	} else {
-		msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
+		msg.Code = CoapCodeMethodNotAllowed
 	}
 	return NewResponseWithMessage(msg)
 }
@@ -311,7 +311,7 @@ func (c *DefaultClient) handleWriteRequest(req CoapRequest) CoapResponse {
 	obj := c.GetObject(t)
 	enabler := obj.GetEnabler()
 
-	msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+	msg := NewMessageOfType(MessageAcknowledgment, req.GetMessage().MessageID)
 	msg.Token = req.GetMessage().Token
 	msg.Payload = NewEmptyPayload()
 
@@ -320,10 +320,10 @@ func (c *DefaultClient) handleWriteRequest(req CoapRequest) CoapResponse {
 		resource := model.GetResource(uint16(resourceId))
 		if resource == nil {
 			// TODO Write to Object Instance
-			msg.Code = COAPCODE_404_NOT_FOUND
+			msg.Code = CoapCodeNotFound
 		} else {
 			if !IsWritableResource(resource) {
-				msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
+				msg.Code = CoapCodeMethodNotAllowed
 			} else {
 				lwReq := Default(req, OPERATIONTYPE_WRITE)
 				response := enabler.OnWrite(instanceId, resourceId, lwReq)
@@ -331,7 +331,7 @@ func (c *DefaultClient) handleWriteRequest(req CoapRequest) CoapResponse {
 			}
 		}
 	} else {
-		msg.Code = COAPCODE_404_NOT_FOUND
+		msg.Code = CoapCodeNotFound
 	}
 	return NewResponseWithMessage(msg)
 }
@@ -353,7 +353,7 @@ func (c *DefaultClient) handleExecuteRequest(req CoapRequest) CoapResponse {
 	obj := c.GetObject(t)
 	enabler := obj.GetEnabler()
 
-	msg := NewMessageOfType(TYPE_ACKNOWLEDGEMENT, req.GetMessage().MessageId)
+	msg := NewMessageOfType(MessageAcknowledgment, req.GetMessage().MessageID)
 	msg.Token = req.GetMessage().Token
 	msg.Payload = NewEmptyPayload()
 
@@ -361,18 +361,18 @@ func (c *DefaultClient) handleExecuteRequest(req CoapRequest) CoapResponse {
 		model := obj.GetDefinition()
 		resource := model.GetResource(uint16(resourceId))
 		if resource == nil {
-			msg.Code = COAPCODE_404_NOT_FOUND
+			msg.Code = CoapCodeNotFound
 		}
 
 		if !IsExecutableResource(resource) {
-			msg.Code = COAPCODE_405_METHOD_NOT_ALLOWED
+			msg.Code = CoapCodeMethodNotAllowed
 		} else {
 			lwReq := Default(req, OPERATIONTYPE_EXECUTE)
 			response := enabler.OnExecute(instanceId, resourceId, lwReq)
 			msg.Code = response.GetResponseCode()
 		}
 	} else {
-		msg.Code = COAPCODE_404_NOT_FOUND
+		msg.Code = CoapCodeNotFound
 	}
 	return NewResponseWithMessage(msg)
 }

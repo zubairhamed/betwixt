@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	s:= NewDefaultServer("8081")
+	s := NewDefaultServer("8081")
 
 	registry := betwixt.NewDefaultObjectRegistry()
 

@@ -46,6 +46,7 @@ const (
 
 // LWM2M Operation Types
 type OperationCode int
+
 const (
 	OPERATION_NONE OperationCode = 0
 	OPERATION_R    OperationCode = 1
@@ -59,6 +60,7 @@ const (
 
 // Type of LWM2M value
 type IdentifierType byte
+
 const (
 	IDENTIFIER_OBJECT_INSTANCE     IdentifierType = 0
 	IDENTIFIER_RESOURCE_INSTANCE   IdentifierType = 1
@@ -68,6 +70,7 @@ const (
 
 // Binding Modes
 type BindingMode string
+
 const (
 	BINDINGMODE_UDP                         BindingMode = "U"
 	BINDINGMODE_UDP_WITH_QUEUE_MODE         BindingMode = "UQ"
