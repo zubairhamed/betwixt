@@ -67,16 +67,16 @@ func ValidResourceTypeField(b []byte) error {
 }
 
 // Decodes the identifier field and returns the type and length
-func DecodeIdentifierField(b []byte, pos int) (identifier uint16, typeLength int) {
+func DecodeIdentifierField(b []byte, pos int) (identifier LWM2MResourceType, typeLength int) {
 	_, typeFieldLengthOfIdentifier, _, _ := DecodeTypeField(b[0])
 
 	if typeFieldLengthOfIdentifier == 0 {
 		_identifier, _ := binary.Uvarint(b[pos : pos+1])
-		identifier = uint16(_identifier)
+		identifier = LWM2MResourceType(_identifier)
 		typeLength = 1
 	} else {
 		_identifier, _ := binary.Uvarint(b[pos : pos+2])
-		identifier = uint16(_identifier)
+		identifier = LWM2MResourceType(_identifier)
 		typeLength = 2
 	}
 	return
@@ -105,7 +105,7 @@ func DecodeLengthField(b []byte, pos int) (valueLength uint64, typeLength int) {
 }
 
 // DecodeResourceValue decodes the resource value
-func DecodeResourceValue(resourceId uint16, b []byte, resourceDef ResourceDefinition) (Value, error) {
+func DecodeResourceValue(resourceId LWM2MResourceType, b []byte, resourceDef ResourceDefinition) (Value, error) {
 	if resourceDef.MultipleValuesAllowed() {
 
 		err := ValidResourceTypeField(b)
@@ -170,7 +170,7 @@ func DecodeResourceValue(resourceId uint16, b []byte, resourceDef ResourceDefini
 }
 
 // EncodeValue encodes the resource id and value and returns a byte array representation
-func EncodeValue(resourceId uint16, allowMultipleValues bool, v Value) []byte {
+func EncodeValue(resourceId LWM2MResourceType, allowMultipleValues bool, v Value) []byte {
 	if v.GetType() == VALUETYPE_MULTIPLE {
 		typeOfMultipleValue := v.GetContainedType()
 		if typeOfMultipleValue == VALUETYPE_INTEGER {
@@ -207,11 +207,11 @@ func EncodeValue(resourceId uint16, allowMultipleValues bool, v Value) []byte {
 			resourceTlv := bytes.NewBuffer([]byte{})
 
 			// Byte 7-6: identifier
-			typeField := CreateTlvTypeField(128, resourceInstanceBytes.Bytes(), resourceId)
+			typeField := CreateTlvTypeField(128, resourceInstanceBytes.Bytes(), uint16(resourceId))
 			resourceTlv.Write([]byte{typeField})
 
 			// Identifier Field
-			identifierField := CreateTlvIdentifierField(resourceId)
+			identifierField := CreateTlvIdentifierField(uint16(resourceId))
 			resourceTlv.Write(identifierField)
 
 			// Length Field

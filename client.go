@@ -238,7 +238,7 @@ func (c *DefaultClient) handleReadRequest(req CoapRequest) CoapResponse {
 
 	if enabler != nil {
 		model := obj.GetDefinition()
-		resource := model.GetResource(uint16(resourceId))
+		resource := model.GetResource(LWM2MResourceType(resourceId))
 
 		if resource == nil {
 			// TODO: Return TLV of Object Instance
@@ -317,7 +317,7 @@ func (c *DefaultClient) handleWriteRequest(req CoapRequest) CoapResponse {
 
 	if enabler != nil {
 		model := obj.GetDefinition()
-		resource := model.GetResource(uint16(resourceId))
+		resource := model.GetResource(LWM2MResourceType(resourceId))
 		if resource == nil {
 			// TODO Write to Object Instance
 			msg.Code = CoapCodeNotFound
@@ -359,7 +359,7 @@ func (c *DefaultClient) handleExecuteRequest(req CoapRequest) CoapResponse {
 
 	if enabler != nil {
 		model := obj.GetDefinition()
-		resource := model.GetResource(uint16(resourceId))
+		resource := model.GetResource(LWM2MResourceType(resourceId))
 		if resource == nil {
 			msg.Code = CoapCodeNotFound
 		}

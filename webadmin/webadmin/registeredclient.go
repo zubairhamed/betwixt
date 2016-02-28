@@ -98,7 +98,7 @@ func (c *DefaultRegisteredClient) ReadResource(obj uint16, inst uint16, rsrc uin
 	req := NewRequest(MessageConfirmable, Get, GenerateMessageID())
 	req.SetRequestURI(uri)
 
-	resourceDefinition := c.GetObject(betwixt.LWM2MObjectType(obj)).GetDefinition().GetResource(rsrc)
+	resourceDefinition := c.GetObject(betwixt.LWM2MObjectType(obj)).GetDefinition().GetResource(betwixt.LWM2MResourceType(rsrc))
 	if resourceDefinition.MultipleValuesAllowed() {
 		req.SetMediaType(MediaTypeTlvVndOmaLwm2m)
 	} else {
@@ -107,7 +107,7 @@ func (c *DefaultRegisteredClient) ReadResource(obj uint16, inst uint16, rsrc uin
 
 	response, _ := SendMessage(req.GetMessage(), NewUDPConnection(conn))
 	PrintMessage(response.GetMessage())
-	responseValue, _ := betwixt.DecodeResourceValue(rsrc, response.GetMessage().Payload.GetBytes(), resourceDefinition)
+	responseValue, _ := betwixt.DecodeResourceValue(betwixt.LWM2MResourceType(rsrc), response.GetMessage().Payload.GetBytes(), resourceDefinition)
 
 	return responseValue, nil
 }

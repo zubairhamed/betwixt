@@ -1,0 +1,703 @@
+{
+  "Owner": "OMA",
+  "Objects": [
+    {
+      "Id": 0,
+      "Name": "LWM2M Security",
+      "Multiple": true,
+      "Mandatory": true,
+      "Resources": [
+        {
+          "Id": 0,
+          "Name": "LWM2M Server URI",
+          "Operations": "N",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "string",
+          "RangeOrEnums": "0-255 bytes",
+          "ValueValidator": "NewRangeValidator(0 255)"
+        },
+        {
+          "Id": 1,
+          "Name": "Bootstrap Server",
+          "Operations": "N",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "bool"
+        },
+        {
+          "Id": 2,
+          "Name": "Security Mode",
+          "Operations": "N",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "int",
+          "RangeOrEnums": "0-3",
+          "ValueValidator": "NewRangeValidator(0 3)"
+        },
+        {
+          "Id": 3,
+          "Name": "Public Key or Identity",
+          "Operations": "N",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "opaque"
+        },
+        {
+          "Id": 4,
+          "Name": "Server Public Key or Identity",
+          "Operations": "N",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "opaque"
+        },
+        {
+          "Id": 5,
+          "Name": "Secret Key",
+          "Operations": "N",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "opaque"
+        },
+        {
+          "Id": 6,
+          "Name": "SMS Security Mode",
+          "Operations": "N",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "int",
+          "RangeOrEnums": "0-255",
+          "ValueValidator": "NewRangeValidator(0 255)"
+        },
+        {
+          "Id": 7,
+          "Name": "SMS Binding Key Parameters",
+          "Operations": "N",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "opaque",
+          "RangeOrEnums": "6 bytes",
+          "ValueValidator": "NewLengthValidator(6)"
+        },
+        {
+          "Id": 8,
+          "Name": "SMS Binding Secret Keys",
+          "Operations": "N",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "opaque",
+          "RangeOrEnums": "32-48 bytes",
+          "ValueValidator": "NewRangeValidator(32 48)"
+        },
+        {
+          "Id": 9,
+          "Name": "LWM2M Server SMS Number",
+          "Operations": "N",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "int"
+        },
+        {
+          "Id": 10,
+          "Name": "Short Server ID",
+          "Operations": "N",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "int",
+          "RangeOrEnums": "1-65535",
+          "ValueValidator": "NewRangeValidator(1 65535)"
+        },
+        {
+          "Id": 11,
+          "Name": "Client Hold Off Time",
+          "Operations": "N",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "int",
+          "Units": "s"
+        }
+      ]
+    },
+    {
+      "Id": 1,
+      "Name": "LWM2M Server",
+      "Multiple": true,
+      "Mandatory": true,
+      "Resources": [
+        {
+          "Id": 0,
+          "Name": "Short Server ID",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "int",
+          "RangeOrEnums": "1-65535",
+          "ValueValidator": "NewRangeValidator(1 65535)"
+        },
+        {
+          "Id": 1,
+          "Name": "Lifetime",
+          "Operations": "RW",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "int",
+          "Units": "s"
+        },
+        {
+          "Id": 2,
+          "Name": "Default Minimum Period",
+          "Operations": "RW",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "int",
+          "Units": "s"
+        },
+        {
+          "Id": 3,
+          "Name": "Default Maximum Period",
+          "Operations": "RW",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "int",
+          "Units": "s"
+        },
+        {
+          "Id": 4,
+          "Name": "Disable",
+          "Operations": "E",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "string"
+        },
+        {
+          "Id": 5,
+          "Name": "Disable Timeout",
+          "Operations": "RW",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "int",
+          "Units": "s"
+        },
+        {
+          "Id": 6,
+          "Name": "Notification Storing When Disabled or Offline",
+          "Operations": "RW",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "bool"
+        },
+        {
+          "Id": 7,
+          "Name": "Binding",
+          "Operations": "RW",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "string",
+          "RangeOrEnums": "The possible values of Resource are listed in 5.2.1.1"
+        },
+        {
+          "Id": 8,
+          "Name": "Registration Update Trigger",
+          "Operations": "E",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "string"
+        }
+      ]
+    },
+    {
+      "Id": 2,
+      "Name": "LWM2M Access Control",
+      "Multiple": true,
+      "Mandatory": false,
+      "Resources": [
+        {
+          "Id": 0,
+          "Name": "Object ID",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "int",
+          "RangeOrEnums": "1-65534",
+          "ValueValidator": "NewRangeValidator(1 65534)"
+        },
+        {
+          "Id": 1,
+          "Name": "Object Instance ID",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "int",
+          "RangeOrEnums": "0-65535",
+          "ValueValidator": "NewRangeValidator(0 65535)"
+        },
+        {
+          "Id": 2,
+          "Name": "ACL",
+          "Operations": "RW",
+          "Multiple": true,
+          "Mandatory": false,
+          "ResourceType": "int",
+          "RangeOrEnums": "16-bit",
+          "ValueValidator": "NewRangeValidator(-32768 32767)"
+        },
+        {
+          "Id": 3,
+          "Name": "Access Control Owner",
+          "Operations": "RW",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "int",
+          "RangeOrEnums": "0-65535",
+          "ValueValidator": "NewRangeValidator(0 65535)"
+        }
+      ]
+    },
+    {
+      "Id": 3,
+      "Name": "Device",
+      "Multiple": false,
+      "Mandatory": true,
+      "Resources": [
+        {
+          "Id": 0,
+          "Name": "Manufacturer",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "string"
+        },
+        {
+          "Id": 1,
+          "Name": "Model Number",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "string"
+        },
+        {
+          "Id": 2,
+          "Name": "Serial Number",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "string"
+        },
+        {
+          "Id": 3,
+          "Name": "Firmware Version",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "string"
+        },
+        {
+          "Id": 4,
+          "Name": "Reboot",
+          "Operations": "E",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "string"
+        },
+        {
+          "Id": 5,
+          "Name": "Factory Reset",
+          "Operations": "E",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "string"
+        },
+        {
+          "Id": 6,
+          "Name": "Available Power Sources",
+          "Operations": "R",
+          "Multiple": true,
+          "Mandatory": false,
+          "ResourceType": "int",
+          "RangeOrEnums": "0-7",
+          "ValueValidator": "NewRangeValidator(0 7)"
+        },
+        {
+          "Id": 7,
+          "Name": "Power Source Voltage",
+          "Operations": "R",
+          "Multiple": true,
+          "Mandatory": false,
+          "ResourceType": "int",
+          "Units": "mV"
+        },
+        {
+          "Id": 8,
+          "Name": "Power Source Current",
+          "Operations": "R",
+          "Multiple": true,
+          "Mandatory": false,
+          "ResourceType": "int",
+          "Units": "mA"
+        },
+        {
+          "Id": 9,
+          "Name": "Battery Level",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "int",
+          "RangeOrEnums": "0-100",
+          "Units": "%",
+          "ValueValidator": "NewRangeValidator(0 100)"
+        },
+        {
+          "Id": 10,
+          "Name": "Memory Free",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "int",
+          "Units": "KB"
+        },
+        {
+          "Id": 11,
+          "Name": "Error Code",
+          "Operations": "R",
+          "Multiple": true,
+          "Mandatory": true,
+          "ResourceType": "int"
+        },
+        {
+          "Id": 12,
+          "Name": "Reset Error Code",
+          "Operations": "E",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "string"
+        },
+        {
+          "Id": 13,
+          "Name": "Current Time",
+          "Operations": "RW",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "time"
+        },
+        {
+          "Id": 14,
+          "Name": "UTC Offset",
+          "Operations": "RW",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "string"
+        },
+        {
+          "Id": 15,
+          "Name": "Timezone",
+          "Operations": "RW",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResoursceType": "string"
+        },
+        {
+          "Id": 16,
+          "Name": "Supported Binding and Modes",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "string"
+        }
+      ]
+    },
+    {
+      "Id": 4,
+      "Name": "Connectivity Monitoring",
+      "Multiple": false,
+      "Mandatory": false,
+      "Resources": [
+        {
+          "Id": 0,
+          "Name": "Network Bearer",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "int"
+        },
+        {
+          "Id": 1,
+          "Name": "Available Network Bearer",
+          "Operations": "R",
+          "Multiple": true,
+          "Mandatory": true,
+          "ResourceType": "int"
+        },
+        {
+          "Id": 2,
+          "Name": "Radio Signal Strength",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "int",
+          "Units": "dBm"
+        },
+        {
+          "Id": 3,
+          "Name": "Link Quality",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "int"
+        },
+        {
+          "Id": 4,
+          "Name": "IP Addresses",
+          "Operations": "R",
+          "Multiple": true,
+          "Mandatory": true,
+          "ResourceType": "string"
+        },
+        {
+          "Id": 5,
+          "Name": "Router IP Addresses",
+          "Operations": "R",
+          "Multiple": true,
+          "Mandatory": false,
+          "ResourceType": "string"
+        },
+        {
+          "Id": 6,
+          "Name": "Link Utilization",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "int",
+          "RangeOrEnums": "0-100",
+          "Units": "%",
+          "ValueValidator": "NewRangeValidator(0 100)"
+        },
+        {
+          "Id": 7,
+          "Name": "APN",
+          "Operations": "R",
+          "Multiple": true,
+          "Mandatory": false,
+          "ResourceType": "string"
+        },
+        {
+          "Id": 8,
+          "Name": "Cell ID",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "int"
+        },
+        {
+          "Id": 9,
+          "Name": "SMNC",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "int",
+          "Units": "%"
+        },
+        {
+          "Id": 10,
+          "Name": "SMCC",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "int"
+        }
+      ]
+    },
+    {
+      "Id": 5,
+      "Name": "Firmware Update",
+      "Multiple": false,
+      "Mandatory": false,
+      "Resources": [
+        {
+          "Id": 0,
+          "Name": "Package",
+          "Operations": "W",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "opaque"
+        },
+        {
+          "Id": 1,
+          "Name": "Package URI",
+          "Operations": "W",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "string",
+          "RangeOrEnums": "0-255 bytes",
+          "ValueValidator": "NewRangeValidator(0 255)"
+        },
+        {
+          "Id": 2,
+          "Name": "Update",
+          "Operations": "E",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "string"
+        },
+        {
+          "Id": 3,
+          "Name": "State",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "int",
+          "RangeOrEnums": "1-3",
+          "ValueValidator": "NewRangeValidator(1 3)"
+        },
+        {
+          "Id": 4,
+          "Name": "Update Supported Objects",
+          "Operations": "RW",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "bool"
+        },
+        {
+          "Id": 5,
+          "Name": "Update Result",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "int",
+          "RangeOrEnums": "0-6",
+          "ValueValidator": "NewRangeValidator(0 6)"
+        }
+      ]
+    },
+    {
+      "Id": 6,
+      "Name": "Location",
+      "Multiple": false,
+      "Mandatory": false,
+      "Resources": [
+        {
+          "Id": 0,
+          "Name": "Latitude",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "string",
+          "Units": "Deg"
+        },
+        {
+          "Id": 1,
+          "Name": "Longitude",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "string",
+          "Units": "Deg"
+        },
+        {
+          "Id": 2,
+          "Name": "Altitude",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "string",
+          "Units": "m"
+        },
+        {
+          "Id": 3,
+          "Name": "Uncertainty",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "string",
+          "Units": "m"
+        },
+        {
+          "Id": 4,
+          "Name": "Velocity",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "opaque",
+          "Units": "Refers to 3GPP GAD specs"
+        },
+        {
+          "Id": 5,
+          "Name": "Timestamp",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "time",
+          "RangeOrEnums": "0-6",
+          "ValueValidator": "NewRangeValidator(0 6)"
+        }
+      ]
+    },
+    {
+      "Id": 7,
+      "Name": "Connectivity Statistics",
+      "Multiple": false,
+      "Mandatory": false,
+      "Resources": [
+        {
+          "Id": 0,
+          "Name": "SMS Tx Counter",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "int"
+        },
+        {
+          "Id": 1,
+          "Name": "SMS Rx Counter",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "int"
+        },
+        {
+          "Id": 2,
+          "Name": "Tx Data",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "int",
+          "Units": "Kilo-Bytes"
+        },
+        {
+          "Id": 3,
+          "Name": "Rx Data",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "int",
+          "Units": "Kilo-Bytes"
+        },
+        {
+          "Id": 4,
+          "Name": "Max Message Size",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "int",
+          "Units": "Byte"
+        },
+        {
+          "Id": 5,
+          "Name": "Average Message Size",
+          "Operations": "R",
+          "Multiple": false,
+          "Mandatory": false,
+          "ResourceType": "int",
+          "Units": "Byte"
+        },
+        {
+          "Id": 6,
+          "Name": "StartOrReset",
+          "Operations": "E",
+          "Multiple": false,
+          "Mandatory": true,
+          "ResourceType": "string"
+        }
+      ]
+    }
+  ]
+}

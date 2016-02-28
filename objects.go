@@ -39,7 +39,7 @@ func (o *DefaultObjectDefinition) SetResources(r []ResourceDefinition) {
 	o.Resources = r
 }
 
-func (o *DefaultObjectDefinition) GetResource(n uint16) ResourceDefinition {
+func (o *DefaultObjectDefinition) GetResource(n LWM2MResourceType) ResourceDefinition {
 	for _, rsrc := range o.Resources {
 		if rsrc.GetId() == n {
 			return rsrc
@@ -125,7 +125,7 @@ func (o *DefaultObject) SetEnabler(e ObjectEnabler) {
 }
 
 type DefaultResourceDefinition struct {
-	Id             uint16
+	Id             LWM2MResourceType
 	Name           string
 	Operations     OperationCode
 	Multiple       bool
@@ -137,7 +137,7 @@ type DefaultResourceDefinition struct {
 	ValueValidator Validator
 }
 
-func (o *DefaultResourceDefinition) GetId() uint16 {
+func (o *DefaultResourceDefinition) GetId() LWM2MResourceType {
 	return o.Id
 }
 
@@ -179,7 +179,7 @@ type ObjectValue struct {
 	resources  []Value
 }
 
-func NewResourceValue(id uint16, value Value) Value {
+func NewResourceValue(id LWM2MResourceType, value Value) Value {
 	return &ResourceValue{
 		id:    id,
 		value: value,
@@ -187,11 +187,11 @@ func NewResourceValue(id uint16, value Value) Value {
 }
 
 type ResourceValue struct {
-	id    uint16
+	id    LWM2MResourceType
 	value Value
 }
 
-func (v ResourceValue) GetId() uint16 {
+func (v ResourceValue) GetId() LWM2MResourceType {
 	return v.id
 }
 
@@ -215,7 +215,7 @@ func (v ResourceValue) GetValue() interface{} {
 	return v.value.GetValue()
 }
 
-func NewMultipleResourceValue(id uint16, value []*ResourceValue) Value {
+func NewMultipleResourceValue(id LWM2MResourceType, value []*ResourceValue) Value {
 	return &MultipleResourceValue{
 		id:        id,
 		instances: value,
@@ -223,7 +223,7 @@ func NewMultipleResourceValue(id uint16, value []*ResourceValue) Value {
 }
 
 type MultipleResourceValue struct {
-	id        uint16
+	id        LWM2MResourceType
 	instances []*ResourceValue
 }
 

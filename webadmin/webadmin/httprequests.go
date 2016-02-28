@@ -113,14 +113,14 @@ func SetupHttpRoutes(server betwixt.Server) {
 
 			for _, resource := range resources {
 				contentModels = append(contentModels, &models.ContentValueModel{
-					Id:    resource.GetId(),
+					Id:    uint16(resource.GetId()),
 					Value: resource.GetValue(),
 				})
 			}
 		} else {
 			resource := val.(*betwixt.ResourceValue)
 			contentModels = append(contentModels, &models.ContentValueModel{
-				Id:    resource.GetId(),
+				Id:    uint16(resource.GetId()),
 				Value: resource.GetValue(),
 			})
 		}

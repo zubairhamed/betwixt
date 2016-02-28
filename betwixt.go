@@ -9,6 +9,9 @@ import (
 // LWM2MObjectType represents a LWM2M Object Type
 type LWM2MObjectType uint16
 
+// LWM2MResourceType represents a LWM2M Resource Type
+type LWM2MResourceType uint16
+
 // LWM2MObjectInstances contains instances of LWM2M Objects by Type
 type LWM2MObjectInstances map[LWM2MObjectType]Object
 
@@ -112,7 +115,7 @@ type ObjectSource interface {
 	Initialize()
 	GetObject(n LWM2MObjectType) ObjectDefinition
 	GetObjects() map[LWM2MObjectType]ObjectDefinition
-	AddObject(m ObjectDefinition, res ...ResourceDefinition)
+	AddObject(m ObjectDefinition, res []ResourceDefinition)
 }
 
 // Registry interface represents a source from which LWM2M object definitions can be looked up/resolved or
@@ -131,14 +134,14 @@ type ObjectDefinition interface {
 	GetDescription() string
 	SetResources([]ResourceDefinition)
 	GetResources() []ResourceDefinition
-	GetResource(n uint16) ResourceDefinition
+	GetResource(n LWM2MResourceType) ResourceDefinition
 	AllowMultiple() bool
 	IsMandatory() bool
 }
 
 // ResourceDefinition interface defines a LWM2M Resource
 type ResourceDefinition interface {
-	GetId() uint16
+	GetId() LWM2MResourceType
 	GetName() string
 	GetDescription() string
 	GetUnits() string
