@@ -2,6 +2,7 @@
 [![GoDoc](https://godoc.org/github.com/zubairhamed/betwixt?status.svg)](https://godoc.org/github.com/zubairhamed/betwixt)
 [![Build Status](https://drone.io/github.com/zubairhamed/betwixt/status.png)](https://drone.io/github.com/zubairhamed/betwixt/latest)
 [![Coverage Status](https://coveralls.io/repos/zubairhamed/betwixt/badge.svg?branch=master)](https://coveralls.io/r/zubairhamed/betwixt?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/zubairhamed/betwixt)](https://goreportcard.com/report/github.com/zubairhamed/betwixt)
 
 #### Betwixt is a Lightweight M2M implementation written in Go
 OMA Lightweight M2M is a protocol from the Open Mobile Alliance for M2M or IoT device management. Lightweight M2M enabler defines the application layer communication protocol between a LWM2M Server and a LWM2M Client, which is located in a LWM2M Device. 

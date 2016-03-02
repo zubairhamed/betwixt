@@ -1,0 +1,3 @@
+name: Betwixt LWM2M WebAdmin Server
+http:
+  port: 8081
