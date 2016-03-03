@@ -19,15 +19,13 @@ func NewBoltStore(dbfile string) (*BoltDbStore, error) {
 }
 
 type BoltDbStore struct {
-	db 	*bolt.DB
+	db *bolt.DB
 }
 
 func (db *BoltDbStore) Init() {
 
 }
 
-
 func (db *BoltDbStore) Close() {
 
 }
-

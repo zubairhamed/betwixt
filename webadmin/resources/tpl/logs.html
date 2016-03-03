@@ -1,8 +1,8 @@
-#{ define "page_index" }#
+#{ define "page_logs" }#
 <!doctype html>
 <html lang="en" ng-app="betwixt-app">
 <head>
-    <title>:: Betwixt LWM2M ::</title>
+    <title>:: Betwixt LWM2M :: Logs</title>
     #{ template "head" }#
 </head>
 
@@ -17,18 +17,10 @@
 <div id="layout" class="content pure-g">
     #{ template "nav" }#
 
-    <!--
-        Status tiles [Memory, Clients, Requests, Errors]
-
-
-        List of Clients         Details
-                                [View] [Delete]
-    -->
-
-    #{ template "clients_list"}#
+    #{ template "entity_list"}#
 
     <div id="main" class="pure-u-1">
-        #{ template "clients_list" }#
+        #{ template "entity_content" }#
     </div>
 </div>
 </body>

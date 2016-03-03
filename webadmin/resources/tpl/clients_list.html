@@ -1,0 +1,16 @@
+#{ define "clients_list" }#
+<div id="list" class="pure-u-1">
+
+    <div class="entity-item entity-item-unread pure-g " ng-repeat="entity in data.entities">
+        <div class="pure-u">
+            <div ng-class="data.iconColor" ng-click="entityClick(entity.id)"></div>
+        </div>
+
+        <div class="pure-u-3-4">
+            <h5 class="entity-text" ng-click="entityClick(entity.id)">{{entity.text}}</h5>
+            <h4 class="entity-id">{{entity.id}}</h4>
+        </div>
+    </div>
+
+</div>
+#{ end }#

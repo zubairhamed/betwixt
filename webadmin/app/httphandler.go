@@ -2,28 +2,70 @@ package app
 
 import (
 	"github.com/zenazn/goji/web"
-	"net/http"
 	"log"
+	"net/http"
+	"strings"
 )
 
-func FnHttpIndexPage(c web.C, w http.ResponseWriter, r *http.Request) {
-	log.Println("fn http - index")
+func (b *BetwixtWebApp) fnHttpIndexPage(c web.C, w http.ResponseWriter, r *http.Request) {
+	b.tpl.ExecuteTemplate(w, "page_index", nil)
 }
 
-func FnHttpClientView (c web.C, w http.ResponseWriter, r *http.Request) {}
-func FnHttpApiGetClients (c web.C, w http.ResponseWriter, r *http.Request) {}
-func FnHttpApiGetServerStats (c web.C, w http.ResponseWriter, r *http.Request) {}
-func FnHttpApiGetClientMessages (c web.C, w http.ResponseWriter, r *http.Request) {}
-func FnHttpApiGetClient (c web.C, w http.ResponseWriter, r *http.Request) {}
-func FnHttpApiGetClientResource (c web.C, w http.ResponseWriter, r *http.Request) {}
-func FnHttpApiGetClientInstance (c web.C, w http.ResponseWriter, r *http.Request) {}
-func FnHttpApiPutClientResource (c web.C, w http.ResponseWriter, r *http.Request) {}
-func FnHttpApiPutClientInstance (c web.C, w http.ResponseWriter, r *http.Request) {}
-func FnHttpApiDeleteClientInstance (c web.C, w http.ResponseWriter, r *http.Request) { }
-func FnHttpApiObserveClientResource (c web.C, w http.ResponseWriter, r *http.Request) {}
-func FnHttpApiDeleteObserveClientResource (c web.C, w http.ResponseWriter, r *http.Request) { }
-func FnHttpApiPostClientObservation (c web.C, w http.ResponseWriter, r *http.Request) { }
-func FnHttpApiPostClientInstance (c web.C, w http.ResponseWriter, r *http.Request) { }
+func (b *BetwixtWebApp) fnHttpLogsPage(c web.C, w http.ResponseWriter, r *http.Request) {
+	b.tpl.ExecuteTemplate(w, "page_logs", nil)
+}
+
+func (b *BetwixtWebApp) fnHttpSettingsPage(c web.C, w http.ResponseWriter, r *http.Request) {
+	b.tpl.ExecuteTemplate(w, "page_settings", nil)
+}
+
+
+func (b *BetwixtWebApp) fnHttpClientView(c web.C, w http.ResponseWriter, r *http.Request) {
+	log.Println("fn http - view client")
+}
+
+func (b *BetwixtWebApp) fnHttpApiGetClients(c web.C, w http.ResponseWriter, r *http.Request) {
+	log.Println("fn http api - get clients")
+}
+
+func (b *BetwixtWebApp) fnHttpApiGetServerStats(c web.C, w http.ResponseWriter, r *http.Request) {
+	log.Println("fn http api - get server stats")
+}
+
+func (b *BetwixtWebApp) fnHttpApiGetClientMessages(c web.C, w http.ResponseWriter, r *http.Request) {
+	log.Println("fn http api - get client messages")
+}
+
+func (b *BetwixtWebApp) fnHttpApiGetClient(c web.C, w http.ResponseWriter, r *http.Request) {
+	log.Println("fn http api - get client")
+}
+
+func (b *BetwixtWebApp) fnHttpApiGetClientResource(c web.C, w http.ResponseWriter, r *http.Request)           {}
+func (b *BetwixtWebApp) fnHttpApiGetClientInstance(c web.C, w http.ResponseWriter, r *http.Request)           {}
+func (b *BetwixtWebApp) fnHttpApiPutClientResource(c web.C, w http.ResponseWriter, r *http.Request)           {}
+func (b *BetwixtWebApp) fnHttpApiPutClientInstance(c web.C, w http.ResponseWriter, r *http.Request)           {}
+func (b *BetwixtWebApp) fnHttpApiDeleteClientInstance(c web.C, w http.ResponseWriter, r *http.Request)        {}
+func (b *BetwixtWebApp) fnHttpApiObserveClientResource(c web.C, w http.ResponseWriter, r *http.Request)       {}
+func (b *BetwixtWebApp) fnHttpApiDeleteObserveClientResource(c web.C, w http.ResponseWriter, r *http.Request) {}
+func (b *BetwixtWebApp) fnHttpApiPostClientObservation(c web.C, w http.ResponseWriter, r *http.Request)       {}
+func (b *BetwixtWebApp) fnHttpApiPostClientInstance(c web.C, w http.ResponseWriter, r *http.Request)          {}
+
+func (b *BetwixtWebApp) fnWebUiResources(c web.C, w http.ResponseWriter, r *http.Request) {
+	path := r.URL.Path
+
+
+	switch {
+	case strings.HasPrefix(path, "/css"):
+		w.Header().Set("Content-Type", "text/css")
+
+	case strings.HasPrefix(path, "/js"):
+		w.Header().Set("Content-Type", "text/javascript")
+	}
+
+	data, _ := AssetContent(path)
+
+	w.Write(data)
+}
 
 /*
 			GET 		/
@@ -62,4 +104,4 @@ gs)
 	goji.Put("/v1.0/*", s.HandlePut)
 	goji.Delete("/v1.0/*", s.HandleDelete)
 	goji.Patch("/v1.0/*", s.HandlePatch)
- */
+*/
