@@ -1,8 +1,8 @@
 package betwixt
 
 import (
-	"log"
 	"encoding/json"
+	"log"
 )
 
 type YamlObjectDefinition struct {
@@ -38,7 +38,6 @@ func ParseObjectDefinitionsJson(data []byte) []ObjectDefinition {
 		if v["Description"] != nil {
 			m.Description = v["Description"].(string)
 		}
-
 
 		m.Multiple, _ = v["Multiple"].(bool)
 		m.Mandatory, _ = v["Mandatory"].(bool)
