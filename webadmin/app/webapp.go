@@ -8,6 +8,7 @@ import (
 	"log"
 	"bytes"
 	"strings"
+	"github.com/zubairhamed/betwixt"
 )
 
 type ServerConfig map[string]string
@@ -36,6 +37,10 @@ type BetwixtWebApp struct {
 	config     ServerConfig
 	wait       chan struct{}
 	tpl        *template.Template
+	connectedClients    map[string]betwixt.RegisteredClient
+	stats      *ServerStatistics
+	events     map[betwixt.EventType]betwixt.FnEvent
+
 }
 
 func (b *BetwixtWebApp) cacheWebTemplates() {

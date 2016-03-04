@@ -6,13 +6,59 @@ body {
     color: #333;
 }
 
-
-
 a {
     text-decoration: none;
     color: #1b98f8;
 }
 
+
+.title {
+    float: left;
+    width: 50%;
+}
+
+.status {
+    text-align: right;
+}
+
+.status-box {
+    width: 80px;
+    height: 40px;
+    border: 2px solid white;
+    float: right;
+    margin: 5px;
+    text-align: center;
+}
+
+.status-mem {
+    background-color: red;
+}
+
+.status-clients {
+    background-color: green;
+}
+
+.status-requests {
+    background-color: blue;
+}
+
+.status-errors {
+    background-color: yellow;
+}
+
+.status-title {
+    font-weight: bold;
+    font-size: 0.7em;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 2px;
+}
+
+.status-value {
+    font-size: 1.0em;
+    width: 100%;
+    text-align: center;
+}
 
 /*
  * -- HELPER STYLES --
@@ -356,7 +402,6 @@ a {
 
 .home-menu {
     padding: 0.5em;
-    text-align: center;
     box-shadow: 0 1px 1px rgba(0,0,0, 0.10);
 }
 

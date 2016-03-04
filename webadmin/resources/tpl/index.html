@@ -10,7 +10,28 @@
 
 <div class="header">
     <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
-        <a class="pure-menu-heading" href="">Betwixt LWM2M WebUI :: #{ .Title }# </a>
+        <div class="title">
+            <a class="pure-menu-heading" href="">Betwixt LWM2M WebUI :: #{ .Title }# </a>
+        </div>
+        <div class="status">
+            <div class="status-box status-mem">
+                <div class="status-title">MEM</div>
+                <div class="status-value">1024KB</div>
+            </div>
+            <div class="status-box status-clients">
+                <div class="status-title">CLI</div>
+                <div class="status-value">22</div>
+            </div>
+            <div class="status-box status-requests">
+                <div class="status-title">REQ</div>
+                <div class="status-value">221</div>
+            </div>
+            <div class="status-box status-errors">
+                <div class="status-title">ERR</div>
+                <div class="status-value">52</div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -24,11 +45,24 @@
         List of Clients         Details
                                 [View] [Delete]
     -->
+    <div id="clientlist">
+        <div id="list" class="pure-u-1">
+            <div class="entity-item entity-item-unread pure-g " ng-repeat="entity in data.entities">
+                <div class="pure-u">
+                    <div ng-class="data.iconColor" ng-click="entityClick(entity.id)"></div>
+                </div>
 
-    #{ template "clients_list"}#
+                <div class="pure-u-3-4">
+                    <h5 class="entity-text" ng-click="entityClick(entity.id)">{{entity.text}}</h5>
+                    <h4 class="entity-id">{{entity.id}}</h4>
+                </div>
+            </div>
 
-    <div id="main" class="pure-u-1">
-        #{ template "clients_list" }#
+        </div>
+
+        <div id="main" class="pure-u-1">
+            #{ template "client_content" }#
+        </div>
     </div>
 </div>
 </body>

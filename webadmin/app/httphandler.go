@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"runtime"
 )
 
 func (b *BetwixtWebApp) fnHttpIndexPage(c web.C, w http.ResponseWriter, r *http.Request) {
@@ -19,40 +20,83 @@ func (b *BetwixtWebApp) fnHttpSettingsPage(c web.C, w http.ResponseWriter, r *ht
 	b.tpl.ExecuteTemplate(w, "page_settings", nil)
 }
 
-
 func (b *BetwixtWebApp) fnHttpClientView(c web.C, w http.ResponseWriter, r *http.Request) {
 	log.Println("fn http - view client")
 }
 
 func (b *BetwixtWebApp) fnHttpApiGetClients(c web.C, w http.ResponseWriter, r *http.Request) {
 	log.Println("fn http api - get clients")
+	w.WriteHeader(501)
 }
 
 func (b *BetwixtWebApp) fnHttpApiGetServerStats(c web.C, w http.ResponseWriter, r *http.Request) {
 	log.Println("fn http api - get server stats")
+	
+	var mem runtime.MemStats
+	runtime.ReadMemStats(&mem)
+
+	clientsCount := len(server.GetClients())
+
+	model := &models.StatsModel{
+		ClientsCount: clientsCount,
+		MemUsage:     strconv.Itoa(int(mem.Alloc / 1000)),
+		Requests:     server.GetStats().GetRequestsCount(),
+		Errors:       0,
+	}
+
+	return model
+
+	w.WriteHeader(501)
 }
 
 func (b *BetwixtWebApp) fnHttpApiGetClientMessages(c web.C, w http.ResponseWriter, r *http.Request) {
 	log.Println("fn http api - get client messages")
+	w.WriteHeader(501)
 }
 
 func (b *BetwixtWebApp) fnHttpApiGetClient(c web.C, w http.ResponseWriter, r *http.Request) {
 	log.Println("fn http api - get client")
+	w.WriteHeader(501)
 }
 
-func (b *BetwixtWebApp) fnHttpApiGetClientResource(c web.C, w http.ResponseWriter, r *http.Request)           {}
-func (b *BetwixtWebApp) fnHttpApiGetClientInstance(c web.C, w http.ResponseWriter, r *http.Request)           {}
-func (b *BetwixtWebApp) fnHttpApiPutClientResource(c web.C, w http.ResponseWriter, r *http.Request)           {}
-func (b *BetwixtWebApp) fnHttpApiPutClientInstance(c web.C, w http.ResponseWriter, r *http.Request)           {}
-func (b *BetwixtWebApp) fnHttpApiDeleteClientInstance(c web.C, w http.ResponseWriter, r *http.Request)        {}
-func (b *BetwixtWebApp) fnHttpApiObserveClientResource(c web.C, w http.ResponseWriter, r *http.Request)       {}
-func (b *BetwixtWebApp) fnHttpApiDeleteObserveClientResource(c web.C, w http.ResponseWriter, r *http.Request) {}
-func (b *BetwixtWebApp) fnHttpApiPostClientObservation(c web.C, w http.ResponseWriter, r *http.Request)       {}
-func (b *BetwixtWebApp) fnHttpApiPostClientInstance(c web.C, w http.ResponseWriter, r *http.Request)          {}
+func (b *BetwixtWebApp) fnHttpApiGetClientResource(c web.C, w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(501)
+}
+
+func (b *BetwixtWebApp) fnHttpApiGetClientInstance(c web.C, w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(501)
+}
+
+func (b *BetwixtWebApp) fnHttpApiPutClientResource(c web.C, w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(501)
+}
+
+func (b *BetwixtWebApp) fnHttpApiPutClientInstance(c web.C, w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(501)
+}
+
+func (b *BetwixtWebApp) fnHttpApiDeleteClientInstance(c web.C, w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(501)
+}
+
+func (b *BetwixtWebApp) fnHttpApiObserveClientResource(c web.C, w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(501)
+}
+
+func (b *BetwixtWebApp) fnHttpApiDeleteObserveClientResource(c web.C, w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(501)
+}
+
+func (b *BetwixtWebApp) fnHttpApiPostClientObservation(c web.C, w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(501)
+}
+
+func (b *BetwixtWebApp) fnHttpApiPostClientInstance(c web.C, w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(501)
+}
 
 func (b *BetwixtWebApp) fnWebUiResources(c web.C, w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
-
 
 	switch {
 	case strings.HasPrefix(path, "/css"):
