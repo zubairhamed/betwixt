@@ -1,14 +1,14 @@
 package app
 
 import (
+	"bytes"
 	"flag"
 	"github.com/alecthomas/template"
 	"github.com/zenazn/goji"
+	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/canopus"
 	"log"
-	"bytes"
 	"strings"
-	"github.com/zubairhamed/betwixt"
 )
 
 type ServerConfig map[string]string
@@ -24,23 +24,23 @@ func NewWebApp(store Store, cfg ServerConfig) *BetwixtWebApp {
 		store:      store,
 		coapServer: canopus.NewServer("5683", ""),
 		config:     cfg,
+		stats:      &BetwixtServerStatistics{},
 	}
 
 	return w
 }
 
 type BetwixtWebApp struct {
-	name       string
-	store      Store
-	httpPort   string
-	coapServer canopus.CoapServer
-	config     ServerConfig
-	wait       chan struct{}
-	tpl        *template.Template
-	connectedClients    map[string]betwixt.RegisteredClient
-	stats      *ServerStatistics
-	events     map[betwixt.EventType]betwixt.FnEvent
-
+	name             string
+	store            Store
+	httpPort         string
+	coapServer       canopus.CoapServer
+	config           ServerConfig
+	wait             chan struct{}
+	tpl              *template.Template
+	connectedClients map[string]betwixt.RegisteredClient
+	stats            betwixt.ServerStatistics
+	events           map[betwixt.EventType]betwixt.FnEvent
 }
 
 func (b *BetwixtWebApp) cacheWebTemplates() {
@@ -123,6 +123,13 @@ func (b *BetwixtWebApp) setupHttp() {
 	goji.Post("/api/clients/:client/:object/:instance", b.fnHttpApiPostClientInstance)
 }
 
+func (b *BetwixtWebApp) getClients() map[string]betwixt.RegisteredClient {
+	return b.connectedClients
+}
+
+func (b *BetwixtWebApp) getServerStats() betwixt.ServerStatistics {
+	return b.stats
+}
 
 func AssetContent(path string) ([]byte, error) {
 	if strings.HasPrefix(path, "/") {
@@ -137,7 +144,6 @@ func AssetContent(path string) ([]byte, error) {
 
 	return data, err
 }
-
 
 // Instantiate CoAP Server
 // Register all CoAP Endpoints

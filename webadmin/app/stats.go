@@ -1,5 +1,13 @@
 package app
 
-type ServerStatistics struct {
+type BetwixtServerStatistics struct {
+	requestCount int
+}
 
+func (s *BetwixtServerStatistics) IncrementCoapRequestsCount() {
+	s.requestCount++
+}
+
+func (s *BetwixtServerStatistics) GetRequestsCount() int {
+	return s.requestCount
 }

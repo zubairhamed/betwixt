@@ -1,11 +1,13 @@
 package app
 
 import (
+	"encoding/json"
 	"github.com/zenazn/goji/web"
 	"log"
 	"net/http"
-	"strings"
 	"runtime"
+	"strconv"
+	"strings"
 )
 
 func (b *BetwixtWebApp) fnHttpIndexPage(c web.C, w http.ResponseWriter, r *http.Request) {
@@ -29,24 +31,27 @@ func (b *BetwixtWebApp) fnHttpApiGetClients(c web.C, w http.ResponseWriter, r *h
 	w.WriteHeader(501)
 }
 
+// Endpoint: /api/server/stats
 func (b *BetwixtWebApp) fnHttpApiGetServerStats(c web.C, w http.ResponseWriter, r *http.Request) {
 	log.Println("fn http api - get server stats")
-	
+
 	var mem runtime.MemStats
 	runtime.ReadMemStats(&mem)
 
-	clientsCount := len(server.GetClients())
+	clientsCount := len(b.getClients())
 
-	model := &models.StatsModel{
+	model := &StatsModel{
 		ClientsCount: clientsCount,
 		MemUsage:     strconv.Itoa(int(mem.Alloc / 1000)),
-		Requests:     server.GetStats().GetRequestsCount(),
+		Requests:     b.getServerStats().GetRequestsCount(),
 		Errors:       0,
 	}
 
-	return model
-
-	w.WriteHeader(501)
+	if jsonBytes, err := json.Marshal(model); err == nil {
+		w.Write(jsonBytes)
+	} else {
+		w.WriteHeader(500)
+	}
 }
 
 func (b *BetwixtWebApp) fnHttpApiGetClientMessages(c web.C, w http.ResponseWriter, r *http.Request) {
