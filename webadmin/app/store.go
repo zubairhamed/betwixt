@@ -29,3 +29,6 @@ func (db *BoltDbStore) Init() {
 func (db *BoltDbStore) Close() {
 
 }
+
+// Events
+// Clients

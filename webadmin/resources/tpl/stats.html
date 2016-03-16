@@ -1,0 +1,31 @@
+#{ define "stats" }#
+<div class="container">
+    <h2>.:: betwixt webadmin ::.</h2>
+    <div class="row">
+        <div class="three columns status-mem">
+            <div class="status-box">
+                <h5>MEM USED</h5>
+                <h6>{{stats.MemUsage}} KB</h6>
+            </div>
+        </div>
+        <div class="three columns status-clients">
+            <div class="status-box">
+                <h5>CONNECTED</h5>
+                <h6>{{stats.ClientsCount}} Clients</h6>
+            </div>
+        </div>
+        <div class="three columns status-requests">
+            <div class="status-box">
+                <h5>REQUESTS</h5>
+                <h6>{{stats.Requests}}</h6>
+            </div>
+        </div>
+        <div class="three columns status-errors">
+            <div class="status-box">
+                <h5>ERRORS</h5>
+                <h6>{{stats.Errors}}</h6>
+            </div>
+        </div>
+    </div>
+</div>
+#{ end }#

@@ -9,6 +9,7 @@ import (
 	"github.com/zubairhamed/canopus"
 	"log"
 	"strings"
+	"strconv"
 )
 
 type ServerConfig map[string]string
@@ -20,11 +21,13 @@ func NewWebApp(store Store, cfg ServerConfig) *BetwixtWebApp {
 
 	w := &BetwixtWebApp{
 		name:       name,
-		httpPort:   httpPort,
 		store:      store,
+		httpPort:   httpPort,
 		coapServer: canopus.NewServer("5683", ""),
 		config:     cfg,
+		connectedClients: make(map[string]betwixt.RegisteredClient),
 		stats:      &BetwixtServerStatistics{},
+		events: make(map[betwixt.EventType]betwixt.FnEvent),
 	}
 
 	return w
@@ -41,15 +44,13 @@ type BetwixtWebApp struct {
 	connectedClients map[string]betwixt.RegisteredClient
 	stats            betwixt.ServerStatistics
 	events           map[betwixt.EventType]betwixt.FnEvent
+	registry   			 betwixt.Registry
 }
 
 func (b *BetwixtWebApp) cacheWebTemplates() {
 	tplBuf := bytes.NewBuffer([]byte{})
 
-	var tpls = []string{
-		"index", "nav", "head", "logs", "settings", "clients_list", "client_content",
-	}
-
+	var tpls = []string{ "index", "nav", "head", "logs", "settings", "stats", "client" }
 	var tpl []byte
 
 	for _, v := range tpls {
@@ -87,13 +88,12 @@ func (b *BetwixtWebApp) Serve() error {
 
 func (b *BetwixtWebApp) setupCoap() {
 	b.coapServer.OnMessage(func(msg *canopus.Message, inbound bool) {
-		// server.stats.IncrementCoapRequestsCount()
+		b.stats.IncrementCoapRequestsCount()
 	})
 
-	b.coapServer.Post("/rd", FnCoapRegisterClient)
-	b.coapServer.Put("/rd/:id", FnCoapUpdateClient)
-	b.coapServer.Delete("/rd/:id", FnCoapDeleteClient)
-
+	b.coapServer.Post("/rd", FnCoapRegisterClient(b))
+	b.coapServer.Put("/rd/:id", FnCoapUpdateClient(b))
+	b.coapServer.Delete("/rd/:id", FnCoapDeleteClient(b))
 }
 
 func (b *BetwixtWebApp) setupHttp() {
@@ -127,8 +127,67 @@ func (b *BetwixtWebApp) getClients() map[string]betwixt.RegisteredClient {
 	return b.connectedClients
 }
 
+func (b *BetwixtWebApp) getClient(id string) betwixt.RegisteredClient {
+	return b.connectedClients[id]
+}
+
 func (b *BetwixtWebApp) getServerStats() betwixt.ServerStatistics {
 	return b.stats
+}
+
+func (b *BetwixtWebApp) register(ep string, addr string, resources []*canopus.CoreResource) (string, error) {
+	clientId := canopus.GenerateToken(8)
+	cli := NewRegisteredClient(ep, clientId, addr)
+
+	objs := make(map[betwixt.LWM2MObjectType]betwixt.Object)
+
+	for _, o := range resources {
+		t := o.Target[1:len(o.Target)]
+		sp := strings.Split(t, "/")
+
+		objectId, _ := strconv.Atoi(sp[0])
+		lwId := betwixt.LWM2MObjectType(objectId)
+
+		obj, ok := objs[lwId]
+		if !ok {
+			obj = betwixt.NewObject(lwId, nil, b.registry)
+		}
+
+		if len(sp) > 1 {
+			// Has Object Instance
+			instanceId, _ := strconv.Atoi(sp[1])
+			obj.AddInstance(instanceId)
+		}
+		objs[lwId] = obj
+	}
+	cli.SetObjects(objs)
+	b.connectedClients[ep] = cli
+
+	return clientId, nil
+}
+
+func (b *BetwixtWebApp) delete(id string) {
+	for k, v := range b.connectedClients {
+		if v.GetId() == id {
+
+			delete(b.connectedClients, k)
+			return
+		}
+	}
+}
+
+func (b *BetwixtWebApp) update(id string) {
+	for k, v := range b.connectedClients {
+		if v.GetId() == id {
+			v.Update()
+			b.connectedClients[k] = v
+		}
+	}
+}
+
+
+func (b *BetwixtWebApp) UseRegistry(reg betwixt.Registry) {
+	b.registry = reg
 }
 
 func AssetContent(path string) ([]byte, error) {
@@ -144,11 +203,3 @@ func AssetContent(path string) ([]byte, error) {
 
 	return data, err
 }
-
-// Instantiate CoAP Server
-// Register all CoAP Endpoints
-/*
-	POST		/rd
-	PUT			/rd/:id
-	DELETE	/rd/:id
-*/

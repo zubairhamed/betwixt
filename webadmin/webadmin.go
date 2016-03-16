@@ -4,11 +4,16 @@ import (
 	"github.com/kylelemons/go-gypsy/yaml"
 	"github.com/zubairhamed/betwixt/webadmin/app"
 	"log"
+	"github.com/zubairhamed/betwixt"
 )
 
 func main() {
 	if store, err := app.NewBoltStore("app.db"); err == nil {
 		webApp := app.NewWebApp(store, parseConfig())
+
+		registry := betwixt.NewDefaultObjectRegistry()
+
+		webApp.UseRegistry(registry)
 
 		webApp.Serve()
 	} else {
@@ -28,11 +33,3 @@ func parseConfig() app.ServerConfig {
 	}
 	return cfg
 }
-
-/*
-name: Betwixt LWM2M WebAdmin Server
-http:
-  port: 8081
-coap:
-  port: 5683
-*/

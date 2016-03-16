@@ -8,6 +8,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"github.com/zubairhamed/betwixt"
 )
 
 func (b *BetwixtWebApp) fnHttpIndexPage(c web.C, w http.ResponseWriter, r *http.Request) {
@@ -27,14 +28,38 @@ func (b *BetwixtWebApp) fnHttpClientView(c web.C, w http.ResponseWriter, r *http
 }
 
 func (b *BetwixtWebApp) fnHttpApiGetClients(c web.C, w http.ResponseWriter, r *http.Request) {
-	log.Println("fn http api - get clients")
-	w.WriteHeader(501)
+	cl := []ClientModel{}
+
+	for _, v := range b.getClients() {
+
+		objs := make(map[string]ObjectModel)
+		for key, val := range v.GetObjects() {
+			objectModel := ObjectModel{
+				Instances:  val.GetInstances(),
+				Definition: val.GetDefinition(),
+			}
+			typeKey := strconv.Itoa(int(key))
+			objs[typeKey] = objectModel
+		}
+
+		c := ClientModel{
+			Endpoint:         v.GetName(),
+			RegistrationID:   v.GetId(),
+			RegistrationDate: v.GetRegistrationDate().Format("Jan 2, 2006, 3:04pm (SGT)"),
+			LastUpdate:       v.LastUpdate().Format("Jan 2, 2006, 3:04pm (SGT)"),
+			Objects:          objs,
+		}
+		cl = append(cl, c)
+	}
+
+	if jsonBytes, err := json.Marshal(cl); err == nil {
+		w.Write(jsonBytes)
+	} else {
+		w.WriteHeader(500)
+	}
 }
 
-// Endpoint: /api/server/stats
 func (b *BetwixtWebApp) fnHttpApiGetServerStats(c web.C, w http.ResponseWriter, r *http.Request) {
-	log.Println("fn http api - get server stats")
-
 	var mem runtime.MemStats
 	runtime.ReadMemStats(&mem)
 
@@ -60,12 +85,90 @@ func (b *BetwixtWebApp) fnHttpApiGetClientMessages(c web.C, w http.ResponseWrite
 }
 
 func (b *BetwixtWebApp) fnHttpApiGetClient(c web.C, w http.ResponseWriter, r *http.Request) {
-	log.Println("fn http api - get client")
-	w.WriteHeader(501)
+
+	clientId := c.URLParams["client"]
+	v := b.getClient(clientId)
+	if v == nil {
+		w.WriteHeader(500)
+	}
+
+	objs := make(map[string]ObjectModel)
+	for key, val := range v.GetObjects() {
+		objectModel := ObjectModel{
+			Instances:  val.GetInstances(),
+			Definition: val.GetDefinition(),
+		}
+		typeKey := strconv.Itoa(int(key))
+		objs[typeKey] = objectModel
+	}
+
+	cl := ClientModel{
+		Endpoint:         v.GetName(),
+		RegistrationID:   v.GetId(),
+		RegistrationDate: v.GetRegistrationDate().Format("Jan 2, 2006, 3:04pm (SGT)"),
+		LastUpdate:       v.LastUpdate().Format("Jan 2, 2006, 3:04pm (SGT)"),
+		Objects:          objs,
+	}
+
+	if jsonBytes, err := json.Marshal(cl); err == nil {
+		w.Write(jsonBytes)
+	} else {
+		w.WriteHeader(500)
+	}
 }
 
 func (b *BetwixtWebApp) fnHttpApiGetClientResource(c web.C, w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(501)
+	clientId := c.URLParams["client"]
+	object, err := strconv.Atoi(c.URLParams["object"])
+	if err != nil {
+		w.WriteHeader(500)
+	}
+
+	instance, err := strconv.Atoi(c.URLParams["instance"])
+	if err != nil {
+		w.WriteHeader(500)
+	}
+
+	resource, err := strconv.Atoi(c.URLParams["resource"])
+	if err != nil {
+		w.WriteHeader(500)
+	}
+
+	cli := b.getClient(clientId)
+	val, _ := cli.ReadResource(uint16(object), uint16(instance), uint16(resource))
+
+	if val == nil {
+		log.Println("Value returned by ReadResource is nil")
+		w.WriteHeader(500)
+	}
+
+	contentModels := []*ContentValueModel{}
+	if val.GetType() == betwixt.VALUETYPE_MULTIRESOURCE {
+		resources := val.(*betwixt.MultipleResourceValue).GetValue().([]*betwixt.ResourceValue)
+
+		for _, resource := range resources {
+			contentModels = append(contentModels, &ContentValueModel{
+				Id:    uint16(resource.GetId()),
+				Value: resource.GetValue(),
+			})
+		}
+	} else {
+		resource := val.(*betwixt.ResourceValue)
+		contentModels = append(contentModels, &ContentValueModel{
+			Id:    uint16(resource.GetId()),
+			Value: resource.GetValue(),
+		})
+	}
+
+	payload := &ExecuteResponseModel{
+		Content: contentModels,
+	}
+
+	if jsonBytes, err := json.Marshal(payload); err == nil {
+		w.Write(jsonBytes)
+	} else {
+		w.WriteHeader(500)
+	}
 }
 
 func (b *BetwixtWebApp) fnHttpApiGetClientInstance(c web.C, w http.ResponseWriter, r *http.Request) {

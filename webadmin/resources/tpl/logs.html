@@ -1,28 +1,3 @@
 #{ define "page_logs" }#
-<!doctype html>
-<html lang="en" ng-app="betwixt-app">
-<head>
-    <title>:: Betwixt LWM2M :: Logs</title>
-    #{ template "head" }#
-</head>
 
-<body>
-
-<div class="header">
-    <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
-        <a class="pure-menu-heading" href="">Betwixt LWM2M WebUI :: #{ .Title }# </a>
-    </div>
-</div>
-
-<div id="layout" class="content pure-g">
-    #{ template "nav" }#
-
-    #{ template "entity_list"}#
-
-    <div id="main" class="pure-u-1">
-        #{ template "entity_content" }#
-    </div>
-</div>
-</body>
-</html>
 #{ end }#
