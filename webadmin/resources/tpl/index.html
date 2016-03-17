@@ -14,6 +14,7 @@
         <table class="u-full-width">
             <thead>
                 <tr>
+                    <th>Endpoint</th>
                     <th>Client id</th>
                     <th>Connected</th>
                     <th>Updated</th>
@@ -22,11 +23,12 @@
             </thead>
             <tbody>
                 <tr ng-repeat="client in clients">
+                    <td>{{client.Endpoint}}</td>
                     <td>{{client.RegistrationID}}</td>
                     <td>{{client.RegistrationDate}}</td>
                     <td>{{client.LastUpdate}}</td>
                     <td>
-                        <a class="button button-primary" href="/client/{{client.RegistrationID}}/view">View</a>
+                        <a class="button button-primary" href="/client/{{client.Endpoint}}/view">View</a>
                         <a class="button button-primary" href="#">Delete</a>
                     </td>
                 </tr>

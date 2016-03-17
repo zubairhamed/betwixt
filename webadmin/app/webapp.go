@@ -50,7 +50,7 @@ type BetwixtWebApp struct {
 func (b *BetwixtWebApp) cacheWebTemplates() {
 	tplBuf := bytes.NewBuffer([]byte{})
 
-	var tpls = []string{ "index", "nav", "head", "logs", "settings", "stats", "client" }
+	var tpls = []string{ "index", "head", "logs", "settings", "stats", "client" }
 	var tpl []byte
 
 	for _, v := range tpls {
@@ -128,6 +128,7 @@ func (b *BetwixtWebApp) getClients() map[string]betwixt.RegisteredClient {
 }
 
 func (b *BetwixtWebApp) getClient(id string) betwixt.RegisteredClient {
+	log.Println(b.connectedClients)
 	return b.connectedClients[id]
 }
 

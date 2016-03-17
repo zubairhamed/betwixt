@@ -87,7 +87,9 @@ func (b *BetwixtWebApp) fnHttpApiGetClientMessages(c web.C, w http.ResponseWrite
 func (b *BetwixtWebApp) fnHttpApiGetClient(c web.C, w http.ResponseWriter, r *http.Request) {
 
 	clientId := c.URLParams["client"]
+
 	v := b.getClient(clientId)
+	log.Println(clientId, v)
 	if v == nil {
 		w.WriteHeader(500)
 	}
