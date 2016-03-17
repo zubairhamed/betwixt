@@ -10,6 +10,15 @@
     #{ template "stats" }#
     <br /><br /><br />
 
+    <style>
+        .btn {
+            border: 1px solid white;
+            color: white;
+            padding: 5px;
+            border-radius: 3px;
+        }
+    </style>
+
     <div class="container">
         <h4>Client: {{ client.Endpoint }} ({{ client.RegistrationID }})</h4>
         <h5>Connected: {{ client.RegistrationDate }}</h5>
@@ -42,12 +51,14 @@
                     <tr ng-repeat="resource in value.Definition.Resources">
                         <td>/{{ key }}/{{ objInstance }}/{{ resource.Id }}</td>
                         <td>
-                            <a href="#" ng-show="{{ IsExecutable(resource) }}" ng-click="opExecute(client.Endpoint, key, objInstance, resource.Id)">exec</a>
-                            <a href="#" ng-show="{{ IsReadable(resource) }}" ng-click="opObserve(client.Endpoint, key, objInstance, resource.Id)">observe</a>
-                            <a href="#" ng-show="{{ IsReadable(resource) }}" ng-click="opCancelObserve(client.Endpoint, key, objInstance, resource.Id)">stop</a>
-                            <a href="#" ng-show="{{ IsReadable(resource) }}" ng-click="opRead(client.Endpoint, key, objInstance, resource.Id)">read</a>
-                            <a href="#" ng-show="{{ IsWritable(resource) }}" ng-click="opWrite(client.Endpoint, key, objInstance, resource.Id)">write</a>
-                            <a href="#" ng-show="{{ IsNone(resource) }}">none</a>
+                            <div class="btn-group">
+                                <a class="btn btn-default" href="#" ng-show="{{ IsExecutable(resource) }}" ng-click="opExecute(client.Endpoint, key, objInstance, resource.Id)"><i class="fa fa-gear"></i></a>
+                                <a class="btn btn-default" href="#" ng-show="{{ IsExecutable(resource) }}" ng-click="opExecute(client.Endpoint, key, objInstance, resource.Id)"><i class="fa fa-gears"></i></a>
+                                <a class="btn btn-default" href="#" ng-show="{{ IsReadable(resource) }}" ng-click="opObserve(client.Endpoint, key, objInstance, resource.Id)"><i class="fa fa-search-plus"></i></a>
+                                <a class="btn btn-default" href="#" ng-show="{{ IsReadable(resource) }}" ng-click="opCancelObserve(client.Endpoint, key, objInstance, resource.Id)"><i class="fa fa-search-minus"></i></a>
+                                <a class="btn btn-default" href="#" ng-show="{{ IsReadable(resource) }}" ng-click="opRead(client.Endpoint, key, objInstance, resource.Id)"><i class="fa fa-external-link"></i></a>
+                                <a class="btn btn-default" href="#" ng-show="{{ IsWritable(resource) }}" ng-click="opWrite(client.Endpoint, key, objInstance, resource.Id)"><i class="fa fa-pencil-square-o"></i></a>
+                            </div>
                         </td>
                         <td>{{ resource.Name }}</td>
                         <td>{{ resourcevalue['/' + key + '/' + objInstance + '/' + resource.Id] }}</td>
@@ -62,3 +73,9 @@
 </body>
 </html>
 #{ end }#
+
+<!--
+    Read
+
+    Delete
+-->
