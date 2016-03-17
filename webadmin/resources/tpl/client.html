@@ -1,3 +1,38 @@
 #{ define "page_client" }#
+<!doctype html>
+<html lang="en" ng-app="betwixt-app">
+<head>
+    <title>:: betwixt webadmin ::</title>
+    #{ template "head" }#
+</head>
+<body ng-controller="clientController">
+    <br />
+    #{ template "stats" }#
+    <br /><br /><br />
 
+    <div class="container">
+        <table class="u-full-width">
+            <thead>
+                <tr>
+                    <th>Client id</th>
+                    <th>Connected</th>
+                    <th>Updated</th>
+                    <th>&nbsp</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="client in clients">
+                    <td>{{client.RegistrationID}}</td>
+                    <td>{{client.RegistrationDate}}</td>
+                    <td>{{client.LastUpdate}}</td>
+                    <td>
+                        <a class="button button-primary" href="/client/{{client.RegistrationID}}/view">View</a>
+                        <a class="button button-primary" href="#">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
 #{ end }#

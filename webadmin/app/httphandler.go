@@ -24,7 +24,7 @@ func (b *BetwixtWebApp) fnHttpSettingsPage(c web.C, w http.ResponseWriter, r *ht
 }
 
 func (b *BetwixtWebApp) fnHttpClientView(c web.C, w http.ResponseWriter, r *http.Request) {
-	log.Println("fn http - view client")
+	b.tpl.ExecuteTemplate(w, "page_client", nil)
 }
 
 func (b *BetwixtWebApp) fnHttpApiGetClients(c web.C, w http.ResponseWriter, r *http.Request) {

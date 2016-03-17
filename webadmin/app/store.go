@@ -30,5 +30,7 @@ func (db *BoltDbStore) Close() {
 
 }
 
-// Events
-// Clients
+// AddMessage
+// DeleteMessage
+// GetMessages
+// GetMessage
