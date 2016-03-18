@@ -3,13 +3,13 @@ package app
 import (
 	"bytes"
 	"flag"
-	"github.com/alecthomas/template"
 	"github.com/zenazn/goji"
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/canopus"
 	"log"
 	"strconv"
 	"strings"
+	"html/template"
 )
 
 type ServerConfig map[string]string
@@ -40,7 +40,7 @@ type BetwixtWebApp struct {
 	coapServer       canopus.CoapServer
 	config           ServerConfig
 	wait             chan struct{}
-	tpl              *template.Template
+	tpl 						 *template.Template
 	connectedClients map[string]betwixt.RegisteredClient
 	stats            betwixt.ServerStatistics
 	events           map[betwixt.EventType]betwixt.FnEvent

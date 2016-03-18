@@ -1,3 +1,5 @@
 gom 'github.com/zubairhamed/canopus'
-gom 'github.com/zubairhamed/sugoi'
 gom 'github.com/stretchr/testify/assert'
+gom 'github.com/boltdb/bolt'
+gom 'github.com/zenazn/goji'
+gom 'github.com/kylelemons/go-gypsy'
