@@ -2,7 +2,6 @@ package betwixt
 
 import (
 	"github.com/zubairhamed/canopus"
-	"github.com/zubairhamed/sugoi"
 	"time"
 )
 
@@ -200,7 +199,6 @@ type Server interface {
 	GetClients() map[string]RegisteredClient
 	GetClient(id string) RegisteredClient
 	GetStats() ServerStatistics
-	GetHttpServer() sugoi.HttpServer
 	GetCoapServer() canopus.CoapServer
 }
 
