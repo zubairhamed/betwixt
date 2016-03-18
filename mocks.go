@@ -4,7 +4,6 @@ package betwixt
 import (
 	"errors"
 	"github.com/zubairhamed/canopus"
-	"github.com/zubairhamed/sugoi"
 	"time"
 )
 
@@ -156,13 +155,11 @@ func (s *MockServerStatistics) GetRequestsCount() int {
 func NewMockServer() Server {
 	return &MockServer{
 		stats:      &MockServerStatistics{},
-		httpServer: sugoi.NewHttpServer("8080"),
 	}
 }
 
 type MockServer struct {
 	stats      ServerStatistics
-	httpServer sugoi.HttpServer
 	coapServer canopus.CoapServer
 }
 
@@ -184,10 +181,6 @@ func (server *MockServer) GetClients() map[string]RegisteredClient {
 
 func (server *MockServer) GetStats() ServerStatistics {
 	return server.stats
-}
-
-func (server *MockServer) GetHttpServer() sugoi.HttpServer {
-	return server.httpServer
 }
 
 func (server *MockServer) GetCoapServer() canopus.CoapServer {
