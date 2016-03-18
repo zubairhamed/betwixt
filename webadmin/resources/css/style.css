@@ -1,0 +1,40 @@
+body {
+    background-color: rgb(102, 117, 132);
+}
+
+.status-box {
+    margin: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.status-mem {
+    background-color: #663E7A;
+    border: 3px solid #907A9B;
+}
+
+.status-clients {
+    background-color: #D38A37;
+    border: 3px solid #F2963A;
+}
+
+.status-requests {
+    background-color: #5FA8D8;
+    border: 3px solid #799CF7;
+}
+
+.status-errors {
+    background-color: #911135;
+    border: 3px solid #A80840;
+}
+
+.container h2 {
+    text-align: center;
+}
+
+.btn {
+    border: 1px solid white;
+    color: white;
+    padding: 5px;
+    border-radius: 3px;
+}

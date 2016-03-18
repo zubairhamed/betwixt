@@ -49,12 +49,10 @@ func (c *DefaultClient) Register(name string) (string, error) {
 	}
 
 	req := NewRequest(MessageConfirmable, Post, GenerateMessageID())
-
 	req.SetStringPayload(BuildModelResourceStringPayload(c.enabledObjects))
 	req.SetRequestURI("/rd")
 	req.SetURIQuery("ep", name)
 	resp, err := c.coapServer.Send(req)
-
 	path := ""
 	if err != nil {
 		return "", err
@@ -62,7 +60,6 @@ func (c *DefaultClient) Register(name string) (string, error) {
 		path = resp.GetMessage().GetLocationPath()
 	}
 	c.path = path
-
 	PrintMessage(resp.GetMessage())
 
 	return path, nil

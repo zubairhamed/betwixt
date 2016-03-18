@@ -1,4 +1,4 @@
-package webadmin
+package app
 
 import (
 	"fmt"
