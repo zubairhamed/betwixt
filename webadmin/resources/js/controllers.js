@@ -56,6 +56,11 @@ app.controller("clientController", function($scope, $http, $location){
         // POST     /api/clients/{client}/{object}/{instance}/{resource}
     }
 
+    $scope.opExecuteWithOptions = function (client, object, instance, resource) {
+        alert("Execute with Options");
+        // POST     /api/clients/{client}/{object}/{instance}/{resource}
+    }
+
     $scope.opRead = function (client, object, instance, resource) {
         key = "/" + object + "/" + instance + "/" + resource;
         $http.get("/api/clients/" + client + key).success(function(data) {

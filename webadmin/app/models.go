@@ -18,7 +18,6 @@ type ClientModel struct {
 }
 
 type ResourceModel struct {
-
 }
 
 type ContentValueModel struct {

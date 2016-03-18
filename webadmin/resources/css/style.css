@@ -31,3 +31,10 @@ body {
 .container h2 {
     text-align: center;
 }
+
+.btn {
+    border: 1px solid white;
+    color: white;
+    padding: 5px;
+    border-radius: 3px;
+}

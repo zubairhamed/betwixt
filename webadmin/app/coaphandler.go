@@ -21,7 +21,7 @@ func FnCoapRegisterClient(b *BetwixtWebApp) canopus.RouteHandler {
 
 		msg := canopus.NewMessageOfType(canopus.MessageAcknowledgment, req.GetMessage().MessageID)
 		msg.Token = req.GetMessage().Token
-		msg.AddOption(canopus.OptionLocationPath, "rd/" + clientId)
+		msg.AddOption(canopus.OptionLocationPath, "rd/"+clientId)
 		msg.Code = canopus.CoapCodeCreated
 
 		return canopus.NewResponseWithMessage(msg)
@@ -55,4 +55,3 @@ func FnCoapDeleteClient(b *BetwixtWebApp) canopus.RouteHandler {
 		return canopus.NewResponseWithMessage(msg)
 	}
 }
-

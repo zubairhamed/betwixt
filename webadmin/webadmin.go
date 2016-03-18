@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/kylelemons/go-gypsy/yaml"
+	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/webadmin/app"
 	"log"
-	"github.com/zubairhamed/betwixt"
 )
 
 func main() {

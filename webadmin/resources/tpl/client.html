@@ -10,15 +10,6 @@
     #{ template "stats" }#
     <br /><br /><br />
 
-    <style>
-        .btn {
-            border: 1px solid white;
-            color: white;
-            padding: 5px;
-            border-radius: 3px;
-        }
-    </style>
-
     <div class="container">
         <h4>Client: {{ client.Endpoint }} ({{ client.RegistrationID }})</h4>
         <h5>Connected: {{ client.RegistrationDate }}</h5>
@@ -53,7 +44,7 @@
                         <td>
                             <div class="btn-group">
                                 <a class="btn btn-default" href="#" ng-show="{{ IsExecutable(resource) }}" ng-click="opExecute(client.Endpoint, key, objInstance, resource.Id)"><i class="fa fa-gear"></i></a>
-                                <a class="btn btn-default" href="#" ng-show="{{ IsExecutable(resource) }}" ng-click="opExecute(client.Endpoint, key, objInstance, resource.Id)"><i class="fa fa-gears"></i></a>
+                                <a class="btn btn-default" href="#" ng-show="{{ IsExecutable(resource) }}" ng-click="opExecuteWithOptions(client.Endpoint, key, objInstance, resource.Id)"><i class="fa fa-gears"></i></a>
                                 <a class="btn btn-default" href="#" ng-show="{{ IsReadable(resource) }}" ng-click="opObserve(client.Endpoint, key, objInstance, resource.Id)"><i class="fa fa-search-plus"></i></a>
                                 <a class="btn btn-default" href="#" ng-show="{{ IsReadable(resource) }}" ng-click="opCancelObserve(client.Endpoint, key, objInstance, resource.Id)"><i class="fa fa-search-minus"></i></a>
                                 <a class="btn btn-default" href="#" ng-show="{{ IsReadable(resource) }}" ng-click="opRead(client.Endpoint, key, objInstance, resource.Id)"><i class="fa fa-external-link"></i></a>

@@ -8,8 +8,8 @@ import (
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/canopus"
 	"log"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 type ServerConfig map[string]string
@@ -20,14 +20,14 @@ func NewWebApp(store Store, cfg ServerConfig) *BetwixtWebApp {
 	httpPort := cfg["http-port"]
 
 	w := &BetwixtWebApp{
-		name:       name,
-		store:      store,
-		httpPort:   httpPort,
-		coapServer: canopus.NewServer("5683", ""),
-		config:     cfg,
+		name:             name,
+		store:            store,
+		httpPort:         httpPort,
+		coapServer:       canopus.NewServer("5683", ""),
+		config:           cfg,
 		connectedClients: make(map[string]betwixt.RegisteredClient),
-		stats:      &BetwixtServerStatistics{},
-		events: make(map[betwixt.EventType]betwixt.FnEvent),
+		stats:            &BetwixtServerStatistics{},
+		events:           make(map[betwixt.EventType]betwixt.FnEvent),
 	}
 
 	return w
@@ -44,13 +44,13 @@ type BetwixtWebApp struct {
 	connectedClients map[string]betwixt.RegisteredClient
 	stats            betwixt.ServerStatistics
 	events           map[betwixt.EventType]betwixt.FnEvent
-	registry   			 betwixt.Registry
+	registry         betwixt.Registry
 }
 
 func (b *BetwixtWebApp) cacheWebTemplates() {
 	tplBuf := bytes.NewBuffer([]byte{})
 
-	var tpls = []string{ "index", "head", "logs", "settings", "stats", "client" }
+	var tpls = []string{"index", "head", "logs", "settings", "stats", "client"}
 	var tpl []byte
 
 	for _, v := range tpls {
@@ -185,7 +185,6 @@ func (b *BetwixtWebApp) update(id string) {
 		}
 	}
 }
-
 
 func (b *BetwixtWebApp) UseRegistry(reg betwixt.Registry) {
 	b.registry = reg
