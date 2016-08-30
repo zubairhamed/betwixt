@@ -215,7 +215,6 @@ func (c *DefaultClient) handleCreateRequest(req CoapRequest) CoapResponse {
 
 // Handles LWM2M Read Requests (not to be mistaken for/not the same as  CoAP GET)
 func (c *DefaultClient) handleReadRequest(req CoapRequest) CoapResponse {
-	log.Println("Read Request")
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
@@ -249,6 +248,8 @@ func (c *DefaultClient) handleReadRequest(req CoapRequest) CoapResponse {
 
 				val := response.GetResponseValue()
 				msg.Code = response.GetResponseCode()
+
+				msg.AddOption(OptionContentFormat, MediaTypeFromValue(val))
 				b := EncodeValue(resource.GetId(), resource.MultipleValuesAllowed(), val)
 				msg.Payload = NewBytesPayload(b)
 			}

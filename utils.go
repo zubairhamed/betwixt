@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log"
 	"sort"
+	"github.com/zubairhamed/canopus"
 )
 
 const (
@@ -166,6 +167,14 @@ func DecodeResourceValue(resourceId LWM2MResourceType, b []byte, resourceDef Res
 		}
 	} else {
 		return NewResourceValue(resourceId, ValueFromBytes(b, resourceDef.GetResourceType())), nil
+	}
+}
+
+func MediaTypeFromValue(v Value) canopus.MediaType {
+	if v.GetType() == VALUETYPE_MULTIPLE {
+		return canopus.MediaTypeTlvVndOmaLwm2m
+	} else {
+		return canopus.MediaTypeTextPlain
 	}
 }
 
