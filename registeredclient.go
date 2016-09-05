@@ -2,10 +2,11 @@ package betwixt
 
 import (
 	"fmt"
-	. "github.com/zubairhamed/canopus"
 	"log"
 	"net"
 	"time"
+
+	. "github.com/zubairhamed/canopus"
 )
 
 // Returns a new instance of DefaultRegisteredClient implementing RegisteredClient
@@ -92,12 +93,6 @@ func (c *DefaultRegisteredClient) ReadObject(obj uint16, inst uint16) (Value, er
 
 func (c *DefaultRegisteredClient) ReadResource(obj uint16, inst uint16, rsrc uint16) (Value, error) {
 	rAddr, _ := net.ResolveUDPAddr("udp", c.addr)
-	// lAddr, _ := net.ResolveUDPAddr("udp", ":0")
-
-	// log.Println("Remote Addr", rAddr)
-
-	//
-	// conn, _ := net.DialUDP("udp", lAddr, rAddr)
 
 	uri := fmt.Sprintf("/%d/%d/%d", obj, inst, rsrc)
 	req := NewRequest(MessageConfirmable, Get, GenerateMessageID())
@@ -110,11 +105,8 @@ func (c *DefaultRegisteredClient) ReadResource(obj uint16, inst uint16, rsrc uin
 		req.SetMediaType(MediaTypeTextPlainVndOmaLwm2m)
 	}
 
-	log.Println("Z", req.GetMessage().MessageID)
 	response, err := c.coapServer.SendTo(req, rAddr)
 
-	log.Println("B")
-	// response, err := SendMessage(req.GetMessage(), NewUDPConnection(conn))
 	if err != nil {
 		log.Println(err)
 		return nil, err
