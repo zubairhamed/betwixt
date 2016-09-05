@@ -16,8 +16,6 @@ func main() {
 
 	c.OnStartup(func() {
 		c.Register(cli.Name)
-
-		// TODO: Randomly fire change events for values changed
 	})
 
 	c.Start()

@@ -3,11 +3,12 @@ package app
 import (
 	"bytes"
 	"flag"
-	"github.com/zenazn/goji"
-	"github.com/zubairhamed/betwixt"
 	"html/template"
 	"log"
 	"strings"
+
+	"github.com/zenazn/goji"
+	"github.com/zubairhamed/betwixt"
 )
 
 func NewWebApp(store betwixt.Store, cfg betwixt.ServerConfig) *BetwixtWebApp {

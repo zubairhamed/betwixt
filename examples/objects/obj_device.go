@@ -1,8 +1,9 @@
 package objects
 
 import (
-	. "github.com/zubairhamed/betwixt"
 	"time"
+
+	. "github.com/zubairhamed/betwixt"
 )
 
 type DeviceObject struct {

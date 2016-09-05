@@ -5,9 +5,10 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"github.com/zubairhamed/canopus"
 	"log"
 	"sort"
+
+	"github.com/zubairhamed/canopus"
 )
 
 const (

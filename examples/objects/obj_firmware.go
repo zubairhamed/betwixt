@@ -1,9 +1,10 @@
 package objects
 
 import (
+	"log"
+
 	. "github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/canopus"
-	"log"
 )
 
 type FirmwareObject struct {

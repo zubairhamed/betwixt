@@ -2,13 +2,14 @@ package app
 
 import (
 	"encoding/json"
-	"github.com/zenazn/goji/web"
-	"github.com/zubairhamed/betwixt"
 	"log"
 	"net/http"
 	"runtime"
 	"strconv"
 	"strings"
+
+	"github.com/zenazn/goji/web"
+	"github.com/zubairhamed/betwixt"
 )
 
 func (b *BetwixtWebApp) fnHttpIndexPage(c web.C, w http.ResponseWriter, r *http.Request) {

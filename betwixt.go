@@ -1,8 +1,9 @@
 package betwixt
 
 import (
-	"github.com/zubairhamed/canopus"
 	"time"
+
+	"github.com/zubairhamed/canopus"
 )
 
 // LWM2MObjectType represents a LWM2M Object Type

@@ -1,10 +1,11 @@
 package betwixt
 
 import (
-	"github.com/zubairhamed/canopus"
 	"log"
 	"strconv"
 	"strings"
+
+	"github.com/zubairhamed/canopus"
 )
 
 type ServerConfig map[string]string
