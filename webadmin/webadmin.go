@@ -4,24 +4,20 @@ import (
 	"github.com/kylelemons/go-gypsy/yaml"
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/webadmin/app"
-	"log"
 )
 
 func main() {
-	if store, err := app.NewBoltStore("app.db"); err == nil {
-		webApp := app.NewWebApp(store, parseConfig())
+	store := betwixt.NewInMemoryStore()
+	webApp := app.NewWebApp(store, parseConfig())
 
-		registry := betwixt.NewDefaultObjectRegistry()
+	registry := betwixt.NewDefaultObjectRegistry()
 
-		webApp.UseRegistry(registry)
+	webApp.UseRegistry(registry)
 
-		webApp.Serve()
-	} else {
-		log.Fatal(err)
-	}
+	webApp.Serve()
 }
 
-func parseConfig() app.ServerConfig {
+func parseConfig() betwixt.ServerConfig {
 	cfg := map[string]string{}
 	if file, err := yaml.ReadFile("./config.yaml"); err == nil {
 		m := file.Root.(yaml.Map)

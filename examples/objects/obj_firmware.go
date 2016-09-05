@@ -1,7 +1,9 @@
-package ev3
+package objects
 
 import (
 	. "github.com/zubairhamed/betwixt"
+	"github.com/zubairhamed/canopus"
+	"log"
 )
 
 type FirmwareObject struct {
@@ -9,22 +11,35 @@ type FirmwareObject struct {
 }
 
 func (o *FirmwareObject) OnExecute(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+	log.Println("Executing: ", instanceId, resourceId)
+	canopus.PrintMessage(req.GetMessage())
+
 	return Unauthorized()
 }
 
 func (o *FirmwareObject) OnCreate(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+	log.Println("Creating: ", instanceId, resourceId)
+	canopus.PrintMessage(req.GetMessage())
+
 	return Unauthorized()
 }
 
 func (o *FirmwareObject) OnDelete(instanceId int, req Lwm2mRequest) Lwm2mResponse {
+	log.Println("Deleting: ", instanceId)
+	canopus.PrintMessage(req.GetMessage())
+
 	return Unauthorized()
 }
 
 func (o *FirmwareObject) OnRead(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+	log.Println("Reading: ", instanceId, resourceId)
+	canopus.PrintMessage(req.GetMessage())
 	return Unauthorized()
 }
 
 func (o *FirmwareObject) OnWrite(instanceId int, resourceId int, req Lwm2mRequest) Lwm2mResponse {
+	log.Println("Writing: ", instanceId, resourceId)
+	canopus.PrintMessage(req.GetMessage())
 	return Unauthorized()
 }
 

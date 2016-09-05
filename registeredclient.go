@@ -1,21 +1,22 @@
-package app
+package betwixt
 
 import (
 	"fmt"
-	"github.com/zubairhamed/betwixt"
 	. "github.com/zubairhamed/canopus"
+	"log"
 	"net"
 	"time"
 )
 
 // Returns a new instance of DefaultRegisteredClient implementing RegisteredClient
-func NewRegisteredClient(ep string, id string, addr string) betwixt.RegisteredClient {
+func NewRegisteredClient(ep string, id string, addr string, coapServer CoapServer) RegisteredClient {
 	return &DefaultRegisteredClient{
 		name:       ep,
 		id:         id,
 		addr:       addr,
 		regDate:    time.Now(),
 		updateDate: time.Now(),
+		coapServer: coapServer,
 	}
 }
 
@@ -24,12 +25,13 @@ type DefaultRegisteredClient struct {
 	name           string
 	lifetime       int
 	version        string
-	bindingMode    betwixt.BindingMode
+	bindingMode    BindingMode
 	smsNumber      string
 	addr           string
 	regDate        time.Time
 	updateDate     time.Time
-	enabledObjects map[betwixt.LWM2MObjectType]betwixt.Object
+	coapServer     CoapServer
+	enabledObjects map[LWM2MObjectType]Object
 }
 
 func (c *DefaultRegisteredClient) GetAddress() string {
@@ -52,7 +54,7 @@ func (c *DefaultRegisteredClient) GetVersion() string {
 	return c.version
 }
 
-func (c *DefaultRegisteredClient) GetBindingMode() betwixt.BindingMode {
+func (c *DefaultRegisteredClient) GetBindingMode() BindingMode {
 	return c.bindingMode
 }
 
@@ -72,42 +74,52 @@ func (c *DefaultRegisteredClient) LastUpdate() time.Time {
 	return c.updateDate
 }
 
-func (c *DefaultRegisteredClient) SetObjects(objects map[betwixt.LWM2MObjectType]betwixt.Object) {
+func (c *DefaultRegisteredClient) SetObjects(objects map[LWM2MObjectType]Object) {
 	c.enabledObjects = objects
 }
 
-func (c *DefaultRegisteredClient) GetObjects() map[betwixt.LWM2MObjectType]betwixt.Object {
+func (c *DefaultRegisteredClient) GetObjects() map[LWM2MObjectType]Object {
 	return c.enabledObjects
 }
 
-func (c *DefaultRegisteredClient) GetObject(t betwixt.LWM2MObjectType) betwixt.Object {
+func (c *DefaultRegisteredClient) GetObject(t LWM2MObjectType) Object {
 	return c.enabledObjects[t]
 }
 
-func (c *DefaultRegisteredClient) ReadObject(obj uint16, inst uint16) (betwixt.Value, error) {
+func (c *DefaultRegisteredClient) ReadObject(obj uint16, inst uint16) (Value, error) {
 	return nil, nil
 }
 
-func (c *DefaultRegisteredClient) ReadResource(obj uint16, inst uint16, rsrc uint16) (betwixt.Value, error) {
+func (c *DefaultRegisteredClient) ReadResource(obj uint16, inst uint16, rsrc uint16) (Value, error) {
 	rAddr, _ := net.ResolveUDPAddr("udp", c.addr)
-	lAddr, _ := net.ResolveUDPAddr("udp", ":0")
+	// lAddr, _ := net.ResolveUDPAddr("udp", ":0")
 
-	conn, _ := net.DialUDP("udp", lAddr, rAddr)
+	// log.Println("Remote Addr", rAddr)
+
+	//
+	// conn, _ := net.DialUDP("udp", lAddr, rAddr)
 
 	uri := fmt.Sprintf("/%d/%d/%d", obj, inst, rsrc)
 	req := NewRequest(MessageConfirmable, Get, GenerateMessageID())
 	req.SetRequestURI(uri)
 
-	resourceDefinition := c.GetObject(betwixt.LWM2MObjectType(obj)).GetDefinition().GetResource(betwixt.LWM2MResourceType(rsrc))
+	resourceDefinition := c.GetObject(LWM2MObjectType(obj)).GetDefinition().GetResource(LWM2MResourceType(rsrc))
 	if resourceDefinition.MultipleValuesAllowed() {
 		req.SetMediaType(MediaTypeTlvVndOmaLwm2m)
 	} else {
 		req.SetMediaType(MediaTypeTextPlainVndOmaLwm2m)
 	}
 
-	response, _ := SendMessage(req.GetMessage(), NewUDPConnection(conn))
-	PrintMessage(response.GetMessage())
-	responseValue, _ := betwixt.DecodeResourceValue(betwixt.LWM2MResourceType(rsrc), response.GetMessage().Payload.GetBytes(), resourceDefinition)
+	log.Println("Z", req.GetMessage().MessageID)
+	response, err := c.coapServer.SendTo(req, rAddr)
+
+	log.Println("B")
+	// response, err := SendMessage(req.GetMessage(), NewUDPConnection(conn))
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	responseValue, _ := DecodeResourceValue(LWM2MResourceType(rsrc), response.GetMessage().Payload.GetBytes(), resourceDefinition)
 
 	return responseValue, nil
 }

@@ -9,13 +9,13 @@ func TestClient(t *testing.T) {
 
 	registry := NewDefaultObjectRegistry()
 
-	cli := NewDefaultClient("0", "blahblah", registry)
+	cli := NewLwm2mClient("TestClient", "0", "blahblah", registry)
 	assert.NotNil(t, cli)
 
-	cli = NewDefaultClient("blahblah", "localhost:5683", registry)
+	cli = NewLwm2mClient("TestClient", "blahblah", "localhost:5683", registry)
 	assert.NotNil(t, cli)
 
-	cli = NewDefaultClient("0", "localhost:5683", registry)
+	cli = NewLwm2mClient("TestClient", "0", "localhost:5683", registry)
 	assert.NotNil(t, cli, "Error instantiating client")
 	assert.NotNil(t, registry, "Error instantiating registry")
 
