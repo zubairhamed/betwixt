@@ -1,25 +1,40 @@
 package main
 
 import (
+	"log"
+
 	"github.com/zubairhamed/betwixt"
 	"github.com/zubairhamed/betwixt/examples/objects"
-	"log"
 )
 
 func main() {
+
+	// Channel for exit
+	ch := make(chan bool)
 
 	// Create Server
 	server := CreateServer()
 	server.OnRegistered(func(c betwixt.RegisteredClient) {
 		log.Println("Registered a client with name", c.GetName())
 
-		// Get all resources
-		// v, err := c.ReadResource(3, 0, 0)
-		// log.Println("Read Resource", v, err)
+		var str string
 
-		// Create and validate resource
+		// Read
+		for i := 0; i <= 16; i++ {
+			v, err := c.ReadResource(3, 0, uint16(i))
+			if err != nil {
+				panic(err.Error())
+			}
+			str = v.GetStringValue()
+			log.Printf("Resource 3/0/%d : %s", i, str)
+		}
 
-		// Delete and validate resource
+		// TODO: Create
+
+		// TODO: Delete
+
+		// Exit Example
+		ch <- true
 	})
 
 	go server.Serve()
@@ -32,7 +47,7 @@ func main() {
 	})
 	go client.Start()
 
-	<-make(chan struct{})
+	<-ch
 }
 
 func CreateServer() *betwixt.LWM2MServer {
