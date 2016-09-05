@@ -14,48 +14,47 @@ The OMA Lightweight M2M enabler includes device management and service enablemen
 package main
 
 import (
-	. "github.com/zubairhamed/betwixt"
-	. "github.com/zubairhamed/betwixt/examples/client/basic/objects"
+	"github.com/zubairhamed/betwixt"
+	"github.com/zubairhamed/betwixt/examples"
+	"github.com/zubairhamed/betwixt/examples/objects"
 )
 
 func main() {
-	registry := NewDefaultObjectRegistry()
-	c, _ := NewDefaultClient(":0", "localhost:5683", registry)
+	cli := examples.StandardCommandLineFlags()
+
+	registry := betwixt.NewDefaultObjectRegistry()
+	c := betwixt.NewLwm2mClient("TestClient", ":0", cli.Server, registry)
 
 	setupResources(c, registry)
 
 	c.OnStartup(func() {
-		// When client has started up, register itself with a LWM2M server
-		c.Register("betwixt")
-
-		// TODO: Randomly fire change events for values changed
+		c.Register(cli.Name)
 	})
 
-	// Start client's CoAP listen
 	c.Start()
 }
 
-func setupResources(client LWM2MClient, reg Registry) {
-	client.SetEnabler(OMA_OBJECT_LWM2M_SECURITY, NewExampleSecurityObject(reg))
-	client.AddObjectInstances(OMA_OBJECT_LWM2M_SECURITY, 0, 1, 2)
+func setupResources(client betwixt.LWM2MClient, reg betwixt.Registry) {
+	client.SetEnabler(betwixt.OMA_OBJECT_LWM2M_SECURITY, objects.NewExampleSecurityObject(reg))
+	client.AddObjectInstances(betwixt.OMA_OBJECT_LWM2M_SECURITY, 0, 1, 2)
 
-	client.SetEnabler(OMA_OBJECT_LWM2M_SERVER, NewExampleServerObject(reg))
-	client.AddObjectInstance(OMA_OBJECT_LWM2M_SERVER, 1)
+	client.SetEnabler(betwixt.OMA_OBJECT_LWM2M_SERVER, objects.NewExampleServerObject(reg))
+	client.AddObjectInstance(betwixt.OMA_OBJECT_LWM2M_SERVER, 1)
 
-	client.SetEnabler(OMA_OBJECT_LWM2M_DEVICE, NewExampleDeviceObject(reg))
-	client.AddObjectInstance(OMA_OBJECT_LWM2M_DEVICE, 0)
+	client.SetEnabler(betwixt.OMA_OBJECT_LWM2M_DEVICE, objects.NewExampleDeviceObject(reg))
+	client.AddObjectInstance(betwixt.OMA_OBJECT_LWM2M_DEVICE, 0)
 
-	client.EnableObject(OMA_OBJECT_LWM2M_ACCESS_CONTROL, NewExampleAccessControlObject(reg))
-	client.AddObjectInstances(OMA_OBJECT_LWM2M_ACCESS_CONTROL, 0, 1, 2)
+	client.EnableObject(betwixt.OMA_OBJECT_LWM2M_ACCESS_CONTROL, objects.NewExampleAccessControlObject(reg))
+	client.AddObjectInstances(betwixt.OMA_OBJECT_LWM2M_ACCESS_CONTROL, 0, 1, 2)
 
-	client.EnableObject(OMA_OBJECT_LWM2M_CONNECTIVITY_MONITORING, NewExampleConnectivityMonitoringObject(reg))
-	client.AddObjectInstance(OMA_OBJECT_LWM2M_CONNECTIVITY_MONITORING, 0)
+	client.EnableObject(betwixt.OMA_OBJECT_LWM2M_CONNECTIVITY_MONITORING, objects.NewExampleConnectivityMonitoringObject(reg))
+	client.AddObjectInstance(betwixt.OMA_OBJECT_LWM2M_CONNECTIVITY_MONITORING, 0)
 
-	client.EnableObject(OMA_OBJECT_LWM2M_FIRMWARE_UPDATE, NewExampleFirmwareUpdateObject(reg))
-	client.AddObjectInstance(OMA_OBJECT_LWM2M_FIRMWARE_UPDATE, 0)
+	client.EnableObject(betwixt.OMA_OBJECT_LWM2M_FIRMWARE_UPDATE, objects.NewExampleFirmwareUpdateObject(reg))
+	client.AddObjectInstance(betwixt.OMA_OBJECT_LWM2M_FIRMWARE_UPDATE, 0)
 
-	client.EnableObject(OMA_OBJECT_LWM2M_LOCATION, NewExampleLocationObject(reg))
-	client.EnableObject(OMA_OBJECT_LWM2M_CONNECTIVITY_STATISTICS, NewExampleConnectivityStatisticsObject(reg))
+	client.EnableObject(betwixt.OMA_OBJECT_LWM2M_LOCATION, objects.NewExampleLocationObject(reg))
+	client.EnableObject(betwixt.OMA_OBJECT_LWM2M_CONNECTIVITY_STATISTICS, objects.NewExampleConnectivityStatisticsObject(reg))
 }
 ```
 
