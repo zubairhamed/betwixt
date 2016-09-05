@@ -30,7 +30,7 @@ type FnOnWrite func()
 type FnOnExecute func()
 
 // Event Callback for a register request
-type FnOnRegistered func(string)
+type FnOnRegistered func(RegisteredClient)
 
 // Event Callback for a deregister request
 type FnOnDeregistered func()
@@ -165,6 +165,7 @@ type LWM2MClient interface {
 	SetEnabler(LWM2MObjectType, ObjectEnabler)
 	GetRegistry() Registry
 	GetEnabledObjects() map[LWM2MObjectType]Object
+	GetObject(n LWM2MObjectType) Object
 	Start()
 
 	// Events
@@ -172,8 +173,6 @@ type LWM2MClient interface {
 	OnRead(FnOnRead)
 	OnWrite(FnOnWrite)
 	OnExecute(FnOnExecute)
-	OnRegistered(FnOnRegistered)
-	OnDeregistered(FnOnDeregistered)
 	OnError(FnOnError)
 }
 
@@ -219,7 +218,7 @@ type RegisteredClient interface {
 	GetAddress() string
 
 	ReadObject(uint16, uint16) (Value, error)
-	ReadResource(uint16, uint16, uint16) (Value, error)
+	ReadResource(object uint16, instance uint16, resource uint16) (Value, error)
 	Delete(int, int)
 	Execute(int, int, int)
 }

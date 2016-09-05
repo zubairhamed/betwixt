@@ -1,4 +1,4 @@
-package ev3
+package objects
 
 import (
 	. "github.com/zubairhamed/betwixt"

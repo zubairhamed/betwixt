@@ -1,4 +1,4 @@
-package basic
+package objects
 
 import (
 	. "github.com/zubairhamed/betwixt"

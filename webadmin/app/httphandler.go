@@ -30,7 +30,7 @@ func (b *BetwixtWebApp) fnHttpClientView(c web.C, w http.ResponseWriter, r *http
 func (b *BetwixtWebApp) fnHttpApiGetClients(c web.C, w http.ResponseWriter, r *http.Request) {
 	cl := []ClientModel{}
 
-	for _, v := range b.getClients() {
+	for _, v := range b.server.GetClients() {
 
 		objs := make(map[string]ObjectModel)
 		for key, val := range v.GetObjects() {
@@ -63,12 +63,12 @@ func (b *BetwixtWebApp) fnHttpApiGetServerStats(c web.C, w http.ResponseWriter, 
 	var mem runtime.MemStats
 	runtime.ReadMemStats(&mem)
 
-	clientsCount := len(b.getClients())
+	clientsCount := len(b.server.GetClients())
 
 	model := &StatsModel{
 		ClientsCount: clientsCount,
 		MemUsage:     strconv.Itoa(int(mem.Alloc / 1000)),
-		Requests:     b.getServerStats().GetRequestsCount(),
+		Requests:     b.server.GetServerStats().GetRequestsCount(),
 		Errors:       0,
 	}
 
@@ -88,7 +88,7 @@ func (b *BetwixtWebApp) fnHttpApiGetClient(c web.C, w http.ResponseWriter, r *ht
 
 	clientId := c.URLParams["client"]
 
-	v := b.getClient(clientId)
+	v := b.server.GetClient(clientId)
 	log.Println(clientId, v)
 	if v == nil {
 		w.WriteHeader(500)
@@ -136,7 +136,7 @@ func (b *BetwixtWebApp) fnHttpApiGetClientResource(c web.C, w http.ResponseWrite
 		w.WriteHeader(500)
 	}
 
-	cli := b.getClient(clientId)
+	cli := b.server.GetClient(clientId)
 	val, _ := cli.ReadResource(uint16(object), uint16(instance), uint16(resource))
 
 	if val == nil {

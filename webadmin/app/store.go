@@ -2,11 +2,6 @@ package app
 
 import "github.com/boltdb/bolt"
 
-type Store interface {
-	Init()
-	Close()
-}
-
 func NewBoltStore(dbfile string) (*BoltDbStore, error) {
 	db, err := bolt.Open(dbfile, 0600, nil)
 	if err != nil {

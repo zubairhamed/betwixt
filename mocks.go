@@ -154,7 +154,7 @@ func (s *MockServerStatistics) GetRequestsCount() int {
 
 func NewMockServer() Server {
 	return &MockServer{
-		stats:      &MockServerStatistics{},
+		stats: &MockServerStatistics{},
 	}
 }
 
@@ -313,6 +313,10 @@ func (c *MockClient) GetRegistry() Registry {
 }
 func (c *MockClient) GetEnabledObjects() map[LWM2MObjectType]Object {
 	return c.enabledObjects
+}
+
+func (c *MockClient) GetObject(n LWM2MObjectType) Object {
+	return c.enabledObjects[n]
 }
 
 func (c *MockClient) AddObjectInstances(LWM2MObjectType, ...int) {}
