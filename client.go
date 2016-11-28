@@ -3,17 +3,16 @@ package betwixt
 import (
 	"errors"
 	"log"
-
-	. "github.com/zubairhamed/canopus"
+	"github.com/zubairhamed/canopus"
 )
 
 // NewLWM2MClient instantiates a new instance of LWM2M Client
 func NewLwm2mClient(name, local, remote string, registry Registry) LWM2MClient {
-	coapServer := NewServer(name, local, remote)
+	server := canopus.NewServer()
 
 	// Create Mandatory
 	c := &DefaultLWM2MClient{
-		coapServer:     coapServer,
+		coapServer:     server,
 		enabledObjects: make(map[LWM2MObjectType]Object),
 		registry:       registry,
 	}
@@ -27,7 +26,7 @@ func NewLwm2mClient(name, local, remote string, registry Registry) LWM2MClient {
 }
 
 type DefaultLWM2MClient struct {
-	coapServer     CoapServer
+	coapServer     canopus.CoapServer
 	registry       Registry
 	enabledObjects map[LWM2MObjectType]Object
 	path           string
@@ -47,10 +46,11 @@ func (c *DefaultLWM2MClient) Register(name string) (string, error) {
 		return "", errors.New("Client name can not exceed 10 characters")
 	}
 
-	req := NewRequest(MessageConfirmable, Post, GenerateMessageID())
+	req := canopus.NewRequest(canopus.MessageConfirmable, canopus.Post, canopus.GenerateMessageID())
 	req.SetStringPayload(BuildModelResourceStringPayload(c.enabledObjects))
 	req.SetRequestURI("/rd")
 	req.SetURIQuery("ep", name)
+
 	resp, err := c.coapServer.Send(req)
 	path := ""
 	if err != nil {
@@ -83,7 +83,7 @@ func (c *DefaultLWM2MClient) GetRegistry() Registry {
 
 // Unregisters this client from a LWM2M server which was previously registered
 func (c *DefaultLWM2MClient) Deregister() {
-	req := NewRequest(MessageConfirmable, Delete, GenerateMessageID())
+	req := canopus.NewRequest(canopus.MessageConfirmable, canopus.Delete, canopus.GenerateMessageID())
 
 	req.SetRequestURI(c.path)
 	_, err := c.coapServer.Send(req)
@@ -155,13 +155,13 @@ func (c *DefaultLWM2MClient) Start() {
 	c.validate()
 
 	s := c.coapServer
-	s.OnStart(func(server CoapServer) {
+	s.OnStart(func(server canopus.CoapServer) {
 		if c.evtOnStartup != nil {
 			c.evtOnStartup()
 		}
 	})
 
-	s.OnObserve(func(resource string, msg *Message) {
+	s.OnObserve(func(resource string, msg canopus.Message) {
 		log.Println("Observe Requested")
 	})
 
@@ -181,7 +181,7 @@ func (c *DefaultLWM2MClient) Start() {
 }
 
 // Handles LWM2M Create Requests (not to be mistaken for/not the same as  CoAP PUT)
-func (c *DefaultLWM2MClient) handleCreateRequest(req CoapRequest) CoapResponse {
+func (c *DefaultLWM2MClient) handleCreateRequest(req canopus.Request) canopus.Response {
 	log.Println("Create Request")
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
@@ -197,22 +197,22 @@ func (c *DefaultLWM2MClient) handleCreateRequest(req CoapRequest) CoapResponse {
 	obj := c.GetObject(t)
 	enabler := obj.GetEnabler()
 
-	msg := NewMessageOfType(MessageAcknowledgment, req.GetMessage().MessageID)
-	msg.Token = req.GetMessage().Token
-	msg.Payload = NewEmptyPayload()
+	msg := canopus.NewMessageOfType(canopus.MessageAcknowledgment, req.GetMessage().GetMessageId(), canopus.NewEmptyPayload()).(*canopus.CoapMessage)
+	msg.Token = req.GetMessage().GetToken()
+	msg.Payload = canopus.NewEmptyPayload()
 
 	if enabler != nil {
 		lwReq := Default(req, OPERATIONTYPE_CREATE)
 		response := enabler.OnCreate(instanceId, resourceId, lwReq)
 		msg.Code = response.GetResponseCode()
 	} else {
-		msg.Code = CoapCodeMethodNotAllowed
+		msg.Code = canopus.CoapCodeMethodNotAllowed
 	}
-	return NewResponseWithMessage(msg)
+	return canopus.NewResponseWithMessage(msg)
 }
 
 // Handles LWM2M Read Requests (not to be mistaken for/not the same as  CoAP GET)
-func (c *DefaultLWM2MClient) handleReadRequest(req CoapRequest) CoapResponse {
+func (c *DefaultLWM2MClient) handleReadRequest(req canopus.Request) canopus.Response {
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
@@ -227,8 +227,8 @@ func (c *DefaultLWM2MClient) handleReadRequest(req CoapRequest) CoapResponse {
 	obj := c.GetObject(t)
 	enabler := obj.GetEnabler()
 
-	msg := NewMessageOfType(MessageAcknowledgment, req.GetMessage().MessageID)
-	msg.Token = req.GetMessage().Token
+	msg := canopus.NewMessageOfType(canopus.MessageAcknowledgment, req.GetMessage().GetMessageId(), canopus.NewEmptyPayload()).(*canopus.CoapMessage)
+	msg.Token = req.GetMessage().GetToken()
 
 	if enabler != nil {
 		model := obj.GetDefinition()
@@ -236,10 +236,10 @@ func (c *DefaultLWM2MClient) handleReadRequest(req CoapRequest) CoapResponse {
 
 		if resource == nil {
 			// TODO: Return TLV of Object Instance
-			msg.Code = CoapCodeNotFound
+			msg.Code = canopus.CoapCodeNotFound
 		} else {
 			if !IsReadableResource(resource) {
-				msg.Code = CoapCodeMethodNotAllowed
+				msg.Code = canopus.CoapCodeMethodNotAllowed
 			} else {
 				lwReq := Default(req, OPERATIONTYPE_READ)
 				response := enabler.OnRead(instanceId, resourceId, lwReq)
@@ -247,19 +247,19 @@ func (c *DefaultLWM2MClient) handleReadRequest(req CoapRequest) CoapResponse {
 				val := response.GetResponseValue()
 				msg.Code = response.GetResponseCode()
 
-				msg.AddOption(OptionContentFormat, MediaTypeFromValue(val))
+				msg.AddOption(canopus.OptionContentFormat, MediaTypeFromValue(val))
 				b := EncodeValue(resource.GetId(), resource.MultipleValuesAllowed(), val)
-				msg.Payload = NewBytesPayload(b)
+				msg.Payload = canopus.NewBytesPayload(b)
 			}
 		}
 	} else {
-		msg.Code = CoapCodeMethodNotAllowed
+		msg.Code = canopus.CoapCodeMethodNotAllowed
 	}
-	return NewResponseWithMessage(msg)
+	return canopus.NewResponseWithMessage(msg)
 }
 
 // Handles LWM2M Delete Requests (not to be mistaken for/not the same as  CoAP DELETE)
-func (c *DefaultLWM2MClient) handleDeleteRequest(req CoapRequest) CoapResponse {
+func (c *DefaultLWM2MClient) handleDeleteRequest(req canopus.Request) canopus.Response {
 	log.Println("Delete Request")
 	objectId := req.GetAttributeAsInt("obj")
 	instanceId := req.GetAttributeAsInt("inst")
@@ -267,9 +267,8 @@ func (c *DefaultLWM2MClient) handleDeleteRequest(req CoapRequest) CoapResponse {
 	t := LWM2MObjectType(objectId)
 	enabler := c.GetObject(t).GetEnabler()
 
-	msg := NewMessageOfType(MessageAcknowledgment, req.GetMessage().MessageID)
-	msg.Token = req.GetMessage().Token
-	msg.Payload = NewEmptyPayload()
+	msg := canopus.NewMessageOfType(canopus.MessageAcknowledgment, req.GetMessage().GetMessageId(), canopus.NewEmptyPayload()).(*canopus.CoapMessage)
+	msg.Token = req.GetMessage().GetToken()
 
 	if enabler != nil {
 		lwReq := Default(req, OPERATIONTYPE_DELETE)
@@ -277,9 +276,9 @@ func (c *DefaultLWM2MClient) handleDeleteRequest(req CoapRequest) CoapResponse {
 		response := enabler.OnDelete(instanceId, lwReq)
 		msg.Code = response.GetResponseCode()
 	} else {
-		msg.Code = CoapCodeMethodNotAllowed
+		msg.Code = canopus.CoapCodeMethodNotAllowed
 	}
-	return NewResponseWithMessage(msg)
+	return canopus.NewResponseWithMessage(msg)
 }
 
 func (c *DefaultLWM2MClient) handleDiscoverRequest() {
@@ -291,7 +290,7 @@ func (c *DefaultLWM2MClient) handleObserveRequest() {
 }
 
 // Handles LWM2M Write Requests (not to be mistaken for/not the same as  CoAP POST)
-func (c *DefaultLWM2MClient) handleWriteRequest(req CoapRequest) CoapResponse {
+func (c *DefaultLWM2MClient) handleWriteRequest(req canopus.Request) canopus.Response {
 	log.Println("Write Request")
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
@@ -307,19 +306,18 @@ func (c *DefaultLWM2MClient) handleWriteRequest(req CoapRequest) CoapResponse {
 	obj := c.GetObject(t)
 	enabler := obj.GetEnabler()
 
-	msg := NewMessageOfType(MessageAcknowledgment, req.GetMessage().MessageID)
-	msg.Token = req.GetMessage().Token
-	msg.Payload = NewEmptyPayload()
+	msg := canopus.NewMessageOfType(canopus.MessageAcknowledgment, req.GetMessage().GetMessageId(), canopus.NewEmptyPayload()).(*canopus.CoapMessage)
+	msg.Token = req.GetMessage().GetToken()
 
 	if enabler != nil {
 		model := obj.GetDefinition()
 		resource := model.GetResource(LWM2MResourceType(resourceId))
 		if resource == nil {
 			// TODO Write to Object Instance
-			msg.Code = CoapCodeNotFound
+			msg.Code = canopus.CoapCodeNotFound
 		} else {
 			if !IsWritableResource(resource) {
-				msg.Code = CoapCodeMethodNotAllowed
+				msg.Code = canopus.CoapCodeMethodNotAllowed
 			} else {
 				lwReq := Default(req, OPERATIONTYPE_WRITE)
 				response := enabler.OnWrite(instanceId, resourceId, lwReq)
@@ -327,13 +325,13 @@ func (c *DefaultLWM2MClient) handleWriteRequest(req CoapRequest) CoapResponse {
 			}
 		}
 	} else {
-		msg.Code = CoapCodeNotFound
+		msg.Code = canopus.CoapCodeNotFound
 	}
-	return NewResponseWithMessage(msg)
+	return canopus.NewResponseWithMessage(msg)
 }
 
 // Handles LWM2M Execute Requests
-func (c *DefaultLWM2MClient) handleExecuteRequest(req CoapRequest) CoapResponse {
+func (c *DefaultLWM2MClient) handleExecuteRequest(req canopus.Request) canopus.Response {
 	log.Println("Execute Request")
 	attrResource := req.GetAttribute("rsrc")
 	objectId := req.GetAttributeAsInt("obj")
@@ -349,28 +347,27 @@ func (c *DefaultLWM2MClient) handleExecuteRequest(req CoapRequest) CoapResponse 
 	obj := c.GetObject(t)
 	enabler := obj.GetEnabler()
 
-	msg := NewMessageOfType(MessageAcknowledgment, req.GetMessage().MessageID)
-	msg.Token = req.GetMessage().Token
-	msg.Payload = NewEmptyPayload()
+	msg := canopus.NewMessageOfType(canopus.MessageAcknowledgment, req.GetMessage().GetMessageId(), canopus.NewEmptyPayload()).(*canopus.CoapMessage)
+	msg.Token = req.GetMessage().GetToken()
 
 	if enabler != nil {
 		model := obj.GetDefinition()
 		resource := model.GetResource(LWM2MResourceType(resourceId))
 		if resource == nil {
-			msg.Code = CoapCodeNotFound
+			msg.Code = canopus.CoapCodeNotFound
 		}
 
 		if !IsExecutableResource(resource) {
-			msg.Code = CoapCodeMethodNotAllowed
+			msg.Code = canopus.CoapCodeMethodNotAllowed
 		} else {
 			lwReq := Default(req, OPERATIONTYPE_EXECUTE)
 			response := enabler.OnExecute(instanceId, resourceId, lwReq)
 			msg.Code = response.GetResponseCode()
 		}
 	} else {
-		msg.Code = CoapCodeNotFound
+		msg.Code = canopus.CoapCodeNotFound
 	}
-	return NewResponseWithMessage(msg)
+	return canopus.NewResponseWithMessage(msg)
 }
 
 // Events

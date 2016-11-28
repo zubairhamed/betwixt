@@ -180,9 +180,9 @@ type LWM2MClient interface {
 // Lwm2mRequest interface represents an incoming request from a server
 type Lwm2mRequest interface {
 	GetPath() string
-	GetMessage() *canopus.Message
+	GetMessage() canopus.Message
 	GetOperationType() OperationType
-	GetCoapRequest() canopus.CoapRequest
+	GetCoapRequest() canopus.Request
 }
 
 // Lwm2mResponse interface represents an outgoing response to a server

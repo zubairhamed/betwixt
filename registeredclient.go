@@ -111,7 +111,7 @@ func (c *DefaultRegisteredClient) ReadResource(obj uint16, inst uint16, rsrc uin
 		log.Println(err)
 		return nil, err
 	}
-	responseValue, _ := DecodeResourceValue(LWM2MResourceType(rsrc), response.GetMessage().Payload.GetBytes(), resourceDefinition)
+	responseValue, _ := DecodeResourceValue(LWM2MResourceType(rsrc), response.GetMessage().GetPayload().GetBytes(), resourceDefinition)
 
 	return responseValue, nil
 }

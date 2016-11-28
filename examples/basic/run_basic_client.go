@@ -10,7 +10,8 @@ func main() {
 	cli := examples.StandardCommandLineFlags()
 
 	registry := betwixt.NewDefaultObjectRegistry()
-	c := betwixt.NewLwm2mClient("TestClient", ":0", cli.Server, registry)
+	// c := betwixt.NewLwm2mClient("TestClient", ":0", cli.Server, registry)
+	c := betwixt.NewLwm2mClient("TestClient", ":0", "leshan.eclipse.org:5683", registry)
 
 	setupResources(c, registry)
 

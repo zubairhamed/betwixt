@@ -5,7 +5,7 @@ import (
 )
 
 // Default is a helper/shortcut method which creates a Default LWM2M Request
-func Default(coap canopus.CoapRequest, op OperationType) Lwm2mRequest {
+func Default(coap canopus.Request, op OperationType) Lwm2mRequest {
 	return &DefaultRequest{
 		coap: coap,
 		op:   op,
@@ -13,7 +13,7 @@ func Default(coap canopus.CoapRequest, op OperationType) Lwm2mRequest {
 }
 
 type DefaultRequest struct {
-	coap canopus.CoapRequest
+	coap canopus.Request
 	op   OperationType
 }
 
@@ -21,7 +21,7 @@ func (r *DefaultRequest) GetPath() string {
 	return r.coap.GetMessage().GetURIPath()
 }
 
-func (r *DefaultRequest) GetMessage() *canopus.Message {
+func (r *DefaultRequest) GetMessage() canopus.Message {
 	return r.coap.GetMessage()
 }
 
@@ -29,7 +29,7 @@ func (r *DefaultRequest) GetOperationType() OperationType {
 	return r.op
 }
 
-func (r *DefaultRequest) GetCoapRequest() canopus.CoapRequest {
+func (r *DefaultRequest) GetCoapRequest() canopus.Request {
 	return r.coap
 }
 
@@ -47,7 +47,7 @@ func (r *NilRequest) GetPath() string {
 	return ""
 }
 
-func (r *NilRequest) GetMessage() *canopus.Message {
+func (r *NilRequest) GetMessage() canopus.Message {
 	return nil
 }
 
@@ -55,6 +55,6 @@ func (r *NilRequest) GetOperationType() OperationType {
 	return r.op
 }
 
-func (r *NilRequest) GetCoapRequest() canopus.CoapRequest {
+func (r *NilRequest) GetCoapRequest() canopus.Request {
 	return nil
 }
